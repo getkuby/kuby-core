@@ -1,10 +1,13 @@
-require 'open3'
-require 'securerandom'
 require 'colorized_string'
+require 'rouge'
 
 namespace :kuby do
   task dockerfile: :environment do
-    puts Kuby.definition.docker.to_dockerfile
+    theme = Rouge::Themes::Base16::Solarized.new
+    formatter = Rouge::Formatters::Terminal256.new(theme)
+    lexer = Rouge::Lexers::Docker.new
+    tokens = lexer.lex(Kuby.definition.docker.to_dockerfile.to_s)
+    puts formatter.format(tokens)
   end
 
   task build: :environment do

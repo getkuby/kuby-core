@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'railties', '~> 6.0'
   s.add_dependency 'colorize'
+  s.add_dependency 'rouge'
 
   s.require_path = 'lib'
   s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby.gemspec']

@@ -197,12 +197,12 @@ module Kuby
 
       def initialize(*args)
         super
-        @distro = DISTRO_MAP[metadata.distro_name].new(self)
+        @distro = DISTRO_MAP[metadata.distro].new(self)
       end
 
       def distro_updated
-        dist_class = DISTRO_MAP[metadata.distro_name]
-        raise "No distro named #{metadata.distro_name}" unless dist_class
+        dist_class = DISTRO_MAP[metadata.distro]
+        raise "No distro named #{metadata.distro}" unless dist_class
         @distro = dist_class.new(self)
       end
 

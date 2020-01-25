@@ -1,8 +1,7 @@
 module Kuby
   module Docker
     class Metadata
-      DEFAULT_DISTRO = [:debian].freeze
-      DEFAULT_DISTRO_VERSIONS = { alpine: '3.11' }.freeze
+      DEFAULT_DISTRO = :debian
 
       attr_accessor :image_url
       attr_reader :definition, :distro
@@ -20,16 +19,8 @@ module Kuby
         @tags.empty? ? default_tags : @tags
       end
 
-      def distro=(distro_tuple)
-        @distro = Array(distro_tuple)
-      end
-
-      def distro_name
-        (distro || DEFAULT_DISTRO)[0]
-      end
-
-      def distro_version
-        (distro || DEFAULT_DISTRO)[1] || DEFAULT_DISTRO_VERSIONS[distro_name]
+      def distro=(distro_name)
+        @distro = distro_name
       end
 
       private
