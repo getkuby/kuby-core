@@ -1,17 +1,10 @@
 module Kuby
   module Docker
     class Builder
-      class << self
-        def build(app, &block)
-          new(app, &block)
-        end
-      end
+      attr_reader :definition
 
-      attr_reader :app
-
-      def initialize(app, &block)
-        @app = app
-        instance_eval(&block) if block
+      def initialize(definition)
+        @definition = definition
       end
 
       def base_image(image_url)
@@ -38,12 +31,21 @@ module Kuby
         package_phase << pkg
       end
 
+      def distro(distro_name)
+        metadata.distro = distro_name
+        package_phase.distro_updated
+      end
+
       def files(path)
         copy_phase << path
       end
 
       def port(port)
         webserver_phase.port = port
+      end
+
+      def image_url(url)
+        metadata.image_url = url
       end
 
       def use(*args)
@@ -65,31 +67,35 @@ module Kuby
       end
 
       def setup_phase
-        @setup_phase ||= SetupPhase.new(app)
+        @setup_phase ||= SetupPhase.new(definition)
       end
 
       def package_phase
-        @package_phase ||= PackagePhase.new(app)
+        @package_phase ||= PackagePhase.new(definition)
       end
 
       def bundler_phase
-        @bundler_phase ||= BundlerPhase.new(app)
+        @bundler_phase ||= BundlerPhase.new(definition)
       end
 
       def yarn_phase
-        @yarn_phase ||= YarnPhase.new(app)
+        @yarn_phase ||= YarnPhase.new(definition)
       end
 
       def copy_phase
-        @copy_phase ||= CopyPhase.new(app)
+        @copy_phase ||= CopyPhase.new(definition)
       end
 
       def assets_phase
-        @assets_phase ||= AssetsPhase.new(app)
+        @assets_phase ||= AssetsPhase.new(definition)
       end
 
       def webserver_phase
-        @webserver_phase ||= WebserverPhase.new(app)
+        @webserver_phase ||= WebserverPhase.new(definition)
+      end
+
+      def metadata
+        @metadata ||= Metadata.new(definition)
       end
 
       private

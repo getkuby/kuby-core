@@ -8,15 +8,13 @@ module Kuby
     end
 
     def docker(&block)
-      @docker ||= Docker::Builder.new(app, &block)
+      @docker ||= Docker::Builder.new(self)
+      @docker.instance_eval(&block) if block
+      @docker
     end
 
     def app_name
       @app_name ||= app.class.module_parent.name
-    end
-
-    def docker_image_name
-      @docker_image_name ||= app_name.downcase
     end
   end
 end

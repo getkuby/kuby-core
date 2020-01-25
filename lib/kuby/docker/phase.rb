@@ -1,10 +1,20 @@
 module Kuby
   module Docker
     class Phase
-      attr_reader :app
+      attr_reader :definition
 
-      def initialize(app)
-        @app = app
+      def initialize(definition)
+        @definition = definition
+      end
+
+      private
+
+      def app
+        definition.app
+      end
+
+      def metadata
+        definition.docker.metadata
       end
     end
   end

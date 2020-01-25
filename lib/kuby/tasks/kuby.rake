@@ -1,5 +1,6 @@
 require 'open3'
 require 'securerandom'
+require 'colorized_string'
 
 namespace :kuby do
   task dockerfile: :environment do
@@ -7,33 +8,47 @@ namespace :kuby do
   end
 
   task build: :environment do
-    definition = Kuby.definition
+    docker = Kuby.definition.docker
 
-    uuid = SecureRandom.hex[0...8]
-    image_name = definition.docker_image_name
-    uuid_tag = "#{image_name}:#{uuid}"
-    latest_tag = "#{image_name}:latest"
-    cmd = "docker build -t #{uuid_tag} -t #{latest_tag} -f- ."
-
-    Open3.pipeline_w(cmd) do |stdin, _wait_threads|
-      stdin.puts definition.docker.to_dockerfile
-    end
+    Kuby.docker_cli.build(
+      dockerfile: docker.to_dockerfile,
+      image_url:  docker.metadata.image_url,
+      tags:       docker.metadata.tags
+    )
   end
 
   task run: :environment do
-    definition = Kuby.definition
-    image_name = definition.docker_image_name
-    df = definition.docker.to_dockerfile
+    docker = Kuby.definition.docker
+    dockerfile = docker.to_dockerfile
 
-    cmd = [
-      'docker', 'run',
-      '-e', 'RAILS_ENV=production',
-      *df.exposed_ports.flat_map { |port| ['-p', "#{port}:#{port}"] },
-      '--init',
-      '--rm',
-      "#{image_name}:latest"
-    ]
+    Kuby.docker_cli.run(
+      image_url: docker.metadata.image_url,
+      tag:       'latest',
+      env:       { 'RAILS_ENV' => 'production' },
+      ports:     dockerfile.exposed_ports
+    )
+  end
 
-    exec cmd.join(' ')
+  task push: :environment do
+    docker = Kuby.definition.docker
+    image_url = docker.metadata.image_url
+
+    # find latest tag
+    images = Kuby.docker_cli.images(image_url)
+    latest = images.find { |image| image[:tag] == 'latest' }
+
+    unless latest
+      msg = "Could not find tag 'latest'. Run rake kuby:build "\
+        'to build the Docker image.'
+
+      puts ColorizedString[msg].red
+    end
+
+    # find all tags that point to the same image as 'latest'
+    images.each do |image_data|
+      if image_data[:id] == latest[:id]
+        Kuby.docker_cli.push(image_url, image_data[:tag])
+      end
+    end
   end
 end

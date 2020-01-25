@@ -15,7 +15,14 @@ module Kuby
       private
 
       def default_base_image
-        @default_base_image ||= "ruby:#{RUBY_VERSION}"
+        @default_base_image ||= case metadata.distro_name
+          when :debian
+            "ruby:#{RUBY_VERSION}"
+          when :alpine
+            "ruby:#{RUBY_VERSION}-alpine#{metadata.distro_version}"
+          else
+            # ERROR
+        end
       end
     end
   end

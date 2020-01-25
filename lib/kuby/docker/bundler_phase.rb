@@ -1,7 +1,7 @@
 module Kuby
   module Docker
     class BundlerPhase < Phase
-      DEFAULT_WITHOUT = ['development', 'test']
+      DEFAULT_WITHOUT = ['development', 'test'].freeze
 
       attr_accessor :version, :gemfile, :without
 
@@ -25,14 +25,12 @@ module Kuby
           dockerfile.env("BUNDLE_WITHOUT='#{wo.join(' ')}'")
         end
 
-        cmd = [
+        dockerfile.run(
           'bundle', 'install',
           '--jobs', '3',
           '--retry', '3',
           '--gemfile', gf
-        ]
-
-        dockerfile.run(cmd)
+        )
 
         # generate binstubs and add the bin directory to our path
         dockerfile.run('bundle binstubs --all')

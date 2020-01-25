@@ -10,5 +10,9 @@ module Kuby
     def define(app = Rails.application, &block)
       @definition = Definition.new(app, &block)
     end
+
+    def docker_cli
+      @docker_cli ||= Docker::CLI.new
+    end
   end
 end

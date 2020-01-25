@@ -14,7 +14,18 @@ module Kuby
       end
 
       class From < Command
-        def to_s; "FROM #{super}"; end
+        attr_reader :image_url, :as
+
+        def initialize(image_url, as: nil)
+          @image_url = image_url
+          @as = as
+        end
+
+        def to_s
+          str = "FROM #{image_url}"
+          str << " AS #{as}" if as
+          str
+        end
       end
 
       class Workdir < Command
@@ -30,7 +41,20 @@ module Kuby
       end
 
       class Copy < Command
-        def to_s; "COPY #{super}"; end
+        attr_reader :source, :dest, :from
+
+        def initialize(source, dest, from: nil)
+          @source = source
+          @dest = dest
+          @from = from
+        end
+
+        def to_s
+          cmd = ['COPY']
+          cmd << "--from=#{from}" if from
+          cmd += [source, dest]
+          cmd.join(' ')
+        end
       end
 
       class Expose < Command
@@ -41,38 +65,39 @@ module Kuby
         def to_s; "CMD #{super}"; end
       end
 
-      attr_reader :commands
+      attr_reader :commands, :cursor
 
       def initialize
         @commands = []
+        @cursor = 0
       end
 
       def from(*args)
-        commands << From.new(*args)
+        add From.new(*args)
       end
 
       def workdir(*args)
-        commands << Workdir.new(*args)
+        add Workdir.new(*args)
       end
 
       def env(*args)
-        commands << Env.new(*args)
+        add Env.new(*args)
       end
 
       def run(*args)
-        commands << Run.new(*args)
+        add Run.new(*args)
       end
 
       def copy(*args)
-        commands << Copy.new(*args)
+        add Copy.new(*args)
       end
 
       def expose(*args)
-        commands << Expose.new(*args)
+        add Expose.new(*args)
       end
 
       def cmd(*args)
-        commands << Cmd.new(*args)
+        add Cmd.new(*args)
       end
 
       def to_s
@@ -83,6 +108,20 @@ module Kuby
         commands
           .select { |c| c.is_a?(Expose) }
           .map { |c| c.args.first }
+      end
+
+      def insert_at(pos)
+        @cursor = pos
+        yield
+      ensure
+        @cursor = commands.size
+      end
+
+      private
+
+      def add(cmd)
+        commands.insert(cursor, cmd)
+        @cursor += 1
       end
     end
   end
