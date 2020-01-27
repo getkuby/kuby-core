@@ -1,6 +1,18 @@
 module Kuby
   module Docker
-    class Builder
+    class MissingTagError < StandardError
+      attr_reader :tag
+
+      def initialize(tag)
+        @tag = tag
+      end
+
+      def message
+        @message ||= "Could not find tag '#{tag}'."
+      end
+    end
+
+    class Spec
       attr_reader :definition
 
       def initialize(definition)
@@ -96,6 +108,24 @@ module Kuby
 
       def metadata
         @metadata ||= Metadata.new(definition)
+      end
+
+      def latest_tags
+        # find latest tag
+        images = Kuby.docker_cli.images(metadata.image_url)
+        latest = images.find { |image| image[:tag] == 'latest' }
+
+        unless latest
+          raise MissingTagError.new('latest')
+        end
+
+        # find all tags that point to the same image as 'latest'
+        # and push them up
+        images.each_with_object([]) do |image_data, tags|
+          if image_data[:id] == latest[:id]
+            tags << image_data[:tag]
+          end
+        end
       end
 
       private

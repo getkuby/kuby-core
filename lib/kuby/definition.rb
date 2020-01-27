@@ -8,9 +8,15 @@ module Kuby
     end
 
     def docker(&block)
-      @docker ||= Docker::Builder.new(self)
+      @docker ||= Docker::Spec.new(self)
       @docker.instance_eval(&block) if block
       @docker
+    end
+
+    def kubernetes(&block)
+      @kubernetes ||= Kubernetes::Spec.new(self)
+      @kubernetes.instance_eval(&block) if block
+      @kubernetes
     end
 
     def app_name

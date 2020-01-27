@@ -1,8 +1,10 @@
 require 'kuby/railtie'
 
 module Kuby
-  autoload :Definition, 'kuby/definition'
-  autoload :Docker, 'kuby/docker'
+  autoload :Definition,  'kuby/definition'
+  autoload :Docker,      'kuby/docker'
+  autoload :Kubernetes,  'kuby/kubernetes'
+  autoload :ValueFields, 'kuby/value_fields'
 
   class << self
     attr_reader :definition

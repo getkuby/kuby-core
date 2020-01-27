@@ -9,18 +9,16 @@ module Kuby
         end
 
         def apply_to(dockerfile)
-          port = phase.port || WebserverPhase::DEFAULT_PORT
-
           dockerfile.cmd(
             'puma',
             '--workers', '4',
             '--bind', 'tcp://0.0.0.0',
-            '--port', port,
+            '--port', phase.port,
             '--pidfile', './server.pid',
             './config.ru'
           )
 
-          dockerfile.expose(port)
+          dockerfile.expose(phase.port)
         end
       end
 
@@ -35,6 +33,10 @@ module Kuby
         raise "No package manager named #{ws}" unless ws_class
 
         ws_class.new(self).apply_to(dockerfile)
+      end
+
+      def port
+        @port || DEFAULT_PORT
       end
 
       private

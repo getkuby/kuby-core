@@ -2,6 +2,10 @@ require 'colorized_string'
 require 'rouge'
 
 namespace :kuby do
+  task tester: :environment do
+    Kuby.definition.kubernetes.service
+  end
+
   task dockerfile: :environment do
     theme = Rouge::Themes::Base16::Solarized.new
     formatter = Rouge::Formatters::Terminal256.new(theme)
@@ -36,22 +40,15 @@ namespace :kuby do
     docker = Kuby.definition.docker
     image_url = docker.metadata.image_url
 
-    # find latest tag
-    images = Kuby.docker_cli.images(image_url)
-    latest = images.find { |image| image[:tag] == 'latest' }
-
-    unless latest
-      msg = "Could not find tag 'latest'. Run rake kuby:build "\
-        'to build the Docker image.'
+    begin
+      docker.latest_tags.each do |tag|
+        Kuby.docker_cli.push(image_url, tag)
+      end
+    rescue Kuby::Docker::MissingTagError => e
+      msg = "#{e.message} Run rake kuby:build to build the"\
+        'Docker image before running this task.'
 
       puts ColorizedString[msg].red
-    end
-
-    # find all tags that point to the same image as 'latest'
-    images.each do |image_data|
-      if image_data[:id] == latest[:id]
-        Kuby.docker_cli.push(image_url, image_data[:tag])
-      end
     end
   end
 end

@@ -1,7 +1,6 @@
 module Kuby
   module Docker
     autoload :AssetsPhase,    'kuby/docker/assets_phase'
-    autoload :Builder,        'kuby/docker/builder'
     autoload :BundlerPhase,   'kuby/docker/bundler_phase'
     autoload :CLI,            'kuby/docker/cli'
     autoload :CopyPhase,      'kuby/docker/copy_phase'
@@ -11,6 +10,7 @@ module Kuby
     autoload :PackagePhase,   'kuby/docker/package_phase'
     autoload :Phase,          'kuby/docker/phase'
     autoload :SetupPhase,     'kuby/docker/setup_phase'
+    autoload :Spec,           'kuby/docker/spec'
     autoload :WebserverPhase, 'kuby/docker/webserver_phase'
     autoload :YarnPhase,      'kuby/docker/yarn_phase'
   end
