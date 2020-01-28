@@ -1,6 +1,7 @@
 module Kuby
   module Kubernetes
     autoload :ConfigMap,      'kuby/kubernetes/config_map'
+    autoload :CLI,            'kuby/kubernetes/cli'
     autoload :Deployment,     'kuby/kubernetes/deployment'
     autoload :DockerConfig,   'kuby/kubernetes/docker_config'
     autoload :Ingress,        'kuby/kubernetes/ingress'

@@ -4,7 +4,7 @@ require 'open3'
 
 module Kuby
   module Docker
-    class CLI
+    class CLI < CLIBase
       attr_reader :executable
 
       def initialize(executable = nil)
@@ -18,7 +18,7 @@ module Kuby
           '-f-', '.'
         ]
 
-        pipeline_w(cmd) do |stdin, _wait_threads|
+        pipeline_w({}, cmd) do |stdin, _wait_threads|
           stdin.puts(dockerfile.to_s)
         end
       end
@@ -53,36 +53,6 @@ module Kuby
         systemm([
           executable, 'push', "#{image_url}:#{tag}"
         ])
-      end
-
-      private
-
-      def pipeline_w(cmd, opts = {}, &block)
-        cmd_s = cmd.join(' ')
-        print_cmd(cmd_s)
-        Open3.pipeline_w(cmd_s, opts, &block)
-      end
-
-      def execc(cmd)
-        cmd_s = cmd.join(' ')
-        print_cmd(cmd_s)
-        exec(cmd_s)
-      end
-
-      def systemm(cmd)
-        cmd_s = cmd.join(' ')
-        print_cmd(cmd_s)
-        system(cmd_s)
-      end
-
-      def backticks(cmd)
-        cmd_s = cmd.join(' ')
-        print_cmd(cmd_s)
-        `#{cmd_s}`
-      end
-
-      def print_cmd(cmd)
-        puts ColorizedString["Executing #{cmd}"].yellow
       end
     end
   end

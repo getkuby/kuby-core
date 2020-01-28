@@ -13,7 +13,7 @@ module Kuby
         {
           name: name,
           port: port,
-          target_port: target_port,
+          targetPort: target_port,
           protocol: protocol
         }
       end

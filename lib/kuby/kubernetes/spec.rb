@@ -147,6 +147,11 @@ module Kuby
           end
 
           template do
+            labels do
+              app kube_spec.selector_app
+              role kube_spec.role
+            end
+
             spec do
               container do
                 name "#{kube_spec.selector_app}-#{kube_spec.role}"
@@ -179,8 +184,8 @@ module Kuby
                   timeout_seconds 1
 
                   http_get do
-                    path '/health'
-                    port 80
+                    path '/healthz'
+                    port kube_spec.docker.webserver_phase.port
                     scheme 'HTTP'
                   end
                 end
@@ -203,6 +208,19 @@ module Kuby
         @ingress ||= Ingress.new do
           name "#{spec.selector_app}-ingress"
           namespace spec.namespace.name
+
+          rule do
+            host 'camerondutro.com'
+
+            http do
+              path do
+                backend do
+                  service_name spec.service.name
+                  service_port spec.service.ports.first.port
+                end
+              end
+            end
+          end
         end
       end
 

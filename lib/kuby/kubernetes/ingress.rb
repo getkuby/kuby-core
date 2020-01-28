@@ -1,10 +1,16 @@
 module Kuby
   module Kubernetes
     class Ingress
+      autoload :Backend, 'kuby/kubernetes/ingress/backend'
+      autoload :Http,    'kuby/kubernetes/ingress/http'
+      autoload :Path,    'kuby/kubernetes/ingress/path'
+      autoload :Rule,    'kuby/kubernetes/ingress/rule'
+
       extend ValueFields
 
       value_fields :name, :namespace
       object_field(:labels) { Labels.new }
+      array_field(:rule) { Rule.new }
 
       def initialize(&block)
         instance_eval(&block) if block
@@ -12,7 +18,7 @@ module Kuby
 
       def serialize
         {
-          apiVersion: 'extensions/v1beta1',
+          apiVersion: 'networking.k8s.io/v1beta1',
           kind: 'Ingress',
           metadata: {
             name: name,
@@ -20,6 +26,7 @@ module Kuby
             labels: labels.serialize
           },
           spec: {
+            rules: rules.map(&:serialize)
           }
         }
       end

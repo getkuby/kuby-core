@@ -5,6 +5,7 @@ module Kuby
         extend ValueFields
 
         object_field(:spec) { Spec.new }
+        object_field(:labels) { Labels.new }
 
         def initialize(&block)
           instance_eval(&block) if block
@@ -12,6 +13,9 @@ module Kuby
 
         def serialize
           {
+            metadata: {
+              labels: labels.serialize
+            },
             spec: spec.serialize
           }
         end

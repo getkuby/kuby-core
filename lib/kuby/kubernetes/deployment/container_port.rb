@@ -13,7 +13,7 @@ module Kuby
         def serialize
           {
             name: name,
-            container_port: container_port,
+            containerPort: container_port,
             protocol: protocol
           }
         end
