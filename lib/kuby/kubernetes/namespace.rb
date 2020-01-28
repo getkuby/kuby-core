@@ -1,10 +1,9 @@
 module Kuby
   module Kubernetes
-    class ServiceAccount
+    class Namespace
       extend ValueFields
 
-      value_fields :name, :namespace
-      object_field(:labels) { Labels.new }
+      value_fields :name
 
       def initialize(&block)
         instance_eval(&block) if block
@@ -13,11 +12,9 @@ module Kuby
       def serialize
         {
           apiVersion: 'v1',
-          kind: 'ServiceAccount',
+          kind: 'Namespace',
           metadata: {
-            name: name,
-            namespace: namespace,
-            labels: labels.serialize
+            name: name
           }
         }
       end

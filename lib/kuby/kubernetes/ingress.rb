@@ -3,7 +3,7 @@ module Kuby
     class Ingress
       extend ValueFields
 
-      value_fields :name
+      value_fields :name, :namespace
       object_field(:labels) { Labels.new }
 
       def initialize(&block)
@@ -16,11 +16,16 @@ module Kuby
           kind: 'Ingress',
           metadata: {
             name: name,
+            namespace: namespace,
             labels: labels.serialize
           },
           spec: {
           }
         }
+      end
+
+      def to_resource
+        Resource.new(serialize)
       end
     end
   end

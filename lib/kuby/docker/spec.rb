@@ -72,6 +72,12 @@ module Kuby
         layer_stack.delete(*args)
       end
 
+      def credentials(&block)
+        @credentials ||= Credentials.new
+        @credentials.instance_eval(&block) if block
+        @credentials
+      end
+
       def to_dockerfile
         Dockerfile.new.tap do |df|
           layer_stack.each { |layer| layer.apply_to(df) }

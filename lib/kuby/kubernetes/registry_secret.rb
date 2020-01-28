@@ -2,12 +2,13 @@ require 'base64'
 
 module Kuby
   module Kubernetes
-    class Secrets < KeyValuePairs
+    class RegistrySecret
       extend ValueFields
 
       attr_reader :labels
 
-      value_fields :name, :namespace, :type
+      value_fields :name, :namespace
+      array_field(:docker_config) { DockerConfig.new }
       object_field(:labels) { Labels.new }
 
       def initialize(&block)
@@ -18,15 +19,19 @@ module Kuby
         {
           apiVersion: 'v1',
           kind: 'Secret',
-          type: type,
+          type: 'kubernetes.io/dockerconfigjson',
           metadata: {
             name: name,
             namespace: namespace,
             labels: labels.serialize
           },
-          data: super.each_with_object({}) do |(k, v), ret|
-            ret[k] = Base64.strict_encode64(v)
-          end
+          data: {
+            :".dockerconfigjson" => Base64.strict_encode64({
+              auths: docker_configs.each_with_object({}) do |dc, ret|
+                ret.merge!(dc.serialize)
+              end
+            }.to_json)
+          }
         }
       end
 

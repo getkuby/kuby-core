@@ -4,6 +4,7 @@ module Kuby
     autoload :BundlerPhase,   'kuby/docker/bundler_phase'
     autoload :CLI,            'kuby/docker/cli'
     autoload :CopyPhase,      'kuby/docker/copy_phase'
+    autoload :Credentials,    'kuby/docker/credentials'
     autoload :Dockerfile,     'kuby/docker/dockerfile'
     autoload :LayerStack,     'kuby/docker/layer_stack'
     autoload :Metadata,       'kuby/docker/metadata'

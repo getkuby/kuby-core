@@ -1,13 +1,17 @@
 module Kuby
   module ValueFields
     def value_fields(*fields)
-      fields.each do |field|
-        define_method(field) do |*args|
-          if args.empty?
-            instance_variable_get(:"@#{field}")
-          else
-            instance_variable_set(:"@#{field}", args.first)
-          end
+      fields.each { |field| value_field(field) }
+    end
+
+    def value_field(field, default: nil)
+      define_method(field) do |*args|
+        if args.empty?
+          instance_variable_get(:"@#{field}") || (
+            default.respond_to?(:call) ? default.call : default
+          )
+        else
+          instance_variable_set(:"@#{field}", args.first)
         end
       end
     end

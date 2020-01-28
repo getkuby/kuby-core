@@ -1,9 +1,10 @@
 module Kuby
   module Kubernetes
-    class ConfigMap
+    class ConfigMap < KeyValuePairs
       extend ValueFields
 
-      value_fields :name
+      value_fields :name, :namespace
+      object_field(:labels) { Labels.new }
 
       def initialize(&block)
         instance_eval(&block) if block
@@ -11,8 +12,19 @@ module Kuby
 
       def serialize
         {
-          name: name
+          apiVersion: 'v1',
+          kind: 'ConfigMap',
+          metadata: {
+            name: name,
+            namespace: namespace,
+            labels: labels.serialize
+          },
+          data: super
         }
+      end
+
+      def to_resource
+        Resource.new(serialize)
       end
     end
   end

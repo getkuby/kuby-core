@@ -10,6 +10,7 @@ module Kuby
         array_field(:port) { ContainerPort.new }
         array_field(:env, :env_entries) { EnvEntry.new }
         array_field(:env_from, :env_from_entries) { EnvFromEntry.new }
+        object_field(:readiness_probe) { ReadinessProbe.new }
 
         def initialize(&block)
           instance_eval(&block) if block
@@ -21,10 +22,11 @@ module Kuby
             args: args,
             command: command,
             image: image,
-            image_pull_policy: image_pull_policy,
+            imagePullPolicy: image_pull_policy,
             env: env_entries.map(&:serialize),
             envFrom: env_from_entries.map(&:serialize),
-            ports: ports.map(&:serialize)
+            ports: ports.map(&:serialize),
+            readinessProbe: readiness_probe.serialize
           }
         end
       end
