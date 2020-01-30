@@ -23,6 +23,10 @@ module Kuby
         }
       end
 
+      def kind
+        :config_map
+      end
+
       def to_resource
         Resource.new(serialize)
       end

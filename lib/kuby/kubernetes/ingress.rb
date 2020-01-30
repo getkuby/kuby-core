@@ -31,6 +31,10 @@ module Kuby
         }
       end
 
+      def kind
+        :ingress
+      end
+
       def to_resource
         Resource.new(serialize)
       end

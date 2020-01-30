@@ -22,6 +22,10 @@ module Kuby
         }
       end
 
+      def kind
+        :service_account
+      end
+
       def to_resource
         Resource.new(serialize)
       end

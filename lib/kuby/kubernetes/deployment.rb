@@ -36,11 +36,17 @@ module Kuby
             labels: labels.serialize
           },
           spec: {
-            selector: selector.serialize,
+            selector: {
+              matchLabels: selector.serialize
+            },
             strategy: strategy.serialize,
             template: template.serialize
           }
         }
+      end
+
+      def kind
+        :deployment
       end
 
       def to_resource

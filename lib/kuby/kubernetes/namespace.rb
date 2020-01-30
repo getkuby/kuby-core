@@ -19,6 +19,10 @@ module Kuby
         }
       end
 
+      def kind
+        :namespace
+      end
+
       def to_resource
         Resource.new(serialize)
       end

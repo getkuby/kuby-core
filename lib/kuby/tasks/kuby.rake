@@ -51,4 +51,21 @@ namespace :kuby do
       puts ColorizedString[msg].red
     end
   end
+
+  task objects: :environment do
+    Kuby.definition.kubernetes.objects.each do |object|
+      puts object.to_resource.serialize.to_yaml
+    end
+  end
+
+  task deploy: :environment do
+    kubeconfig_path = '/Users/cameron/.kube/kuby-app-prod-kubeconfig.yaml'
+
+    deployer = Kuby::Kubernetes::Deployer.new(
+      Kuby.definition.kubernetes.objects,
+      Kuby::Kubernetes::CLI.new(kubeconfig_path)
+    )
+
+    deployer.deploy
+  end
 end

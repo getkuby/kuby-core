@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Kuby
   module Kubernetes
     class Resource
@@ -9,6 +11,10 @@ module Kuby
 
       def serialize
         cleanup(contents)
+      end
+
+      def to_yaml
+        YAML.dump(serialize)
       end
 
       private

@@ -1,9 +1,5 @@
 module Kuby
   module Kubernetes
-    class Selector < KeyValuePairs
-      def serialize
-        { matchLabels: super }
-      end
-    end
+    class Selector < KeyValuePairs; end
   end
 end

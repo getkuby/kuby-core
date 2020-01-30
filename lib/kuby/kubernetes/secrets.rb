@@ -30,6 +30,10 @@ module Kuby
         }
       end
 
+      def kind
+        :secret
+      end
+
       def to_resource
         Resource.new(serialize)
       end

@@ -18,7 +18,7 @@ module Kuby
           '-f-', '.'
         ]
 
-        pipeline_w({}, cmd) do |stdin, _wait_threads|
+        open3_w({}, cmd) do |stdin, _wait_threads|
           stdin.puts(dockerfile.to_s)
         end
       end
@@ -53,6 +53,10 @@ module Kuby
         systemm([
           executable, 'push', "#{image_url}:#{tag}"
         ])
+      end
+
+      def status_key
+        :kuby_docker_cli_last_status
       end
     end
   end

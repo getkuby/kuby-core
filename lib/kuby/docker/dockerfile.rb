@@ -74,8 +74,8 @@ module Kuby
         @cursor = 0
       end
 
-      def from(*args)
-        add From.new(*args)
+      def from(*args, **kwargs)
+        add From.new(*args, **kwargs)
       end
 
       def workdir(*args)
@@ -90,8 +90,8 @@ module Kuby
         add Run.new(*args)
       end
 
-      def copy(*args)
-        add Copy.new(*args)
+      def copy(*args, **kwargs)
+        add Copy.new(*args, **kwargs)
       end
 
       def expose(*args)

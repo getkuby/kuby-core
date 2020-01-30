@@ -1,6 +1,7 @@
 require 'kuby/railtie'
 
 module Kuby
+  autoload :BasicLogger, 'kuby/basic_logger'
   autoload :CLIBase,     'kuby/cli_base'
   autoload :Definition,  'kuby/definition'
   autoload :Docker,      'kuby/docker'
@@ -10,6 +11,7 @@ module Kuby
 
   class << self
     attr_reader :definition
+    attr_accessor :logger
 
     def define(app = Rails.application, &block)
       @definition = Definition.new(app, &block)
@@ -17,6 +19,10 @@ module Kuby
 
     def docker_cli
       @docker_cli ||= Docker::CLI.new
+    end
+
+    def logger
+      @logger ||= NilLogger.new
     end
   end
 end
