@@ -1,3 +1,5 @@
+require 'kuby/docker/errors'
+
 module Kuby
   module Docker
     autoload :AssetsPhase,    'kuby/docker/assets_phase'

@@ -17,12 +17,12 @@ module Kuby
     end
 
     def object_field(field, &field_block)
-      define_method(field) do |&block|
+      define_method(field) do |*args, &block|
         ivar = :"@#{field}"
         val = instance_variable_get(ivar)
 
         unless val
-          val = field_block.call
+          val = field_block.call(*args)
           instance_variable_set(ivar, val)
         end
 

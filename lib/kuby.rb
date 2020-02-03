@@ -21,8 +21,14 @@ module Kuby
       @docker_cli ||= Docker::CLI.new
     end
 
-    def logger
-      @logger ||= NilLogger.new
+    def register_provider(provider_name, provider_klass)
+      providers[provider_name] = provider_klass
+    end
+
+    def providers
+      @providers ||= {}
     end
   end
 end
+
+Kuby.register_provider(:minikube, Kuby::Kubernetes::MinikubeProvider)

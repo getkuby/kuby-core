@@ -12,29 +12,68 @@ module Kuby
         @executable = executable || `which kubectl`.strip
       end
 
-      def apply(object, dry_run: false)
-        cmd = [executable, 'apply', '--validate']
+      def apply(res, dry_run: false)
+        cmd = [executable, '--kubeconfig', kubeconfig_path, 'apply', '--validate']
         cmd << '--dry-run' if dry_run
         cmd += ['-f', '-']
 
         open3_w(env, cmd) do |stdin, _wait_thread|
-          stdin.puts(object.to_resource.to_yaml)
+          stdin.puts(res.to_resource.to_yaml)
+        end
+
+        unless last_status.success?
+          err = InvalidResourceError.new("Could not apply #{res.kind.to_s.humanize.downcase} "\
+            "'#{res.name}': kubectl exited with status code #{last_status.exitstatus}"
+          )
+
+          err.resource = res
+          raise err
+        end
+      end
+
+      def apply_uri(uri, dry_run: false)
+        cmd = [executable, '--kubeconfig', kubeconfig_path, 'apply', '--validate']
+        cmd << '--dry-run' if dry_run
+        cmd += ['-f', uri]
+        systemm(cmd)
+
+        unless last_status.success?
+          err = InvalidResourceUriError.new("Could not apply #{uri}: "\
+            "kubectl exited with status code #{last_status.exitstatus}"
+          )
+
+          err.resource_uri = uri
+          raise err
         end
       end
 
       def get(type, namespace, selector)
-        cmd = [executable, '-n', namespace, 'get', type, '--selector']
+        cmd = [executable, '--kubeconfig', kubeconfig_path, '-n', namespace]
+        cmd += ['get', type, '--selector']
         cmd << selector.map { |k, v| "#{k}=#{v}" }.join(',')
         cmd += ['-o', 'json']
-        JSON.parse(backticks(cmd))
+        result = backticks(cmd)
+
+        unless last_status.success?
+          raise GetResourceError, "couldn't get resources of type '#{type}' "\
+            "in namespace #{namespace}: kubectl exited with status code #{last_status.exitstatus}"
+        end
+
+        JSON.parse(result)
+      end
+
+      def logs(namespace, selector, follow: true)
+        cmd = [executable, '--kubeconfig', kubeconfig_path, '-n', namespace, 'logs']
+        cmd << '-f' if follow
+        cmd << '--selector'
+        cmd << selector.map { |k, v| "#{k}=#{v}" }.join(',')
+        execc(cmd)
       end
 
       private
 
       def env
-        @env ||= {
-          'KUBECONFIG' => kubeconfig_path
-        }
+        @env ||= {}
       end
 
       def status_key

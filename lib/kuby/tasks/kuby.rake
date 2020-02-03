@@ -2,10 +2,6 @@ require 'colorized_string'
 require 'rouge'
 
 namespace :kuby do
-  task tester: :environment do
-    Kuby.definition.kubernetes.service
-  end
-
   task dockerfile: :environment do
     theme = Rouge::Themes::Base16::Solarized.new
     formatter = Rouge::Formatters::Terminal256.new(theme)
@@ -52,20 +48,29 @@ namespace :kuby do
     end
   end
 
-  task objects: :environment do
-    Kuby.definition.kubernetes.objects.each do |object|
-      puts object.to_resource.serialize.to_yaml
+  task resources: :environment do
+    Kuby.definition.kubernetes.resources.each do |res|
+      puts res.to_resource.serialize.to_yaml
     end
   end
 
   task deploy: :environment do
-    kubeconfig_path = '/Users/cameron/.kube/kuby-app-prod-kubeconfig.yaml'
+    Kuby.definition.kubernetes.provider.deploy
+  end
 
-    deployer = Kuby::Kubernetes::Deployer.new(
-      Kuby.definition.kubernetes.objects,
-      Kuby::Kubernetes::CLI.new(kubeconfig_path)
-    )
+  task kubeconfig: :environment do
+    path = Kuby.definition.kubernetes.provider.kubeconfig_path
+    puts ColorizedString["Printing contents of #{path}"].yellow
+    puts File.read(path)
+  end
 
-    deployer.deploy
+  task setup: :environment do
+    Kuby.definition.kubernetes.provider.setup
+  end
+
+  task logs: :environment do
+    kubernetes = Kuby.definition.kubernetes
+    kubernetes_cli = kubernetes.provider.kubernetes_cli
+    kubernetes_cli.logs(kubernetes.namespace.name, kubernetes.deployment.selector.serialize)
   end
 end

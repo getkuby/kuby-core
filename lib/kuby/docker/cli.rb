@@ -21,6 +21,11 @@ module Kuby
         open3_w({}, cmd) do |stdin, _wait_threads|
           stdin.puts(dockerfile.to_s)
         end
+
+        unless last_status.success?
+          raise BuildError, 'build failed: docker command exited with '\
+            "status code #{last_status.exitstatus}"
+        end
       end
 
       def run(image_url:, tag: 'latest', env: {}, ports: [])
@@ -53,6 +58,11 @@ module Kuby
         systemm([
           executable, 'push', "#{image_url}:#{tag}"
         ])
+
+        unless last_status.success?
+          raise PushError, 'push failed: docker command exited with '\
+            "status code #{last_status.exitstatus}"
+        end
       end
 
       def status_key

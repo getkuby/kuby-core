@@ -2,90 +2,77 @@ require 'colorized_string'
 
 module Kuby
   module Kubernetes
-    class InvalidResourceError < StandardError
-      attr_accessor :object
-    end
-
     class Deployer
       PRE_DEPLOY_ORDER = %i(namespace service_account config_map secret).freeze
       DEPLOY_ORDER = %i(service deployment ingress).freeze
 
-      attr_reader :objects, :cli
+      attr_reader :resources, :cli
 
-      def initialize(objects, cli)
-        @objects = objects
+      def initialize(resources, cli)
+        @resources = resources
         @cli = cli
       end
 
       def deploy
-        each_object do |obj|
+        each_resource do |res|
           Kuby.logger.info(
-            ColorizedString["Validating #{obj.kind.to_s.humanize.downcase} '#{obj.name}'"].yellow
+            ColorizedString["Validating #{res.kind.to_s.humanize.downcase} '#{res.name}'"].yellow
           )
 
-          validate_object!(obj)
+          validate_resource!(res)
         end
 
         Kuby.logger.info('All Kubernetes resources valid!')
 
-        each_object do |obj|
+        each_resource do |res|
           Kuby.logger.info(
-            ColorizedString["Deploying #{obj.kind.to_s.humanize.downcase} '#{obj.name}'"].yellow
+            ColorizedString["Deploying #{res.kind.to_s.humanize.downcase} '#{res.name}'"].yellow
           )
 
-          deploy_object(obj)
+          deploy_resource(res)
         end
       rescue InvalidResourceError => e
         Kuby.logger.fatal(ColorizedString[e.message].red)
-        Kuby.logger.fatal(ColorizedString[e.object.to_resource.to_yaml].red)
+        Kuby.logger.fatal(ColorizedString[e.resource.to_resource.to_yaml].red)
       end
 
       private
 
-      def validate_object!(obj)
-        cli.apply(obj, dry_run: true)
-
-        unless cli.last_status.success?
-          err = InvalidResourceError.new("Could not validate #{obj.kind.to_s.humanize.downcase} "\
-            "'#{obj.name}': kubectl exited with status code #{cli.last_status.exitstatus}"
-          )
-
-          err.object = obj
-          raise err
-        end
+      def validate_resource!(res)
+        cli.apply(res, dry_run: true)
       end
 
-      def deploy_object(obj)
-        cli.apply(obj)
-        Monitors.for(obj, cli, timeout: 10.minutes).watch_until_ready
+      def deploy_resource(res)
+        cli.apply(res)
+        Monitors.for(res, cli, timeout: 10.minutes).watch_until_ready
       end
 
-      def each_object(&block)
+      def each_resource(&block)
         examined = []
 
         PRE_DEPLOY_ORDER.each do |kind|
-          each_object_of_kind(kind) do |obj|
-            examined << obj
-            yield obj
+          each_resource_of_kind(kind) do |res|
+            examined << res
+            yield res
           end
         end
 
-        unknown = (objects - examined).reject do |obj|
-          DEPLOY_ORDER.include?(obj.kind)
+        unknown = (resources - examined).reject do |res|
+          DEPLOY_ORDER.include?(res.kind)
         end
 
         unknown.map(&:kind).uniq.each do |unknown_kind|
-          each_object_of_kind(unknown_kind, &block)
+          each_resource_of_kind(unknown_kind, &block)
         end
 
         DEPLOY_ORDER.each do |kind|
-          each_object_of_kind(kind, &block)
+          each_resource_of_kind(kind, &block)
         end
       end
 
-      def each_object_of_kind(kind)
-        objects.each do |obj|
-          yield obj if obj.kind == kind
+      def each_resource_of_kind(kind)
+        resources.each do |res|
+          yield res if res.kind == kind
         end
       end
     end

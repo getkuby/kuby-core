@@ -1,5 +1,7 @@
 module Kuby
   module Kubernetes
+    class ProviderError < StandardError; end
+
     class Spec
       extend ValueFields
 
@@ -11,20 +13,44 @@ module Kuby
 
       attr_reader :definition
       value_field :environment, default: DEFAULT_ENVIRONMENT
+      value_fields :hostname
 
       def initialize(definition)
         @definition = definition
       end
 
-      def namespace
+      def provider(provider_name = nil, &block)
+        if provider_name
+          if @provider || provider_klass = Kuby.providers[provider_name]
+            @provider ||= provider_klass.new(definition)
+            @provider.configure(&block)
+          else
+            msg = if provider_name
+              "no provider registered with name #{provider_name}, "\
+                'do you need to add a gem to your Gemfile?'
+            else
+              'no provider configured'
+            end
+
+            raise ProviderError, msg
+          end
+        end
+
+        @provider
+      end
+
+      def namespace(&block)
         spec = self
 
         @namespace ||= Namespace.new do
           name "#{spec.selector_app}-#{spec.environment}"
         end
+
+        @namespace.instance_eval(&block) if block
+        @namespace
       end
 
-      def service
+      def service(&block)
         spec = self
 
         @service ||= Service.new do
@@ -34,7 +60,7 @@ module Kuby
 
           port do
             name 'http'
-            port 80
+            port 8080
             protocol 'TCP'
             target_port 'http'
           end
@@ -49,9 +75,12 @@ module Kuby
             role spec.role
           end
         end
+
+        @service.instance_eval(&block) if block
+        @service
       end
 
-      def service_account
+      def service_account(&block)
         spec = self
 
         @service_account ||= ServiceAccount.new do
@@ -63,9 +92,12 @@ module Kuby
             role spec.role
           end
         end
+
+        @service_account.instance_eval(&block) if block
+        @service_account
       end
 
-      def config_map
+      def config_map(&block)
         spec = self
 
         @config_map ||= ConfigMap.new do
@@ -82,12 +114,15 @@ module Kuby
             end
           end
         end
+
+        @config_map.instance_eval(&block) if block
+        @config_map
       end
 
-      def app_secrets
+      def app_secrets(&block)
         spec = self
 
-        @secrets ||= Secrets.new do
+        @app_secrets ||= Secrets.new do
           type 'Opaque'
           name "#{spec.selector_app}-secrets"
           namespace spec.namespace.name
@@ -102,9 +137,12 @@ module Kuby
             end
           end
         end
+
+        @app_secrets.instance_eval(&block) if block
+        @app_secrets
       end
 
-      def registry_secret
+      def registry_secret(&block)
         spec = self
 
         @registry_secret ||= RegistrySecret.new do
@@ -118,9 +156,12 @@ module Kuby
             email spec.docker.credentials.email
           end
         end
+
+        @registry_secret.instance_eval(&block) if block
+        @registry_secret
       end
 
-      def deployment
+      def deployment(&block)
         kube_spec = self
 
         @deployment ||= Deployment.new do
@@ -200,9 +241,12 @@ module Kuby
             end
           end
         end
+
+        @deployment.instance_eval(&block) if block
+        @deployment
       end
 
-      def ingress
+      def ingress(&block)
         spec = self
 
         @ingress ||= Ingress.new do
@@ -210,7 +254,7 @@ module Kuby
           namespace spec.namespace.name
 
           rule do
-            host 'camerondutro.com'
+            host spec.hostname
 
             http do
               path do
@@ -222,10 +266,13 @@ module Kuby
             end
           end
         end
+
+        @ingress.instance_eval(&block) if block
+        @ingress
       end
 
-      def objects
-        @objects ||= [
+      def resources
+        @resources ||= [
           namespace,
           service,
           service_account,
