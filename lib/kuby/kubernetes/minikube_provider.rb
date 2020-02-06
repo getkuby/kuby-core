@@ -18,7 +18,7 @@ module Kuby
         # it handles all the localhost mapping, etc if you set up a
         # service LB.
         kube_spec.resources.delete(kube_spec.ingress)
-        kube_spec.service { type 'LoadBalancer' }
+        kube_spec.service.spec { type 'LoadBalancer' }
 
         configure do
           # default kubeconfig path

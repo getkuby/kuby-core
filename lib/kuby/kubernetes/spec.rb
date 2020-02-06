@@ -1,3 +1,5 @@
+require 'kube-dsl'
+
 module Kuby
   module Kubernetes
     class ProviderError < StandardError; end
@@ -42,8 +44,10 @@ module Kuby
       def namespace(&block)
         spec = self
 
-        @namespace ||= Namespace.new do
-          name "#{spec.selector_app}-#{spec.environment}"
+        @namespace ||= KubeDSL.namespace do
+          metadata do
+            name "#{spec.selector_app}-#{spec.environment}"
+          end
         end
 
         @namespace.instance_eval(&block) if block
@@ -53,26 +57,31 @@ module Kuby
       def service(&block)
         spec = self
 
-        @service ||= Service.new do
-          name "#{spec.selector_app}-svc"
-          namespace spec.namespace.name
-          type 'ClusterIP'
+        @service ||= KubeDSL.service do
+          metadata do
+            name "#{spec.selector_app}-svc"
+            namespace spec.namespace.metadata.name
 
-          port do
-            name 'http'
-            port 8080
-            protocol 'TCP'
-            target_port 'http'
+            labels do
+              app spec.selector_app
+              role spec.role
+            end
           end
 
-          labels do
-            app spec.selector_app
-            role spec.role
-          end
+          spec do
+            type 'ClusterIP'
 
-          selector do
-            app spec.selector_app
-            role spec.role
+            selector do
+              app spec.selector_app
+              role spec.role
+            end
+
+            port do
+              name 'http'
+              port 8080
+              protocol 'TCP'
+              target_port 'http'
+            end
           end
         end
 
@@ -83,13 +92,15 @@ module Kuby
       def service_account(&block)
         spec = self
 
-        @service_account ||= ServiceAccount.new do
-          name "#{spec.selector_app}-sa"
-          namespace spec.namespace.name
+        @service_account ||= KubeDSL.service_account do
+          metadata do
+            name "#{spec.selector_app}-sa"
+            namespace spec.namespace.metadata.name
 
-          labels do
-            app spec.selector_app
-            role spec.role
+            labels do
+              app spec.selector_app
+              role spec.role
+            end
           end
         end
 
@@ -100,17 +111,21 @@ module Kuby
       def config_map(&block)
         spec = self
 
-        @config_map ||= ConfigMap.new do
-          name "#{spec.selector_app}-config"
-          namespace spec.namespace.name
+        @config_map ||= KubeDSL.config_map do
+          metadata do
+            name "#{spec.selector_app}-config"
+            namespace spec.namespace.metadata.name
+          end
 
-          ENV.each_pair do |key, val|
-            include_key = key.start_with?('RAILS_') &&
-              !ENV_SECRETS.include?(key) &&
-              !ENV_EXCLUDE.include?(key)
+          data do
+            ENV.each_pair do |key, val|
+              include_key = key.start_with?('RAILS_') &&
+                !ENV_SECRETS.include?(key) &&
+                !ENV_EXCLUDE.include?(key)
 
-            if include_key
-              send(key.to_sym, val)
+              if include_key
+                send(key.to_sym, val)
+              end
             end
           end
         end
@@ -122,18 +137,23 @@ module Kuby
       def app_secrets(&block)
         spec = self
 
-        @app_secrets ||= Secrets.new do
+        @app_secrets ||= KubeDSL.secret do
+          metadata do
+            name "#{spec.selector_app}-secrets"
+            namespace spec.namespace.metadata.name
+          end
+
           type 'Opaque'
-          name "#{spec.selector_app}-secrets"
-          namespace spec.namespace.name
 
-          if master_key = ENV[MASTER_KEY_VAR]
-            send MASTER_KEY_VAR.to_sym, master_key
-          else
-            master_key_path = spec.app.root.join('config', 'master.key')
+          data do
+            if master_key = ENV[MASTER_KEY_VAR]
+              send(MASTER_KEY_VAR.to_sym, master_key)
+            else
+              master_key_path = spec.app.root.join('config', 'master.key')
 
-            if master_key_path.exist?
-              send MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip
+              if master_key_path.exist?
+                send(MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip)
+              end
             end
           end
         end
@@ -146,8 +166,10 @@ module Kuby
         spec = self
 
         @registry_secret ||= RegistrySecret.new do
-          name "#{spec.selector_app}-registry-secret"
-          namespace spec.namespace.name
+          metadata do
+            name "#{spec.selector_app}-registry-secret"
+            namespace spec.namespace.metadata.name
+          end
 
           docker_config do
             registry_host spec.docker.metadata.image_host
@@ -164,80 +186,88 @@ module Kuby
       def deployment(&block)
         kube_spec = self
 
-        @deployment ||= Deployment.new do
-          name "#{kube_spec.selector_app}-deployment"
-          namespace kube_spec.namespace.name
+        @deployment ||= KubeDSL.deployment do
+          metadata do
+            name "#{kube_spec.selector_app}-deployment"
+            namespace kube_spec.namespace.metadata.name
 
-          labels do
-            app kube_spec.selector_app
-            role kube_spec.role
-          end
-
-          selector do
-            app kube_spec.selector_app
-            role kube_spec.role
-          end
-
-          strategy do
-            type 'RollingUpdate'
-
-            rolling_update do
-              max_surge '25%'
-              max_unavailable 0
-            end
-          end
-
-          template do
             labels do
               app kube_spec.selector_app
               role kube_spec.role
             end
+          end
 
-            spec do
-              container do
-                name "#{kube_spec.selector_app}-#{kube_spec.role}"
-                image kube_spec.image_url_with_tag
-                image_pull_policy 'IfNotPresent'
+          spec do
+            selector do
+              match_labels do
+                app kube_spec.selector_app
+                role kube_spec.role
+              end
+            end
 
-                port do
-                  container_port kube_spec.docker.webserver_phase.port
-                  name 'http'
-                  protocol 'TCP'
-                end
+            strategy do
+              type 'RollingUpdate'
 
-                env_from do
-                  config_map_ref do
-                    name kube_spec.config_map.name
-                  end
-                end
+              rolling_update do
+                max_surge '25%'
+                max_unavailable 0
+              end
+            end
 
-                env_from do
-                  secret_ref do
-                    name kube_spec.app_secrets.name
-                  end
-                end
-
-                readiness_probe do
-                  success_threshold 1
-                  failure_threshold 2
-                  initial_delay_seconds 15
-                  period_seconds 3
-                  timeout_seconds 1
-
-                  http_get do
-                    path '/healthz'
-                    port kube_spec.docker.webserver_phase.port
-                    scheme 'HTTP'
-                  end
+            template do
+              metadata do
+                labels do
+                  app kube_spec.selector_app
+                  role kube_spec.role
                 end
               end
 
-              image_pull_secret do
-                name kube_spec.registry_secret.name
-              end
+              spec do
+                container do
+                  name "#{kube_spec.selector_app}-#{kube_spec.role}"
+                  image kube_spec.image_url_with_tag
+                  image_pull_policy 'IfNotPresent'
 
-              restart_policy 'Always'
-              service_account_name kube_spec.service_account.name
+                  port do
+                    container_port kube_spec.docker.webserver_phase.port
+                    name 'http'
+                    protocol 'TCP'
+                  end
+
+                  env_from do
+                    config_map_ref do
+                      name kube_spec.config_map.metadata.name
+                    end
+                  end
+
+                  env_from do
+                    secret_ref do
+                      name kube_spec.app_secrets.metadata.name
+                    end
+                  end
+
+                  readiness_probe do
+                    success_threshold 1
+                    failure_threshold 2
+                    initial_delay_seconds 15
+                    period_seconds 3
+                    timeout_seconds 1
+
+                    http_get do
+                      path '/healthz'
+                      port kube_spec.docker.webserver_phase.port
+                      scheme 'HTTP'
+                    end
+                  end
+                end
+
+                image_pull_secret do
+                  name kube_spec.registry_secret.metadata.name
+                end
+
+                restart_policy 'Always'
+                service_account_name kube_spec.service_account.metadata.name
+              end
             end
           end
         end
@@ -249,18 +279,22 @@ module Kuby
       def ingress(&block)
         spec = self
 
-        @ingress ||= Ingress.new do
-          name "#{spec.selector_app}-ingress"
-          namespace spec.namespace.name
+        @ingress ||= KubeDSL.ingress do
+          metadata do
+            name "#{spec.selector_app}-ingress"
+            namespace spec.namespace.metadata.name
+          end
 
-          rule do
-            host spec.hostname
+          spec do
+            rule do
+              host spec.hostname
 
-            http do
-              path do
-                backend do
-                  service_name spec.service.name
-                  service_port spec.service.ports.first.port
+              http do
+                path do
+                  backend do
+                    service_name spec.service.metadata.name
+                    service_port spec.service.spec.ports.first.port
+                  end
                 end
               end
             end

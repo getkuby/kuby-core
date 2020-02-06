@@ -19,7 +19,9 @@ module Kuby
             end
 
             data = cli.get(
-              :deployment, deployment.namespace, deployment.selector.serialize
+              :deployment,
+              deployment.metadata.namespace,
+              deployment.spec.selector.match_labels.serialize
             )
 
             all_available = data['items'].all? do |item|

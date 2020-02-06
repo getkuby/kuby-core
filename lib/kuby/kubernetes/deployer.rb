@@ -16,7 +16,7 @@ module Kuby
       def deploy
         each_resource do |res|
           Kuby.logger.info(
-            ColorizedString["Validating #{res.kind.to_s.humanize.downcase} '#{res.name}'"].yellow
+            ColorizedString["Validating #{res.kind.to_s.humanize.downcase} '#{res.metadata.name}'"].yellow
           )
 
           validate_resource!(res)
@@ -26,7 +26,7 @@ module Kuby
 
         each_resource do |res|
           Kuby.logger.info(
-            ColorizedString["Deploying #{res.kind.to_s.humanize.downcase} '#{res.name}'"].yellow
+            ColorizedString["Deploying #{res.kind.to_s.humanize.downcase} '#{res.metadata.name}'"].yellow
           )
 
           deploy_resource(res)
