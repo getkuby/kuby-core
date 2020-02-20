@@ -23,7 +23,7 @@ module Kuby
 
         unless last_status.success?
           err = InvalidResourceError.new("Could not apply #{res.kind.to_s.humanize.downcase} "\
-            "'#{res.name}': kubectl exited with status code #{last_status.exitstatus}"
+            "'#{res.metadata.name}': kubectl exited with status code #{last_status.exitstatus}"
           )
 
           err.resource = res
@@ -47,10 +47,9 @@ module Kuby
         end
       end
 
-      def get(type, namespace, selector)
+      def get_object(type, namespace, name)
         cmd = [executable, '--kubeconfig', kubeconfig_path, '-n', namespace]
-        cmd += ['get', type, '--selector']
-        cmd << selector.map { |k, v| "#{k}=#{v}" }.join(',')
+        cmd += ['get', type, name]
         cmd += ['-o', 'json']
         result = backticks(cmd)
 
@@ -62,12 +61,17 @@ module Kuby
         JSON.parse(result)
       end
 
-      def logs(namespace, selector, follow: true)
+      def logtail(namespace, selector, follow: true)
         cmd = [executable, '--kubeconfig', kubeconfig_path, '-n', namespace, 'logs']
         cmd << '-f' if follow
         cmd << '--selector'
         cmd << selector.map { |k, v| "#{k}=#{v}" }.join(',')
         execc(cmd)
+      end
+
+      def current_context
+        cmd = [executable, '--kubeconfig', kubeconfig_path, 'config', 'current-context']
+        backticks(cmd).strip
       end
 
       private

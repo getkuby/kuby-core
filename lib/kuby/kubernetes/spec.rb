@@ -2,23 +2,19 @@ require 'kube-dsl'
 
 module Kuby
   module Kubernetes
-    class ProviderError < StandardError; end
-
     class Spec
-      extend ValueFields
+      extend ::KubeDSL::ValueFields
 
-      WEB_ROLE = 'web'.freeze
       DEFAULT_ENVIRONMENT = 'production'.freeze
-      MASTER_KEY_VAR = 'RAILS_MASTER_KEY'.freeze
-      ENV_SECRETS = [MASTER_KEY_VAR].freeze
-      ENV_EXCLUDE = ['RAILS_ENV'].freeze
 
       attr_reader :definition
       value_field :environment, default: DEFAULT_ENVIRONMENT
-      value_fields :hostname
 
       def initialize(definition)
         @definition = definition
+        @plugins = {}
+
+        plugin(:rails_app)
       end
 
       def provider(provider_name = nil, &block)
@@ -34,11 +30,51 @@ module Kuby
               'no provider configured'
             end
 
-            raise ProviderError, msg
+            raise MissingProviderError, msg
           end
         end
 
         @provider
+      end
+
+      def plugin(plugin_name, &block)
+        if @plugins[plugin_name] || plugin_klass = Kuby.plugins[plugin_name]
+          @plugins[plugin_name] ||= plugin_klass.new(definition)
+          @plugins[plugin_name].configure(&block)
+        else
+          raise MissingPluginError, "no plugin registered with name #{plugin_name}, "\
+            'do you need to add a gem to your Gemfile?'
+        end
+
+        @plugins[plugin_name]
+      end
+
+      def deploy(tag = nil)
+        set_tag(tag ||= latest_tag)
+        provider.deploy
+      end
+
+      def rollback
+        depl = provider.kubernetes_cli.get_object(
+          'deployment', namespace.metadata.name, deployment.metadata.name
+        )
+
+        image_url = depl.dig('spec', 'template', 'spec', 'containers', 0, 'image')
+
+        unless image_url
+          raise MissingDeploymentError, "couldn't find an existing deployment"
+        end
+
+        deployed_tag = ::Kuby::Docker::TimestampTag.try_parse(image_url.split(':').last)
+        all_tags = docker.tags.all.timestamp_tags.sort
+        tag_idx = all_tags.index { |tag| tag.time == deployed_tag.time } || 0
+
+        if tag_idx == 0
+          raise Kuby::Docker::MissingTagError, 'could not find previous tag'
+        end
+
+        previous_tag = all_tags[tag_idx - 1]
+        deploy(previous_tag.to_s)
       end
 
       def namespace(&block)
@@ -54,294 +90,43 @@ module Kuby
         @namespace
       end
 
-      def service(&block)
-        spec = self
-
-        @service ||= KubeDSL.service do
-          metadata do
-            name "#{spec.selector_app}-svc"
-            namespace spec.namespace.metadata.name
-
-            labels do
-              app spec.selector_app
-              role spec.role
-            end
-          end
-
-          spec do
-            type 'ClusterIP'
-
-            selector do
-              app spec.selector_app
-              role spec.role
-            end
-
-            port do
-              name 'http'
-              port 8080
-              protocol 'TCP'
-              target_port 'http'
-            end
-          end
-        end
-
-        @service.instance_eval(&block) if block
-        @service
-      end
-
-      def service_account(&block)
-        spec = self
-
-        @service_account ||= KubeDSL.service_account do
-          metadata do
-            name "#{spec.selector_app}-sa"
-            namespace spec.namespace.metadata.name
-
-            labels do
-              app spec.selector_app
-              role spec.role
-            end
-          end
-        end
-
-        @service_account.instance_eval(&block) if block
-        @service_account
-      end
-
-      def config_map(&block)
-        spec = self
-
-        @config_map ||= KubeDSL.config_map do
-          metadata do
-            name "#{spec.selector_app}-config"
-            namespace spec.namespace.metadata.name
-          end
-
-          data do
-            ENV.each_pair do |key, val|
-              include_key = key.start_with?('RAILS_') &&
-                !ENV_SECRETS.include?(key) &&
-                !ENV_EXCLUDE.include?(key)
-
-              if include_key
-                send(key.to_sym, val)
-              end
-            end
-          end
-        end
-
-        @config_map.instance_eval(&block) if block
-        @config_map
-      end
-
-      def app_secrets(&block)
-        spec = self
-
-        @app_secrets ||= KubeDSL.secret do
-          metadata do
-            name "#{spec.selector_app}-secrets"
-            namespace spec.namespace.metadata.name
-          end
-
-          type 'Opaque'
-
-          data do
-            if master_key = ENV[MASTER_KEY_VAR]
-              send(MASTER_KEY_VAR.to_sym, master_key)
-            else
-              master_key_path = spec.app.root.join('config', 'master.key')
-
-              if master_key_path.exist?
-                send(MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip)
-              end
-            end
-          end
-        end
-
-        @app_secrets.instance_eval(&block) if block
-        @app_secrets
-      end
-
-      def registry_secret(&block)
-        spec = self
-
-        @registry_secret ||= RegistrySecret.new do
-          metadata do
-            name "#{spec.selector_app}-registry-secret"
-            namespace spec.namespace.metadata.name
-          end
-
-          docker_config do
-            registry_host spec.docker.metadata.image_host
-            username spec.docker.credentials.username
-            password spec.docker.credentials.password
-            email spec.docker.credentials.email
-          end
-        end
-
-        @registry_secret.instance_eval(&block) if block
-        @registry_secret
-      end
-
-      def deployment(&block)
-        kube_spec = self
-
-        @deployment ||= KubeDSL.deployment do
-          metadata do
-            name "#{kube_spec.selector_app}-deployment"
-            namespace kube_spec.namespace.metadata.name
-
-            labels do
-              app kube_spec.selector_app
-              role kube_spec.role
-            end
-          end
-
-          spec do
-            selector do
-              match_labels do
-                app kube_spec.selector_app
-                role kube_spec.role
-              end
-            end
-
-            strategy do
-              type 'RollingUpdate'
-
-              rolling_update do
-                max_surge '25%'
-                max_unavailable 0
-              end
-            end
-
-            template do
-              metadata do
-                labels do
-                  app kube_spec.selector_app
-                  role kube_spec.role
-                end
-              end
-
-              spec do
-                container do
-                  name "#{kube_spec.selector_app}-#{kube_spec.role}"
-                  image kube_spec.image_url_with_tag
-                  image_pull_policy 'IfNotPresent'
-
-                  port do
-                    container_port kube_spec.docker.webserver_phase.port
-                    name 'http'
-                    protocol 'TCP'
-                  end
-
-                  env_from do
-                    config_map_ref do
-                      name kube_spec.config_map.metadata.name
-                    end
-                  end
-
-                  env_from do
-                    secret_ref do
-                      name kube_spec.app_secrets.metadata.name
-                    end
-                  end
-
-                  readiness_probe do
-                    success_threshold 1
-                    failure_threshold 2
-                    initial_delay_seconds 15
-                    period_seconds 3
-                    timeout_seconds 1
-
-                    http_get do
-                      path '/healthz'
-                      port kube_spec.docker.webserver_phase.port
-                      scheme 'HTTP'
-                    end
-                  end
-                end
-
-                image_pull_secret do
-                  name kube_spec.registry_secret.metadata.name
-                end
-
-                restart_policy 'Always'
-                service_account_name kube_spec.service_account.metadata.name
-              end
-            end
-          end
-        end
-
-        @deployment.instance_eval(&block) if block
-        @deployment
-      end
-
-      def ingress(&block)
-        spec = self
-
-        @ingress ||= KubeDSL.ingress do
-          metadata do
-            name "#{spec.selector_app}-ingress"
-            namespace spec.namespace.metadata.name
-          end
-
-          spec do
-            rule do
-              host spec.hostname
-
-              http do
-                path do
-                  backend do
-                    service_name spec.service.metadata.name
-                    service_port spec.service.spec.ports.first.port
-                  end
-                end
-              end
-            end
-          end
-        end
-
-        @ingress.instance_eval(&block) if block
-        @ingress
-      end
-
       def resources
-        @resources ||= [
+        [
           namespace,
-          service,
-          service_account,
-          config_map,
-          app_secrets,
-          registry_secret,
-          deployment,
-          ingress
+          *@plugins.flat_map { |_, plugin| plugin.resources }
         ]
+      end
+
+      def set_tag(tag)
+        spec = self
+
+        plugin(:rails_app).deployment do
+          spec do
+            template do
+              spec do
+                container(:web) do
+                  image "#{spec.docker.metadata.image_url}:#{tag}"
+                end
+              end
+            end
+          end
+        end
       end
 
       def selector_app
         @selector_app ||= definition.app_name.downcase
       end
 
-      def role
-        WEB_ROLE
-      end
-
-      def image_url_with_tag
-        @image_url ||= begin
-          tag = docker.latest_tags.find do |tag|
-            tag != 'latest'
-          end
-
-          "#{docker.metadata.image_url}:#{tag}"
-        end
-      end
-
       def docker
         definition.docker
       end
 
-      def app
-        definition.app
+      private
+
+      def latest_tag
+        @latest_tag ||= docker.tags.local.latest_tags.find do |tag|
+          tag != ::Kuby::Docker::Tags::LATEST
+        end
       end
     end
   end

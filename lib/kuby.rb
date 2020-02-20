@@ -7,7 +7,6 @@ module Kuby
   autoload :Docker,      'kuby/docker'
   autoload :Kubernetes,  'kuby/kubernetes'
   autoload :Middleware,  'kuby/middleware'
-  autoload :ValueFields, 'kuby/value_fields'
 
   class << self
     attr_reader :definition
@@ -17,10 +16,6 @@ module Kuby
       @definition = Definition.new(app, &block)
     end
 
-    def docker_cli
-      @docker_cli ||= Docker::CLI.new
-    end
-
     def register_provider(provider_name, provider_klass)
       providers[provider_name] = provider_klass
     end
@@ -28,7 +23,19 @@ module Kuby
     def providers
       @providers ||= {}
     end
+
+    def register_plugin(plugin_name, plugin_klass)
+      plugins[plugin_name] = plugin_klass
+    end
+
+    def plugins
+      @plugins ||= {}
+    end
   end
 end
 
+# providers
 Kuby.register_provider(:minikube, Kuby::Kubernetes::MinikubeProvider)
+
+# plugins
+Kuby.register_plugin(:rails_app, Kuby::Kubernetes::Plugins::RailsApp)

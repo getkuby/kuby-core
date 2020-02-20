@@ -13,7 +13,7 @@ namespace :kuby do
   task build: :environment do
     docker = Kuby.definition.docker
 
-    Kuby.docker_cli.build(
+    docker.cli.build(
       dockerfile: docker.to_dockerfile,
       image_url:  docker.metadata.image_url,
       tags:       docker.metadata.tags
@@ -24,7 +24,7 @@ namespace :kuby do
     docker = Kuby.definition.docker
     dockerfile = docker.to_dockerfile
 
-    Kuby.docker_cli.run(
+    docker.cli.run(
       image_url: docker.metadata.image_url,
       tag:       'latest',
       env:       { 'RAILS_ENV' => 'production' },
@@ -38,7 +38,7 @@ namespace :kuby do
 
     begin
       docker.latest_tags.each do |tag|
-        Kuby.docker_cli.push(image_url, tag)
+        docker.cli.push(image_url, tag)
       end
     rescue Kuby::Docker::MissingTagError => e
       msg = "#{e.message} Run rake kuby:build to build the"\
@@ -55,7 +55,11 @@ namespace :kuby do
   end
 
   task deploy: :environment do
-    Kuby.definition.kubernetes.provider.deploy
+    Kuby.definition.kubernetes.deploy
+  end
+
+  task rollback: :environment do
+    Kuby.definition.kubernetes.rollback
   end
 
   task kubeconfig: :environment do
@@ -71,6 +75,8 @@ namespace :kuby do
   task logs: :environment do
     kubernetes = Kuby.definition.kubernetes
     kubernetes_cli = kubernetes.provider.kubernetes_cli
-    kubernetes_cli.logs(kubernetes.namespace.name, kubernetes.deployment.selector.serialize)
+    kubernetes_cli.logtail(
+      kubernetes.namespace.name, kubernetes.deployment.selector.serialize
+    )
   end
 end

@@ -1,8 +1,11 @@
+require 'uri'
+
 module Kuby
   module Docker
     class Metadata
       DEFAULT_DISTRO = :debian
-      DEFAULT_REGISTRY_HOST = 'docker.io'.freeze
+      DEFAULT_REGISTRY_HOST = 'https://docker.io'.freeze
+      LATEST_TAG = 'latest'
 
       attr_accessor :image_url
       attr_reader :definition, :distro
@@ -17,10 +20,19 @@ module Kuby
       end
 
       def image_host
-        if image_url.include?('/')
-          image_url.split('/').first
+        @image_host ||= if image_url.include?('/')
+          uri = parse_url(image_url)
+          "#{uri.scheme}://#{uri.host}"
         else
           DEFAULT_REGISTRY_HOST
+        end
+      end
+
+      def image_repo
+        @image_repo ||= if image_url.include?('/')
+          parse_url(image_url).path.sub(/\A\//, '')
+        else
+          image_url
         end
       end
 
@@ -41,8 +53,16 @@ module Kuby
 
       def default_tags
         @default_tags ||= [
-          Time.now.strftime('%Y%m%d%H%M%S'), 'latest'
+          TimestampTag.new(Time.now).to_s, LATEST_TAG
         ]
+      end
+
+      def parse_url(url)
+        uri = URI.parse(url)
+        return uri if uri.scheme
+
+        # force a scheme because URI.parse won't work properly without one
+        URI.parse("https://#{url}")
       end
     end
   end

@@ -1,79 +1,92 @@
-require 'colorized_string'
+require 'krane'
+require 'tempfile'
+require 'yaml'
 
 module Kuby
   module Kubernetes
     class Deployer
-      PRE_DEPLOY_ORDER = %i(namespace service_account config_map secret).freeze
-      DEPLOY_ORDER = %i(service deployment ingress).freeze
+      attr_reader :definition
 
-      attr_reader :resources, :cli
-
-      def initialize(resources, cli)
-        @resources = resources
-        @cli = cli
+      def initialize(definition)
+        @definition = definition
       end
 
       def deploy
-        each_resource do |res|
-          Kuby.logger.info(
-            ColorizedString["Validating #{res.kind.to_s.humanize.downcase} '#{res.metadata.name}'"].yellow
-          )
-
-          validate_resource!(res)
+        namespaced, global = all_resources.partition do |resource|
+          # Unfortunately we can't use respond_to here because all KubeDSL
+          # objects use ObjectMeta, which has a namespace field. Not sure
+          # why, since it makes no sense for a namespace to have a namespace.
+          # Instead we just check for nil here.
+          resource.metadata.namespace
         end
 
-        Kuby.logger.info('All Kubernetes resources valid!')
+        deploy_global_resources(global)
+        deploy_namespaced_resources(namespaced)
+      end
 
-        each_resource do |res|
+      private
+
+      def deploy_global_resources(resources)
+        resources.each do |res|
+          Kuby.logger.info(
+            ColorizedString["Validating global resource #{res.kind.to_s.humanize.downcase} '#{res.metadata.name}'"].yellow
+          )
+
+          cli.apply(res, dry_run: true)
+        end
+
+        resources.each do |res|
           Kuby.logger.info(
             ColorizedString["Deploying #{res.kind.to_s.humanize.downcase} '#{res.metadata.name}'"].yellow
           )
 
-          deploy_resource(res)
+          cli.apply(res)
         end
       rescue InvalidResourceError => e
         Kuby.logger.fatal(ColorizedString[e.message].red)
         Kuby.logger.fatal(ColorizedString[e.resource.to_resource.to_yaml].red)
       end
 
-      private
+      def deploy_namespaced_resources(resources)
+        yaml = resources_to_yaml(resources)
 
-      def validate_resource!(res)
-        cli.apply(res, dry_run: true)
+        resources_file = Tempfile.new(['kuby-deploy-resources', '.yaml'])
+        resources_file.write(yaml)
+        resources_file.close
+
+        task = DeployTask.new(
+          provider.kubeconfig_path,
+          namespace: namespace.metadata.name,
+          context: cli.current_context,
+          filenames: [resources_file.path]
+        )
+
+        task.run!(verify_result: true)
+      ensure
+        resources_file.close
+        resources_file.unlink
       end
 
-      def deploy_resource(res)
-        cli.apply(res)
-        Monitors.for(res, cli, timeout: 10.minutes).watch_until_ready
+      def resources_to_yaml(resources)
+        resources
+          .map { |r| r.to_resource.to_yaml }
+          .join("---\n")
       end
 
-      def each_resource(&block)
-        examined = []
-
-        PRE_DEPLOY_ORDER.each do |kind|
-          each_resource_of_kind(kind) do |res|
-            examined << res
-            yield res
-          end
-        end
-
-        unknown = (resources - examined).reject do |res|
-          DEPLOY_ORDER.include?(res.kind)
-        end
-
-        unknown.map(&:kind).uniq.each do |unknown_kind|
-          each_resource_of_kind(unknown_kind, &block)
-        end
-
-        DEPLOY_ORDER.each do |kind|
-          each_resource_of_kind(kind, &block)
-        end
+      def provider
+        definition.kubernetes.provider
       end
 
-      def each_resource_of_kind(kind)
-        resources.each do |res|
-          yield res if res.kind == kind
-        end
+      def namespace
+        definition.kubernetes.namespace
+      end
+
+      def all_resources
+        definition.kubernetes.resources
+      end
+
+      def cli
+        provider.kubernetes_cli
       end
     end
   end

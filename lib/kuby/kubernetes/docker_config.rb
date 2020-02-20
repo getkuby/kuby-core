@@ -1,9 +1,10 @@
-require 'json'
+require 'base64'
+require 'kube-dsl'
 
 module Kuby
   module Kubernetes
     class DockerConfig
-      extend ValueFields
+      extend ::KubeDSL::ValueFields
 
       value_fields :registry_host, :username, :password, :email
 

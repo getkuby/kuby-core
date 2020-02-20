@@ -1,17 +1,7 @@
+require 'docker/remote'
+
 module Kuby
   module Docker
-    class MissingTagError < StandardError
-      attr_reader :tag
-
-      def initialize(tag)
-        @tag = tag
-      end
-
-      def message
-        @message ||= "Could not find tag '#{tag}'."
-      end
-    end
-
     class Spec
       attr_reader :definition
 
@@ -116,22 +106,57 @@ module Kuby
         @metadata ||= Metadata.new(definition)
       end
 
-      def latest_tags
-        # find latest tag
-        images = Kuby.docker_cli.images(metadata.image_url)
-        latest = images.find { |image| image[:tag] == 'latest' }
+      def tags
+        @tags ||= Tags.new(cli, remote_client, metadata)
+      end
 
-        unless latest
-          raise MissingTagError.new('latest')
-        end
+      # def tags
+      #   images = cli.images(metadata.image_url)
+      #   images.map { |image| image[:tag] }
+      # end
 
-        # find all tags that point to the same image as 'latest'
-        # and push them up
-        images.each_with_object([]) do |image_data, tags|
-          if image_data[:id] == latest[:id]
-            tags << image_data[:tag]
-          end
-        end
+      # def latest_tags
+      #   # find "latest" tag
+      #   images = cli.images(metadata.image_url)
+      #   latest = images.find { |image| image[:tag] == LATEST }
+
+      #   unless latest
+      #     raise MissingTagError.new(LATEST)
+      #   end
+
+      #   # find all tags that point to the same image as 'latest'
+      #   images.each_with_object([]) do |image_data, tags|
+      #     if image_data[:id] == latest[:id]
+      #       tags << image_data[:tag]
+      #     end
+      #   end
+      # end
+
+      # def timestamp_tags
+      #   tags.map { |t| TimestampTag.try_parse(t) }.compact
+      # end
+
+      # def all_timestamp_tags
+      #   all_tags.map { |t| TimestampTag.try_parse(t) }.compact
+      # end
+
+      # def remote_tags
+      #   remote.tags
+      # end
+
+      # def all_tags
+      #   (tags + remote_tags).uniq
+      # end
+
+      def cli
+        @cli ||= Docker::CLI.new
+      end
+
+      def remote_client
+        @remote_client ||= ::Docker::Remote::Client.new(
+          metadata.image_host, metadata.image_repo,
+          credentials.username, credentials.password,
+        )
       end
 
       private

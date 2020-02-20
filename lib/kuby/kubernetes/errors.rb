@@ -9,5 +9,10 @@ module Kuby
     end
 
     class GetResourceError < StandardError; end
+
+    class MissingDeploymentError < StandardError; end
+
+    class MissingProviderError < StandardError; end
+    class MissingPluginError < StandardError; end
   end
 end
