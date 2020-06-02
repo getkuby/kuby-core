@@ -1,10 +1,13 @@
 module Kuby
   class Definition
-    attr_reader :app
+    attr_reader :environment, :app
 
-    def initialize(app, &block)
+    def initialize(environment, app, &block)
+      @environment = environment
       @app = app
+
       instance_eval(&block) if block
+      kubernetes.after_configuration
     end
 
     def docker(&block)

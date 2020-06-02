@@ -1,4 +1,3 @@
-require 'colorized_string'
 require 'json'
 require 'open3'
 

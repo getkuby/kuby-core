@@ -4,6 +4,12 @@ module Kuby
   module Kubernetes
     module Plugins
       class RailsApp < Plugin
+        autoload :Database,        'kuby/kubernetes/plugins/rails_app/database'
+        autoload :MySQL,           'kuby/kubernetes/plugins/rails_app/mysql'
+        autoload :Postgres,        'kuby/kubernetes/plugins/rails_app/postgres'
+        autoload :RewriteDbConfig, 'kuby/kubernetes/plugins/rails_app/rewrite_db_config'
+        autoload :Sqlite,          'kuby/kubernetes/plugins/rails_app/sqlite'
+
         extend ::KubeDSL::ValueFields
 
         WEB_ROLE = 'web'.freeze
@@ -11,14 +17,73 @@ module Kuby
         ENV_SECRETS = [MASTER_KEY_VAR].freeze
         ENV_EXCLUDE = ['RAILS_ENV'].freeze
 
-        value_fields :hostname
+        value_fields :hostname, :tls_enabled, :database
 
         def initialize(definition)
           @definition = definition
+          @tls_enabled = true
         end
 
         def configure(&block)
           instance_eval(&block) if block
+        end
+
+        def after_configuration
+          # currently Database.get doesn't return nil, but this if statement
+          # is here as a placeholder to indicate we'd like to be able to
+          # handle Rails apps that don't use a database, i.e. don't have
+          # activerecord configured
+          if @database = Database.get(definition)
+            definition.kubernetes.plugins[database] = @database
+            definition.kubernetes.add_plugin(:kube_db)
+
+            definition.docker do
+              insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase
+            end
+          end
+
+          # do we always want this?
+          definition.kubernetes.add_plugin(:nginx_ingress)
+
+          if @tls_enabled
+            definition.kubernetes.add_plugin(:cert_manager)
+          end
+        end
+
+        def before_deploy(manifest)
+          # Make sure plugin has been configured. If not, do nothing.
+          if cert_manager = definition.kubernetes.plugin(:cert_manager)
+            if ing = manifest.find(:ingress, ingress.metadata.name)
+              cert_manager.annotate_ingress(ing)
+            end
+          end
+        end
+
+        def database(&block)
+          @database.instance_eval(&block) if block
+          @database
+        end
+
+        def set_image(image_with_tag)
+          deployment do
+            spec do
+              template do
+                spec do
+                  container(:web) do
+                    image image_with_tag
+                  end
+
+                  init_container(:create_db) do
+                    image image_with_tag
+                  end
+
+                  init_container(:migrate_db) do
+                    image image_with_tag
+                  end
+                end
+              end
+            end
+          end
         end
 
         def service(&block)
@@ -30,17 +95,17 @@ module Kuby
               namespace spec.namespace.metadata.name
 
               labels do
-                app spec.selector_app
-                role spec.role
+                add :app, spec.selector_app
+                add :role, spec.role
               end
             end
 
             spec do
-              type 'ClusterIP'
+              type 'NodePort'
 
               selector do
-                app spec.selector_app
-                role spec.role
+                add :app, spec.selector_app
+                add :role, spec.role
               end
 
               port do
@@ -65,8 +130,8 @@ module Kuby
               namespace spec.namespace.metadata.name
 
               labels do
-                app spec.selector_app
-                role spec.role
+                add :app, spec.selector_app
+                add :role, spec.role
               end
             end
           end
@@ -91,7 +156,7 @@ module Kuby
                   !ENV_EXCLUDE.include?(key)
 
                 if include_key
-                  send(key.to_sym, val)
+                  add key.to_sym, val
                 end
               end
             end
@@ -114,12 +179,12 @@ module Kuby
 
             data do
               if master_key = ENV[MASTER_KEY_VAR]
-                send(MASTER_KEY_VAR.to_sym, master_key)
+                add MASTER_KEY_VAR.to_sym, master_key
               else
                 master_key_path = spec.app.root.join('config', 'master.key')
 
                 if master_key_path.exist?
-                  send(MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip)
+                  add MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip
                 end
               end
             end
@@ -159,16 +224,16 @@ module Kuby
               namespace kube_spec.namespace.metadata.name
 
               labels do
-                app kube_spec.selector_app
-                role kube_spec.role
+                add :app, kube_spec.selector_app
+                add :role, kube_spec.role
               end
             end
 
             spec do
               selector do
                 match_labels do
-                  app kube_spec.selector_app
-                  role kube_spec.role
+                  add :app, kube_spec.selector_app
+                  add :role, kube_spec.role
                 end
               end
 
@@ -184,8 +249,8 @@ module Kuby
               template do
                 metadata do
                   labels do
-                    app kube_spec.selector_app
-                    role kube_spec.role
+                    add :app, kube_spec.selector_app
+                    add :role, kube_spec.role
                   end
                 end
 
@@ -227,6 +292,16 @@ module Kuby
                     end
                   end
 
+                  init_container(:create_db) do
+                    name "#{kube_spec.selector_app}-create-db"
+                    command %w(bundle exec rake kuby:rails_app:db:create_unless_exists)
+                  end
+
+                  init_container(:migrate_db) do
+                    name "#{kube_spec.selector_app}-migrate-db"
+                    command %w(bundle exec rake db:migrate)
+                  end
+
                   image_pull_secret do
                     name kube_spec.registry_secret.metadata.name
                   end
@@ -244,11 +319,16 @@ module Kuby
 
         def ingress(&block)
           spec = self
+          tls_enabled = @tls_enabled
 
-          @ingress ||= KubeDSL.ingress do
+          @ingress ||= KubeDSL::DSL::Extensions::V1beta1::Ingress.new do
             metadata do
               name "#{spec.selector_app}-ingress"
               namespace spec.namespace.metadata.name
+
+              annotations do
+                add :'kubernetes.io/ingress.class', 'nginx'
+              end
             end
 
             spec do
@@ -262,6 +342,13 @@ module Kuby
                       service_port spec.service.spec.ports.first.port
                     end
                   end
+                end
+              end
+
+              if tls_enabled
+                tls do
+                  secret_name "#{spec.selector_app}-tls"
+                  hosts [spec.hostname]
                 end
               end
             end
@@ -279,7 +366,8 @@ module Kuby
             app_secrets,
             registry_secret,
             deployment,
-            ingress
+            ingress,
+            *database.resources
           ]
         end
 
@@ -306,3 +394,5 @@ module Kuby
     end
   end
 end
+
+load File.expand_path(File.join('rails_app', 'tasks.rake'), __dir__)

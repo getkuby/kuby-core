@@ -1,217 +1,58 @@
 module Kuby
   module Docker
     class PackagePhase < Phase
-      class Package
-        attr_reader :name, :version
-
-        def initialize(name, version)
-          @name = name
-          @version = version
-        end
-      end
-
-      class PackageList
-        include Enumerable
-
-        attr_reader :packages
-
-        def initialize(package_tuples)
-          @packages = []
-          package_tuples.each { |pt| self.<<(*pt) }
-        end
-
-        def [](name)
-          packages.find { |pkg| pkg.name == name }
-        end
-
-        def <<(name, version = nil)
-          packages << Package.new(name, version)
-        end
-
-        def delete(name)
-          packages.delete_if { |pkg| pkg.name == name }
-        end
-
-        def each(&block)
-          packages.each(&block)
-        end
-
-        def empty?
-          packages.empty?
-        end
-      end
-
-      class Debian
-        DEFAULT_PACKAGES = [
-          ['ca-certificates'],
-          ['nodejs', '12.14.1'],
-          ['yarn', '1.21.1']
-        ].freeze
-
-        attr_reader :phase, :packages
-
-        def initialize(phase)
-          @phase = phase
-          @packages = PackageList.new(DEFAULT_PACKAGES.dup)
-        end
-
-        def apply_to(dockerfile)
-          to_install = packages.dup
-
-          if nodejs = to_install['nodejs']
-            install_nodejs(dockerfile, nodejs)
-            to_install.delete('nodejs')
-          end
-
-          if yarn = to_install['yarn']
-            install_yarn(dockerfile, yarn)
-            to_install.delete('yarn')
-          end
-
-          pkg_cmd = <<~CMD.strip
-            apt-get update -qq && \\
-              DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends apt-transport-https && \\
-              DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends apt-utils && \\
-              DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends
-          CMD
-
-          unless packages.empty?
-            pkg_cmd << " \\\n  #{packages.map(&:name).join(" \\\n  ")}"
-          end
-
-          dockerfile.run(pkg_cmd)
-        end
-
-        private
-
-        def install_nodejs(dockerfile, nodejs)
-          dockerfile.insert_at(0) do
-            version = nodejs.version || 'current'
-            # no distro means debian, eg. stretch, buster, etc
-            node_image = "node:#{version}"
-            dockerfile.from(node_image, as: 'nodejs')
-          end
-
-          dockerfile.copy('/usr/local/bin/node', '/usr/local/bin/node', from: 'nodejs')
-        end
-
-        def install_yarn(dockerfile, yarn)
-          url = if yarn.version
-            "https://github.com/yarnpkg/yarn/releases/download/v#{yarn.version}/yarn-v#{yarn.version}.tar.gz"
-          else
-            "https://yarnpkg.com/latest.tar.gz"
-          end
-
-          dockerfile.run(<<~CMD.strip)
-            wget #{url} && \\
-              yarnv=$(basename $(ls yarn-*.tar.gz | cut -d'-' -f 2) .tar.gz) && \\
-              tar zxvf yarn-$yarnv.tar.gz -C /opt && \\
-              mv /opt/yarn-$yarnv /opt/yarn && \\
-              wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --import && \\
-              wget https://github.com/yarnpkg/yarn/releases/download/$yarnv/yarn-$yarnv.tar.gz.asc && \\
-              gpg --verify yarn-$yarnv.tar.gz.asc
-          CMD
-
-          dockerfile.env("PATH=$PATH:/opt/yarn/bin")
-        end
-      end
-
-      class Alpine
-        DEFAULT_PACKAGES = [
-          ['ca-certificates'],
-          ['nodejs', '12.14.1'],
-          ['yarn', '1.21.1'],
-          ['build-base'],
-          ['sqlite-dev'],
-          ['tzdata']
-        ].freeze
-
-        attr_reader :phase, :packages
-
-        def initialize(phase)
-          @phase = phase
-          @packages = PackageList.new(DEFAULT_PACKAGES.dup)
-        end
-
-        def apply_to(dockerfile)
-          to_install = packages.dup
-
-          if nodejs = to_install['nodejs']
-            install_nodejs(dockerfile, nodejs)
-            to_install.delete('nodejs')
-          end
-
-          if yarn = to_install['yarn']
-            install_yarn(dockerfile, yarn)
-            to_install.delete('yarn')
-          end
-
-          unless packages.empty?
-            dockerfile.run(
-              "apk add --no-cache #{packages.map(&:name).join(' ')}"
-            )
-          end
-        end
-
-        private
-
-        def install_nodejs(dockerfile, nodejs)
-          dockerfile.insert_at(0) do
-            version = nodejs.version || 'current'
-            node_image = "node:#{version}-alpine"
-            dockerfile.from(node_image, as: 'nodejs')
-          end
-
-          dockerfile.copy('/usr/local/bin/node', '/usr/local/bin/node', from: 'nodejs')
-        end
-
-        def install_yarn(dockerfile, yarn)
-          url = if yarn.version
-            "https://github.com/yarnpkg/yarn/releases/download/v#{yarn.version}/yarn-v#{yarn.version}.tar.gz"
-          else
-            "https://yarnpkg.com/latest.tar.gz"
-          end
-
-          dockerfile.run(<<~CMD.strip)
-            wget #{url} && \\
-              yarnv=$(basename $(ls yarn-*.tar.gz | cut -d'-' -f 2) .tar.gz) && \\
-              tar zxvf yarn-$yarnv.tar.gz -C /opt && \\
-              mv /opt/yarn-$yarnv /opt/yarn && \\
-              apk add --no-cache gnupg && \\
-              wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --import && \\
-              wget https://github.com/yarnpkg/yarn/releases/download/$yarnv/yarn-$yarnv.tar.gz.asc && \\
-              gpg --verify yarn-$yarnv.tar.gz.asc
-          CMD
-
-          dockerfile.env("PATH=$PATH:/opt/yarn/bin")
-        end
-
-        def metadata
-          phase.definition.docker.metadata
-        end
-      end
-
-      DISTRO_MAP = { debian: Debian, alpine: Alpine }.freeze
-
-      attr_reader :distro, :packages
+      attr_reader :operations
 
       def initialize(*args)
         super
-        @distro = DISTRO_MAP[metadata.distro].new(self)
+
+        @operations = []
       end
 
-      def distro_updated
-        dist_class = DISTRO_MAP[metadata.distro]
-        raise "No distro named #{metadata.distro}" unless dist_class
-        @distro = dist_class.new(self)
+      def add(package_name, version = nil)
+        operations << [:add, package_name, version]
       end
 
-      def <<(package)
-        distro.packages << package
+      def remove(package_name)
+        operations << [:remove, package_name]
       end
 
       def apply_to(dockerfile)
-        distro.apply_to(dockerfile)
+        packages = distro_spec.default_packages.dup
+
+        operations.each do |operator, package_name, version|
+          if operator == :add
+            packages << [package_name, version]
+          else
+            packages.reject! do |pkg_name_to_del, *|
+              pkg_name_to_del == package_name
+            end
+          end
+        end
+
+        packages.map! do |package_name, version|
+          get_package(package_name, version)
+        end
+
+        distro_spec.install(packages, into: dockerfile)
+      end
+
+      private
+
+      def distro_spec
+        definition.docker.distro_spec
+      end
+
+      def get_package(package_name, version)
+        if package = Kuby.packages[package_name]
+          package.with_version(version)
+        else
+          raise MissingPackageError, "package '#{package_name}' hasn't been registered"
+        end
+      end
+
+      def metadata
+        definition.docker.metadata
       end
     end
   end

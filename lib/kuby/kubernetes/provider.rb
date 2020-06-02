@@ -16,6 +16,31 @@ module Kuby
         # do nothing by default
       end
 
+      # called after all providers and plugins have been configured
+      def after_configuration
+        # do nothing by default
+      end
+
+      # called before any providers or plugins have been setup
+      def before_setup
+        # do nothing by default
+      end
+
+      # called after all providers and plugins have been setup
+      def after_setup
+        # do nothing by default
+      end
+
+      # called before the deploy is initiated
+      def before_deploy(manifest)
+        # do nothing by default
+      end
+
+      # called after the deploy has completed
+      def after_deploy(manifest)
+        # do nothing by default
+      end
+
       def deploy
         deployer.deploy
       end

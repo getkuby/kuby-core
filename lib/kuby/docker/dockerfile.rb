@@ -1,5 +1,3 @@
-require 'colorized_string'
-
 module Kuby
   module Docker
     class Dockerfile

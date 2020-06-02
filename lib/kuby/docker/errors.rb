@@ -14,5 +14,9 @@ module Kuby
         @message ||= "Could not find tag '#{tag}'."
       end
     end
+
+    class UnsupportedDistroError < StandardError; end
+    class MissingPackageError < StandardError; end
+    class MissingDistroError < StandardError; end
   end
 end

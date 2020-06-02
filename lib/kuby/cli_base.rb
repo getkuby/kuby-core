@@ -1,4 +1,3 @@
-require 'colorized_string'
 require 'open3'
 require 'thread'
 

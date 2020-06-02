@@ -1,4 +1,5 @@
 require 'logger'
+require 'rails/railtie'
 
 module Kuby
   class Railtie < ::Rails::Railtie

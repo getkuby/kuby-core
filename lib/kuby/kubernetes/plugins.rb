@@ -1,7 +1,8 @@
 module Kuby
   module Kubernetes
     module Plugins
-      autoload :RailsApp, 'kuby/kubernetes/plugins/rails_app'
+      autoload :NginxIngress, 'kuby/kubernetes/plugins/nginx_ingress'
+      autoload :RailsApp,     'kuby/kubernetes/plugins/rails_app'
     end
   end
 end

@@ -30,7 +30,7 @@ module Kuby
       def apply_to(dockerfile)
         ws = webserver || default_webserver
         ws_class = WEBSERVER_MAP[ws]
-        raise "No package manager named #{ws}" unless ws_class
+        raise "No webserver named #{ws}" unless ws_class
 
         ws_class.new(self).apply_to(dockerfile)
       end

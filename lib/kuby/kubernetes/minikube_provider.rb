@@ -24,13 +24,14 @@ module Kuby
       def after_initialize
         @config = Config.new
 
-        # Remove ingress and change service type from ClusterIP to
-        # LoadBalancer. No need to set up ingress for minikube since
-        # it handles all the localhost mapping, etc if you set up a
-        # service LB.
-        rails_app = spec.plugin(:rails_app)
-        rails_app.resources.delete(rails_app.ingress)
-        rails_app.service.spec { type 'LoadBalancer' }
+        if rails_app = spec.plugin(:rails_app)
+          # Remove ingress and change service type from ClusterIP to
+          # LoadBalancer. No need to set up ingress for minikube since
+          # it handles all the localhost mapping, etc if you set up a
+          # service LB.
+          rails_app.resources.delete(rails_app.ingress)
+          rails_app.service.spec { type 'LoadBalancer' }
+        end
 
         configure do
           # default kubeconfig path

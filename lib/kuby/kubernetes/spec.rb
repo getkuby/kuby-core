@@ -5,16 +5,14 @@ module Kuby
     class Spec
       extend ::KubeDSL::ValueFields
 
-      DEFAULT_ENVIRONMENT = 'production'.freeze
-
-      attr_reader :definition
-      value_field :environment, default: DEFAULT_ENVIRONMENT
+      attr_reader :definition, :plugins
 
       def initialize(definition)
         @definition = definition
-        @plugins = {}
+        @plugins = TrailingHash.new
 
-        plugin(:rails_app)
+        # default plugins
+        add_plugin(:rails_app)
       end
 
       def provider(provider_name = nil, &block)
@@ -37,21 +35,54 @@ module Kuby
         @provider
       end
 
-      def plugin(plugin_name, &block)
+      def configure_plugin(plugin_name, &block)
         if @plugins[plugin_name] || plugin_klass = Kuby.plugins[plugin_name]
           @plugins[plugin_name] ||= plugin_klass.new(definition)
-          @plugins[plugin_name].configure(&block)
+          @plugins[plugin_name].configure(&block) if block
         else
           raise MissingPluginError, "no plugin registered with name #{plugin_name}, "\
             'do you need to add a gem to your Gemfile?'
         end
+      end
 
+      alias_method :add_plugin, :configure_plugin
+
+      def plugin(plugin_name)
         @plugins[plugin_name]
       end
 
+      def after_configuration
+        @plugins.each { |_, plg| plg.after_configuration }
+        provider.after_configuration
+      end
+
+      def setup
+        provider.before_setup
+        provider.setup
+
+        @plugins.each { |_, plg| plg.before_setup }
+        @plugins.each { |_, plg| plg.setup }
+        @plugins.each { |_, plg| plg.after_setup }
+
+        provider.after_setup
+      end
+
       def deploy(tag = nil)
-        set_tag(tag ||= latest_tag)
+        tag ||= latest_tag
+
+        unless tag
+          raise Kuby::Docker::MissingTagError, 'could not find latest timestamped tag'
+        end
+
+        set_tag(tag)
+
+        provider.before_deploy(resources)
+        @plugins.each { |_, plg| plg.before_deploy(resources) }
+
         provider.deploy
+
+        @plugins.each { |_, plg| plg.after_deploy(resources) }
+        provider.after_deploy(resources)
       end
 
       def rollback
@@ -82,7 +113,7 @@ module Kuby
 
         @namespace ||= KubeDSL.namespace do
           metadata do
-            name "#{spec.selector_app}-#{spec.environment}"
+            name "#{spec.selector_app}-#{spec.definition.environment}"
           end
         end
 
@@ -91,26 +122,14 @@ module Kuby
       end
 
       def resources
-        [
+        @resources ||= Manifest.new([
           namespace,
           *@plugins.flat_map { |_, plugin| plugin.resources }
-        ]
+        ])
       end
 
       def set_tag(tag)
-        spec = self
-
-        plugin(:rails_app).deployment do
-          spec do
-            template do
-              spec do
-                container(:web) do
-                  image "#{spec.docker.metadata.image_url}:#{tag}"
-                end
-              end
-            end
-          end
-        end
+        plugin(:rails_app).set_image("#{docker.metadata.image_url}:#{tag}")
       end
 
       def selector_app

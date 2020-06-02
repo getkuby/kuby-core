@@ -1,5 +1,6 @@
+require 'fileutils'
 require 'krane'
-require 'tempfile'
+require 'securerandom'
 require 'yaml'
 
 module Kuby
@@ -29,7 +30,7 @@ module Kuby
       def deploy_global_resources(resources)
         resources.each do |res|
           Kuby.logger.info(
-            ColorizedString["Validating global resource #{res.kind.to_s.humanize.downcase} '#{res.metadata.name}'"].yellow
+            "Validating global resource, #{res.kind_sym.to_s.humanize.downcase} '#{res.metadata.name}'"
           )
 
           cli.apply(res, dry_run: true)
@@ -37,40 +38,40 @@ module Kuby
 
         resources.each do |res|
           Kuby.logger.info(
-            ColorizedString["Deploying #{res.kind.to_s.humanize.downcase} '#{res.metadata.name}'"].yellow
+            "Deploying #{res.kind_sym.to_s.humanize.downcase} '#{res.metadata.name}'"
           )
 
           cli.apply(res)
         end
       rescue InvalidResourceError => e
-        Kuby.logger.fatal(ColorizedString[e.message].red)
-        Kuby.logger.fatal(ColorizedString[e.resource.to_resource.to_yaml].red)
+        Kuby.logger.fatal(e.message)
+        Kuby.logger.fatal(e.resource.to_resource.to_yaml)
       end
 
       def deploy_namespaced_resources(resources)
-        yaml = resources_to_yaml(resources)
+        old_kubeconfig = ENV['KUBECONFIG']
+        ENV['KUBECONFIG'] = provider.kubeconfig_path
 
-        resources_file = Tempfile.new(['kuby-deploy-resources', '.yaml'])
-        resources_file.write(yaml)
-        resources_file.close
+        tmpdir = Dir.mktmpdir('kuby-deploy-resources')
 
-        task = DeployTask.new(
-          provider.kubeconfig_path,
+        resources.each do |resource|
+          resource_path = File.join(
+            tmpdir, "#{SecureRandom.hex(6)}-#{resource.kind_sym.downcase}.yaml"
+          )
+
+          File.write(resource_path, resource.to_resource.to_yaml)
+        end
+
+        task = ::Krane::DeployTask.new(
           namespace: namespace.metadata.name,
           context: cli.current_context,
-          filenames: [resources_file.path]
+          filenames: [tmpdir]
         )
 
-        task.run!(verify_result: true)
+        task.run!(verify_result: true, prune: false)
       ensure
-        resources_file.close
-        resources_file.unlink
-      end
-
-      def resources_to_yaml(resources)
-        resources
-          .map { |r| r.to_resource.to_yaml }
-          .join("---\n")
+        ENV['KUBECONFIG'] = old_kubeconfig
+        FileUtils.rm_rf(tmpdir)
       end
 
       def provider

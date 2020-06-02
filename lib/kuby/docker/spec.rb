@@ -35,7 +35,7 @@ module Kuby
 
       def distro(distro_name)
         metadata.distro = distro_name
-        package_phase.distro_updated
+        @distro_spec = nil
       end
 
       def files(path)
@@ -110,44 +110,6 @@ module Kuby
         @tags ||= Tags.new(cli, remote_client, metadata)
       end
 
-      # def tags
-      #   images = cli.images(metadata.image_url)
-      #   images.map { |image| image[:tag] }
-      # end
-
-      # def latest_tags
-      #   # find "latest" tag
-      #   images = cli.images(metadata.image_url)
-      #   latest = images.find { |image| image[:tag] == LATEST }
-
-      #   unless latest
-      #     raise MissingTagError.new(LATEST)
-      #   end
-
-      #   # find all tags that point to the same image as 'latest'
-      #   images.each_with_object([]) do |image_data, tags|
-      #     if image_data[:id] == latest[:id]
-      #       tags << image_data[:tag]
-      #     end
-      #   end
-      # end
-
-      # def timestamp_tags
-      #   tags.map { |t| TimestampTag.try_parse(t) }.compact
-      # end
-
-      # def all_timestamp_tags
-      #   all_tags.map { |t| TimestampTag.try_parse(t) }.compact
-      # end
-
-      # def remote_tags
-      #   remote.tags
-      # end
-
-      # def all_tags
-      #   (tags + remote_tags).uniq
-      # end
-
       def cli
         @cli ||= Docker::CLI.new
       end
@@ -157,6 +119,14 @@ module Kuby
           metadata.image_host, metadata.image_repo,
           credentials.username, credentials.password,
         )
+      end
+
+      def distro_spec
+        @distro_spec ||= if distro_klass = Kuby.distros[metadata.distro]
+          distro_klass.new(self)
+        else
+          raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
+        end
       end
 
       private

@@ -2,7 +2,7 @@ require 'base64'
 
 module Kuby
   module Kubernetes
-    class RegistrySecret < ::KubeDSL::DSL::Secret
+    class RegistrySecret < ::KubeDSL::DSL::V1::Secret
       array_field(:docker_config) { DockerConfig.new }
 
       def initialize(&block)

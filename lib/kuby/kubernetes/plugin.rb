@@ -12,6 +12,39 @@ module Kuby
         # do nothing by default
       end
 
+      def setup
+        # do nothing by default
+      end
+
+      def resources
+        []
+      end
+
+      # called after all plugins have been configured
+      def after_configuration
+        # do nothing by default
+      end
+
+      # called before any plugins have been setup
+      def before_setup
+        # do nothing by default
+      end
+
+      # called after all plugins have been setup
+      def after_setup
+        # do nothing by default
+      end
+
+      # called before deploying any resources
+      def before_deploy(manifest)
+        # do nothing by default
+      end
+
+      # called after deploying all resources
+      def after_deploy(manifest)
+        # do nothing by default
+      end
+
       private
 
       def after_initialize

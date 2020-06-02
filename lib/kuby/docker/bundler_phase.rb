@@ -1,7 +1,7 @@
 module Kuby
   module Docker
     class BundlerPhase < Phase
-      DEFAULT_WITHOUT = ['development', 'test'].freeze
+      DEFAULT_WITHOUT = ['development', 'test', 'deploy'].freeze
 
       attr_accessor :version, :gemfile, :without
 
@@ -27,7 +27,7 @@ module Kuby
 
         dockerfile.run(
           'bundle', 'install',
-          '--jobs', '3',
+          '--jobs', '$(nproc)',
           '--retry', '3',
           '--gemfile', gf
         )
