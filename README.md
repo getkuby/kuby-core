@@ -24,11 +24,11 @@ Why bet the farm on Docker and Kubernetes?
 
 ### Docker
 
-When Docker came on the scene in 2013 it was seen as a game-changer. Applications that used to be deployed onto hand-provisioned servers can now be bundled up into neat little packages and transferred between computers in their entirety. Since the whole application - dependencies, operating system components, assets, code, etc - can be passed around as a single artifact, Docker images eliminate the need for manually provisioned servers and eliminate a whole class of "works on my machine" problems.
+When Docker came on the scene in 2013 it was seen as a game-changer. Applications that used to be deployed onto hand-provisioned servers can now be bundled up into neat little packages and transferred between computers in their entirety. Since the whole application - dependencies, operating system components, assets, code, etc - can be passed around as a single artifact, Docker images curtail the need for manually provisioned servers and eliminate a whole class of "works on my machine" problems.
 
 ### Kubernetes
 
-Kubernetes has taken the ops world by storm. It's resilient to failure, portable across a variety of cloud providers, and backed by industry-leading organizations like the CNCF. Kubernetes configuration is portable enough to be used, without modification, on just about any Kubernetes cluster, making migrations not only feasible, but easy. Many cloud providers like Google GCP, Amazon AWS, Microsoft Azure, DigitalOcean, and Linode support Kubernetes. Most of these providers will even manage the Kubernetes cluster for you, and in some cases will even provide it free of charge (you pay only for the compute resources).
+Kubernetes has taken the ops world by storm. It's resilient to failure, portable across a variety of cloud providers, and backed by industry-leading organizations like the CNCF. Kubernetes configuration is portable enough to be used, without modification, on just about any Kubernetes cluster, making migrations not only feasible, but easy. Many cloud providers like Google GCP, Amazon AWS, Microsoft Azure, DigitalOcean, and Linode support Kubernetes. Most of these providers will manage the Kubernetes cluster for you, and in some cases will even provide it free of charge (you pay only for the compute resources).
 
 ## Getting Started
 
@@ -85,7 +85,7 @@ The first line defines the _deploy environment_:
 Kuby.define(:production)
 ```
 
-Deploy environments usually closely mirror your Rails environments. For example, you might create a new Rails environment called "staging" or "preprod" that's used to test production changes before they go live.
+Deploy environments usually closely mirror your Rails environments. For example, you might create a new Rails environment called "staging" or "preprod" that's used to test production changes before they go live. You'll want to create a "staging" Kuby deploy environment as well.
 
 If you're a small shop or hobbyist though, chances are the "production" deploy environment is all you need.
 
@@ -150,21 +150,24 @@ add_plugin :rails_app do
 end
 ```
 
-Configuring DNS to point to your Kubernetes cluster is outside the scope of this README, but all the hosting providers should have tutorials. For example, [here's one](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars) from DigitalOcean.
+Configuring DNS to point to your Kubernetes cluster is outside the scope of this README, but all the hosting providers should have tutorials. For example, [here's the one](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars) from DigitalOcean.
 
 ## Deploying
 
 Now that Kuby is configured and your Kubernetes cluster is ready, it's time to deploy!
 
 1. Build the Docker image
+
     ```sh
     bundle exec rake kuby:build
     ```
 1. Push the Docker image to the container registry:
+
     ```sh
     bundle exec rake kuby:push
     ```
 1. Deploy!
+
     ```sh
     bundle exec rake kuby:deploy
     ```
@@ -172,7 +175,7 @@ Now that Kuby is configured and your Kubernetes cluster is ready, it's time to d
 
 ## Running Tests
 
-`bundle exec rspec` should do the trick :)
+`bundle exec rspec` should do the trick... or at least it would if there were any tests. Don't worry, it's on my radar.
 
 ## License
 
