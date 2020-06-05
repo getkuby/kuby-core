@@ -12,11 +12,15 @@ Gem::Specification.new do |s|
 
   s.platform = Gem::Platform::RUBY
 
-  s.add_dependency 'colorize'
-  s.add_dependency 'kube-dsl'
-  s.add_dependency 'krane'
+  s.add_dependency 'colorize', '~> 0.8'
+  s.add_dependency 'docker-remote', '~> 0.1'
+  s.add_dependency 'krane', '~> 1.0'
+  s.add_dependency 'kuby-cert-manager', '~> 0.1'
+  s.add_dependency 'kube-dsl', '~> 0.1'
+  s.add_dependency 'kuby-kube-db', '~> 0.1'
+  s.add_dependency 'kubernetes-cli', '~> 0.1'
   s.add_dependency 'railties', '~> 6.0'
-  s.add_dependency 'rouge'
+  s.add_dependency 'rouge', '~> 3.0'
 
   s.require_path = 'lib'
   s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby.gemspec']

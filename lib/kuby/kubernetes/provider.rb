@@ -1,3 +1,5 @@
+require 'kubernetes-cli'
+
 module Kuby
   module Kubernetes
     class Provider
@@ -50,7 +52,7 @@ module Kuby
       end
 
       def kubernetes_cli
-        @kubernetes_cli ||= Kuby::Kubernetes::CLI.new(kubeconfig_path)
+        @kubernetes_cli ||= ::KubernetesCLI.new(kubeconfig_path)
       end
 
       def kubeconfig_path

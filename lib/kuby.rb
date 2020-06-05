@@ -87,7 +87,7 @@ end
 Kuby.register_provider(:minikube, Kuby::Kubernetes::MinikubeProvider)
 
 # plugins
-Kuby.register_plugin(:rails_app, Kuby::Kubernetes::Plugins::RailsApp)
+Kuby.register_plugin(:rails_app, Kuby::Kubernetes::Plugins::RailsApp::Plugin)
 Kuby.register_plugin(:nginx_ingress, Kuby::Kubernetes::Plugins::NginxIngress)
 
 # distros

@@ -1,8 +1,8 @@
 module Kuby
   module Kubernetes
     module Plugins
-      class RailsApp < Plugin
-        class Postgres < Plugin
+      module RailsApp
+        class Postgres < Kuby::Kubernetes::Plugin
         end
       end
     end

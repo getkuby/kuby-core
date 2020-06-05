@@ -1,7 +1,7 @@
 module Kuby
   module Kubernetes
     module Plugins
-      class RailsApp < Plugin
+      module RailsApp
         class UnsupportedDatabaseError < StandardError; end
 
         class Database

@@ -161,7 +161,7 @@ Now that Kuby is configured and your Kubernetes cluster is ready, it's time to d
     ```sh
     bundle exec rake kuby:build
     ```
-1. Push the Docker image to the container registry:
+1. Push the Docker image to the container registry
 
     ```sh
     bundle exec rake kuby:push

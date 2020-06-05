@@ -2,7 +2,6 @@ require 'kuby/kubernetes/errors'
 
 module Kuby
   module Kubernetes
-    autoload :CLI,              'kuby/kubernetes/cli'
     autoload :MinikubeProvider, 'kuby/kubernetes/minikube_provider'
     autoload :Deployer,         'kuby/kubernetes/deployer'
     autoload :DockerConfig,     'kuby/kubernetes/docker_config'

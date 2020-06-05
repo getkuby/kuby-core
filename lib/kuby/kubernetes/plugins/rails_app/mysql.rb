@@ -1,10 +1,11 @@
 require 'kube-dsl'
+require 'kuby/kube-db'
 
 module Kuby
   module Kubernetes
     module Plugins
-      class RailsApp < Plugin
-        class MySQL < Plugin
+      module RailsApp
+        class MySQL < Kuby::Kubernetes::Plugin
           attr_reader :definition, :environment, :configs
 
           def initialize(definition, environment, configs)

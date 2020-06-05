@@ -1,8 +1,8 @@
 module Kuby
   module Kubernetes
     module Plugins
-      class RailsApp < Plugin
-        class Sqlite < Plugin
+      module RailsApp
+        class Sqlite < Kuby::Kubernetes::Plugin
         end
       end
     end
