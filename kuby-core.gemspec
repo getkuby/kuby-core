@@ -2,11 +2,11 @@ $:.unshift File.join(File.dirname(__FILE__), 'lib')
 require 'kuby/version'
 
 Gem::Specification.new do |s|
-  s.name     = 'kuby'
+  s.name     = 'kuby-core'
   s.version  = ::Kuby::VERSION
   s.authors  = ['Cameron Dutro']
   s.email    = ['camertron@gmail.com']
-  s.homepage = 'http://github.com/camertron/kuby'
+  s.homepage = 'http://github.com/getkuby/kuby-core'
 
   s.description = s.summary = 'Deploy your Rails app onto Kubernetes the easy way.'
 
@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'rouge', '~> 3.0'
 
   s.require_path = 'lib'
-  s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby.gemspec']
+  s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'LICENSE', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby-core.gemspec']
 end
