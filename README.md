@@ -32,7 +32,7 @@ Kubernetes has taken the ops world by storm. It's resilient to failure, portable
 
 ## Getting Started
 
-NOTE: Kuby is designed to work with Rails 5.2 and up.
+NOTE: Kuby is designed to work with Rails 5.1 and up.
 
 ### Choosing a Provider
 

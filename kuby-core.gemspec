@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'kube-dsl', '~> 0.1'
   s.add_dependency 'kuby-kube-db', '~> 0.1'
   s.add_dependency 'kubernetes-cli', '~> 0.1'
-  s.add_dependency 'railties', '~> 6.0'
+  s.add_dependency 'railties', '>= 5.1'
   s.add_dependency 'rouge', '~> 3.0'
 
   s.require_path = 'lib'
