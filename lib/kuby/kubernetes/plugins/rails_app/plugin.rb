@@ -13,11 +13,12 @@ module Kuby
           ENV_SECRETS = [MASTER_KEY_VAR].freeze
           ENV_EXCLUDE = ['RAILS_ENV'].freeze
 
-          value_fields :hostname, :tls_enabled, :database
+          value_fields :hostname, :tls_enabled, :database, :replicas
 
           def initialize(definition)
             @definition = definition
             @tls_enabled = true
+            @replicas = 1
           end
 
           def configure(&block)
@@ -226,6 +227,8 @@ module Kuby
               end
 
               spec do
+                replicas kube_spec.replicas
+
                 selector do
                   match_labels do
                     add :app, kube_spec.selector_app
