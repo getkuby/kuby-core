@@ -54,33 +54,33 @@ module Kuby
                 cert_manager.annotate_ingress(ing)
               end
             end
-          end
 
-          def database(&block)
-            @database.instance_eval(&block) if block
-            @database
-          end
+            kube_spec = self
 
-          def set_image(image_with_tag)
             deployment do
               spec do
                 template do
                   spec do
                     container(:web) do
-                      image image_with_tag
+                      image kube_spec.docker.metadata.image_with_tag
                     end
 
                     init_container(:create_db) do
-                      image image_with_tag
+                      image kube_spec.docker.metadata.image_with_tag
                     end
 
                     init_container(:migrate_db) do
-                      image image_with_tag
+                      image kube_spec.docker.metadata.image_with_tag
                     end
                   end
                 end
               end
             end
+          end
+
+          def database(&block)
+            @database.instance_eval(&block) if block
+            @database
           end
 
           def service(&block)
@@ -191,27 +191,6 @@ module Kuby
             @app_secrets
           end
 
-          def registry_secret(&block)
-            spec = self
-
-            @registry_secret ||= RegistrySecret.new do
-              metadata do
-                name "#{spec.selector_app}-registry-secret"
-                namespace spec.namespace.metadata.name
-              end
-
-              docker_config do
-                registry_host spec.docker.metadata.image_host
-                username spec.docker.credentials.username
-                password spec.docker.credentials.password
-                email spec.docker.credentials.email
-              end
-            end
-
-            @registry_secret.instance_eval(&block) if block
-            @registry_secret
-          end
-
           def deployment(&block)
             kube_spec = self
 
@@ -302,7 +281,7 @@ module Kuby
                     end
 
                     image_pull_secret do
-                      name kube_spec.registry_secret.metadata.name
+                      name kube_spec.definition.kubernetes.registry_secret.metadata.name
                     end
 
                     restart_policy 'Always'
@@ -363,7 +342,6 @@ module Kuby
               service_account,
               config_map,
               app_secrets,
-              registry_secret,
               deployment,
               ingress,
               *database.resources

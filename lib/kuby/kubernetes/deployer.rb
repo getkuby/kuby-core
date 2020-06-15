@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'krane'
+require 'ext/krane/kubernetes_resource'
 require 'securerandom'
 require 'yaml'
 

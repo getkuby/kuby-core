@@ -67,15 +67,7 @@ module Kuby
         provider.after_setup
       end
 
-      def deploy(tag = nil)
-        tag ||= latest_tag
-
-        unless tag
-          raise Kuby::Docker::MissingTagError, 'could not find latest timestamped tag'
-        end
-
-        set_tag(tag)
-
+      def deploy
         provider.before_deploy(resources)
         @plugins.each { |_, plg| plg.before_deploy(resources) }
 
@@ -86,8 +78,11 @@ module Kuby
       end
 
       def rollback
+        # it sucks that we have to reach into the rails app for this...
         depl = provider.kubernetes_cli.get_object(
-          'deployment', namespace.metadata.name, deployment.metadata.name
+          'deployment',
+          namespace.metadata.name,
+          plugin(:rails_app).deployment.metadata.name
         )
 
         image_url = depl.dig('spec', 'template', 'spec', 'containers', 0, 'image')
@@ -96,16 +91,14 @@ module Kuby
           raise MissingDeploymentError, "couldn't find an existing deployment"
         end
 
-        deployed_tag = ::Kuby::Docker::TimestampTag.try_parse(image_url.split(':').last)
-        all_tags = docker.tags.all.timestamp_tags.sort
-        tag_idx = all_tags.index { |tag| tag.time == deployed_tag.time } || 0
+        deployed_tag = image_url.split(':').last
+        previous_tag = docker.tags.previous_tag(deployed_tag)
 
-        if tag_idx == 0
+        unless previous_tag
           raise Kuby::Docker::MissingTagError, 'could not find previous tag'
         end
 
-        previous_tag = all_tags[tag_idx - 1]
-        deploy(previous_tag.to_s)
+        deploy(previous_tag)
       end
 
       def namespace(&block)
@@ -121,15 +114,33 @@ module Kuby
         @namespace
       end
 
+      def registry_secret(&block)
+        spec = self
+
+        @registry_secret ||= RegistrySecret.new do
+          metadata do
+            name "#{spec.selector_app}-registry-secret"
+            namespace spec.namespace.metadata.name
+          end
+
+          docker_config do
+            registry_host spec.docker.metadata.image_host
+            username spec.docker.credentials.username
+            password spec.docker.credentials.password
+            email spec.docker.credentials.email
+          end
+        end
+
+        @registry_secret.instance_eval(&block) if block
+        @registry_secret
+      end
+
       def resources
         @resources ||= Manifest.new([
           namespace,
+          registry_secret,
           *@plugins.flat_map { |_, plugin| plugin.resources }
         ])
-      end
-
-      def set_tag(tag)
-        plugin(:rails_app).set_image("#{docker.metadata.image_url}:#{tag}")
       end
 
       def selector_app
@@ -138,14 +149,6 @@ module Kuby
 
       def docker
         definition.docker
-      end
-
-      private
-
-      def latest_tag
-        @latest_tag ||= docker.tags.local.latest_tags.find do |tag|
-          tag != ::Kuby::Docker::Tags::LATEST
-        end
       end
     end
   end

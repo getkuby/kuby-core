@@ -40,6 +40,24 @@ module Kuby
         @tags.empty? ? default_tags : @tags
       end
 
+      def tag
+        @tag ||= begin
+          t = ENV.fetch('KUBY_DOCKER_TAG') do
+            definition.docker.tags.latest_timestamp_tag&.to_s
+          end
+
+          unless t
+            raise MissingTagError, 'could not find latest timestamped tag'
+          end
+
+          t
+        end
+      end
+
+      def image_with_tag
+        @image_with_tag ||= "#{image_url}:#{tag}"
+      end
+
       def distro=(distro_name)
         @distro = distro_name
       end
