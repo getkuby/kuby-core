@@ -6,6 +6,8 @@ module Kuby
     module Plugins
       module RailsApp
         class MySQL < Kuby::Kubernetes::Plugin
+          ROLE = 'web'.freeze
+
           attr_reader :definition, :environment, :configs
 
           def initialize(definition, environment, configs)
@@ -109,7 +111,7 @@ module Kuby
           end
 
           def base_name
-            @base_name ||= "#{kubernetes.selector_app}-#{environment}"
+            @base_name ||= "#{kubernetes.selector_app}-#{ROLE}"
           end
 
           def kubernetes

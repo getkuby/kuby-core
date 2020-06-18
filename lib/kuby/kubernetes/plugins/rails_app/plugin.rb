@@ -196,7 +196,7 @@ module Kuby
 
             @deployment ||= KubeDSL.deployment do
               metadata do
-                name "#{kube_spec.selector_app}-deployment"
+                name "#{kube_spec.selector_app}-#{kube_spec.role}"
                 namespace kube_spec.namespace.metadata.name
 
                 labels do
