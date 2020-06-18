@@ -16,9 +16,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'docker-remote', '~> 0.1'
   s.add_dependency 'krane', '~> 1.0'
   s.add_dependency 'kuby-cert-manager', '~> 0.1'
-  s.add_dependency 'kube-dsl', '~> 0.1'
-  s.add_dependency 'kuby-kube-db', '~> 0.1'
-  s.add_dependency 'kubernetes-cli', '~> 0.1'
+  s.add_dependency 'kube-dsl', '~> 0.3'
+  s.add_dependency 'kuby-kube-db', '~> 0.4'
+  s.add_dependency 'kubernetes-cli', '~> 0.2'
   s.add_dependency 'railties', '>= 5.1'
   s.add_dependency 'rouge', '~> 3.0'
 

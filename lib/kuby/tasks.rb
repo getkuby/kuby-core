@@ -50,6 +50,8 @@ module Kuby
     end
 
     def print_resources
+      kubernetes.before_deploy
+
       kubernetes.resources.each do |res|
         puts res.to_resource.serialize.to_yaml
       end

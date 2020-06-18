@@ -5,7 +5,7 @@ module Kuby
     class Spec
       extend ::KubeDSL::ValueFields
 
-      attr_reader :definition, :plugins
+      attr_reader :definition, :plugins, :tag
 
       def initialize(definition)
         @definition = definition
@@ -56,6 +56,24 @@ module Kuby
         provider.after_configuration
       end
 
+      def before_deploy
+        @tag ||= docker.metadata.tag
+
+        provider.before_deploy(resources)
+        @plugins.each { |_, plg| plg.before_deploy(resources) }
+      ensure
+        @tag = nil
+      end
+
+      def after_deploy
+        @tag ||= docker.metadata.tag
+
+        @plugins.each { |_, plg| plg.after_deploy(resources) }
+        provider.after_deploy(resources)
+      ensure
+        @tag = nil
+      end
+
       def setup
         provider.before_setup
         provider.setup
@@ -67,14 +85,12 @@ module Kuby
         provider.after_setup
       end
 
-      def deploy
-        provider.before_deploy(resources)
-        @plugins.each { |_, plg| plg.before_deploy(resources) }
+      def deploy(tag = nil)
+        @tag = tag
 
+        before_deploy
         provider.deploy
-
-        @plugins.each { |_, plg| plg.after_deploy(resources) }
-        provider.after_deploy(resources)
+        after_deploy
       end
 
       def rollback
@@ -92,11 +108,7 @@ module Kuby
         end
 
         deployed_tag = image_url.split(':').last
-        previous_tag = docker.tags.previous_tag(deployed_tag)
-
-        unless previous_tag
-          raise Kuby::Docker::MissingTagError, 'could not find previous tag'
-        end
+        previous_tag = docker.metadata.previous_tag(deployed_tag)
 
         deploy(previous_tag)
       end

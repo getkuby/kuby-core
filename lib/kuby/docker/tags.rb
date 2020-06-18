@@ -19,11 +19,11 @@ module Kuby
         (local.latest_tags + remote.latest_tags).uniq
       end
 
-      def previous_tag(current_tag)
+      def previous_timestamp_tag(current_tag)
         current_tag = ::Kuby::Docker::TimestampTag.try_parse(current_tag)
         all_tags = timestamp_tags.sort
 
-        idx = timestamp_tags.index do |tag|
+        idx = all_tags.index do |tag|
           tag.time == current_tag.time
         end
 

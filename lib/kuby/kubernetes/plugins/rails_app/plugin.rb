@@ -55,22 +55,22 @@ module Kuby
               end
             end
 
-            kube_spec = self
+            image_with_tag = "#{docker.metadata.image_url}:#{kubernetes.tag}"
 
             deployment do
               spec do
                 template do
                   spec do
                     container(:web) do
-                      image kube_spec.docker.metadata.image_with_tag
+                      image image_with_tag
                     end
 
                     init_container(:create_db) do
-                      image kube_spec.docker.metadata.image_with_tag
+                      image image_with_tag
                     end
 
                     init_container(:migrate_db) do
-                      image kube_spec.docker.metadata.image_with_tag
+                      image image_with_tag
                     end
                   end
                 end
@@ -358,6 +358,10 @@ module Kuby
 
           def docker
             definition.docker
+          end
+
+          def kubernetes
+            definition.kubernetes
           end
 
           def app

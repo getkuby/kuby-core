@@ -41,21 +41,25 @@ module Kuby
       end
 
       def tag
-        @tag ||= begin
-          t = ENV.fetch('KUBY_DOCKER_TAG') do
-            definition.docker.tags.latest_timestamp_tag&.to_s
-          end
-
-          unless t
-            raise MissingTagError, 'could not find latest timestamped tag'
-          end
-
-          t
+        t = ENV.fetch('KUBY_DOCKER_TAG') do
+          definition.docker.tags.latest_timestamp_tag
         end
+
+        unless t
+          raise MissingTagError, 'could not find latest timestamped tag'
+        end
+
+        t.to_s
       end
 
-      def image_with_tag
-        @image_with_tag ||= "#{image_url}:#{tag}"
+      def previous_tag(current_tag)
+        t = definition.docker.tags.previous_timestamp_tag(current_tag)
+
+        unless t
+          raise MissingTagError, 'could not find previous timestamped tag'
+        end
+
+        t.to_s
       end
 
       def distro=(distro_name)
