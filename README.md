@@ -209,6 +209,28 @@ bundle exec rake kuby:remote:dbconsole
 
 ## Customizing the Deploy
 
+Kuby is designed to be highly customizable. You can customize how Docker images are built by running your own commands and installing your own packages, and you can customize the Kubernetes deployment process by modifying resources and adding additional resources of your own. Customization requires a bit more knowledge around how Docker and Kubernetes work, so you may want to invest some time learning more about them before diving in too deep.
+
+### Customizing the Docker Build
+
+We've already seen the standard way to configure Kuby's Docker component (i.e. `docker do ... end` above), but there's a lot more you can do.
+
+#### Installing Additional Packages
+
+#### Custom Phases
+
+Kuby builds Docker images in 7 phases.
+
+1. **Setup phase**: Defines the Docker base image (eg. ruby:2.6.3, ruby:2.6.3-alpine, etc), sets the working directory, and sets the `KUBY_ENV` and `RAILS_ENV` environment variables.
+1. **Package phase**: Installs packages via the operating system's package manager, eg. `apt-get`, `apk`, `yum`, etc. Popular packages include things like database drivers (eg. libmysqldev, sqlite3-dev), and image processing libraries (eg. imagemagick, graphicsmagick).
+1. **Bundler phase**: Runs `bundle install`, which installs all the Ruby dependencies listed in your app's Gemfile.
+1. **Yarn phase**: Runs `yarn install`, which installs all the JavaScript dependencies listed in your app's package.json.
+1. **Copy phase**: Copies your app's source code into the image.
+1. **Assets phase**: Compiles assets managed by both the asset pipeline and webpacker.
+1. **Webserver phase**: Instructs the Docker image use the specified webserver to run your app. Currently only the Rails default, [Puma](https://github.com/puma/puma), is supported.
+
+Phases are just Ruby classes that respond to the `apply_to(dockerfile)` method. You can define your own custom phases and insert them into the build process.
+
 ## Secrets
 
 ## Data Stores
