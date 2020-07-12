@@ -173,6 +173,50 @@ Now that Kuby is configured and your Kubernetes cluster is ready, it's time to d
     ```
 1. Rejoice
 
+## After the Deploy
+
+Great, you've deployed your app! Now what?
+
+Check the status of your deployment by running:
+
+```bash
+bundle exec rake kuby:remote:status
+```
+
+The obvious way to see if your app is working or not is to try to access it over the Internet. If the deploy succeeded (and `rake status` indicates everything's up and running) but your app is erroring out, chances are something is misconfigured. A good place to look when diagnosing issues is your Rails server log. Run the following rake task to see a live log tail:
+
+```bash
+bundle exec rake kuby:remote:logs
+```
+
+Establish a shell session by running:
+
+```bash
+bundle exec rake kuby:remote:shell
+```
+
+Establish a Rails console session by running:
+
+```bash
+bundle exec rake kuby:remote:console
+```
+
+Establish a database console session by running:
+
+```bash
+bundle exec rake kuby:remote:dbconsole
+```
+
+## Customizing the Deploy
+
+## Secrets
+
+## Data Stores
+
+## Custom Resources
+
+## Creating your own Plugin
+
 ## Running Tests
 
 `bundle exec rspec` should do the trick... or at least it would if there were any tests. Don't worry, it's on my radar.
