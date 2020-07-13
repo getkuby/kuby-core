@@ -56,11 +56,11 @@ module Kuby
       @plugins ||= {}
     end
 
-    def register_package(package_name, package_def)
+    def register_package(package_name, package_def = nil)
       packages[package_name] = case package_def
-        when String
-          Kuby::Docker::Packages::ManagedPackage.new(
-            package_name, debian: package_def, alpine: package_def
+        when NilClass
+          Kuby::Docker::Packages::SimpleManagedPackage.new(
+            package_name
           )
         when Hash
           Kuby::Docker::Packages::ManagedPackage.new(

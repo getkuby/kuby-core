@@ -1,6 +1,4 @@
 require 'fileutils'
-require 'krane'
-require 'ext/krane/kubernetes_resource'
 require 'securerandom'
 require 'yaml'
 
@@ -63,7 +61,7 @@ module Kuby
           File.write(resource_path, resource.to_resource.to_yaml)
         end
 
-        task = ::Krane::DeployTask.new(
+        task = ::Kuby::Kubernetes::DeployTask.new(
           namespace: namespace.metadata.name,
           context: cli.current_context,
           filenames: [tmpdir]

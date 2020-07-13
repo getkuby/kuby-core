@@ -4,6 +4,7 @@ module Kuby
   module Kubernetes
     autoload :MinikubeProvider, 'kuby/kubernetes/minikube_provider'
     autoload :Deployer,         'kuby/kubernetes/deployer'
+    autoload :DeployTask,       'kuby/kubernetes/deploy_task'
     autoload :DockerConfig,     'kuby/kubernetes/docker_config'
     autoload :Manifest,         'kuby/kubernetes/manifest'
     autoload :Monitors,         'kuby/kubernetes/monitors'
