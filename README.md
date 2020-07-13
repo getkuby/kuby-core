@@ -18,15 +18,15 @@ Perhaps [Stefan Wintermeyer](https://twitter.com/wintermeyer) said it best durin
 
 > "In my experience, deployment is one of the major problems of normal Rails users. It is a big pain to set up a deployment system for a Rails application, and I don't see anything out there that makes it easier. [...] I believe that we lose quite a lot of companies and new developers on this step. Because everything else [is] so much easier with Rails. But that last step - and it's a super important step - is still super complicated."
 
-## Docker and Kubernetes
+## Why Docker and Kubernetes?
 
-Why bet the farm on Docker and Kubernetes?
+So, why bet the farm on Docker and Kubernetes?
 
-### Docker
+### Why Docker
 
 When Docker came on the scene in 2013 it was seen as a game-changer. Applications that used to be deployed onto hand-provisioned servers can now be bundled up into neat little packages and transferred between computers in their entirety. Since the whole application - dependencies, operating system components, assets, code, etc - can be passed around as a single artifact, Docker images curtail the need for manually provisioned servers and eliminate a whole class of "works on my machine" problems.
 
-### Kubernetes
+### Why Kubernetes
 
 Kubernetes has taken the ops world by storm. It's resilient to failure, portable across a variety of cloud providers, and backed by industry-leading organizations like the CNCF. Kubernetes configuration is portable enough to be used, without modification, on just about any Kubernetes cluster, making migrations not only feasible, but easy. Many cloud providers like Google GCP, Amazon AWS, Microsoft Azure, DigitalOcean, and Linode support Kubernetes. Most of these providers will manage the Kubernetes cluster for you, and in some cases will even provide it free of charge (you pay only for the compute resources).
 
@@ -38,13 +38,13 @@ NOTE: Kuby is designed to work with Rails 5.1 and up.
 
 The first step in deploying your app is to choose a hosting provider. At the time of this writing, Kuby supports DigitalOcean and Linode, but support for more providers is coming soon. Use your provider's dashboard to spin up a Kubernetes cluster. In most cases, this shouldn't involve more than a few button clicks.
 
-### The Container Registry
+### Using a Container Registry
 
 Kuby uses Docker to package up your application into a Docker _image_. Images are then pushed (i.e. uploaded) to something called a "container registry." Container registries host Docker images so they can be pulled (i.e. downloaded) later.
 
 Although there are a number of container registries available (some free and some paid), consider using the Gitlab registry. Gitlab's registry is free and unlimited. You don't have to host your code on Gitlab to take advantage of the registry, but they're great for that too.
 
-### Integrating Kuby
+### Integrating Kuby Into Your App
 
 Kuby configuration is done via a [DSL](https://en.wikipedia.org/wiki/Domain-specific_language). There are two main sections, one for Docker and one for Kubernetes. Put the config into a Rails initializer, eg. config/initializers/kuby.rb.
 
@@ -173,7 +173,7 @@ Now that Kuby is configured and your Kubernetes cluster is ready, it's time to d
     ```
 1. Rejoice
 
-## After the Deploy
+## Checking in on Your App
 
 Great, you've deployed your app! Now what?
 
@@ -207,7 +207,7 @@ Establish a database console session by running:
 bundle exec rake kuby:remote:dbconsole
 ```
 
-## Customizing the Deploy
+## Customizing Kuby
 
 Kuby is designed to be highly customizable. You can customize how Docker images are built by running your own commands and installing your own packages. You can customize the Kubernetes deployment process by modifying resources and adding additional resources of your own. Customization requires a bit more knowledge around how Docker and Kubernetes work, so you may want to invest some time learning more about them before diving in too deep.
 
@@ -274,11 +274,11 @@ Kuby.define(:production) do
 end
 ```
 
-#### Custom Phases
+#### Custom Build Phases
 
-Kuby builds Docker images in 7 phases:
+Kuby builds Docker images in 7 build phases:
 
-1. **Setup phase**: Defines the Docker base image (eg. ruby:2.6.3, ruby:2.6.3-alpine, etc), sets the working directory, and sets the `KUBY_ENV` and `RAILS_ENV` environment variables.
+1. **Setup phase**: Defines the Docker base image (eg. ruby:2.6.3, ruby:2.6.3-alpine, etc), sets the working directory, and defines the `KUBY_ENV` and `RAILS_ENV` environment variables.
 1. **Package phase**: Installs packages via the operating system's package manager, eg. `apt-get`, `apk`, `yum`, etc. Popular packages include things like database drivers (eg. libmysqldev, sqlite3-dev), and image processing libraries (eg. imagemagick, graphicsmagick).
 1. **Bundler phase**: Runs `bundle install`, which installs all the Ruby dependencies listed in your app's Gemfile.
 1. **Yarn phase**: Runs `yarn install`, which installs all the JavaScript dependencies listed in your app's package.json.
@@ -286,11 +286,51 @@ Kuby builds Docker images in 7 phases:
 1. **Assets phase**: Compiles assets managed by both the asset pipeline and webpacker.
 1. **Webserver phase**: Instructs the Docker image to use a webserver to run your app. Currently only the Rails default, [Puma](https://github.com/puma/puma), is supported (including puma in your Gemfile is all you need to do - no other configuration is necessary).
 
-Phases are just Ruby classes that respond to the `apply_to(dockerfile)` method. You can define your own custom phases and insert them into the build process.
+Phases are just Ruby classes that respond to the `apply_to(dockerfile)` method. It's possible to define your own custom phases and insert them into the build process. To do so, create a Ruby class and define the appropriate method. Then, insert your new phase. For example, let's define a phase that writes a file into the image that contains the current git commit ID (it can be handy to know which version of your code your image contains). We assume the current git commit is passed as a Docker build argument, since it won't be available to Docker otherwise (in other words, the .git folder won't and shouldn't be copied into the image).
+
+```ruby
+class GitCommitPhase
+  def apply_to(dockerfile)
+    dockerfile.run('echo $GIT_COMMIT > GIT_COMMIT')
+  end
+end
+
+Kuby.define(:production) do
+  docker do
+    insert :git_commit_phase, GitCommitPhase.new, after: :copy_phase
+  end
+end
+```
+
+### Customizing the Deploy
+
+In Kubernetes, everything is a resource. Resources generally have a "kind" (eg. "ConfigMap", "Namespace", etc), and a unique name. Kubernetes resources are usually stored as flat .yml or .json files and applied via the Kubernetes CLI, `kubectl` (vocalized as "kube control", or "kube cuttle"), but Kuby does things a little differently. In Kuby, resources are defined in Ruby code using the [KubeDSL gem](https://github.com/getkuby/kube-dsl). Kuby defines around 10 resources for a standard Rails app, which are summarized below.
+
+1. **Namepace**: A Kubernetes namespace inside which all other resources are defined.
+1. **ServiceAccount**: An account permitted to make changes inside the namespace.
+1. **Service**: Defines an HTTP interface to your app and defines which ports should be exposed.
+1. **ConfigMap**: Contains configuration data your app needs to run, usually key/value pairs.
+1. **Secret**: Contains app "secrets", i.e. sensitive configuration data like 3rd party API keys, passwords, etc. By default, this only contains the contents of `RAILS_MASTER_KEY`.
+1. **Deployment**: Specifies how to deploy your app. Includes configuration for creating and migrating the database, as well as where to get the Docker image and how to safely restart the Rails server without dropping requests.
+1. **Ingress**: Defines how connections to your app will be made from the outside world.
+
+To customize these resources, you simply have to know where they're defined. Most of Kuby's resources are exposed publicly and allow for modification. For example, here's how to disable TLS for your Rails app (it's turned on by default):
+
+```ruby
+Kuby.define(:production) do
+  kubernetes do
+    plugin :rails_app do
+      tls_enabled false
+    end
+  end
+end
+```
 
 ## Secrets
 
 ## Data Stores
+
+## TLS
 
 ## Custom Resources
 
