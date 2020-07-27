@@ -1,3 +1,7 @@
+## 0.4.0
+* Introduce simple managed package.
+* Refactor deploy task into its own class.
+
 ## 0.3.0
 * Fix Krane issue causing incorrect constant lookup and therefore deploy failures.
   - See: https://github.com/Shopify/krane/pull/720
