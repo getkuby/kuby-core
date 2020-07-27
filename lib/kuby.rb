@@ -1,4 +1,5 @@
 require 'kuby/railtie'
+require 'kuby/generators/kuby'
 
 module Kuby
   autoload :BasicLogger,  'kuby/basic_logger'
@@ -61,6 +62,10 @@ module Kuby
         when NilClass
           Kuby::Docker::Packages::SimpleManagedPackage.new(
             package_name
+          )
+        when String
+          Kuby::Docker::Packages::SimpleManagedPackage.new(
+            package_def
           )
         when Hash
           Kuby::Docker::Packages::ManagedPackage.new(

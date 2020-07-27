@@ -120,7 +120,7 @@ class WatchmanPackage < Kuby::Docker::Packages::Package
         && make && make install
     END
   end
-  
+
   def install_on_alpine(dockerfile)
     # alpine-specific statements
   end
