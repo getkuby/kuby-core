@@ -1,5 +1,4 @@
 require 'kuby/railtie'
-require 'kuby/generators/kuby'
 
 module Kuby
   autoload :BasicLogger,  'kuby/basic_logger'
