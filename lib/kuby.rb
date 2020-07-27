@@ -1,5 +1,10 @@
 require 'kuby/railtie'
 
+begin
+  require 'kuby/kubernetes/plugins/rails_app/generators/kuby'
+rescue NameError
+end
+
 module Kuby
   autoload :BasicLogger,  'kuby/basic_logger'
   autoload :CLIBase,      'kuby/cli_base'

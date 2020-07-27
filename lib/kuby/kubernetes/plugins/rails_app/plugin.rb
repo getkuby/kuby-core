@@ -1,6 +1,5 @@
 require 'kube-dsl'
 require 'kuby/cert-manager'
-require 'kuby/kubernetes/plugins/rails_app/generators/kuby'
 
 module Kuby
   module Kubernetes
