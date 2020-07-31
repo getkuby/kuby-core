@@ -1,3 +1,7 @@
+## 0.5.0
+* Fix Rails generators issue causing crash at startup.
+* Add rake task to run arbitrary kubectl commands.
+
 ## 0.4.0
 * Introduce simple managed package.
 * Refactor deploy task into its own class.

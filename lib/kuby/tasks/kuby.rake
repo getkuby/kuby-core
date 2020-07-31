@@ -1,3 +1,5 @@
+require 'shellwords'
+
 namespace :kuby do
   def tasks
     @tasks ||= Kuby::Tasks.new(Kuby.definition)
@@ -21,6 +23,10 @@ namespace :kuby do
 
   task resources: :environment do
     tasks.print_resources
+  end
+
+  task :kubectl, [:cmd] => [:environment] do |_, args|
+    tasks.kubectl(Shellwords.shellsplit(args[:cmd]))
   end
 
   task deploy: :environment do

@@ -63,6 +63,10 @@ module Kuby
       puts File.read(path)
     end
 
+    def kubectl(*cmd)
+      kubernetes_cli.run_cmd(cmd)
+    end
+
     def remote_logs
       kubernetes_cli.logtail(namespace, match_labels.serialize)
     end
