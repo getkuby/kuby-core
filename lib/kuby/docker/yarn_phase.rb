@@ -1,6 +1,6 @@
 module Kuby
   module Docker
-    class YarnPhase < Phase
+    class YarnPhase < Layer
       def apply_to(dockerfile)
         dockerfile.copy('package.json', '.')
         dockerfile.copy('yarn.lock*', '.')

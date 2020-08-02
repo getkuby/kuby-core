@@ -6,6 +6,17 @@ class KubyGenerator < Rails::Generators::Base
     initializer(
       'kuby.rb',
       <<~END
+        require 'kuby'
+
+        Kuby.load!
+      END
+    )
+  end
+
+  def create_config_file
+    create_file(
+      'kuby.rb',
+      <<~END
         # Define a production Kuby deploy environment
         Kuby.define(:production) do
           docker do
@@ -38,6 +49,24 @@ class KubyGenerator < Rails::Generators::Base
             provider :minikube
           end
         end
+      END
+    )
+  end
+
+  def create_dockerignore
+    create_file(
+      '.dockerignore',
+      <<~END
+        .bundle/
+        vendor/bundle
+        node_modules/
+        .node_modules/
+        **/.git*
+        tmp/
+        log/
+        engines/**/log/
+        engines/**/tmp/
+        public/assets
       END
     )
   end

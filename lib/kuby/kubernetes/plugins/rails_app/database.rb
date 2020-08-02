@@ -1,3 +1,6 @@
+require 'erb'
+require 'yaml'
+
 module Kuby
   module Kubernetes
     module Plugins
@@ -11,8 +14,8 @@ module Kuby
             'postgresql' => Postgres
           }.freeze
 
-          def self.get(definition)
-            new(definition).database
+          def self.get(rails_app)
+            new(rails_app).database
           end
 
           def self.get_adapter(adapter)
@@ -22,16 +25,16 @@ module Kuby
             end
           end
 
-          attr_reader :definition
+          attr_reader :rails_app
 
-          def initialize(definition)
-            @definition = definition
+          def initialize(rails_app)
+            @rails_app = rails_app
           end
 
           def database
             @database ||= self.class
               .get_adapter(adapter)
-              .new(definition, environment, db_configs)
+              .new(rails_app, environment, db_configs)
           end
 
           private
@@ -45,11 +48,27 @@ module Kuby
           end
 
           def environment
-            @environment ||= definition.environment
+            @environment ||= rails_app.definition.environment
           end
 
           def db_configs
-            @db_configs ||= definition.app.config.database_configuration
+            @db_configs ||= YAML.load(ERB.new(File.read(db_config_path)).result)
+          end
+
+          def db_config_path
+            @db_config_path ||= begin
+              db_config_paths.first or
+                raise "Couldn't find database config at #{rails_app.root}"
+            end
+          end
+
+          def db_config_paths
+            @db_config_paths ||=
+              Dir.glob(
+                File.join(
+                  rails_app.root, 'config', 'database.{yml,erb,yml.erb,yaml,yaml.erb}'
+                )
+              )
           end
         end
       end

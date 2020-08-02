@@ -1,6 +1,6 @@
 module Kuby
   module Docker
-    class BundlerPhase < Phase
+    class BundlerPhase < Layer
       DEFAULT_WITHOUT = ['development', 'test', 'deploy'].freeze
 
       attr_accessor :version, :gemfile, :without

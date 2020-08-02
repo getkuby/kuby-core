@@ -26,11 +26,6 @@ module Kuby
           rails_app.resources.delete(rails_app.ingress)
           rails_app.service.spec { type 'LoadBalancer' }
         end
-
-        configure do
-          # default kubeconfig path
-          kubeconfig File.join(ENV['HOME'], '.kube', 'config')
-        end
       end
 
       def kubeconfig_path
@@ -45,6 +40,11 @@ module Kuby
 
       def after_initialize
         @config = Config.new
+
+        configure do
+          # default kubeconfig path
+          kubeconfig File.join(ENV['HOME'], '.kube', 'config')
+        end
       end
     end
   end

@@ -27,6 +27,11 @@ module Kuby
         def setup
           Kuby.logger.info('Deploying nginx ingress resources')
 
+          if already_deployed?
+            Kuby.logger.info('Nginx ingress already deployed, skipping')
+            return
+          end
+
           SETUP_RESOURCES.each do |uri|
             uri = uri % { provider: @config.provider || DEFAULT_PROVIDER }
             kubernetes_cli.apply_uri(uri)
@@ -47,6 +52,13 @@ module Kuby
         end
 
         private
+
+        def already_deployed?
+          kubernetes_cli.get_object('Service', 'ingress-nginx', 'ingress-nginx')
+          true
+        rescue KubernetesCLI::GetResourceError
+          return false
+        end
 
         def after_initialize
           @config = Config.new

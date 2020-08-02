@@ -1,6 +1,6 @@
 module Kuby
   module Docker
-    class WebserverPhase < Phase
+    class WebserverPhase < Layer
       class Puma
         attr_reader :phase
 

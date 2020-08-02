@@ -1,3 +1,13 @@
+## 0.6.0
+* Fix `MissingDistroError` caused by not setting a default distro.
+* Create a .dockerignore file when running the Rails generator.
+* Add ability to insert inline Docker layers without having to create a separate class, eg:
+    ```ruby
+    insert :hello, before: :bundler_phase do |dockerfile|
+      dockerfile.run('echo "hello, world"')
+    end
+    ```
+
 ## 0.5.0
 * Fix Rails generators issue causing crash at startup.
 * Add rake task to run arbitrary kubectl commands.

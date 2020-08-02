@@ -1,10 +1,13 @@
 module Kuby
   class Definition
-    attr_reader :environment, :app
+    extend KubeDSL::ValueFields
 
-    def initialize(environment, app, &block)
+    value_field :app_name, default: -> { raise 'Please set app_name in your Kuby config' }
+
+    attr_reader :environment
+
+    def initialize(environment, &block)
       @environment = environment
-      @app = app
 
       instance_eval(&block) if block
       kubernetes.after_configuration
@@ -20,10 +23,6 @@ module Kuby
       @kubernetes ||= Kubernetes::Spec.new(self)
       @kubernetes.instance_eval(&block) if block
       @kubernetes
-    end
-
-    def app_name
-      @app_name ||= app.class.module_parent.name
     end
   end
 end

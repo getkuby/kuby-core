@@ -2,67 +2,68 @@ require 'shellwords'
 
 namespace :kuby do
   def tasks
+    Kuby.load!
     @tasks ||= Kuby::Tasks.new(Kuby.definition)
   end
 
-  task dockerfile: :environment do
+  task :dockerfile do
     tasks.print_dockerfile
   end
 
-  task build: :environment do
+  task :build do
     tasks.build
   end
 
-  task run: :environment do
+  task :run do
     tasks.run
   end
 
-  task push: :environment do
+  task :push do
     tasks.push
   end
 
-  task resources: :environment do
+  task :resources do
     tasks.print_resources
   end
 
-  task :kubectl, [:cmd] => [:environment] do |_, args|
+  task :kubectl, [:cmd] do |_, args|
     tasks.kubectl(Shellwords.shellsplit(args[:cmd]))
   end
 
-  task deploy: :environment do
-    Kuby.definition.kubernetes.deploy
+  task :deploy do
+    tasks.deploy
   end
 
-  task rollback: :environment do
-    Kuby.definition.kubernetes.rollback
+  task :rollback do
+    tasks.rollback
   end
 
-  task kubeconfig: :environment do
+  task :kubeconfig do
     tasks.print_kubeconfig
   end
 
-  task setup: :environment do
-    Kuby.definition.kubernetes.setup
+  task :setup do
+    tasks.setup
   end
 
   namespace :remote do
-    task logs: :environment do
+    task :logs do
       tasks.remote_logs
     end
 
-    task status: :environment do
+    task :status do
       tasks.remote_status
     end
 
-    task shell: :environment do
+    task :shell do
       tasks.remote_shell
     end
 
-    task console: :environment do
+    task :console do
       tasks.remote_console
     end
 
-    task dbconsole: :environment do
+    task :dbconsole do
       tasks.remote_dbconsole
     end
   end

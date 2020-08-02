@@ -1,6 +1,6 @@
 module Kuby
   module Docker
-    class CopyPhase < Phase
+    class CopyPhase < Layer
       DEFAULT_PATHS = ['./'].freeze
 
       attr_reader :paths

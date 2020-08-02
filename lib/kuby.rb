@@ -19,11 +19,15 @@ module Kuby
 
   class << self
     attr_reader :definition
-    attr_accessor :logger
+    attr_writer :logger
 
-    def define(environment, app = Rails.application, &block)
+    def load!
+      require ENV['KUBY_CONFIG'] || File.join('.', 'kuby.rb')
+    end
+
+    def define(environment, &block)
       environment = environment.to_s
-      definitions[environment] ||= Definition.new(environment, app, &block)
+      definitions[environment] ||= Definition.new(environment, &block)
     end
 
     def definitions
@@ -59,6 +63,10 @@ module Kuby
 
     def plugins
       @plugins ||= {}
+    end
+
+    def logger
+      @logger ||= BasicLogger.new(STDERR)
     end
 
     def register_package(package_name, package_def = nil)

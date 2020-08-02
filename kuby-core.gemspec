@@ -23,5 +23,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'rouge', '~> 3.0'
 
   s.require_path = 'lib'
+
   s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'LICENSE', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby-core.gemspec']
 end

@@ -16,6 +16,10 @@ module Kuby
       puts formatter.format(tokens)
     end
 
+    def setup
+      definition.kubernetes.setup
+    end
+
     def build
       docker.cli.build(
         dockerfile: docker.to_dockerfile,
@@ -47,6 +51,14 @@ module Kuby
 
         Kuby.logger.fatal(msg)
       end
+    end
+
+    def deploy
+      definition.kubernetes.deploy
+    end
+
+    def rollback
+      definition.kubernetes.rollback
     end
 
     def print_resources

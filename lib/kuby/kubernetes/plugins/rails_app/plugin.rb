@@ -13,6 +13,7 @@ module Kuby
           ENV_SECRETS = [MASTER_KEY_VAR].freeze
           ENV_EXCLUDE = ['RAILS_ENV'].freeze
 
+          value_field :root, default: '.'
           value_fields :hostname, :tls_enabled, :database, :replicas
 
           def initialize(definition)
@@ -30,7 +31,7 @@ module Kuby
             # is here as a placeholder to indicate we'd like to be able to
             # handle Rails apps that don't use a database, i.e. don't have
             # activerecord configured
-            if @database = Database.get(definition)
+            if @database = Database.get(self)
               definition.kubernetes.plugins[database] = @database
               definition.kubernetes.add_plugin(:kube_db)
 
@@ -178,9 +179,9 @@ module Kuby
                 if master_key = ENV[MASTER_KEY_VAR]
                   add MASTER_KEY_VAR.to_sym, master_key
                 else
-                  master_key_path = spec.app.root.join('config', 'master.key')
+                  master_key_path = File.join(spec.root, 'config', 'master.key')
 
-                  if master_key_path.exist?
+                  if File.exist?(master_key_path)
                     add MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip
                   end
                 end
@@ -362,10 +363,6 @@ module Kuby
 
           def kubernetes
             definition.kubernetes
-          end
-
-          def app
-            definition.app
           end
 
           def namespace

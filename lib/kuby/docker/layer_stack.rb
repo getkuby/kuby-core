@@ -15,12 +15,31 @@ module Kuby
         @stack.each { |name| yield layers[name] }
       end
 
-      def use(name, layer)
+      def use(name, layer = nil, &block)
         stack << name
-        layers[name] = layer
+
+        if layer
+          layers[name] = layer
+        elsif block_given?
+          layers[name] = InlineLayer.new(block)
+        else
+          raise "Must either pass a layer object or a block to `#{__method__}'"
+        end
       end
 
-      def insert(name, layer, options = {})
+      def insert(name, layer = nil, options = {}, &block)
+        # this is truly gross but it's the only way I can think of to be able
+        # to call insert these two ways:
+        #
+        # insert :foo, FooLayer.new, before: :bundler_phase
+        # insert :foo, before: :bundler_phase do
+        #   ...
+        # end
+        if layer.is_a?(Hash)
+          insert(name, nil, options.merge(layer), &block)
+          return
+        end
+
         existing_name = options[:before] || options[:after]
         idx = stack.index(existing_name)
 
@@ -30,7 +49,14 @@ module Kuby
 
         idx += 1 if options[:after]
         stack.insert(idx, name)
-        layers[name] = layer
+
+        if layer
+          layers[name] = layer
+        elsif block_given?
+          layers[name] = InlineLayer.new(block)
+        else
+          raise "Must either pass a layer object or a block to `#{__method__}'"
+        end
       end
 
       def delete(name)

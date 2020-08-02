@@ -1,6 +1,6 @@
 module Kuby
   module Docker
-    class SetupPhase < Phase
+    class SetupPhase < Layer
       DEFAULT_WORKING_DIR = '/usr/src/app'.freeze
 
       attr_accessor :base_image, :working_dir

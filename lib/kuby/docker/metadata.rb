@@ -8,7 +8,7 @@ module Kuby
       LATEST_TAG = 'latest'
 
       attr_accessor :image_url
-      attr_reader :definition, :distro
+      attr_reader :definition
 
       def initialize(definition)
         @definition = definition
@@ -60,6 +60,10 @@ module Kuby
         end
 
         t.to_s
+      end
+
+      def distro
+        @distro || DEFAULT_DISTRO
       end
 
       def distro=(distro_name)

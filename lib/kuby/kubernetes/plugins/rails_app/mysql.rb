@@ -118,10 +118,6 @@ module Kuby
             definition.kubernetes
           end
 
-          def app
-            definition.app
-          end
-
           private
 
           def config

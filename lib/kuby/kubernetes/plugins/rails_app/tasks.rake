@@ -3,8 +3,9 @@ require 'rake'
 namespace :kuby do
   namespace :rails_app do
     namespace :db do
-      task rewrite_config: :environment do
-        config_file = Kuby.definition.app.root.join('config', 'database.yml')
+      task :rewrite_config do
+        Kuby.load!
+        config_file = File.join(Kuby.definition.kubernetes.plugin(:rails_app).root, 'config', 'database.yml')
         database = Kuby.definition.kubernetes.plugin(:rails_app).database
         File.write(config_file, YAML.dump(database.rewritten_configs))
         Kuby.logger.info("Wrote #{config_file}")

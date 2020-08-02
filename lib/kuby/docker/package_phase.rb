@@ -1,6 +1,6 @@
 module Kuby
   module Docker
-    class PackagePhase < Phase
+    class PackagePhase < Layer
       attr_reader :operations
 
       def initialize(*args)

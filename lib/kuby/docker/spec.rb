@@ -50,12 +50,12 @@ module Kuby
         metadata.image_url = url
       end
 
-      def use(*args)
-        layer_stack.use(*args)
+      def use(*args, &block)
+        layer_stack.use(*args, &block)
       end
 
-      def insert(*args)
-        layer_stack.insert(*args)
+      def insert(*args, &block)
+        layer_stack.insert(*args, &block)
       end
 
       def delete(*args)
