@@ -1,3 +1,5 @@
+require 'pathname'
+
 module Kuby
   module Docker
     class BundlerPhase < Layer
@@ -48,7 +50,7 @@ module Kuby
           .definition
           .gemfiles
           .first
-          .relative_path_from(app.root)
+          .relative_path_from(Pathname(Dir.getwd))
           .to_s
       end
     end

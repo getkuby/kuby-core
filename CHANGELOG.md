@@ -1,4 +1,19 @@
 ## 0.6.0
+* Don't load the Rails environment when running Kuby's rake tasks.
+  - Kuby's gems are still part of the bundle, but config has been moved out of the initializer and into kuby.rb in the Rails root directory.
+  - Internal classes no longer retain a reference to `Rails.application`.
+  - Kuby config now requires `environment` blocks:
+      ```ruby
+      Kuby.define('my-app') do
+        environment(:production) do
+          ...
+        end
+
+        environment(:staging) do
+          ...
+        end
+      end
+      ```
 * Fix `MissingDistroError` caused by not setting a default distro.
 * Create a .dockerignore file when running the Rails generator.
 * Add ability to insert inline Docker layers without having to create a separate class, eg:
@@ -7,6 +22,11 @@
       dockerfile.run('echo "hello, world"')
     end
     ```
+* Add Postgres database support.
+* Don't install sqlite libs by default.
+* Modify Rails generator
+  - Require kuby and load config safely.
+  - Provide manual access to credentials via `ActiveSupport::EncryptedConfiguration`, which is necessary now that our rake tasks don't load the Rails environment.
 
 ## 0.5.0
 * Fix Rails generators issue causing crash at startup.

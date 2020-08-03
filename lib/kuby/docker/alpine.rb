@@ -8,7 +8,6 @@ module Kuby
         [:nodejs, '12.14.1'],
         [:yarn, '1.21.1'],
         [:c_toolchain],
-        [:sqlite_dev],
         [:tzdata]
       ].freeze
 

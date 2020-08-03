@@ -20,7 +20,7 @@ module Kuby
 
           def self.get_adapter(adapter)
             ADAPTER_MAP.fetch(adapter) do
-              raise UnsupportedDatabaseError, "Kuby does not support the '#{adapter}'"\
+              raise UnsupportedDatabaseError, "Kuby does not support the '#{adapter}' "\
                 'database adapter'
             end
           end

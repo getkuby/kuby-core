@@ -6,9 +6,14 @@ class KubyGenerator < Rails::Generators::Base
     initializer(
       'kuby.rb',
       <<~END
-        require 'kuby'
-
-        Kuby.load!
+        begin
+          require 'kuby'
+        rescue LoadError
+          # couldn't require kuby, probably because it's not
+          # installed for this environment
+        else
+          Kuby.load!
+        end
       END
     )
   end
@@ -17,15 +22,24 @@ class KubyGenerator < Rails::Generators::Base
     create_file(
       'kuby.rb',
       <<~END
+        require 'active_support/encrypted_configuration'
+
         # Define a production Kuby deploy environment
         Kuby.define(:production) do
+          credentials = ActiveSupport::EncryptedConfiguration.new(
+            config_path: File.join('config', 'credentials.yml.enc'),
+            key_path: File.join('config', 'master.key'),
+            env_key: 'RAILS_MASTER_KEY',
+            raise_if_missing_key: true
+          )
+
           docker do
             # Configure your Docker registry credentials here. Add them to your
             # Rails credentials file by running `bundle exec rake credentials:edit`.
             credentials do
-              username Rails.application.credentials[:KUBY_DOCKER_USERNAME]
-              password Rails.application.credentials[:KUBY_DOCKER_PASSWORD]
-              email Rails.application.credentials[:KUBY_DOCKER_EMAIL]
+              username credentials[:KUBY_DOCKER_USERNAME]
+              password credentials[:KUBY_DOCKER_PASSWORD]
+              email credentials[:KUBY_DOCKER_EMAIL]
             end
 
             # Configure the URL to your Docker image here, eg:

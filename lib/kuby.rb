@@ -122,8 +122,3 @@ Kuby.register_package(:c_toolchain,
   debian: 'build-essential',
   alpine: 'build-base'
 )
-
-Kuby.register_package(:sqlite_dev,
-  debian: 'libsqlite3-dev',
-  alpine: 'sqlite-dev'
-)
