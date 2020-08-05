@@ -118,7 +118,7 @@ module Kuby
 
         @namespace ||= KubeDSL.namespace do
           metadata do
-            name "#{spec.selector_app}-#{spec.definition.environment}"
+            name "#{spec.selector_app}-#{spec.definition.environment.name}"
           end
         end
 

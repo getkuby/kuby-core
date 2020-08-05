@@ -14,12 +14,16 @@ module Kuby
           ENV_EXCLUDE = ['RAILS_ENV'].freeze
 
           value_field :root, default: '.'
-          value_fields :hostname, :tls_enabled, :database, :replicas
+          value_fields :hostname, :tls_enabled
+          value_fields :manage_database, :database, :replicas
+
+          alias_method :manage_database?, :manage_database
 
           def initialize(definition)
             @definition = definition
             @tls_enabled = true
             @replicas = 1
+            @manage_database = true
           end
 
           def configure(&block)
@@ -27,10 +31,6 @@ module Kuby
           end
 
           def after_configuration
-            # currently Database.get doesn't return nil, but this if statement
-            # is here as a placeholder to indicate we'd like to be able to
-            # handle Rails apps that don't use a database, i.e. don't have
-            # activerecord configured
             if @database = Database.get(self)
               definition.kubernetes.plugins[database] = @database
               definition.kubernetes.add_plugin(:kube_db)
@@ -345,7 +345,7 @@ module Kuby
               app_secrets,
               deployment,
               ingress,
-              *database.resources
+              *database&.resources
             ]
           end
 

@@ -6,14 +6,9 @@ class KubyGenerator < Rails::Generators::Base
     initializer(
       'kuby.rb',
       <<~END
-        begin
-          require 'kuby'
-        rescue LoadError
-          # couldn't require kuby, probably because it's not
-          # installed for this environment
-        else
-          Kuby.load!
-        end
+        require 'kuby'
+
+        Kuby.load!
       END
     )
   end

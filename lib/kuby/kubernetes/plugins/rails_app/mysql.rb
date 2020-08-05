@@ -56,6 +56,20 @@ module Kuby
             end
           end
 
+          def storage(amount)
+            database do
+              spec do
+                storage do
+                  resources do
+                    requests do
+                      set :storage, amount
+                    end
+                  end
+                end
+              end
+            end
+          end
+
           def secret(&block)
             context = self
 

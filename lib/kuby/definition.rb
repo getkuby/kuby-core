@@ -1,28 +1,35 @@
 module Kuby
   class Definition
-    extend KubeDSL::ValueFields
+    attr_reader :app_name
 
-    value_field :app_name, default: -> { raise 'Please set app_name in your Kuby config' }
-
-    attr_reader :environment
-
-    def initialize(environment, &block)
-      @environment = environment
-
-      instance_eval(&block) if block
-      kubernetes.after_configuration
+    def initialize(app_name, &block)
+      @app_name = app_name
     end
 
-    def docker(&block)
-      @docker ||= Docker::Spec.new(self)
-      @docker.instance_eval(&block) if block
-      @docker
+    def environment(name = Kuby.env, &block)
+      name = name.to_s
+
+      if name
+        environments[name] ||= Environment.new(name, self)
+      end
+
+      if block_given?
+        environments[name].instance_eval(&block)
+      end
+
+      environments[name]
     end
 
-    def kubernetes(&block)
-      @kubernetes ||= Kubernetes::Spec.new(self)
-      @kubernetes.instance_eval(&block) if block
-      @kubernetes
+    def docker
+      environment.docker
+    end
+
+    def kubernetes
+      environment.kubernetes
+    end
+
+    def environments
+      @environments ||= {}
     end
   end
 end

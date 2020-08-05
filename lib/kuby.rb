@@ -10,6 +10,7 @@ module Kuby
   autoload :CLIBase,      'kuby/cli_base'
   autoload :Definition,   'kuby/definition'
   autoload :Docker,       'kuby/docker'
+  autoload :Environment,  'kuby/environment'
   autoload :Kubernetes,   'kuby/kubernetes'
   autoload :Middleware,   'kuby/middleware'
   autoload :Tasks,        'kuby/tasks'
@@ -25,17 +26,19 @@ module Kuby
       require ENV['KUBY_CONFIG'] || File.join('.', 'kuby.rb')
     end
 
-    def define(environment, &block)
-      environment = environment.to_s
-      definitions[environment] ||= Definition.new(environment, &block)
+    def define(name, &block)
+      raise 'Kuby is already configured' if @definition
+
+      @definition = Definition.new(name.to_s)
+      @definition.instance_eval(&block)
+
+      @definition.environments.each do |_, env|
+        env.kubernetes.after_configuration
+      end
     end
 
-    def definitions
-      @definitions ||= {}
-    end
-
-    def definition(environment = env)
-      definitions.fetch(environment.to_s) do
+    def environment(name = env)
+      definition.environment(name.to_s) do
         raise UndefinedEnvironmentError, "couldn't find a Kuby environment named "\
           "'#{environment}'"
       end
@@ -94,7 +97,7 @@ module Kuby
 
     def env
       ENV.fetch('KUBY_ENV') do
-        (definitions.keys.first || Rails.env).to_s
+        (definition.environments.keys.first || Rails.env).to_s
       end
     end
   end

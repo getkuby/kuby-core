@@ -15,7 +15,9 @@ module Kuby
           }.freeze
 
           def self.get(rails_app)
-            new(rails_app).database
+            if rails_app.manage_database?
+              new(rails_app).database
+            end
           end
 
           def self.get_adapter(adapter)
@@ -48,7 +50,7 @@ module Kuby
           end
 
           def environment
-            @environment ||= rails_app.definition.environment
+            @environment ||= rails_app.definition.environment.name
           end
 
           def db_configs
