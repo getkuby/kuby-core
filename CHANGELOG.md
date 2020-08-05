@@ -29,6 +29,8 @@
   - Provide manual access to credentials via `ActiveSupport::EncryptedConfiguration`, which is necessary now that our rake tasks don't load the Rails environment.
 * Add a convenience method for requesting the amount of block storage for the database.
 * Add the ability to entirely disable database management via `manage_database false`.
+* Avoid deploying nginx-ingress if it's already deployed.
+* Add rake task for running arbitrary `kubectl` commands.
 
 ## 0.5.0
 * Fix Rails generators issue causing crash at startup.
