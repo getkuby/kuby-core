@@ -1,3 +1,6 @@
+## 0.6.1
+* Fix issue causing database.yml to not be rewritten to point at correct database host.
+
 ## 0.6.0
 * Don't load the Rails environment when running Kuby's rake tasks.
   - Kuby's gems are still part of the bundle, but config has been moved out of the initializer and into kuby.rb in the Rails root directory.

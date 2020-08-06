@@ -20,12 +20,12 @@ module Kuby
       environments[name]
     end
 
-    def docker
-      environment.docker
+    def docker(&block)
+      environment.docker(&block)
     end
 
-    def kubernetes
-      environment.kubernetes
+    def kubernetes(&block)
+      environment.kubernetes(&block)
     end
 
     def environments
