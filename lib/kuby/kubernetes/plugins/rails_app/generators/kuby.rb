@@ -21,7 +21,7 @@ class KubyGenerator < Rails::Generators::Base
 
         # Define a production Kuby deploy environment
         Kuby.define(:production) do
-          credentials = ActiveSupport::EncryptedConfiguration.new(
+          app_creds = ActiveSupport::EncryptedConfiguration.new(
             config_path: File.join('config', 'credentials.yml.enc'),
             key_path: File.join('config', 'master.key'),
             env_key: 'RAILS_MASTER_KEY',
@@ -32,9 +32,9 @@ class KubyGenerator < Rails::Generators::Base
             # Configure your Docker registry credentials here. Add them to your
             # Rails credentials file by running `bundle exec rake credentials:edit`.
             credentials do
-              username credentials[:KUBY_DOCKER_USERNAME]
-              password credentials[:KUBY_DOCKER_PASSWORD]
-              email credentials[:KUBY_DOCKER_EMAIL]
+              username app_creds[:KUBY_DOCKER_USERNAME]
+              password app_creds[:KUBY_DOCKER_PASSWORD]
+              email app_creds[:KUBY_DOCKER_EMAIL]
             end
 
             # Configure the URL to your Docker image here, eg:
@@ -48,7 +48,8 @@ class KubyGenerator < Rails::Generators::Base
             # Add a plugin that facilitates deploying a Rails app.
             add_plugin :rails_app
 
-            # Use minikube as the default provider.
+            # Use minikube as the provider, which is the default installed by
+            # Docker Desktop.
             # See: https://github.com/kubernetes/minikube
             #
             # Note: you will likely want to use a different provider when deploying

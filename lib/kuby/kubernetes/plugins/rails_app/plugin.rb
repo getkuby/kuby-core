@@ -44,7 +44,11 @@ module Kuby
             definition.kubernetes.add_plugin(:nginx_ingress)
 
             if @tls_enabled
-              definition.kubernetes.add_plugin(:cert_manager)
+              context = self
+
+              definition.kubernetes.add_plugin(:cert_manager) do
+                email context.definition.docker.credentials.email
+              end
             end
           end
 
