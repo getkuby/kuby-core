@@ -22,6 +22,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'railties', '>= 5.1'
   s.add_dependency 'rouge', '~> 3.0'
 
+  s.add_development_dependency "bundler", "~> 2.0"
+  s.add_development_dependency "rake", "~> 10.0"
+  s.add_development_dependency "minitest", "~> 5.0"
+
   s.require_path = 'lib'
 
   s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'LICENSE', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby-core.gemspec']

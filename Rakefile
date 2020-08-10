@@ -6,9 +6,10 @@ require 'kuby'
 
 Bundler::GemHelper.install_tasks
 
-task default: :spec
-
-desc 'Run specs'
-RSpec::Core::RakeTask.new do |t|
-  t.pattern = './spec/**/*_spec.rb'
+require "rake/testtask"
+Rake::TestTask.new(:test) do |t|
+  t.libs << "test"
+  t.libs << "lib"
+  t.test_files = FileList["test/**/*_test.rb"]
 end
+task :default => :test
