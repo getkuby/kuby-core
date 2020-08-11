@@ -28,6 +28,10 @@ module Kuby
         end
       end
 
+      def image_hostname
+        @image_hostname ||= URI(image_host).host
+      end
+
       def image_repo
         @image_repo ||= if image_url.include?('/')
           parse_url(image_url).path.sub(/\A\//, '')

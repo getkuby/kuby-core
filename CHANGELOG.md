@@ -1,3 +1,8 @@
+## 0.7.0
+* Automatically perform `docker login` if not already logged into the Docker registry.
+* Fix timestamp tag parsing issue causing deploy to fail with no available tags.
+  - Issue turned out to be ignoring the month of October in the validation regex.
+
 ## 0.6.1
 * Fix issue causing database.yml to not be rewritten to point at correct database host.
 

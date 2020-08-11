@@ -39,6 +39,24 @@ module Kuby
     end
 
     def push
+      hostname = docker.metadata.image_hostname
+
+      unless docker.cli.auths.include?(hostname)
+        Kuby.logger.info("Attempting to log in to registry at #{hostname}")
+
+        begin
+          docker.cli.login(
+            url: docker.metadata.image_host,
+            username: docker.credentials.username,
+            password: docker.credentials.password
+          )
+        rescue Kuby::Docker::LoginError => e
+          Kuby.logger.fatal("Couldn't log in to the registry at #{hostname}")
+          Kuby.logger.fatal(e.message)
+          return
+        end
+      end
+
       image_url = docker.metadata.image_url
 
       begin
@@ -50,6 +68,7 @@ module Kuby
           'Docker image before running this task.'
 
         Kuby.logger.fatal(msg)
+        Kuby.logger.fatal(e.message)
       end
     end
 

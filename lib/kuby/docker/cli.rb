@@ -10,6 +10,38 @@ module Kuby
         @executable = executable || `which docker`.strip
       end
 
+      def config_file
+        if File.exist?(default_config_file)
+          default_config_file
+        end
+      end
+
+      def default_config_file
+        File.join(Dir.home, '.docker', 'config.json')
+      end
+
+      def login(url:, username:, password:)
+        cmd = [
+          executable, 'login', url, '--username', username, '--password-stdin'
+        ]
+
+        open3_w({}, cmd) do |stdin, _wait_threads|
+          stdin.puts(password)
+        end
+
+        unless last_status.success?
+          raise LoginError, 'build failed: docker command exited with '\
+            "status code #{last_status.exitstatus}"
+        end
+      end
+
+      def auths
+        return [] unless config_file
+
+        config = JSON.parse(File.read(config_file))
+        config.fetch('auths', {}).keys
+      end
+
       def build(dockerfile:, image_url:, tags:)
         cmd = [
           executable, 'build',
