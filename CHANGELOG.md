@@ -1,3 +1,10 @@
+## 0.7.2
+* Fix issue causing `Kuby.environment(...)` to raise an `UndefinedEnvironmentError` for existing environments.
+
+## 0.7.1
+* Fix timestamp tag parsing regression caused by adding anchor tags to the regex.
+  - Instead, let's rely on `strptime` and return `nil` if it throws an `ArgumentError`.
+
 ## 0.7.0
 * Automatically perform `docker login` if not already logged into the Docker registry.
 * Fix timestamp tag parsing issue causing deploy to fail with no available tags.

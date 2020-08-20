@@ -1,13 +1,16 @@
 module Kuby
   module Docker
     class TimestampTag
-      RE = /\A20[\d]{2}(?:0[1-9]|10|11|12)(?:0[1-9]|1[1-9]|2[1-9]|3[01])\z/.freeze
       FORMAT = '%Y%m%d%H%M%S'.freeze
 
       def self.try_parse(str)
-        if str =~ RE
-          new(Time.strptime(str, FORMAT))
+        time = begin
+          Time.strptime(str, FORMAT)
+        rescue ArgumentError
+          return nil
         end
+
+        new(time)
       end
 
       attr_reader :time

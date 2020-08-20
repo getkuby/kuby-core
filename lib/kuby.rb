@@ -38,10 +38,10 @@ module Kuby
     end
 
     def environment(name = env)
-      definition.environment(name.to_s) do
-        raise UndefinedEnvironmentError, "couldn't find a Kuby environment named "\
-          "'#{environment}'"
-      end
+      definition.environment(name.to_s) || raise(
+        UndefinedEnvironmentError, "couldn't find a Kuby environment named "\
+        "'#{name}'"
+      )
     end
 
     def register_provider(provider_name, provider_klass)

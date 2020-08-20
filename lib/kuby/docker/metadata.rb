@@ -4,7 +4,7 @@ module Kuby
   module Docker
     class Metadata
       DEFAULT_DISTRO = :debian
-      DEFAULT_REGISTRY_HOST = 'https://docker.io'.freeze
+      DEFAULT_REGISTRY_HOST = 'https://www.docker.com'.freeze
       LATEST_TAG = 'latest'
 
       attr_accessor :image_url
