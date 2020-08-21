@@ -1,5 +1,4 @@
 require 'krane'
-require 'ext/krane/kubernetes_resource'
 require 'kubectl-rb'
 
 module Kuby

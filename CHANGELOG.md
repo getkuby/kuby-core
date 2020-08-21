@@ -1,3 +1,7 @@
+## NEXT
+* Upgrade to Krane >= 1.1.4, < 2.0.
+* Remove Krane monkeypatch in ext/.
+
 ## 0.7.2
 * Fix issue causing `Kuby.environment(...)` to raise an `UndefinedEnvironmentError` for existing environments.
 

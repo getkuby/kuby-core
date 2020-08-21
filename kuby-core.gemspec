@@ -14,7 +14,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'colorize', '~> 0.8'
   s.add_dependency 'docker-remote', '~> 0.1'
-  s.add_dependency 'krane', '~> 1.0'
+  # See: https://github.com/Shopify/krane/pull/720
+  # See: https://github.com/Shopify/krane/blob/master/CHANGELOG.md#114
+  s.add_dependency 'krane', '>= 1.1.4', '< 2.0'
   s.add_dependency 'kuby-cert-manager', '~> 0.2'
   s.add_dependency 'kube-dsl', '~> 0.3'
   s.add_dependency 'kuby-kube-db', '~> 0.4'
