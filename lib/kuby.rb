@@ -1,7 +1,7 @@
 require 'kuby/railtie'
 
 begin
-  require 'kuby/kubernetes/plugins/rails_app/generators/kuby'
+  require 'kuby/plugins/rails_app/generators/kuby'
 rescue NameError
 end
 
@@ -13,6 +13,8 @@ module Kuby
   autoload :Environment,  'kuby/environment'
   autoload :Kubernetes,   'kuby/kubernetes'
   autoload :Middleware,   'kuby/middleware'
+  autoload :Plugin,       'kuby/plugin'
+  autoload :Plugins,      'kuby/plugins'
   autoload :Tasks,        'kuby/tasks'
   autoload :TrailingHash, 'kuby/trailing_hash'
 
@@ -107,8 +109,8 @@ end
 Kuby.register_provider(:minikube, Kuby::Kubernetes::MinikubeProvider)
 
 # plugins
-Kuby.register_plugin(:rails_app, Kuby::Kubernetes::Plugins::RailsApp::Plugin)
-Kuby.register_plugin(:nginx_ingress, Kuby::Kubernetes::Plugins::NginxIngress)
+Kuby.register_plugin(:rails_app, Kuby::Plugins::RailsApp::Plugin)
+Kuby.register_plugin(:nginx_ingress, Kuby::Plugins::NginxIngress)
 
 # distros
 Kuby.register_distro(:debian, Kuby::Docker::Debian)

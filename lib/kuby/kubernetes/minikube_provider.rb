@@ -26,6 +26,10 @@ module Kuby
           rails_app.resources.delete(rails_app.ingress)
           rails_app.service.spec { type 'LoadBalancer' }
         end
+
+        if assets = spec.plugin(:rails_assets)
+          assets.service.spec { type 'LoadBalancer' }
+        end
       end
 
       def kubeconfig_path

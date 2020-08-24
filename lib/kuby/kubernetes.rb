@@ -7,8 +7,6 @@ module Kuby
     autoload :DeployTask,       'kuby/kubernetes/deploy_task'
     autoload :DockerConfig,     'kuby/kubernetes/docker_config'
     autoload :Manifest,         'kuby/kubernetes/manifest'
-    autoload :Monitors,         'kuby/kubernetes/monitors'
-    autoload :Plugin,           'kuby/kubernetes/plugin'
     autoload :Plugins,          'kuby/kubernetes/plugins'
     autoload :Provider,         'kuby/kubernetes/provider'
     autoload :RegistrySecret,   'kuby/kubernetes/registry_secret'

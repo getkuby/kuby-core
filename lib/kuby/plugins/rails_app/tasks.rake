@@ -24,5 +24,13 @@ namespace :kuby do
         end
       end
     end
+
+    namespace :assets do
+      task :copy do
+        Kuby.load!
+        assets = Kuby.definition.kubernetes.plugin(:rails_assets)
+        assets.copy_task.run
+      end
+    end
   end
 end
