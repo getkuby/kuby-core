@@ -1,6 +1,9 @@
 ## NEXT
 * Upgrade to Krane >= 1.1.4, < 2.0.
 * Remove Krane monkeypatch in ext/.
+* Implement a Rails static asset server.
+* Move plugins from `Kuby::Kubernetes` namespace to `Kuby` namespace.
+  - This is to eventually enable plugins to modify the Dockerfile and introduce additional Dockerfiles (i.e. to enable a development mode, etc).
 
 ## 0.7.2
 * Fix issue causing `Kuby.environment(...)` to raise an `UndefinedEnvironmentError` for existing environments.
