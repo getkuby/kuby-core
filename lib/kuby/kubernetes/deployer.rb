@@ -42,7 +42,7 @@ module Kuby
 
           cli.apply(res)
         end
-      rescue InvalidResourceError => e
+      rescue KubernetesCLI::InvalidResourceError => e
         Kuby.logger.fatal(e.message)
         Kuby.logger.fatal(e.resource.to_resource.to_yaml)
       end
