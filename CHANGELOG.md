@@ -1,4 +1,4 @@
-## NEXT
+## 0.8.0
 * Upgrade to Krane >= 1.1.4, < 2.0.
 * Remove Krane monkeypatch in ext/.
 * Implement a Rails static asset server.
