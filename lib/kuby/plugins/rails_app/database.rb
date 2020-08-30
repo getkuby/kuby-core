@@ -35,7 +35,7 @@ module Kuby
         def plugin
           @plugin ||= self.class
             .get_adapter(adapter_name)
-            .new(rails_app, environment, db_configs)
+            .new(rails_app.environment, db_configs)
         end
 
         def adapter_name
@@ -47,11 +47,7 @@ module Kuby
         private
 
         def db_config
-          @db_config ||= db_configs[environment]
-        end
-
-        def environment
-          @environment ||= rails_app.definition.environment.name
+          @db_config ||= db_configs[rails_app.environment.name]
         end
 
         def db_configs

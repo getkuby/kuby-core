@@ -2,15 +2,15 @@ module Kuby
   module Plugins
     module RailsApp
       class Sqlite < ::Kuby::Plugin
-        attr_reader :definition
+        attr_reader :environment
 
-        def initialize(definition, *)
-          @definition = definition
+        def initialize(environment, *)
+          @environment = environment
         end
 
         def after_configuration
-          definition.docker.package_phase.add(:sqlite_dev)
-          definition.docker.package_phase.add(:sqlite_client)
+          environment.docker.package_phase.add(:sqlite_dev)
+          environment.docker.package_phase.add(:sqlite_client)
         end
 
         def name

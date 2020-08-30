@@ -2,22 +2,22 @@ require 'rouge'
 
 module Kuby
   class Tasks
-    attr_reader :definition
+    attr_reader :environment
 
-    def initialize(definition)
-      @definition = definition
+    def initialize(environment)
+      @environment = environment
     end
 
     def print_dockerfile
       theme = Rouge::Themes::Base16::Solarized.new
       formatter = Rouge::Formatters::Terminal256.new(theme)
       lexer = Rouge::Lexers::Docker.new
-      tokens = lexer.lex(Kuby.definition.docker.to_dockerfile.to_s)
+      tokens = lexer.lex(Kuby.environment.docker.to_dockerfile.to_s)
       puts formatter.format(tokens)
     end
 
     def setup
-      definition.kubernetes.setup
+      environment.kubernetes.setup
     end
 
     def build
@@ -73,11 +73,11 @@ module Kuby
     end
 
     def deploy
-      definition.kubernetes.deploy
+      environment.kubernetes.deploy
     end
 
     def rollback
-      definition.kubernetes.rollback
+      environment.kubernetes.rollback
     end
 
     def print_resources
@@ -162,11 +162,11 @@ module Kuby
     end
 
     def kubernetes
-      Kuby.definition.kubernetes
+      Kuby.environment.kubernetes
     end
 
     def docker
-      Kuby.definition.docker
+      Kuby.environment.docker
     end
   end
 end

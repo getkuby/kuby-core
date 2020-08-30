@@ -3,10 +3,10 @@ require 'kubernetes-cli'
 module Kuby
   module Kubernetes
     class Provider
-      attr_reader :definition
+      attr_reader :environment
 
-      def initialize(definition)
-        @definition = definition
+      def initialize(environment)
+        @environment = environment
         after_initialize
       end
 
@@ -66,11 +66,11 @@ module Kuby
       end
 
       def deployer
-        @deployer ||= Kuby::Kubernetes::Deployer.new(definition)
+        @deployer ||= Kuby::Kubernetes::Deployer.new(environment)
       end
 
       def spec
-        definition.kubernetes
+        environment.kubernetes
       end
     end
   end

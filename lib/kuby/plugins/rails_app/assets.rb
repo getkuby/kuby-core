@@ -308,8 +308,8 @@ module Kuby
             end
 
             spec do
-              access_modes ['ReadWriteMany']
-              storage_class_name spec.definition.kubernetes.provider.storage_class_name
+              access_modes ['ReadWriteOnce']
+              storage_class_name spec.environment.kubernetes.provider.storage_class_name
 
               resources do
                 requests do
@@ -331,11 +331,11 @@ module Kuby
         end
 
         def namespace
-          definition.kubernetes.namespace
+          environment.kubernetes.namespace
         end
 
         def selector_app
-          definition.kubernetes.selector_app
+          environment.kubernetes.selector_app
         end
 
         def role

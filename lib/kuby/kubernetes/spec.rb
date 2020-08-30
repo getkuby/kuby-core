@@ -5,10 +5,10 @@ module Kuby
     class Spec
       extend ::KubeDSL::ValueFields
 
-      attr_reader :definition, :plugins, :tag
+      attr_reader :environment, :plugins, :tag
 
-      def initialize(definition)
-        @definition = definition
+      def initialize(environment)
+        @environment = environment
         @plugins = TrailingHash.new
 
         # default plugins
@@ -18,7 +18,7 @@ module Kuby
       def provider(provider_name = nil, &block)
         if provider_name
           if @provider || provider_klass = Kuby.providers[provider_name]
-            @provider ||= provider_klass.new(definition)
+            @provider ||= provider_klass.new(environment)
             @provider.configure(&block)
           else
             msg = if provider_name
@@ -37,7 +37,7 @@ module Kuby
 
       def configure_plugin(plugin_name, &block)
         if @plugins[plugin_name] || plugin_klass = Kuby.plugins[plugin_name]
-          @plugins[plugin_name] ||= plugin_klass.new(definition)
+          @plugins[plugin_name] ||= plugin_klass.new(environment)
           @plugins[plugin_name].configure(&block) if block
         else
           raise MissingPluginError, "no plugin registered with name #{plugin_name}, "\
@@ -118,7 +118,7 @@ module Kuby
 
         @namespace ||= KubeDSL.namespace do
           metadata do
-            name "#{spec.selector_app}-#{spec.definition.environment.name}"
+            name "#{spec.selector_app}-#{spec.environment.name}"
           end
         end
 
@@ -156,11 +156,11 @@ module Kuby
       end
 
       def selector_app
-        @selector_app ||= definition.app_name.downcase
+        @selector_app ||= environment.app_name.downcase
       end
 
       def docker
-        definition.docker
+        environment.docker
       end
     end
   end

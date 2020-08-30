@@ -1,10 +1,10 @@
 module Kuby
   module Docker
     class Layer
-      attr_reader :definition
+      attr_reader :environment
 
-      def initialize(definition)
-        @definition = definition
+      def initialize(environment)
+        @environment = environment
       end
 
       def apply_to(dockerfile)
@@ -15,7 +15,7 @@ module Kuby
       private
 
       def metadata
-        definition.docker.metadata
+        environment.docker.metadata
       end
     end
   end

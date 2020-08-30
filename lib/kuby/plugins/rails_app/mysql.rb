@@ -7,10 +7,9 @@ module Kuby
       class MySQL < ::Kuby::Plugin
         ROLE = 'web'.freeze
 
-        attr_reader :definition, :environment, :configs
+        attr_reader :environment, :configs
 
-        def initialize(definition, environment, configs)
-          @definition = definition
+        def initialize(environment, configs)
           @environment = environment
           @configs = configs
 
@@ -27,8 +26,8 @@ module Kuby
         end
 
         def after_configuration
-          definition.docker.package_phase.add(:mysql_dev)
-          definition.docker.package_phase.add(:mysql_client)
+          environment.docker.package_phase.add(:mysql_dev)
+          environment.docker.package_phase.add(:mysql_client)
         end
 
         def host
@@ -39,7 +38,7 @@ module Kuby
         def rewritten_configs
           # deep dup
           @rewritten_configs ||= Marshal.load(Marshal.dump(configs)).tap do |new_configs|
-            new_configs[environment]['host'] = host
+            new_configs[environment.name]['host'] = host
           end
         end
 
@@ -132,13 +131,13 @@ module Kuby
         end
 
         def kubernetes
-          definition.kubernetes
+          environment.kubernetes
         end
 
         private
 
         def config
-          configs[environment]
+          configs[environment.name]
         end
       end
     end

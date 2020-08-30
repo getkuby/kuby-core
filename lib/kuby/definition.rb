@@ -20,14 +20,6 @@ module Kuby
       environments[name]
     end
 
-    def docker(&block)
-      environment.docker(&block)
-    end
-
-    def kubernetes(&block)
-      environment.kubernetes(&block)
-    end
-
     def environments
       @environments ||= {}
     end

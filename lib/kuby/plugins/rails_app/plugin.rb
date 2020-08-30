@@ -23,8 +23,8 @@ module Kuby
 
         alias_method :manage_database?, :manage_database
 
-        def initialize(definition)
-          @definition = definition
+        def initialize(environment)
+          @environment = environment
           @tls_enabled = true
           @replicas = 1
           @manage_database = true
@@ -42,17 +42,17 @@ module Kuby
           context = self
 
           if @database = Database.get(self)
-            definition.kubernetes.plugins[database.plugin_name] = @database.plugin
-            definition.kubernetes.add_plugin(:kube_db)
+            environment.kubernetes.plugins[database.plugin_name] = @database.plugin
+            environment.kubernetes.add_plugin(:kube_db)
 
-            definition.docker do
+            environment.docker do
               insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase
             end
           end
 
           # do we always want this?
-          definition.kubernetes.add_plugin(:nginx_ingress)
-          definition.kubernetes.add_plugin(:rails_assets) do
+          environment.kubernetes.add_plugin(:nginx_ingress)
+          environment.kubernetes.add_plugin(:rails_assets) do
             asset_url context.asset_url
             packs_url context.packs_url
             asset_path context.asset_path
@@ -61,21 +61,21 @@ module Kuby
           if @tls_enabled
             context = self
 
-            definition.kubernetes.add_plugin(:cert_manager) do
-              email context.definition.docker.credentials.email
+            environment.kubernetes.add_plugin(:cert_manager) do
+              email context.environment.docker.credentials.email
             end
           end
         end
 
         def before_deploy(manifest)
           # Make sure plugin has been configured. If not, do nothing.
-          if cert_manager = definition.kubernetes.plugin(:cert_manager)
+          if cert_manager = environment.kubernetes.plugin(:cert_manager)
             cert_manager.annotate_ingress(ingress)
           end
 
           image_with_tag = "#{docker.metadata.image_url}:#{kubernetes.tag}"
 
-          if assets = definition.kubernetes.plugin(:rails_assets)
+          if assets = environment.kubernetes.plugin(:rails_assets)
             assets.configure_ingress(ingress, hostname)
             assets.configure_deployment(deployment, image_with_tag)
           end
@@ -304,7 +304,7 @@ module Kuby
                   end
 
                   image_pull_secret do
-                    name kube_spec.definition.kubernetes.registry_secret.metadata.name
+                    name kube_spec.environment.kubernetes.registry_secret.metadata.name
                   end
 
                   restart_policy 'Always'
@@ -374,7 +374,7 @@ module Kuby
         end
 
         def selector_app
-          definition.kubernetes.selector_app
+          environment.kubernetes.selector_app
         end
 
         def role
@@ -382,15 +382,15 @@ module Kuby
         end
 
         def docker
-          definition.docker
+          environment.docker
         end
 
         def kubernetes
-          definition.kubernetes
+          environment.kubernetes
         end
 
         def namespace
-          definition.kubernetes.namespace
+          environment.kubernetes.namespace
         end
       end
     end

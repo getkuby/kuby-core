@@ -3,7 +3,7 @@ require 'shellwords'
 namespace :kuby do
   def tasks
     Kuby.load!
-    @tasks ||= Kuby::Tasks.new(Kuby.definition)
+    @tasks ||= Kuby::Tasks.new(Kuby.environment)
   end
 
   task :dockerfile do

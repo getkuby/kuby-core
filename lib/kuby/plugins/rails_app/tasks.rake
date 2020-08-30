@@ -6,8 +6,8 @@ namespace :kuby do
       task :rewrite_config do
         Kuby.load!
 
-        config_file = File.join(Kuby.definition.kubernetes.plugin(:rails_app).root, 'config', 'database.yml')
-        database = Kuby.definition.kubernetes.plugin(:rails_app).database
+        config_file = File.join(Kuby.environment.kubernetes.plugin(:rails_app).root, 'config', 'database.yml')
+        database = Kuby.environment.kubernetes.plugin(:rails_app).database
 
         if database.respond_to?(:rewritten_configs)
           File.write(config_file, YAML.dump(database.rewritten_configs))
@@ -28,7 +28,7 @@ namespace :kuby do
     namespace :assets do
       task :copy do
         Kuby.load!
-        assets = Kuby.definition.kubernetes.plugin(:rails_assets)
+        assets = Kuby.environment.kubernetes.plugin(:rails_assets)
         assets.copy_task.run
       end
     end

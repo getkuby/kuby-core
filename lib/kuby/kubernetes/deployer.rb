@@ -5,10 +5,10 @@ require 'yaml'
 module Kuby
   module Kubernetes
     class Deployer
-      attr_reader :definition
+      attr_reader :environment
 
-      def initialize(definition)
-        @definition = definition
+      def initialize(environment)
+        @environment = environment
       end
 
       def deploy
@@ -74,15 +74,15 @@ module Kuby
       end
 
       def provider
-        definition.kubernetes.provider
+        environment.kubernetes.provider
       end
 
       def namespace
-        definition.kubernetes.namespace
+        environment.kubernetes.namespace
       end
 
       def all_resources
-        definition.kubernetes.resources
+        environment.kubernetes.resources
       end
 
       def cli

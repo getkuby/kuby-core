@@ -3,10 +3,10 @@ require 'docker/remote'
 module Kuby
   module Docker
     class Spec
-      attr_reader :definition
+      attr_reader :environment
 
-      def initialize(definition)
-        @definition = definition
+      def initialize(environment)
+        @environment = environment
       end
 
       def base_image(image_url)
@@ -75,35 +75,35 @@ module Kuby
       end
 
       def setup_phase
-        @setup_phase ||= SetupPhase.new(definition)
+        @setup_phase ||= SetupPhase.new(environment)
       end
 
       def package_phase
-        @package_phase ||= PackagePhase.new(definition)
+        @package_phase ||= PackagePhase.new(environment)
       end
 
       def bundler_phase
-        @bundler_phase ||= BundlerPhase.new(definition)
+        @bundler_phase ||= BundlerPhase.new(environment)
       end
 
       def yarn_phase
-        @yarn_phase ||= YarnPhase.new(definition)
+        @yarn_phase ||= YarnPhase.new(environment)
       end
 
       def copy_phase
-        @copy_phase ||= CopyPhase.new(definition)
+        @copy_phase ||= CopyPhase.new(environment)
       end
 
       def assets_phase
-        @assets_phase ||= AssetsPhase.new(definition)
+        @assets_phase ||= AssetsPhase.new(environment)
       end
 
       def webserver_phase
-        @webserver_phase ||= WebserverPhase.new(definition)
+        @webserver_phase ||= WebserverPhase.new(environment)
       end
 
       def metadata
-        @metadata ||= Metadata.new(definition)
+        @metadata ||= Metadata.new(environment)
       end
 
       def tags

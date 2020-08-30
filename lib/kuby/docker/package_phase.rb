@@ -40,7 +40,7 @@ module Kuby
       private
 
       def distro_spec
-        definition.docker.distro_spec
+        environment.docker.distro_spec
       end
 
       def get_package(package_name, version)
@@ -52,7 +52,7 @@ module Kuby
       end
 
       def metadata
-        definition.docker.metadata
+        environment.docker.metadata
       end
     end
   end

@@ -64,7 +64,7 @@ module Kuby
       end
 
       def kubernetes_cli
-        definition.kubernetes.provider.kubernetes_cli
+        environment.kubernetes.provider.kubernetes_cli
       end
     end
   end

@@ -8,10 +8,10 @@ module Kuby
       LATEST_TAG = 'latest'
 
       attr_accessor :image_url
-      attr_reader :definition
+      attr_reader :environment
 
-      def initialize(definition)
-        @definition = definition
+      def initialize(environment)
+        @environment = environment
         @tags = []
       end
 
@@ -46,7 +46,7 @@ module Kuby
 
       def tag
         t = ENV.fetch('KUBY_DOCKER_TAG') do
-          definition.docker.tags.latest_timestamp_tag
+          environment.docker.tags.latest_timestamp_tag
         end
 
         unless t
@@ -57,7 +57,7 @@ module Kuby
       end
 
       def previous_tag(current_tag)
-        t = definition.docker.tags.previous_timestamp_tag(current_tag)
+        t = environment.docker.tags.previous_timestamp_tag(current_tag)
 
         unless t
           raise MissingTagError, 'could not find previous timestamped tag'
@@ -78,7 +78,7 @@ module Kuby
 
       def default_image_url
         # assuming dockerhub by not specifying full url
-        @default_image_url ||= definition.app_name.downcase
+        @default_image_url ||= environment.app_name.downcase
       end
 
       def default_tags

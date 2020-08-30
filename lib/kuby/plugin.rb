@@ -1,9 +1,9 @@
 module Kuby
   class Plugin
-    attr_reader :definition
+    attr_reader :environment
 
-    def initialize(definition)
-      @definition = definition
+    def initialize(environment)
+      @environment = environment
       after_initialize
     end
 

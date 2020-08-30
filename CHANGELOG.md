@@ -4,6 +4,8 @@
 * Implement a Rails static asset server.
 * Move plugins from `Kuby::Kubernetes` namespace to `Kuby` namespace.
   - This is to eventually enable plugins to modify the Dockerfile and introduce additional Dockerfiles (i.e. to enable a development mode, etc).
+* Pass `Environment` instead of `Definition` instances around.
+  - Providers, plugins, etc all take `Definition` instances. `Definition#kubernetes`, for example, returns the Kubernetes spec for the `Environment` specified by `KUBY_ENV` (or the first env defined if `KUBY_ENV` is not set). This is a problem for Kuby configs that specify multiple environments, and causes plugins to make changes to the default environment instead of the one they've been specifically added to. For example, if the `:production` env is defined first, the `:development` env still gets a cluster issuer from cert-manager even though `enable_tls` is set to `false`.
 
 ## 0.7.2
 * Fix issue causing `Kuby.environment(...)` to raise an `UndefinedEnvironmentError` for existing environments.

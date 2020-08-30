@@ -52,19 +52,17 @@ module Kuby
             # create individual symlinks for each file in source dir
             target_file = File.join(current_dir, relative_source_file)
             FileUtils.mkdir_p(File.dirname(target_file))
-            FileUtils.ln_s(
-              source_ts_file.relative_path_from(source_file.dirname), target_file, force: true
-            )
-
-            Kuby.logger.info("Linked #{source_file} -> #{target_file}")
+            source_ln_file = source_ts_file.relative_path_from(source_file.dirname)
+            FileUtils.ln_s(source_ln_file, target_file, force: true)
+            Kuby.logger.info("Linked #{source_ln_file} -> #{target_file}")
           end
         end
 
         def delete_old_assets
           # find all asset directories; directories have timestamp names
           asset_dirs = (Dir.glob(File.join(dest_path, '*')) - [current_dir])
-            .select { |dir| File.directory?(dir) }  # just in case
-            .sort_by { |dir| Time.strptime(File.basename(dir), TIMESTAMP_FORMAT) }
+            .select { |dir| File.directory?(dir) && try_parse_ts(File.basename(dir)) }
+            .sort_by { |dir| parse_ts(File.basename(dir)) }
             .reverse
 
           # only keep the n most recent directories
@@ -92,6 +90,16 @@ module Kuby
 
             FileUtils.rm_r(dir_to_delete)
           end
+        end
+
+        def try_parse_ts(ts)
+          parse_ts(ts)
+        rescue ArgumentError
+          return nil
+        end
+
+        def parse_ts(ts)
+          Time.strptime(ts, TIMESTAMP_FORMAT)
         end
 
         def ts_dir
