@@ -37,6 +37,8 @@ module Kuby
       @definition.environments.each do |_, env|
         env.kubernetes.after_configuration
       end
+
+      @definition
     end
 
     def environment(name = env)

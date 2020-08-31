@@ -5,6 +5,7 @@ module Kuby
     class Metadata
       DEFAULT_DISTRO = :debian
       DEFAULT_REGISTRY_HOST = 'https://www.docker.com'.freeze
+      DEFAULT_REGISTRY_SCHEME = 'https'
       LATEST_TAG = 'latest'
 
       attr_accessor :image_url
@@ -20,12 +21,7 @@ module Kuby
       end
 
       def image_host
-        @image_host ||= if image_url.include?('/')
-          uri = parse_url(image_url)
-          "#{uri.scheme}://#{uri.host}"
-        else
-          DEFAULT_REGISTRY_HOST
-        end
+        @image_host ||= "#{full_image_uri.scheme}://#{full_image_uri.host}"
       end
 
       def image_hostname
@@ -33,11 +29,7 @@ module Kuby
       end
 
       def image_repo
-        @image_repo ||= if image_url.include?('/')
-          parse_url(image_url).path.sub(/\A\//, '')
-        else
-          image_url
-        end
+        @image_repo ||= full_image_uri.path.sub(/\A[\/]+/, '')
       end
 
       def tags
@@ -76,6 +68,16 @@ module Kuby
 
       private
 
+      def full_image_uri
+        @full_image_uri ||= if image_url.include?('://')
+          URI.parse(image_url)
+        elsif image_url =~ /\A[^.]+\.[^\/]+\//
+          URI.parse("#{DEFAULT_REGISTRY_SCHEME}://#{image_url}")
+        else
+          URI.parse("#{DEFAULT_REGISTRY_HOST}/#{image_url.sub(/\A[\/]+/, '')}")
+        end
+      end
+
       def default_image_url
         # assuming dockerhub by not specifying full url
         @default_image_url ||= environment.app_name.downcase
@@ -92,7 +94,7 @@ module Kuby
         return uri if uri.scheme
 
         # force a scheme because URI.parse won't work properly without one
-        URI.parse("https://#{url}")
+        URI.parse("#{DEFAULT_REGISTRY_SCHEME}://#{url}")
       end
     end
   end

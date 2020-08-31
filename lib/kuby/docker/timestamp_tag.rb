@@ -1,3 +1,5 @@
+require 'time'
+
 module Kuby
   module Docker
     class TimestampTag
@@ -25,6 +27,10 @@ module Kuby
 
       def <=>(other)
         time <=> other.time
+      end
+
+      def ==(other)
+        time == other.time
       end
 
       def hash
