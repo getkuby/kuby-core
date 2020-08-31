@@ -1,3 +1,11 @@
+## 0.8.1
+* Fix database config rewriter task.
+  - Broke with refactoring of database config code.
+* More correctly parse Docker image URLs.
+  - It can be challenging to identify the hostname in image URLs because 1) the host can be omitted, and 2) the scheme is often omitted.
+  - The new strategy is to look for a "." in the first segment of the URL if there is no scheme.  It's not bulletproof but is better than what we had before, which was to assume the first segment was the host. Eg. for an image URL like camertron/foo, we would identify the host as "camertron."
+* Added a number of tests and a Rails dummy app in spec/.
+
 ## 0.8.0
 * Upgrade to Krane >= 1.1.4, < 2.0.
 * Remove Krane monkeypatch in ext/.

@@ -9,8 +9,8 @@ namespace :kuby do
         config_file = File.join(Kuby.environment.kubernetes.plugin(:rails_app).root, 'config', 'database.yml')
         database = Kuby.environment.kubernetes.plugin(:rails_app).database
 
-        if database.respond_to?(:rewritten_configs)
-          File.write(config_file, YAML.dump(database.rewritten_configs))
+        if database.plugin.respond_to?(:rewritten_configs)
+          File.write(config_file, YAML.dump(database.plugin.rewritten_configs))
           Kuby.logger.info("Wrote #{config_file}")
         end
       end
