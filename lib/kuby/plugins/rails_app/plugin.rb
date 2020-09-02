@@ -45,8 +45,10 @@ module Kuby
             environment.kubernetes.plugins[database.plugin_name] = @database.plugin
             environment.kubernetes.add_plugin(:kube_db)
 
-            environment.docker do
-              insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase
+            unless environment.development?
+              environment.docker do
+                insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase
+              end
             end
           end
 
@@ -278,33 +280,37 @@ module Kuby
                       end
                     end
 
-                    readiness_probe do
-                      success_threshold 1
-                      failure_threshold 2
-                      initial_delay_seconds 15
-                      period_seconds 3
-                      timeout_seconds 1
+                    unless kube_spec.environment.development?
+                      readiness_probe do
+                        success_threshold 1
+                        failure_threshold 2
+                        initial_delay_seconds 15
+                        period_seconds 3
+                        timeout_seconds 1
 
-                      http_get do
-                        path '/healthz'
-                        port kube_spec.docker.webserver_phase.port
-                        scheme 'HTTP'
+                        http_get do
+                          path '/healthz'
+                          port kube_spec.docker.webserver_phase.port
+                          scheme 'HTTP'
+                        end
                       end
                     end
                   end
 
-                  init_container(:create_db) do
-                    name "#{kube_spec.selector_app}-create-db"
-                    command %w(bundle exec rake kuby:rails_app:db:create_unless_exists)
-                  end
+                  unless kube_spec.environment.development?
+                    init_container(:create_db) do
+                      name "#{kube_spec.selector_app}-create-db"
+                      command %w(bundle exec rake kuby:rails_app:db:create_unless_exists)
+                    end
 
-                  init_container(:migrate_db) do
-                    name "#{kube_spec.selector_app}-migrate-db"
-                    command %w(bundle exec rake db:migrate)
-                  end
+                    init_container(:migrate_db) do
+                      name "#{kube_spec.selector_app}-migrate-db"
+                      command %w(bundle exec rake db:migrate)
+                    end
 
-                  image_pull_secret do
-                    name kube_spec.environment.kubernetes.registry_secret.metadata.name
+                    image_pull_secret do
+                      name kube_spec.environment.kubernetes.registry_secret.metadata.name
+                    end
                   end
 
                   restart_policy 'Always'

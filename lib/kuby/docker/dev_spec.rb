@@ -1,16 +1,24 @@
-require 'docker/remote'
-
 module Kuby
   module Docker
-    class Spec
+    class WebserverDevPhase < Layer
+      DEFAULT_PORT = 3000
+
+      attr_accessor :port
+
+      def apply_to(dockerfile)
+        # do nothing
+      end
+
+      def port
+        @port || DEFAULT_PORT
+      end
+    end
+
+    class DevSpec
       attr_reader :environment
 
       def initialize(environment)
         @environment = environment
-      end
-
-      def base_image(image_url)
-        setup_phase.base_image = image_url
       end
 
       def working_dir(dir)
@@ -19,14 +27,6 @@ module Kuby
 
       def rails_env(env)
         setup_phase.rails_env = env
-      end
-
-      def bundler_version(version)
-        bundler_phase.bundler_version = version
-      end
-
-      def gemfile(path)
-        bundler_phase.gemfile = path
       end
 
       def package(pkg)
@@ -38,16 +38,8 @@ module Kuby
         @distro_spec = nil
       end
 
-      def files(path)
-        copy_phase << path
-      end
-
       def port(port)
         webserver_phase.port = port
-      end
-
-      def image_url(url)
-        metadata.image_url = url
       end
 
       def use(*args, &block)
@@ -66,15 +58,10 @@ module Kuby
         layer_stack.includes?(*args)
       end
 
-      def credentials(&block)
-        @credentials ||= Credentials.new
-        @credentials.instance_eval(&block) if block
-        @credentials
-      end
-
       def to_dockerfile
         Dockerfile.new.tap do |df|
           layer_stack.each { |layer| layer.apply_to(df) }
+          df.cmd("#{distro_spec.shell_exe} -c 'while test 1; do sleep 5; done'")
         end
       end
 
@@ -86,43 +73,16 @@ module Kuby
         @package_phase ||= PackagePhase.new(environment)
       end
 
-      def bundler_phase
-        @bundler_phase ||= BundlerPhase.new(environment)
-      end
-
-      def yarn_phase
-        @yarn_phase ||= YarnPhase.new(environment)
-      end
-
-      def copy_phase
-        @copy_phase ||= CopyPhase.new(environment)
-      end
-
-      def assets_phase
-        @assets_phase ||= AssetsPhase.new(environment)
-      end
-
       def webserver_phase
-        @webserver_phase ||= WebserverPhase.new(environment)
+        @webserver_phase ||= WebserverDevPhase.new(environment)
       end
 
       def metadata
         @metadata ||= Metadata.new(environment)
       end
 
-      def tags
-        @tags ||= Tags.new(cli, remote_client, metadata)
-      end
-
       def cli
         @cli ||= Docker::CLI.new
-      end
-
-      def remote_client
-        @remote_client ||= ::Docker::Remote::Client.new(
-          metadata.image_host, metadata.image_repo,
-          credentials.username, credentials.password,
-        )
       end
 
       def distro_spec
@@ -139,10 +99,6 @@ module Kuby
         @layer_stack ||= LayerStack.new.tap do |stack|
           stack.use(:setup_phase, setup_phase)
           stack.use(:package_phase, package_phase)
-          stack.use(:bundler_phase, bundler_phase)
-          stack.use(:yarn_phase, yarn_phase)
-          stack.use(:copy_phase, copy_phase)
-          stack.use(:assets_phase, assets_phase)
           stack.use(:webserver_phase, webserver_phase)
         end
       end
