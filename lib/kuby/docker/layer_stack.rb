@@ -63,6 +63,10 @@ module Kuby
         stack.delete(name)
         layers.delete(name)
       end
+
+      def includes?(name)
+        layers.include?(name)
+      end
     end
   end
 end
