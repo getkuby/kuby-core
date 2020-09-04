@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec'
 
   s.require_path = 'lib'
+  s.executables << 'kuby'
 
   s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'LICENSE', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby-core.gemspec']
 end

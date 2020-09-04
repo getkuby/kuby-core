@@ -106,26 +106,21 @@ module Kuby
       kubernetes_cli.run_cmd(['-n', namespace, 'get', 'pods'])
     end
 
-    def remote_shell
+    def remote_exec(cmd)
       first_pod = get_first_pod
-      shell = docker.distro_spec.shell_exe
-      kubernetes_cli.exec_cmd(shell, namespace, first_pod.dig('metadata', 'name'))
+      kubernetes_cli.exec_cmd(cmd, namespace, first_pod.dig('metadata', 'name'))
+    end
+
+    def remote_shell
+      remote_exec(docker.distro_spec.shell_exe)
     end
 
     def remote_console
-      first_pod = get_first_pod
-
-      kubernetes_cli.exec_cmd(
-        'bundle exec rails console', namespace, first_pod.dig('metadata', 'name')
-      )
+      remote_exec('bundle exec rails console')
     end
 
     def remote_dbconsole
-      first_pod = get_first_pod
-
-      kubernetes_cli.exec_cmd(
-        'bundle exec rails dbconsole', namespace, first_pod.dig('metadata', 'name')
-      )
+      remote_exec('bundle exec rails dbconsole')
     end
 
     private

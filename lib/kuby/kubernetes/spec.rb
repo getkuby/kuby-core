@@ -36,13 +36,12 @@ module Kuby
       end
 
       def configure_plugin(plugin_name, &block)
-        if @plugins[plugin_name] || plugin_klass = Kuby.plugins[plugin_name]
-          @plugins[plugin_name] ||= plugin_klass.new(environment)
-          @plugins[plugin_name].configure(&block) if block
-        else
-          raise MissingPluginError, "no plugin registered with name #{plugin_name}, "\
-            'do you need to add a gem to your Gemfile?'
+        unless @plugins.include?(plugin_name)
+          plugin_klass = Kuby.plugins.find(plugin_name)
+          @plugins[plugin_name] = plugin_klass.new(environment)
         end
+
+        @plugins[plugin_name].configure(&block) if block
       end
 
       alias_method :add_plugin, :configure_plugin
@@ -57,7 +56,7 @@ module Kuby
       end
 
       def before_deploy
-        @tag ||= docker.metadata.tag
+        @tag ||= docker.tag
 
         provider.before_deploy(resources)
         @plugins.each { |_, plg| plg.before_deploy(resources) }
@@ -66,7 +65,7 @@ module Kuby
       end
 
       def after_deploy
-        @tag ||= docker.metadata.tag
+        @tag ||= docker.tag
 
         @plugins.each { |_, plg| plg.after_deploy(resources) }
         provider.after_deploy(resources)
@@ -129,7 +128,7 @@ module Kuby
       def registry_secret(&block)
         spec = self
 
-        if spec.docker.credentials
+        unless environment.development?
           @registry_secret ||= RegistrySecret.new do
             metadata do
               name "#{spec.selector_app}-registry-secret"
@@ -154,7 +153,7 @@ module Kuby
           namespace,
           registry_secret,
           *@plugins.flat_map { |_, plugin| plugin.resources }
-        ])
+        ].compact)
       end
 
       def selector_app

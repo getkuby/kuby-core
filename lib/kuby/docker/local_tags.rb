@@ -33,6 +33,10 @@ module Kuby
       def timestamp_tags
         tags.map { |t| TimestampTag.try_parse(t) }.compact
       end
+
+      def latest_timestamp_tag
+        @latest_timestamp_tag ||= timestamp_tags.sort.last
+      end
     end
   end
 end

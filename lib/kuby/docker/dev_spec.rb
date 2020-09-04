@@ -6,7 +6,7 @@ module Kuby
       attr_accessor :port
 
       def apply_to(dockerfile)
-        # do nothing
+        dockerfile.expose(port)
       end
 
       def port
@@ -93,7 +93,31 @@ module Kuby
         end
       end
 
+      def tag
+        t = ENV.fetch('KUBY_DOCKER_TAG') do
+          tags.latest_timestamp_tag
+        end
+
+        unless t
+          raise MissingTagError, 'could not find latest timestamped tag'
+        end
+
+        t.to_s
+      end
+
+      def previous_tag(*)
+        raise MissingTagError, 'cannot roll back in the development environment'
+      end
+
+      def cli
+        @cli ||= Docker::CLI.new
+      end
+
       private
+
+      def tags
+        @tags ||= LocalTags.new(cli, metadata)
+      end
 
       def layer_stack
         @layer_stack ||= LayerStack.new.tap do |stack|
