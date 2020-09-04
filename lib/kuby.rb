@@ -6,17 +6,18 @@ rescue NameError
 end
 
 module Kuby
-  autoload :BasicLogger,  'kuby/basic_logger'
-  autoload :CLIBase,      'kuby/cli_base'
-  autoload :Definition,   'kuby/definition'
-  autoload :Docker,       'kuby/docker'
-  autoload :Environment,  'kuby/environment'
-  autoload :Kubernetes,   'kuby/kubernetes'
-  autoload :Middleware,   'kuby/middleware'
-  autoload :Plugin,       'kuby/plugin'
-  autoload :Plugins,      'kuby/plugins'
-  autoload :Tasks,        'kuby/tasks'
-  autoload :TrailingHash, 'kuby/trailing_hash'
+  autoload :BasicLogger,    'kuby/basic_logger'
+  autoload :CLIBase,        'kuby/cli_base'
+  autoload :Definition,     'kuby/definition'
+  autoload :Docker,         'kuby/docker'
+  autoload :Environment,    'kuby/environment'
+  autoload :Kubernetes,     'kuby/kubernetes'
+  autoload :Middleware,     'kuby/middleware'
+  autoload :Plugin,         'kuby/plugin'
+  autoload :PluginRegistry, 'kuby/plugin_registry'
+  autoload :Plugins,        'kuby/plugins'
+  autoload :Tasks,          'kuby/tasks'
+  autoload :TrailingHash,   'kuby/trailing_hash'
 
   class UndefinedEnvironmentError < StandardError; end
 
@@ -56,8 +57,8 @@ module Kuby
       @providers ||= {}
     end
 
-    def register_plugin(plugin_name, plugin_klass)
-      plugins[plugin_name] = plugin_klass
+    def register_plugin(*args, **kwargs)
+      plugins.register(*args, **kwargs)
     end
 
     def register_distro(distro_name, distro_klass)
@@ -69,7 +70,7 @@ module Kuby
     end
 
     def plugins
-      @plugins ||= {}
+      @plugins ||= PluginRegistry.new
     end
 
     def logger
@@ -108,7 +109,7 @@ module Kuby
 end
 
 # providers
-Kuby.register_provider(:minikube, Kuby::Kubernetes::MinikubeProvider)
+Kuby.register_provider(:docker_desktop, Kuby::Kubernetes::DockerDesktopProvider)
 
 # plugins
 Kuby.register_plugin(:rails_app, Kuby::Plugins::RailsApp::Plugin)

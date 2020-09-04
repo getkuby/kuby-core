@@ -110,8 +110,26 @@ module Kuby
         @metadata ||= Metadata.new(environment)
       end
 
-      def tags
-        @tags ||= Tags.new(cli, remote_client, metadata)
+      def tag
+        t = ENV.fetch('KUBY_DOCKER_TAG') do
+          tags.latest_timestamp_tag
+        end
+
+        unless t
+          raise MissingTagError, 'could not find latest timestamped tag'
+        end
+
+        t.to_s
+      end
+
+      def previous_tag(current_tag)
+        t = tags.previous_timestamp_tag(current_tag)
+
+        unless t
+          raise MissingTagError, 'could not find previous timestamped tag'
+        end
+
+        t.to_s
       end
 
       def cli
@@ -134,6 +152,10 @@ module Kuby
       end
 
       private
+
+      def tags
+        @tags ||= Tags.new(cli, remote_client, metadata)
+      end
 
       def layer_stack
         @layer_stack ||= LayerStack.new.tap do |stack|

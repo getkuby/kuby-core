@@ -36,28 +36,6 @@ module Kuby
         @tags.empty? ? default_tags : @tags
       end
 
-      def tag
-        t = ENV.fetch('KUBY_DOCKER_TAG') do
-          environment.docker.tags.latest_timestamp_tag
-        end
-
-        unless t
-          raise MissingTagError, 'could not find latest timestamped tag'
-        end
-
-        t.to_s
-      end
-
-      def previous_tag(current_tag)
-        t = environment.docker.tags.previous_timestamp_tag(current_tag)
-
-        unless t
-          raise MissingTagError, 'could not find previous timestamped tag'
-        end
-
-        t.to_s
-      end
-
       def distro
         @distro || DEFAULT_DISTRO
       end
