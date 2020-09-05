@@ -14,10 +14,6 @@ namespace :kuby do
     tasks.build
   end
 
-  task :run do
-    tasks.run
-  end
-
   task :push do
     tasks.push
   end

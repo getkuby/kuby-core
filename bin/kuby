@@ -1,79 +1,37 @@
 #! /usr/bin/env ruby
 
-require 'kuby'
+# The idea here is to be able to run the Kuby executable outside
+# of a Bundler context. Kuby cannot both be part of the Rails app's
+# bundle _and_ part of its own bundle since two bundles can pretty
+# easily step on each other's toes (you get all sorts of unfriendly
+# gem activation errors, etc). If kuby-core had no dependencies it
+# wouldn't be as much of a problem. But because kuby-core depends
+# on a number of additional gems, it needs bundler/rubygems to push
+# the right versions of its dependencies onto the load path, require
+# them, etc.
+#
+# Said another way, once code has been loaded into the Ruby VM, it's
+# pretty hard to unload it. For that reason and the reasons above,
+# this executable tries to load as little code as it can. It refrains
+# from invoking Bundler or Rubygems, instead relying on the host Rails
+# app to have included kuby-core in its Gemfile. Both Kuby::RailsCommands
+# and Kuby::KubyCommands include setup code that require Bundler and
+# ask it to set up the load path with all necessary gems.
+#
+# Moreover, we shouldn't have to require the entire bundle or the Rails
+# environment every time we run a Kuby command. By requiring only the
+# bare minimum here, we ensure faster execution times.
 
-module Kuby
-  class Args
-    attr_reader :args, :flag_aliases
-
-    def initialize(args, flag_aliases = [])
-      @args = args
-      @flag_aliases = flag_aliases
-    end
-
-    def [](flag)
-      idx = find_arg_index(flag)
-      idx ? args[idx] : nil
-    end
-
-    def []=(flag, new_value)
-      idx = find_arg_index(flag)
-
-      if idx
-        args[idx] = new_value
-      else
-        @args += [flag, new_value]
-      end
-    end
-
-    private
-
-    def find_arg_index(flag)
-      idx = args.find_index do |arg|
-        flag_aliases.any? { |fas| fas.include?(arg) && fas.include?(flag) }
-      end
-
-      idx ? idx + 1 : nil
-    end
-  end
-
-  class CLI
-    PREFIX = %w(bundle exec rails).freeze
-    SERVER_ARG_ALIASES = [['--binding', '-b'], ['-p', '--port']].freeze
-
-    class << self
-      def run(args = ARGV)
-        subcommand = args[0]
-        arglist = nil
-
-        case subcommand
-          when 'server', 's'
-            arglist = Args.new([*PREFIX, *args], SERVER_ARG_ALIASES)
-            arglist['-b'] ||= '0.0.0.0'
-            arglist['-p'] ||= '3000'
-        end
-
-        arglist ||= Args.new([*PREFIX, *args])
-        tasks = Kuby::Tasks.new(environment)
-        tasks.remote_exec(arglist.args)
-      end
-
-      private
-
-      def kubernetes_cli
-        kubernetes.provider.kubernetes.cli
-      end
-
-      def kubernetes
-        environment.kubernetes
-      end
-
-      def environment
-        Kuby.definition.environment
-      end
-    end
-  end
+if Kernel.const_defined?(:Bundler)
+  fail "Please run the Kuby CLI without Bundler, i.e. without 'bundle exec'"
 end
 
-Kuby.load!
-Kuby::CLI.run
+# push only kuby and vendored GLI onto the load path
+$:.push(File.expand_path(File.join('..', 'lib'), __dir__))
+$:.push(File.expand_path(File.join('..', 'vendor', 'gems', 'gli', 'lib'), __dir__))
+
+# we only need these (and GLI) to run
+require 'kuby/rails_commands'
+require 'kuby/kuby_commands'
+
+Kuby::RailsCommands.run(ARGV) || Kuby::KubyCommands.run(ARGV)
