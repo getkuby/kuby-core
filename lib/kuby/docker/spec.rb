@@ -151,11 +151,11 @@ module Kuby
         end
       end
 
-      private
-
       def tags
         @tags ||= Tags.new(cli, remote_client, metadata)
       end
+
+      private
 
       def layer_stack
         @layer_stack ||= LayerStack.new.tap do |stack|

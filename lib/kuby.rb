@@ -12,21 +12,30 @@ module Kuby
   autoload :Docker,         'kuby/docker'
   autoload :Environment,    'kuby/environment'
   autoload :Kubernetes,     'kuby/kubernetes'
+  autoload :KubyCommands,   'kuby/kuby_commands'
   autoload :Middleware,     'kuby/middleware'
   autoload :Plugin,         'kuby/plugin'
   autoload :PluginRegistry, 'kuby/plugin_registry'
   autoload :Plugins,        'kuby/plugins'
+  autoload :RailsCommands,  'kuby/rails_commands'
   autoload :Tasks,          'kuby/tasks'
   autoload :TrailingHash,   'kuby/trailing_hash'
 
   class UndefinedEnvironmentError < StandardError; end
+  class MissingConfigError < StandardError; end
 
   class << self
     attr_reader :definition
     attr_writer :logger
 
-    def load!
-      require ENV['KUBY_CONFIG'] || File.join('.', 'kuby.rb')
+    def load!(config_file = nil)
+      config_file ||= ENV['KUBY_CONFIG'] || File.join('.', 'kuby.rb')
+
+      unless File.exist?(config_file)
+        raise MissingConfigError, "couldn't find Kuby config file at #{config_file}"
+      end
+
+      require config_file
     end
 
     def define(name, &block)
@@ -100,9 +109,13 @@ module Kuby
       @packages ||= {}
     end
 
+    def env=(env_name)
+      @env = env_name.to_s
+    end
+
     def env
       ENV.fetch('KUBY_ENV') do
-        (definition.environments.keys.first || Rails.env).to_s
+        (@env || definition.environments.keys.first || Rails.env).to_s
       end
     end
   end

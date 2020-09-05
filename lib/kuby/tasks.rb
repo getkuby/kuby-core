@@ -28,16 +28,6 @@ module Kuby
       )
     end
 
-    def run
-      dockerfile = docker.to_dockerfile
-
-      docker.cli.run(
-        image_url: docker.metadata.image_url,
-        tag:       'latest',
-        ports:     dockerfile.exposed_ports
-      )
-    end
-
     def push
       hostname = docker.metadata.image_hostname
 
