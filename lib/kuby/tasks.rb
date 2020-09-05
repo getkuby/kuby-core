@@ -62,8 +62,8 @@ module Kuby
       end
     end
 
-    def deploy
-      environment.kubernetes.deploy
+    def deploy(tag = nil)
+      environment.kubernetes.deploy(tag)
     end
 
     def rollback
