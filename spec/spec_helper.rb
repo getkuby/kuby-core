@@ -55,7 +55,7 @@ module SpecHelpers
         end
 
         kubernetes do
-          provider :minikube
+          provider :docker_desktop
 
           add_plugin :rails_app do
             root File.expand_path(File.join(*%w(. dummy)), __dir__)
