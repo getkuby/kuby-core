@@ -2,17 +2,6 @@ require 'rails/generators'
 require 'rails/generators/base'
 
 class KubyGenerator < Rails::Generators::Base
-  def create_initializer_file
-    initializer(
-      'kuby.rb',
-      <<~END
-        require 'kuby'
-
-        Kuby.load!
-      END
-    )
-  end
-
   def create_config_file
     create_file(
       'kuby.rb',
@@ -48,15 +37,14 @@ class KubyGenerator < Rails::Generators::Base
             # Add a plugin that facilitates deploying a Rails app.
             add_plugin :rails_app
 
-            # Use minikube as the provider, which is the default installed by
-            # Docker Desktop.
-            # See: https://github.com/kubernetes/minikube
+            # Use Docker Desktop as the provider.
+            # See: https://www.docker.com/products/docker-desktop
             #
             # Note: you will likely want to use a different provider when deploying
             # your application into a production environment. To configure a different
             # provider, add the corresponding gem to your gemfile and update the
             # following line according to the provider gem's README.
-            provider :minikube
+            provider :docker_desktop
           end
         end
       END

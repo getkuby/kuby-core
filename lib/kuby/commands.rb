@@ -150,6 +150,7 @@ module Kuby
       c.switch [:N, :namespaced], default: false
       c.action do |global_options, options, args|
         if options[:namespaced]
+          # sorry Demeter
           namespace = Kuby.definition.environment.kubernetes.namespace.metadata.name
           args = ['-n', namespace, *args]
         end

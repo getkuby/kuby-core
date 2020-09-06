@@ -3,12 +3,12 @@ module Kuby
     class SetupPhase < Layer
       DEFAULT_WORKING_DIR = '/usr/src/app'.freeze
 
-      attr_accessor :base_image, :working_dir
+      attr_accessor :base_image, :working_dir, :rails_env
 
       def apply_to(dockerfile)
         dockerfile.from(base_image || default_base_image)
         dockerfile.workdir(working_dir || DEFAULT_WORKING_DIR)
-        dockerfile.env("RAILS_ENV=#{Kuby.env}")
+        dockerfile.env("RAILS_ENV=#{rails_env || Kuby.env}")
         dockerfile.env("KUBY_ENV=#{Kuby.env}")
       end
 

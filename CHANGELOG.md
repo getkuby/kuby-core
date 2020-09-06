@@ -3,6 +3,8 @@
   - Includes a default `:development` Kuby environment.
 * Remove rake tasks in favor of a `kuby` executable powered by a vendorized and re-namespaced copy of [GLI](https://github.com/davetron5000/gli).
   - Executable tries to load as little code as possible, i.e. doesn't load your entire bundle.
+* Rename the `minikube` provider to `docker_desktop`, which is more accurate.
+* Add more tests.
 
 ## 0.8.1
 * Fix database config rewriter task.
