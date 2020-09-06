@@ -16,7 +16,7 @@ Kuby embraces the same convention-over-configuration approach that Rails does. I
 * automatically configures your app with a TLS certificate from [LetsEncrypt](https://letsencrypt.org/).
 * automatically spins up a database instance based on what's in your database.yml.
 * runs a separate server for your static assets.
-* features a powerful plugin system that allows, for example, easy [Sidekiq integration](https://github.com/get-kuby/kuby-sidekiq).
+* features a powerful plugin system that allows, for example, easy [Sidekiq integration](https://github.com/getkuby/kuby-sidekiq).
 
 ## Getting Started
 
