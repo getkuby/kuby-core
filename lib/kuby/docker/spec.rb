@@ -22,15 +22,15 @@ module Kuby
       end
 
       def bundler_version(version)
-        bundler_phase.bundler_version = version
+        bundler_phase.version = version
       end
 
       def gemfile(path)
         bundler_phase.gemfile = path
       end
 
-      def package(pkg)
-        package_phase << pkg
+      def package(*args)
+        package_phase.add(*args)
       end
 
       def distro(distro_name)

@@ -22,6 +22,8 @@ require 'support/docker/fake_cli'
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+Kuby.register_package(:fake_package)
+
 module SpecHelpers
   extend RSpec::SharedContext
 
@@ -52,6 +54,11 @@ module SpecHelpers
           end
 
           image_url context.docker_image_url
+
+          # puma isn't in our gemspec or Gemfile, so we have to manually
+          # set the webserver here (this won't be a problem for actual
+          # rails apps)
+          webserver_phase.webserver = :puma
         end
 
         kubernetes do

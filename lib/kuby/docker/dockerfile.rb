@@ -101,7 +101,8 @@ module Kuby
       end
 
       def to_s
-        commands.map(&:to_s).join("\n")
+        # ensure trailing newline
+        "#{commands.map(&:to_s).join("\n")}\n"
       end
 
       def exposed_ports

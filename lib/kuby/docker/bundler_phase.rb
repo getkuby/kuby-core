@@ -13,14 +13,14 @@ module Kuby
         v = version || default_version
         wo = without || DEFAULT_WITHOUT
 
-        dockerfile.run("gem install bundler -v #{v}")
+        dockerfile.run('gem', 'install', 'bundler', '-v', v)
 
         # bundle install
         dockerfile.copy(gf, '.')
         dockerfile.copy(lf, '.')
 
         # set bundle path so docker will cache the bundle
-        dockerfile.run('mkdir ./bundle')
+        dockerfile.run('mkdir', './bundle')
         dockerfile.env('BUNDLE_PATH=./bundle')
 
         unless wo.empty?
@@ -35,7 +35,7 @@ module Kuby
         )
 
         # generate binstubs and add the bin directory to our path
-        dockerfile.run('bundle binstubs --all')
+        dockerfile.run('bundle', 'binstubs', '--all')
         dockerfile.env("PATH=./bin:$PATH")
       end
 
