@@ -21,6 +21,8 @@ module Kuby
   autoload :Tasks,          'kuby/tasks'
   autoload :TrailingHash,   'kuby/trailing_hash'
 
+  DEFAULT_ENV = 'development'.freeze
+
   class UndefinedEnvironmentError < StandardError; end
   class MissingConfigError < StandardError; end
 
@@ -43,6 +45,17 @@ module Kuby
 
       @definition = Definition.new(name.to_s)
       @definition.instance_eval(&block)
+
+      # default development environment
+      @definition.environment(:development) do
+        kubernetes do
+          add_plugin(:rails_app) do
+            tls_enabled false
+          end
+
+          provider :docker_desktop
+        end
+      end
 
       @definition.environments.each do |_, env|
         env.kubernetes.after_configuration
@@ -115,7 +128,7 @@ module Kuby
 
     def env
       ENV.fetch('KUBY_ENV') do
-        (@env || definition.environments.keys.first || Rails.env).to_s
+        (@env || Rails.env || DEFAULT_ENV).to_s
       end
     end
   end

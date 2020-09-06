@@ -10,11 +10,6 @@ module Kuby
       name = name.to_s
 
       environments[name] ||= Environment.new(name, self)
-      # if name == 'development'
-      #   environments[name] ||= make_default_dev_env
-      # else
-      #   environments[name] ||= Environment.new(name, self)
-      # end
 
       if block_given?
         environments[name].instance_eval(&block)
@@ -26,21 +21,5 @@ module Kuby
     def environments
       @environments ||= {}
     end
-
-    private
-
-    # def make_default_dev_env
-    #   Environment.new('development', self).tap do |env|
-    #     env.instance_eval do
-    #       kubernetes do
-    #         add_plugin(:rails_app) do
-    #           tls_enabled false
-    #         end
-
-    #         provider :docker_desktop
-    #       end
-    #     end
-    #   end
-    # end
   end
 end
