@@ -38,7 +38,6 @@ module Kuby
     SERVER_ARG_ALIASES = [['--binding', '-b'], ['-p', '--port']].freeze
 
     class << self
-      # returns true if command was handled, false otherwise
       def run(args = ARGV)
         subcommand = args[0]
         arglist = nil
@@ -48,8 +47,10 @@ module Kuby
             arglist = Args.new([*PREFIX, *args], SERVER_ARG_ALIASES)
             arglist['-b'] ||= '0.0.0.0'
             arglist['-p'] ||= '3000'
+          when 'runner', 'r'
+          when 'console', 'c'
           else
-            return false
+            return
         end
 
         setup
@@ -57,8 +58,6 @@ module Kuby
         arglist ||= Args.new([*PREFIX, *args])
         tasks = Kuby::Tasks.new(environment)
         tasks.remote_exec(arglist.args)
-
-        true
       end
 
       private

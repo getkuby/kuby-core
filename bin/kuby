@@ -30,8 +30,7 @@ end
 $:.push(File.expand_path(File.join('..', 'lib'), __dir__))
 $:.push(File.expand_path(File.join('..', 'vendor', 'gems', 'gli', 'lib'), __dir__))
 
-# we only need these (and GLI) to run
-require 'kuby/rails_commands'
-require 'kuby/kuby_commands'
+# we only need this (and GLI) to run
+require 'kuby/commands'
 
-Kuby::RailsCommands.run(ARGV) || Kuby::KubyCommands.run(ARGV)
+Kuby::Commands.run(ARGV)
