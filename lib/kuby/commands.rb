@@ -1,9 +1,34 @@
-require 'kuby/gli'
 require 'kuby/version'
+require 'kuby/gli'
 
 module Kuby
-  class KubyCommands
+  class Commands
     extend Kuby::GLI::App
+
+    # GLI doesn't have a wildcard option, so it's impossible to tell it to
+    # slurp up all args after a certain point. In our case, we want to be
+    # able to invoke `rails` commands and pass through all the original
+    # flags, switches, etc. To get around GLI's limitations, we identify
+    # `rails` commands in this hijacked `run` method and only use GLI to
+    # parse global options (like -e). The rest of the Rails options are
+    # captured in an instance variable and thereby made available to the
+    # Rails command handlers defined below. We use Module#prepend here to
+    # avoid the usual series of cryptic alias_method calls (note that there
+    # is no singleton class version of #prepend in the Ruby language).
+    singleton_class.send(:prepend, Module.new do
+      def run(args)
+        if idx = args.index('rails')
+          @rails_options = args[(idx + 1)..-1]
+          super(args[0..(idx + 1)])
+        else
+          super
+        end
+      end
+    end)
+
+    def self.tasks
+      Kuby::Tasks.new(Kuby.definition.environment)
+    end
 
     program_desc 'Kuby command-line interface. Kuby is a convention '\
       'over configuration approach for running Rails apps in Kubernetes.'
@@ -32,16 +57,30 @@ module Kuby
       Kuby.load!(global_options[:config])
     end
 
-    def self.tasks
-      Kuby::Tasks.new(Kuby.definition.environment)
-    end
-
     # These are only stubs included to fill out the help screens. Rails
     # commands are handled by the RailsCommands class.
     desc 'Runs a Rails command.'
-    command :rails do |c|
-      c.desc 'Run the rails server (run `rails server --help` for options)'
-      c.command [:server, :s] do
+    command :rails do |rc|
+      rc.desc 'Runs the rails server (run `rails server --help` for options)'
+      rc.command [:server, :s] do |c|
+        c.action do |global_options, options, args|
+          Kuby::RailsCommands.run(@rails_options)
+        end
+      end
+
+      rc.desc 'Runs a script in the Rails environment (run `rails runner --help` for options)'
+      rc.command [:runner, :r] do |c|
+        c.action do |global_options, options, args|
+          Kuby::RailsCommands.run(@rails_options)
+        end
+      end
+
+      rc.desc 'Starts an interactive Ruby console with the Rails environment loaded '\
+        '(run `rails console --help` for options)'
+      rc.command [:console, :c] do |c|
+        c.action do |global_options, options, args|
+          Kuby::RailsCommands.run(@rails_options)
+        end
       end
     end
 

@@ -8,11 +8,11 @@ end
 module Kuby
   autoload :BasicLogger,    'kuby/basic_logger'
   autoload :CLIBase,        'kuby/cli_base'
+  autoload :Commands,       'kuby/commands'
   autoload :Definition,     'kuby/definition'
   autoload :Docker,         'kuby/docker'
   autoload :Environment,    'kuby/environment'
   autoload :Kubernetes,     'kuby/kubernetes'
-  autoload :KubyCommands,   'kuby/kuby_commands'
   autoload :Middleware,     'kuby/middleware'
   autoload :Plugin,         'kuby/plugin'
   autoload :PluginRegistry, 'kuby/plugin_registry'
