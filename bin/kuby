@@ -33,4 +33,4 @@ $:.push(File.expand_path(File.join('..', 'vendor', 'gems', 'gli', 'lib'), __dir_
 # we only need this (and GLI) to run
 require 'kuby/commands'
 
-Kuby::Commands.run(ARGV)
+exit Kuby::Commands.run(ARGV)
