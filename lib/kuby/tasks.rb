@@ -157,6 +157,12 @@ module Kuby
         'pods', namespace, match_labels.serialize
       )
 
+      # consider only "Running" pods that aren't marked for deletion
+      pods.select! do |pod|
+        pod.dig('status', 'phase') == 'Running' &&
+          !pod.dig('metadata', 'deletionTimestamp')
+      end
+
       if pods.empty?
         raise Kuby::Kubernetes::MissingResourceError,
           "Couldn't find any running pods in namespace '#{namespace}' :("
