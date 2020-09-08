@@ -101,6 +101,11 @@ module Kuby
       kubernetes_cli.exec_cmd(cmd, namespace, first_pod.dig('metadata', 'name'))
     end
 
+    def remote_system(cmd)
+      first_pod = get_first_pod
+      kubernetes_cli.system_cmd(cmd, namespace, first_pod.dig('metadata', 'name'))
+    end
+
     def remote_shell
       remote_exec(docker.distro_spec.shell_exe)
     end
@@ -111,6 +116,38 @@ module Kuby
 
     def remote_dbconsole
       remote_exec('bundle exec rails dbconsole')
+    end
+
+    def dev_deployment_ok
+      return unless Kuby.environment.development?
+
+      deployments = kubernetes_cli.get_objects(
+        'deployments', namespace, match_labels.serialize
+      )
+
+      if deployments.empty?
+        puts 'No development environment detected.'
+        STDOUT.write('Set up development environment? (y/n): ')
+        answer = STDIN.gets.strip.downcase
+        return false unless answer =~ /ye?s?/
+      else
+        depl = deployments.first
+        deployed_checksum = depl.dig('metadata', 'annotations', 'getkuby.io/dockerfile-checksum')
+        current_checksum = docker.to_dockerfile.checksum
+
+        if deployed_checksum != current_checksum
+          puts "Development environment appears to be out-of-date."
+          puts "Environment checksum: #{deployed_checksum}"
+          puts "Current checksum:     #{current_checksum}"
+          STDOUT.write('Update development environment? (y/n): ')
+          answer = STDIN.gets.strip.downcase
+          return false unless answer =~ /ye?s?/
+        else
+          return true
+        end
+      end
+
+      DevSetup.new(environment).run
     end
 
     private
@@ -144,6 +181,14 @@ module Kuby
 
     def kubernetes_cli
       kubernetes.provider.kubernetes_cli
+    end
+
+    def helm_cli
+      kubernetes.provider.helm_cli
+    end
+
+    def docker_cli
+      docker.cli
     end
 
     def kubernetes

@@ -17,16 +17,46 @@ module Kuby
       @after_execute << block
     end
 
+    def with_pipes(out = STDOUT, err = STDERR)
+      previous_stdout = self.stdout
+      previous_stderr = self.stderr
+      self.stdout = out
+      self.stderr = err
+      yield
+    ensure
+      self.stdout = previous_stdout
+      self.stderr = previous_stderr
+    end
+
+    def stdout
+      Thread.current[stdout_key] || STDOUT
+    end
+
+    def stdout=(new_stdout)
+      Thread.current[stdout_key] = new_stdout
+    end
+
+    def stderr
+      Thread.current[stderr_key] || STDERR
+    end
+
+    def stderr=(new_stderr)
+      Thread.current[stderr_key] = new_stderr
+    end
+
     private
 
     def open3_w(env, cmd, opts = {}, &block)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
 
-      Open3.pipeline_w([env, cmd_s], opts) do |stdin, wait_threads|
-        yield(stdin, wait_threads).tap do
-          stdin.close
-          self.last_status = wait_threads.last.value
+      Open3.popen3(env, cmd_s, opts) do |p_stdin, p_stdout, p_stderr, wait_thread|
+        Thread.new(stdout) { |t_stdout| p_stdout.each { |line| t_stdout.puts(line) } }
+        Thread.new(stderr) { |t_stderr| p_stderr.each { |line| t_stderr.puts(line) } }
+
+        yield(p_stdin).tap do
+          p_stdin.close
+          self.last_status = wait_thread.value
           run_after_callbacks(cmd)
         end
       end
@@ -41,8 +71,12 @@ module Kuby
     def systemm(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
-      system(cmd_s).tap do
-        self.last_status = $?
+
+      Open3.popen3(cmd_s) do |p_stdin, p_stdout, p_stderr, wait_thread|
+        Thread.new(stdout) { |t_stdout| p_stdout.each { |line| t_stdout.puts(line) } }
+        Thread.new(stderr) { |t_stderr| p_stderr.each { |line| t_stderr.puts(line) } }
+        p_stdin.close
+        self.last_status = wait_thread.value
         run_after_callbacks(cmd)
       end
     end
@@ -69,6 +103,14 @@ module Kuby
     end
 
     def status_key
+      raise NotImplementedError, "#{__method__} must be defined in derived classes"
+    end
+
+    def stdout_key
+      raise NotImplementedError, "#{__method__} must be defined in derived classes"
+    end
+
+    def stderr_key
       raise NotImplementedError, "#{__method__} must be defined in derived classes"
     end
   end

@@ -6,6 +6,7 @@ module Kuby
   module Kubernetes
     class Deployer
       attr_reader :environment
+      attr_accessor :logdev
 
       def initialize(environment)
         @environment = environment
@@ -22,6 +23,23 @@ module Kuby
 
         deploy_global_resources(global)
         deploy_namespaced_resources(namespaced)
+      end
+
+      # adhere to the "CLI" interface
+      def with_pipes(out = STDOUT, err = STDERR)
+        previous_logdev = logdev
+        @logdev = err
+        yield
+      ensure
+        @logdev = previous_logdev
+      end
+
+      def logdev
+        @logdev || STDERR
+      end
+
+      def last_status
+        nil
       end
 
       private
@@ -66,6 +84,8 @@ module Kuby
           context: cli.current_context,
           filenames: [tmpdir]
         )
+
+        task.logger.reopen(logdev)
 
         task.run!(verify_result: true, prune: false)
       ensure
