@@ -51,13 +51,25 @@ module Kuby
       cmd_s = cmd.join(' ')
 
       Open3.popen3(env, cmd_s, opts) do |p_stdin, p_stdout, p_stderr, wait_thread|
-        Thread.new(stdout) { |t_stdout| p_stdout.each { |line| t_stdout.puts(line) } }
-        Thread.new(stderr) { |t_stderr| p_stderr.each { |line| t_stderr.puts(line) } }
+        Thread.new(stdout) do |t_stdout|
+          begin
+            p_stdout.each { |line| t_stdout.puts(line) }
+          rescue IOError
+          end
+        end
+
+        Thread.new(stderr) do |t_stderr|
+          begin
+            p_stderr.each { |line| t_stderr.puts(line) }
+          rescue IOError
+          end
+        end
 
         yield(p_stdin).tap do
           p_stdin.close
           self.last_status = wait_thread.value
           run_after_callbacks(cmd)
+          wait_thread.join
         end
       end
     end
@@ -73,21 +85,40 @@ module Kuby
       cmd_s = cmd.join(' ')
 
       Open3.popen3(cmd_s) do |p_stdin, p_stdout, p_stderr, wait_thread|
-        Thread.new(stdout) { |t_stdout| p_stdout.each { |line| t_stdout.puts(line) } }
-        Thread.new(stderr) { |t_stderr| p_stderr.each { |line| t_stderr.puts(line) } }
-        p_stdin.close
+        Thread.new(stdout) do |t_stdout|
+          p_stdout.each { |line| t_stdout.puts(line) }
+        end
+
+        Thread.new(stderr) do |t_stderr|
+          p_stderr.each { |line| t_stderr.puts(line) }
+        end
+
         self.last_status = wait_thread.value
         run_after_callbacks(cmd)
+        wait_thread.join
       end
     end
 
     def backticks(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
-      `#{cmd_s}`.tap do
-        self.last_status = $?
+      result = StringIO.new
+
+      Open3.popen3(cmd_s) do |p_stdin, p_stdout, p_stderr, wait_thread|
+        Thread.new do
+          p_stdout.each { |line| result.puts(line) }
+        end
+
+        Thread.new(stderr) do |t_stderr|
+          p_stderr.each { |line| t_stderr.puts(line) }
+        end
+
+        self.last_status = wait_thread.value
         run_after_callbacks(cmd)
+        wait_thread.join
       end
+
+      result.string
     end
 
     def run_before_callbacks(cmd)
