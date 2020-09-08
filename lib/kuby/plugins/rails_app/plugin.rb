@@ -233,6 +233,13 @@ module Kuby
                 add :app, kube_spec.selector_app
                 add :role, kube_spec.role
               end
+
+              annotations do
+                add(
+                  'getkuby.io/dockerfile-checksum',
+                  kube_spec.environment.docker.to_dockerfile.checksum
+                )
+              end
             end
 
             spec do

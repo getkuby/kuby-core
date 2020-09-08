@@ -99,6 +99,14 @@ module Kuby
       def status_key
         :kuby_docker_cli_last_status
       end
+
+      def stdout_key
+        :kuby_docker_stdout
+      end
+
+      def stderr_key
+        :kuby_docker_stderr
+      end
     end
   end
 end

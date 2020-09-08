@@ -1,3 +1,5 @@
+require 'digest'
+
 module Kuby
   module Docker
     class Dockerfile
@@ -103,6 +105,10 @@ module Kuby
       def to_s
         # ensure trailing newline
         "#{commands.map(&:to_s).join("\n")}\n"
+      end
+
+      def checksum
+        Digest::SHA256.hexdigest(to_s)
       end
 
       def exposed_ports

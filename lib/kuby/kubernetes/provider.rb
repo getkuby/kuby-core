@@ -55,18 +55,22 @@ module Kuby
         @kubernetes_cli ||= ::KubernetesCLI.new(kubeconfig_path)
       end
 
+      def helm_cli
+        @helm_cli ||= ::HelmCLI.new(kubeconfig_path)
+      end
+
       def kubeconfig_path
         raise NotImplementedError, "please define #{__method__} in #{self.class.name}"
+      end
+
+      def deployer
+        @deployer ||= Kuby::Kubernetes::Deployer.new(environment)
       end
 
       private
 
       def after_initialize
         # override this in derived classes
-      end
-
-      def deployer
-        @deployer ||= Kuby::Kubernetes::Deployer.new(environment)
       end
 
       def spec

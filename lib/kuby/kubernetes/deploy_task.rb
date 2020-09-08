@@ -18,6 +18,10 @@ module Kuby
         end
       end
 
+      def logger
+        deploy_task.instance_variable_get(:@logger)
+      end
+
       private
 
       def with_env(new_env)

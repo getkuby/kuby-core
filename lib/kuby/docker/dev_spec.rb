@@ -29,8 +29,8 @@ module Kuby
         setup_phase.rails_env = env
       end
 
-      def package(pkg)
-        package_phase << pkg
+      def package(*args)
+        package_phase.add(*args)
       end
 
       def distro(distro_name)
