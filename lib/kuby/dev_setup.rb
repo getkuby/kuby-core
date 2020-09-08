@@ -60,9 +60,10 @@ module Kuby
   end
 
   class Pipe
-    attr_reader :cli, :out, :err, :ex
+    attr_reader :name, :cli, :out, :err
 
-    def initialize(cli)
+    def initialize(name, cli)
+      @name = name
       @cli = cli
       @out = StringIO.new
       @err = StringIO.new
@@ -70,33 +71,56 @@ module Kuby
 
     def wrap(&block)
       cli.with_pipes(out, err) do
-        begin
-          block.call
-        rescue => e
-          @ex = e
-        end
+        block.call
       end
+    end
+
+    def success?
+      cli.last_status.nil? || cli.last_status.success?
     end
   end
 
   class Pipes
-    def initialize(clis)
-      @clis = clis
+    include Enumerable
+
+    attr_reader :pipes, :ex
+
+    def self.build(clis)
+      new(clis.map { |name, cli| Pipe.new(name, cli) })
+    end
+
+    def initialize(pipes)
+      @pipes = pipes
+    end
+
+    def each(&block)
+      pipes.each(&block)
     end
 
     def wrap(&block)
-      do_wrap(clis, &block)
+      do_wrap(pipes, &block)
+    end
+
+    def success?
+      pipes.all?(&:success?) && !ex
     end
 
     private
 
-    def do_wrap(remaining_clis, &block)
-      if remaining_clis.empty?
-        yield
+    def do_wrap(remaining_pipes, &block)
+      if remaining_pipes.empty?
+        begin
+          yield
+        rescue => e
+          @ex = e
+        end
+
         return
       end
 
-      do_wrap(remaining_clis[1..-1], &block)
+      remaining_pipes[0].wrap do
+        do_wrap(remaining_pipes[1..-1], &block)
+      end
     end
   end
 
@@ -110,11 +134,21 @@ module Kuby
 
     def run
       tasks.each do |task|
+        pipes = Pipes.build(clis)
+
         Spinner.spin(task.message) do |spinner|
-          if with_hidden_output(clis) { task.run }
+          pipes.wrap { task.run }
+
+          if pipes.success?
             spinner.success
           else
             spinner.failure
+            print_error(pipes.ex)
+
+            pipes.each do |pipe|
+              print_streams(pipe)
+            end
+
             return false
           end
         end
@@ -125,52 +159,15 @@ module Kuby
 
     private
 
-    def with_hidden_output(clis, &block)
-      if clis.empty?
-        begin
-          yield
-        rescue StopIteration
-          return false
-        end
-
-        return true
+    def print_streams(pipe)
+      unless pipe.out.string.strip.empty?
+        puts("========= #{pipe.name.upcase} STDOUT ========")
+        puts pipe.out.string
       end
 
-      out = StringIO.new
-      err = StringIO.new
-      cli = clis.first
-
-      cli.with_pipes(out, err) do
-        with_hidden_output(clis[1..-1]) do
-          ex = begin
-            block.call
-            nil
-          rescue => e
-            e
-          end
-
-          if ex.is_a?(StopIteration)
-            print_streams(out, err)
-            raise ex
-          elsif ex || (cli.last_status && !cli.last_status.success?)
-            puts "Command exited with non-zero status code or an error was raised"
-            print_error(ex)
-            print_streams(out, err)
-            raise StopIteration
-          end
-        end
-      end
-    end
-
-    def print_streams(out, err)
-      unless out.string.strip.empty?
-        puts("========= STDOUT ========")
-        puts out.string
-      end
-
-      unless err.string.strip.empty?
-        puts("========= STDERR ========")
-        puts err.string
+      unless pipe.err.string.strip.empty?
+        puts("========= #{pipe.name.upcase} STDERR ========")
+        puts pipe.err.string
       end
     end
 
@@ -242,13 +239,13 @@ module Kuby
     end
 
     def clis
-      @clis ||= [
-        kubernetes.provider.kubernetes_cli,
-        kubernetes.provider.helm_cli,
-        kubernetes.provider.deployer,
-        docker.cli,
-        Kuby.logger
-      ]
+      @clis ||= {
+        kubectl: kubernetes.provider.kubernetes_cli,
+        helm: kubernetes.provider.helm_cli,
+        krane: kubernetes.provider.deployer,
+        docker: docker.cli,
+        kuby: Kuby.logger
+      }
     end
 
     def tasks
