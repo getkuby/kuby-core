@@ -214,6 +214,14 @@ module Kuby
           tasks.remote_dbconsole
         end
       end
+
+      rc.desc "Restarts the Rails app's web pods."
+      rc.command :restart do |c|
+        c.action do |global_options, options, args|
+          exit 1 unless tasks.dev_deployment_ok
+          tasks.remote_restart
+        end
+      end
     end
   end
 end

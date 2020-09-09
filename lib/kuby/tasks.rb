@@ -125,6 +125,11 @@ module Kuby
       remote_exec('bundle exec rails dbconsole')
     end
 
+    def remote_restart
+      deployment = rails_app.deployment.metadata.name
+      kubernetes_cli.restart_deployment(namespace, deployment)
+    end
+
     def dev_deployment_ok
       return true unless Kuby.environment.development?
 
@@ -148,13 +153,14 @@ module Kuby
           puts "Current checksum:     #{current_checksum}"
           STDOUT.write('Update development environment? (y/n): ')
           answer = STDIN.gets.strip.downcase
-          return false unless answer =~ /ye?s?/
-        else
-          return true
+          # return true here to prevent letting an out-of-date deployment
+          # stop us from running commands
+          return true unless answer =~ /ye?s?/
+          DevSetup.new(environment).run
         end
       end
 
-      DevSetup.new(environment).run
+      true
     end
 
     private

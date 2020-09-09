@@ -13,16 +13,18 @@ module Kuby
       end
 
       def deploy
-        namespaced, global = all_resources.partition do |resource|
-          # Unfortunately we can't use respond_to here because all KubeDSL
-          # objects use ObjectMeta, which has a namespace field. Not sure
-          # why, since it makes no sense for a namespace to have a namespace.
-          # Instead we just check for nil here.
-          resource.metadata.namespace
-        end
+        restart_rails_deployment_if_necessary do
+          namespaced, global = all_resources.partition do |resource|
+            # Unfortunately we can't use respond_to here because all KubeDSL
+            # objects use ObjectMeta, which has a namespace field. Not sure
+            # why, since it makes no sense for a namespace to have a namespace.
+            # Instead we just check for nil here.
+            resource.metadata.namespace
+          end
 
-        deploy_global_resources(global)
-        deploy_namespaced_resources(namespaced)
+          deploy_global_resources(global)
+          deploy_namespaced_resources(namespaced)
+        end
       end
 
       # adhere to the "CLI" interface
@@ -93,16 +95,46 @@ module Kuby
         FileUtils.rm_rf(tmpdir)
       end
 
+      def restart_rails_deployment_if_necessary
+        deployed_image = nil
+        current_image = "#{docker.metadata.image_url}:#{docker.tag}"
+
+        if rails_app = kubernetes.plugin(:rails_app)
+          deployment_name = rails_app.deployment.metadata.name
+
+          deployment = cli.get_object(
+            'deployment', namespace.metadata.name, deployment_name
+          )
+
+          deployed_image = deployment.dig(*%w(spec template spec containers), 0, 'image')
+        end
+
+        yield
+
+        if deployed_image == current_image
+          Kuby.logger.info('Docker image URL did not change, restarting Rails deployment manually')
+          cli.restart_deployment(namespace.metadata.name, deployment_name)
+        end
+      end
+
       def provider
-        environment.kubernetes.provider
+        kubernetes.provider
       end
 
       def namespace
-        environment.kubernetes.namespace
+        kubernetes.namespace
       end
 
       def all_resources
-        environment.kubernetes.resources
+        kubernetes.resources
+      end
+
+      def docker
+        environment.docker
+      end
+
+      def kubernetes
+        environment.kubernetes
       end
 
       def cli

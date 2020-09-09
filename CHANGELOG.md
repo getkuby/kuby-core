@@ -7,6 +7,8 @@
 * Add more tests.
 * Avoid running commands inside pods that aren't running or that are marked for deletion (#15).
 * Pass `RAILS_MASTER_KEY` to Docker build.
+* Add `kuby remote restart` command for manually restarting Rails pods.
+* Automatically restart Rails pods if deploy doesn't change the Docker image URL.
 
 ## 0.8.1
 * Fix database config rewriter task.
