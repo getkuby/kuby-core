@@ -126,7 +126,7 @@ module Kuby
     end
 
     def dev_deployment_ok
-      return unless Kuby.environment.development?
+      return true unless Kuby.environment.development?
 
       deployments = kubernetes_cli.get_objects(
         'deployments', namespace, match_labels.serialize
