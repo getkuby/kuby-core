@@ -1,5 +1,6 @@
 require 'json'
 require 'open3'
+require 'shellwords'
 
 module Kuby
   module Docker
@@ -42,10 +43,13 @@ module Kuby
         config.fetch('auths', {}).keys
       end
 
-      def build(dockerfile:, image_url:, tags:)
+      def build(dockerfile:, image_url:, tags:, build_args: {})
         cmd = [
           executable, 'build',
           *tags.flat_map { |tag| ['-t', "#{image_url}:#{tag}"] },
+          *build_args.flat_map do |arg, val|
+            ['--build-arg', Shellwords.shellescape("#{arg}=#{val}")]
+          end,
           '-f-', '.'
         ]
 

@@ -10,6 +10,7 @@ module Kuby
         dockerfile.workdir(working_dir || DEFAULT_WORKING_DIR)
         dockerfile.env("RAILS_ENV=#{rails_env || Kuby.env}")
         dockerfile.env("KUBY_ENV=#{Kuby.env}")
+        dockerfile.arg('RAILS_MASTER_KEY')
       end
 
       private

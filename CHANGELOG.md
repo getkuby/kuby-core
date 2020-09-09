@@ -6,6 +6,7 @@
 * Rename the `minikube` provider to `docker_desktop`, which is more accurate.
 * Add more tests.
 * Avoid running commands inside pods that aren't running or that are marked for deletion (#15).
+* Pass `RAILS_MASTER_KEY` to Docker build.
 
 ## 0.8.1
 * Fix database config rewriter task.

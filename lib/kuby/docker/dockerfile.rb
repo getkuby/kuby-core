@@ -67,6 +67,10 @@ module Kuby
         def to_s; "CMD #{super}"; end
       end
 
+      class Arg < Command
+        def to_s; "ARG #{super}"; end
+      end
+
       attr_reader :commands, :cursor
 
       def initialize
@@ -84,6 +88,10 @@ module Kuby
 
       def env(*args)
         add Env.new(*args)
+      end
+
+      def arg(*args)
+        add Arg.new(*args)
       end
 
       def run(*args)
