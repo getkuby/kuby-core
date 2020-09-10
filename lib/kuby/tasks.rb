@@ -36,6 +36,10 @@ module Kuby
     end
 
     def push
+      if environment.development?
+        fail 'Cannot push Docker images built for the development environment'
+      end
+
       hostname = docker.metadata.image_hostname
 
       unless docker.cli.auths.include?(hostname)

@@ -1,14 +1,13 @@
-## NEXT
+## 0.9.0
 * Add support for developing your app using a local Kubernetes cluster.
   - Includes a default `:development` Kuby environment.
-* Remove rake tasks in favor of a `kuby` executable powered by a vendorized and re-namespaced copy of [GLI](https://github.com/davetron5000/gli).
-  - Executable tries to load as little code as possible, i.e. doesn't load your entire bundle.
+* Remove rake tasks in favor of a `kuby` executable powered by [GLI](https://github.com/davetron5000/gli).
 * Rename the `minikube` provider to `docker_desktop`, which is more accurate.
 * Add more tests.
 * Avoid running commands inside pods that aren't running or that are marked for deletion (#15).
-* Pass `RAILS_MASTER_KEY` to Docker build.
+* Pass `RAILS_MASTER_KEY` to Docker build (#14).
 * Add `kuby remote restart` command for manually restarting Rails pods.
-* Automatically restart Rails pods if deploy doesn't change the Docker image URL.
+* Automatically restart Rails pods if deploy doesn't change the Docker image URL (#11).
 
 ## 0.8.1
 * Fix database config rewriter task.
