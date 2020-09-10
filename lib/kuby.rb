@@ -129,7 +129,7 @@ module Kuby
 
     def env
       ENV.fetch('KUBY_ENV') do
-        (@env || Rails.env || DEFAULT_ENV).to_s
+        (@env || Rails.env rescue nil || DEFAULT_ENV).to_s
       end
     end
   end

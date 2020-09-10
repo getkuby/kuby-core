@@ -1,9 +1,9 @@
 require 'kuby/version'
-require 'kuby/gli'
+require 'gli'
 
 module Kuby
   class Commands
-    extend Kuby::GLI::App
+    extend GLI::App
 
     # GLI doesn't have a wildcard option, so it's impossible to tell it to
     # slurp up all args after a certain point. In our case, we want to be
@@ -46,13 +46,6 @@ module Kuby
     flag [:c, :config]
 
     pre do |global_options, options, args|
-      require 'rubygems'
-      require 'bundler'
-
-      Bundler.setup
-
-      require 'kuby'
-
       Kuby.env = global_options[:environment] if global_options[:environment]
       Kuby.load!(global_options[:config])
 
