@@ -146,6 +146,7 @@ module Kuby
         STDOUT.write('Set up development environment? (y/n): ')
         answer = STDIN.gets.strip.downcase
         return false unless answer =~ /ye?s?/
+        DevSetup.new(environment).run
       else
         depl = deployments.first
         deployed_checksum = depl.dig('metadata', 'annotations', 'getkuby.io/dockerfile-checksum')

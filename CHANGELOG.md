@@ -1,3 +1,8 @@
+## 0.9.1
+* Run dev setup when asked to.
+  - Bug caused dev setup to be skipped even when requested.
+* Deployer should be tolerant of missing namespace.
+
 ## 0.9.0
 * Add support for developing your app using a local Kubernetes cluster.
   - Includes a default `:development` Kuby environment.

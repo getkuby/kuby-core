@@ -102,11 +102,14 @@ module Kuby
         if rails_app = kubernetes.plugin(:rails_app)
           deployment_name = rails_app.deployment.metadata.name
 
-          deployment = cli.get_object(
-            'deployment', namespace.metadata.name, deployment_name
-          )
+          begin
+            deployment = cli.get_object(
+              'deployment', namespace.metadata.name, deployment_name
+            )
 
-          deployed_image = deployment.dig(*%w(spec template spec containers), 0, 'image')
+            deployed_image = deployment.dig(*%w(spec template spec containers), 0, 'image')
+          rescue ::KubernetesCLI::GetResourceError
+          end
         end
 
         yield
