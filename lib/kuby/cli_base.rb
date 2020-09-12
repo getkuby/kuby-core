@@ -81,18 +81,42 @@ module Kuby
     end
 
     def systemm(cmd)
+      if stdout == STDOUT && stderr == STDERR
+        systemm_default(cmd)
+      else
+        systemm_open3(cmd)
+      end
+    end
+
+    def systemm_default(cmd)
+      run_before_callbacks(cmd)
+      cmd_s = cmd.join(' ')
+      system(cmd_s).tap do
+        self.last_status = $?
+        run_after_callbacks(cmd)
+      end
+    end
+
+    def systemm_open3(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
 
       Open3.popen3(cmd_s) do |p_stdin, p_stdout, p_stderr, wait_thread|
         Thread.new(stdout) do |t_stdout|
-          p_stdout.each { |line| t_stdout.puts(line) }
+          begin
+            p_stdout.each { |line| t_stdout.puts(line) }
+          rescue IOError
+          end
         end
 
         Thread.new(stderr) do |t_stderr|
-          p_stderr.each { |line| t_stderr.puts(line) }
+          begin
+            p_stderr.each { |line| t_stderr.puts(line) }
+          rescue IOError
+          end
         end
 
+        p_stdin.close
         self.last_status = wait_thread.value
         run_after_callbacks(cmd)
         wait_thread.join
@@ -100,19 +124,43 @@ module Kuby
     end
 
     def backticks(cmd)
+      if stdout == STDOUT && stderr == STDERR
+        backticks_default(cmd)
+      else
+        backticks_open3(cmd)
+      end
+    end
+
+    def backticks_default(cmd)
+      run_before_callbacks(cmd)
+      cmd_s = cmd.join(' ')
+      `#{cmd_s}`.tap do
+        self.last_status = $?
+        run_after_callbacks(cmd)
+      end
+    end
+
+    def backticks_open3(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
       result = StringIO.new
 
       Open3.popen3(cmd_s) do |p_stdin, p_stdout, p_stderr, wait_thread|
         Thread.new do
-          p_stdout.each { |line| result.puts(line) }
+          begin
+            p_stdout.each { |line| result.puts(line) }
+          rescue IOError
+          end
         end
 
         Thread.new(stderr) do |t_stderr|
-          p_stderr.each { |line| t_stderr.puts(line) }
+          begin
+            p_stderr.each { |line| t_stderr.puts(line) }
+          rescue IOError
+          end
         end
 
+        p_stdin.close
         self.last_status = wait_thread.value
         run_after_callbacks(cmd)
         wait_thread.join

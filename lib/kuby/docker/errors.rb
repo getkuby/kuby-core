@@ -2,6 +2,7 @@ module Kuby
   module Docker
     class BuildError < StandardError; end
     class PushError < StandardError; end
+    class PullError < StandardError; end
     class LoginError < StandardError; end
 
     class MissingTagError < StandardError

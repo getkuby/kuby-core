@@ -1,3 +1,7 @@
+## 0.10.1
+* Fix bug causing some `rails` and `rake` commands to not be executed.
+* Fix issue restricting Docker CLI output.
+
 ## 0.10.0
 * Set default database user and password in dev environment.
 * Add ability to run rake tasks in dev environment.

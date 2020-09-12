@@ -100,6 +100,17 @@ module Kuby
         end
       end
 
+      def pull(image_url, tag)
+        systemm([
+          executable, 'pull', "#{image_url}:#{tag}"
+        ])
+
+        unless last_status.success?
+          raise PullError, 'pull failed: docker command exited with '\
+            "status code #{last_status.exitstatus}"
+        end
+      end
+
       def status_key
         :kuby_docker_cli_last_status
       end

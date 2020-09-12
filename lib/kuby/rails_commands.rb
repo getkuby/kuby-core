@@ -50,13 +50,7 @@ module Kuby
               arglist = Args.new([*PREFIX, *args], SERVER_ARG_ALIASES)
               arglist['-b'] ||= '0.0.0.0'
               arglist['-p'] ||= '3000'
-            when 'runner', 'r'
-            when 'console', 'c'
-            else
-              return
           end
-        elsif command == 'rake'
-          arglist = Args.new([*PREFIX, *args])
         end
 
         setup
