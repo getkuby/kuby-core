@@ -23,6 +23,8 @@ module Kuby
   autoload :TrailingHash,   'kuby/trailing_hash'
 
   DEFAULT_ENV = 'development'.freeze
+  DEFAULT_DB_USER = 'root'.freeze
+  DEFAULT_DB_PASSWORD = 'password'.freeze
 
   class UndefinedEnvironmentError < StandardError; end
   class MissingConfigError < StandardError; end
@@ -52,6 +54,11 @@ module Kuby
         kubernetes do
           add_plugin(:rails_app) do
             tls_enabled false
+
+            database do
+              user(DEFAULT_DB_USER) if respond_to?(:user)
+              password(DEFAULT_DB_PASSWORD) if respond_to?(:password)
+            end
           end
 
           provider :docker_desktop

@@ -34,23 +34,29 @@ module Kuby
   end
 
   class RailsCommands
-    PREFIX = %w(bundle exec rails).freeze
+    PREFIX = %w(bundle exec).freeze
     SERVER_ARG_ALIASES = [['--binding', '-b'], ['-p', '--port']].freeze
 
     class << self
       def run(args = ARGV)
-        subcommand = args[0]
-        arglist = nil
+        command = args[0]
 
-        case subcommand
-          when 'server', 's'
-            arglist = Args.new([*PREFIX, *args], SERVER_ARG_ALIASES)
-            arglist['-b'] ||= '0.0.0.0'
-            arglist['-p'] ||= '3000'
-          when 'runner', 'r'
-          when 'console', 'c'
-          else
-            return
+        if command == 'rails'
+          subcommand = args[1]
+          arglist = nil
+
+          case subcommand
+            when 'server', 's'
+              arglist = Args.new([*PREFIX, *args], SERVER_ARG_ALIASES)
+              arglist['-b'] ||= '0.0.0.0'
+              arglist['-p'] ||= '3000'
+            when 'runner', 'r'
+            when 'console', 'c'
+            else
+              return
+          end
+        elsif command == 'rake'
+          arglist = Args.new([*PREFIX, *args])
         end
 
         setup
@@ -63,13 +69,7 @@ module Kuby
       private
 
       def setup
-        require 'rubygems'
-        require 'bundler'
-
-        Bundler.setup
-
         require 'kuby'
-
         Kuby.load!
       end
 

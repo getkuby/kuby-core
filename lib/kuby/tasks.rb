@@ -146,7 +146,7 @@ module Kuby
         STDOUT.write('Set up development environment? (y/n): ')
         answer = STDIN.gets.strip.downcase
         return false unless answer =~ /ye?s?/
-        DevSetup.new(environment).run
+        return DevSetup.new(environment).run
       else
         depl = deployments.first
         deployed_checksum = depl.dig('metadata', 'annotations', 'getkuby.io/dockerfile-checksum')
@@ -161,7 +161,7 @@ module Kuby
           # return true here to prevent letting an out-of-date deployment
           # stop us from running commands
           return true unless answer =~ /ye?s?/
-          DevSetup.new(environment).run
+          return DevSetup.new(environment).run
         end
       end
 

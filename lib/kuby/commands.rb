@@ -17,9 +17,9 @@ module Kuby
     # is no singleton class version of #prepend in the Ruby language).
     singleton_class.send(:prepend, Module.new do
       def run(args)
-        if idx = args.index('rails')
-          @rails_options = args[(idx + 1)..-1]
-          super(args[0..(idx + 1)])
+        if idx = args.index('rails') || idx = args.index('rake')
+          @rails_options = args[idx..-1]
+          super(args[0..idx])
         else
           super
         end
@@ -27,7 +27,13 @@ module Kuby
     end)
 
     def self.tasks
-      Kuby::Tasks.new(Kuby.definition.environment)
+      Kuby::Tasks.new(Kuby.environment)
+    end
+
+    def self.must_be_dev_env!
+      unless Kuby.environment.development?
+        fail "Command not supported in the '#{Kuby.environment.name}' environment"
+      end
     end
 
     program_desc 'Kuby command-line interface. Kuby is a convention '\
@@ -57,9 +63,16 @@ module Kuby
     # commands are handled by the RailsCommands class.
     desc 'Runs a Rails command.'
     command :rails do |rc|
+      rc.action do |global_options, options, args|
+        must_be_dev_env!
+        exit 1 unless tasks.dev_deployment_ok
+        Kuby::RailsCommands.run(@rails_options)
+      end
+
       rc.desc 'Runs the rails server (run `rails server --help` for options)'
       rc.command [:server, :s] do |c|
         c.action do |global_options, options, args|
+          must_be_dev_env!
           exit 1 unless tasks.dev_deployment_ok
           Kuby::RailsCommands.run(@rails_options)
         end
@@ -68,6 +81,7 @@ module Kuby
       rc.desc 'Runs a script in the Rails environment (run `rails runner --help` for options)'
       rc.command [:runner, :r] do |c|
         c.action do |global_options, options, args|
+          must_be_dev_env!
           exit 1 unless tasks.dev_deployment_ok
           Kuby::RailsCommands.run(@rails_options)
         end
@@ -77,9 +91,19 @@ module Kuby
         '(run `rails console --help` for options)'
       rc.command [:console, :c] do |c|
         c.action do |global_options, options, args|
+          must_be_dev_env!
           exit 1 unless tasks.dev_deployment_ok
           Kuby::RailsCommands.run(@rails_options)
         end
+      end
+    end
+
+    desc 'Runs a rake task.'
+    command :rake do |rc|
+      rc.action do |global_options, options, args|
+        must_be_dev_env!
+        exit 1 unless tasks.dev_deployment_ok
+        Kuby::RailsCommands.run(@rails_options)
       end
     end
 

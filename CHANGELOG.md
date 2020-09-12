@@ -1,3 +1,12 @@
+## 0.10.0
+* Set default database user and password in dev environment.
+* Add ability to run rake tasks in dev environment.
+* Disallow running rails and rake tasks in non-dev environments.
+* Don't run database config through ERB.
+  - Rails env often isn't loaded, so ERB rendering can blow up with `NoMethodError`s, etc.
+  - All we really need to know is what database engine to stand up.
+* Require database user/password to be added manually to Kuby config.
+
 ## 0.9.1
 * Run dev setup when asked to.
   - Bug caused dev setup to be skipped even when requested.

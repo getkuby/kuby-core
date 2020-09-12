@@ -6,10 +6,14 @@ class KubyGenerator < Rails::Generators::Base
     create_file(
       'kuby.rb',
       <<~END
+        require 'active_support/core_ext'
         require 'active_support/encrypted_configuration'
 
         # Define a production Kuby deploy environment
         Kuby.define(:production) do
+          # Because the Rails environment isn't always loaded when
+          # your Kuby config is loaded, provide access to Rails
+          # credentials manually.
           app_creds = ActiveSupport::EncryptedConfiguration.new(
             config_path: File.join('config', 'credentials.yml.enc'),
             key_path: File.join('config', 'master.key'),
@@ -35,7 +39,13 @@ class KubyGenerator < Rails::Generators::Base
 
           kubernetes do
             # Add a plugin that facilitates deploying a Rails app.
-            add_plugin :rails_app
+            add_plugin :rails_app do
+              # configure database credentials
+              database do
+                user app_creds[:KUBY_DB_USER]
+                password app_creds[:KUBY_DB_PASSWORD]
+              end
+            end
 
             # Use Docker Desktop as the provider.
             # See: https://www.docker.com/products/docker-desktop

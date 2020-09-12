@@ -1,4 +1,3 @@
-require 'erb'
 require 'yaml'
 
 module Kuby
@@ -51,7 +50,7 @@ module Kuby
         end
 
         def db_configs
-          @db_configs ||= YAML.load(ERB.new(File.read(db_config_path)).result)
+          @db_configs ||= YAML.load(File.read(db_config_path))
         end
 
         def db_config_path

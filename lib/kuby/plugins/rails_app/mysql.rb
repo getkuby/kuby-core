@@ -12,9 +12,6 @@ module Kuby
         def initialize(environment, configs)
           @environment = environment
           @configs = configs
-
-          user(config['username'])
-          password(config['password'])
         end
 
         def name
