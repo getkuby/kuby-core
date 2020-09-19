@@ -1,5 +1,7 @@
 ## Kuby
 
+[![Build Status](https://travis-ci.com/getkuby/kuby-core.svg?branch=master)](https://travis-ci.com/getkuby/kuby-core)
+
 Deploy your Rails app the easy way.
 
 ## What is Kuby?
