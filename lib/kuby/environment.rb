@@ -1,6 +1,9 @@
 module Kuby
   class Environment
     attr_reader :name, :definition
+    attr_accessor :configured
+
+    alias_method :configured?, :configured
 
     def initialize(name, definition, &block)
       @name = name

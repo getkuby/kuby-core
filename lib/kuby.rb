@@ -69,6 +69,10 @@ module Kuby
         env.kubernetes.after_configuration
       end
 
+      @definition.environments.each do |_, env|
+        env.configured = true
+      end
+
       @definition
     end
 

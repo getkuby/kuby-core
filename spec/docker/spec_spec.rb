@@ -263,4 +263,40 @@ describe Kuby::Docker::Spec do
       it { is_expected.to eq(previous_tag) }
     end
   end
+
+  describe '#insert' do
+    subject { spec.to_dockerfile.to_s }
+
+    context 'with a custom class-based build phase' do
+      before do
+        foo_phase = Class.new do
+          def apply_to(dockerfile)
+            dockerfile.insert_at(0) do
+              dockerfile.run('echo "foo"')
+            end
+          end
+        end
+
+        spec.insert :foo_phase, foo_phase.new, after: :webserver_phase
+      end
+
+      it 'inserts the commands' do
+        expect(subject).to match(/\ARUN echo "foo"$/)
+      end
+    end
+
+    context 'with a custom inline build phase' do
+      before do
+        spec.insert :hello, after: :webserver_phase do |dockerfile|
+          dockerfile.insert_at(0) do
+            dockerfile.run('echo "foo"')
+          end
+        end
+      end
+
+      it 'allows inserting custom build phases' do
+        expect(subject).to match(/\ARUN echo "foo"$/)
+      end
+    end
+  end
 end

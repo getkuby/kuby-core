@@ -23,6 +23,7 @@ require 'support/docker/fake_cli'
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 Kuby.register_package(:fake_package)
+Kuby.env = :production
 
 module SpecHelpers
   extend RSpec::SharedContext
@@ -65,6 +66,14 @@ module SpecHelpers
           provider :docker_desktop
 
           add_plugin :rails_app do
+            root File.expand_path(File.join(*%w(. dummy)), __dir__)
+          end
+        end
+      end
+
+      environment(:development) do
+        kubernetes do
+          configure_plugin(:rails_app) do
             root File.expand_path(File.join(*%w(. dummy)), __dir__)
           end
         end

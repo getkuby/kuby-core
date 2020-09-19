@@ -16,7 +16,7 @@ module Kuby
       private
 
       def default_base_image
-        @default_base_image ||= case metadata.distro
+        case metadata.distro
           when :debian
             "ruby:#{RUBY_VERSION}"
           when :alpine

@@ -32,7 +32,7 @@ module Kuby
           @asset_url = DEFAULT_ASSET_URL
           @packs_url = DEFAULT_PACKS_URL
           @asset_path = DEFAULT_ASSET_PATH
-          @database = Database.get(self)
+          # @database = Database.get(self)
         end
 
         def configure(&block)
@@ -42,8 +42,9 @@ module Kuby
         def after_configuration
           context = self
 
-          if database
-            environment.kubernetes.plugins[database.plugin_name] = @database.plugin
+          if manage_database? && @database = Database.get(self)
+            @database.plugin.instance_eval(&@database_block) if @database_block
+            environment.kubernetes.plugins[@database.plugin_name] = @database.plugin
             environment.kubernetes.add_plugin(:kube_db)
 
             unless environment.development?
@@ -114,8 +115,11 @@ module Kuby
         end
 
         def database(&block)
-          @database.plugin.instance_eval(&block) if block
-          @database
+          if block
+            @database_block = block
+          elsif environment.configured?
+            @database
+          end
         end
 
         def service(&block)

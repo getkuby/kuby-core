@@ -1,3 +1,11 @@
+## 0.11.0
+* Defer evaluation of database config until after Kuby has been configured.
+  - The issue that prompted this was that the `database` block was being evaluated before the Rails root had been set via `root`. Kuby couldn't find database.yml in a non-standard location and blew up with an error.
+* Fix tests broken in 0.10.1.
+* Set up Travis CI builds.
+* Add a few tests for custom build phases.
+* Add the `Environment#configured?` method that will return `true` if Kuby has been configured and `false` if configuration hasn't happened or is in progress.
+
 ## 0.10.1
 * Fix bug causing some `rails` and `rake` commands to not be executed.
 * Fix issue restricting Docker CLI output.

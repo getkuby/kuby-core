@@ -56,17 +56,18 @@ module Kuby
         def db_config_path
           @db_config_path ||= begin
             db_config_paths.first or
-              raise "Couldn't find database config at #{rails_app.root}"
+              raise "Couldn't find database config in #{db_config_pattern}"
           end
         end
 
         def db_config_paths
-          @db_config_paths ||=
-            Dir.glob(
-              File.join(
-                rails_app.root, 'config', 'database.{yml,erb,yml.erb,yaml,yaml.erb}'
-              )
-            )
+          @db_config_paths ||= Dir.glob(db_config_pattern)
+        end
+
+        def db_config_pattern
+          @db_config_pattern ||= File.join(
+            rails_app.root, 'config', 'database.{yml,erb,yml.erb,yaml,yaml.erb}'
+          )
         end
       end
     end
