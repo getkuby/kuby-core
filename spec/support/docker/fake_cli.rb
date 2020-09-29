@@ -1,3 +1,4 @@
+# typed: true
 module Docker
   class FakeCLI
     attr_reader :auths

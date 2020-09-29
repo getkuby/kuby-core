@@ -1,12 +1,44 @@
+# typed: strict
+
 require 'pathname'
 
 module Kuby
   module Docker
     class BundlerPhase < Layer
-      DEFAULT_WITHOUT = ['development', 'test', 'deploy'].freeze
+      extend T::Sig
 
-      attr_accessor :version, :gemfile, :without
+      DEFAULT_WITHOUT = T.let(
+        ['development', 'test', 'deploy'].freeze, T::Array[String]
+      )
 
+      sig { returns(T.nilable(String)) }
+      attr_reader :version
+
+      sig { params(version: String).void }
+      attr_writer :version
+
+      sig { returns(T.nilable(String)) }
+      attr_reader :gemfile
+
+      sig { params(gemfile: String).void }
+      attr_writer :gemfile
+
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :without
+
+      sig { params(without: T::Array[String]).void }
+      attr_writer :without
+
+      sig { params(environment: Environment).void }
+      def initialize(environment)
+        super
+
+        @version = T.let(@version, T.nilable(String))
+        @gemfile = T.let(@gemfile, T.nilable(String))
+        @without = T.let(@without, T.nilable(T::Array[String]))
+      end
+
+      sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
         gf = gemfile || default_gemfile
         lf = "#{gf}.lock"
@@ -41,10 +73,12 @@ module Kuby
 
       private
 
+      sig { returns(String) }
       def default_version
         Bundler::VERSION
       end
 
+      sig { returns(String) }
       def default_gemfile
         Bundler
           .definition

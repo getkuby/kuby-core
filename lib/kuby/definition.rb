@@ -1,3 +1,4 @@
+# typed: true
 module Kuby
   class Definition
     attr_reader :app_name

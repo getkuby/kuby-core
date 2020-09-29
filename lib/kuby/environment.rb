@@ -1,3 +1,4 @@
+# typed: true
 module Kuby
   class Environment
     attr_reader :name, :definition

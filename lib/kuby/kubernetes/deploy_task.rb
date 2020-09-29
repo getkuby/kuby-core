@@ -1,3 +1,4 @@
+# typed: false
 require 'krane'
 require 'kubectl-rb'
 

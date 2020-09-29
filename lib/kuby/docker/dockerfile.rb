@@ -1,28 +1,43 @@
+# typed: strict
+
 require 'digest'
 
 module Kuby
   module Docker
     class Dockerfile
+      extend T::Sig
+
       class Command
+        extend T::Sig
+
+        sig { returns(T::Array[String]) }
         attr_reader :args
 
-        def initialize(*args)
+        sig { params(args: T::Array[String]).void }
+        def initialize(args)
           @args = args
         end
 
+        sig { returns(String) }
         def to_s
           args.join(' ')
         end
       end
 
       class From < Command
-        attr_reader :image_url, :as
+        sig { returns(String) }
+        attr_reader :image_url
 
+        sig { returns(T.nilable(String)) }
+        attr_reader :as
+
+        sig { params(image_url: String, as: T.nilable(String)).void }
         def initialize(image_url, as: nil)
           @image_url = image_url
           @as = as
         end
 
+        sig { returns(String) }
         def to_s
           str = "FROM #{image_url}"
           str << " AS #{as}" if as
@@ -31,26 +46,38 @@ module Kuby
       end
 
       class Workdir < Command
+        sig { returns(String) }
         def to_s; "WORKDIR #{super}"; end
       end
 
       class Env < Command
+        sig { returns(String) }
         def to_s; "ENV #{super}"; end
       end
 
       class Run < Command
+        sig { returns(String) }
         def to_s; "RUN #{super}"; end
       end
 
       class Copy < Command
-        attr_reader :source, :dest, :from
+        sig { returns(String) }
+        attr_reader :source
 
+        sig { returns(String) }
+        attr_reader :dest
+
+        sig { returns(T.nilable(String)) }
+        attr_reader :from
+
+        sig { params(source: String, dest: String, from: T.nilable(String)).void }
         def initialize(source, dest, from: nil)
           @source = source
           @dest = dest
           @from = from
         end
 
+        sig { returns(String) }
         def to_s
           cmd = ['COPY']
           cmd << "--from=#{from}" if from
@@ -60,72 +87,92 @@ module Kuby
       end
 
       class Expose < Command
+        sig { returns(String) }
         def to_s; "EXPOSE #{super}"; end
       end
 
       class Cmd < Command
+        sig { returns(String) }
         def to_s; "CMD #{super}"; end
       end
 
       class Arg < Command
+        sig { returns(String) }
         def to_s; "ARG #{super}"; end
       end
 
-      attr_reader :commands, :cursor
+      sig { returns(T::Array[Command]) }
+      attr_reader :commands
 
+      sig { returns(Integer) }
+      attr_reader :cursor
+
+      sig { void }
       def initialize
-        @commands = []
-        @cursor = 0
+        @commands = T.let([], T::Array[Command])
+        @cursor = T.let(0, Integer)
       end
 
-      def from(*args, **kwargs)
-        add From.new(*args, **kwargs)
+      sig { params(image_url: String, as: T.nilable(String)).void }
+      def from(image_url, as: nil)
+        add From.new(image_url, as: as)
       end
 
+      sig { params(args: String).void }
       def workdir(*args)
-        add Workdir.new(*args)
+        add Workdir.new(args)
       end
 
+      sig { params(args: String).void }
       def env(*args)
-        add Env.new(*args)
+        add Env.new(args)
       end
 
+      sig { params(args: String).void }
       def arg(*args)
-        add Arg.new(*args)
+        add Arg.new(args)
       end
 
+      sig { params(args: String).void }
       def run(*args)
-        add Run.new(*args)
+        add Run.new(args)
       end
 
-      def copy(*args, **kwargs)
-        add Copy.new(*args, **kwargs)
+      sig { params(source: String, dest: String, from: T.nilable(String)).void }
+      def copy(source, dest, from: nil)
+        add Copy.new(source, dest, from: from)
       end
 
+      sig { params(args: String).void }
       def expose(*args)
-        add Expose.new(*args)
+        add Expose.new(args)
       end
 
+      sig { params(args: String).void }
       def cmd(*args)
-        add Cmd.new(*args)
+        add Cmd.new(args)
       end
 
+      sig { returns(String) }
       def to_s
         # ensure trailing newline
         "#{commands.map(&:to_s).join("\n")}\n"
       end
 
+      sig { returns(String) }
       def checksum
         Digest::SHA256.hexdigest(to_s)
       end
 
+      sig { returns(T::Array[String]) }
       def exposed_ports
         commands
           .select { |c| c.is_a?(Expose) }
-          .map { |c| c.args.first }
+          .map { |c| T.must(c.args.first) }
       end
 
-      def insert_at(pos)
+      sig { params(pos: Integer, block: T.proc.void).void }
+      def insert_at(pos, &block)
         @cursor = pos
         yield
       ensure
@@ -134,6 +181,7 @@ module Kuby
 
       private
 
+      sig { params(cmd: Command).void }
       def add(cmd)
         commands.insert(cursor, cmd)
         @cursor += 1

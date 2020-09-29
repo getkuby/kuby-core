@@ -1,3 +1,4 @@
+# typed: false
 require 'base64'
 
 module Kuby

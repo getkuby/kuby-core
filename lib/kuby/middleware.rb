@@ -1,3 +1,4 @@
+# typed: strict
 module Kuby
   module Middleware
     autoload :HealthCheck, 'kuby/middleware/health_check'

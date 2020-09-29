@@ -1,3 +1,4 @@
+# typed: strict
 require 'logger'
 require 'rails/railtie'
 

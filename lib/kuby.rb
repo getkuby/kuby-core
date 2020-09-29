@@ -1,3 +1,4 @@
+# typed: false
 require 'kuby/railtie'
 
 begin

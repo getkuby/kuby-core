@@ -1,3 +1,4 @@
+# typed: false
 require 'kube-dsl'
 require 'kuby/kube-db'
 

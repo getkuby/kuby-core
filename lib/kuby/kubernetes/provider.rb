@@ -1,3 +1,4 @@
+# typed: true
 require 'kubernetes-cli'
 
 module Kuby

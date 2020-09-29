@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'kubernetes-cli', '~> 0.3'
   s.add_dependency 'railties', '>= 5.1'
   s.add_dependency 'rouge', '~> 3.0'
+  s.add_dependency 'sorbet-runtime', '~> 0.5'
 
   s.add_development_dependency 'rspec'
 

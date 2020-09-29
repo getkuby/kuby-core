@@ -1,3 +1,4 @@
+# typed: false
 require 'rouge'
 
 module Kuby

@@ -1,22 +1,33 @@
+# typed: strict
+
 module Kuby
   module Docker
     class PackagePhase < Layer
+      extend T::Sig
+
+      Operation = T.type_alias { [Symbol, Symbol, T.nilable(String)] }
+
+      sig { returns(T::Array[Operation]) }
       attr_reader :operations
 
-      def initialize(*args)
+      sig { params(environment: Environment).void }
+      def initialize(environment)
         super
 
-        @operations = []
+        @operations = T.let([], T::Array[Operation])
       end
 
+      sig { params(package_name: Symbol, version: T.nilable(String)).void }
       def add(package_name, version = nil)
         operations << [:add, package_name, version]
       end
 
+      sig { params(package_name: Symbol).void }
       def remove(package_name)
-        operations << [:remove, package_name]
+        operations << [:remove, package_name, nil]
       end
 
+      sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
         packages = distro_spec.default_packages.dup
 
@@ -30,19 +41,27 @@ module Kuby
           end
         end
 
-        packages.map! do |package_name, version|
+        package_impls = packages.map do |package_name, version|
           get_package(package_name, version)
         end
 
-        distro_spec.install(packages, into: dockerfile)
+        distro_spec.install(package_impls, into: dockerfile)
       end
 
       private
 
+      sig { returns(Distro) }
       def distro_spec
         environment.docker.distro_spec
       end
 
+      sig {
+        params(
+          package_name: Symbol,
+          version: T.nilable(String)
+        )
+        .returns(Distro::PackageImpl)
+      }
       def get_package(package_name, version)
         if package = Kuby.packages[package_name]
           package.with_version(version)
@@ -51,6 +70,7 @@ module Kuby
         end
       end
 
+      sig { returns(Metadata) }
       def metadata
         environment.docker.metadata
       end

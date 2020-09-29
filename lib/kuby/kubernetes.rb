@@ -1,3 +1,4 @@
+# typed: strict
 require 'kuby/kubernetes/errors'
 
 module Kuby

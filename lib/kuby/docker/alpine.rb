@@ -1,40 +1,43 @@
+# typed: strict
+
 module Kuby
   module Docker
-    class Alpine
-      SHELL_EXE = '/bin/sh'.freeze
+    class Alpine < Distro
+      SHELL_EXE = T.let('/bin/sh'.freeze, String)
 
-      DEFAULT_PACKAGES = [
-        [:ca_certificates],
+      DEFAULT_PACKAGES = T.let([
+        [:ca_certificates, nil],
         [:nodejs, '12.14.1'],
         [:yarn, '1.21.1'],
-        [:c_toolchain],
-        [:tzdata]
-      ].freeze
+        [:c_toolchain, nil],
+        [:tzdata, nil]
+      ].freeze, T::Array[[Symbol, T.nilable(String)]])
 
+      sig { returns(Layer) }
       attr_reader :phase
 
-      def initialize(phase)
-        @phase = phase
-      end
-
+      sig { override.params(packages: T::Array[Distro::PackageImpl], into: Dockerfile).void }
       def install(packages, into:)
         dockerfile = into
         install_managed(packages, dockerfile)
         install_unmanaged(packages, dockerfile)
       end
 
+      sig { override.returns(T::Array[[Symbol, T.nilable(String)]]) }
       def default_packages
         DEFAULT_PACKAGES
       end
 
+      sig { override.returns(String) }
       def shell_exe
         SHELL_EXE
       end
 
       private
 
+      sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
       def install_managed(packages, dockerfile)
-        pkgs = packages.select(&:managed?)
+        pkgs = T.cast(packages.select(&:managed?), T::Array[Distro::ManagedPackageImpl])
 
         unless pkgs.empty?
           package_names = pkgs.map { |pkg| pkg.package_name_for(:alpine) }
@@ -44,6 +47,7 @@ module Kuby
         end
       end
 
+      sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
       def install_unmanaged(packages, dockerfile)
         packages
           .reject(&:managed?)

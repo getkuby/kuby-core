@@ -1,3 +1,4 @@
+# typed: true
 require 'kube-dsl'
 
 module Kuby

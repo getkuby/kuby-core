@@ -1,3 +1,4 @@
+# typed: strict
 module Kuby
   module Docker
     module Packages

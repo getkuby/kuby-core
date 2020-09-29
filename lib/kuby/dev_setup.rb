@@ -1,3 +1,4 @@
+# typed: true
 module Kuby
   class Spinner
     PIECES = %w(- \\ | /).freeze

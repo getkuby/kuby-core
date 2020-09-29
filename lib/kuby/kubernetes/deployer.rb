@@ -1,3 +1,4 @@
+# typed: true
 require 'fileutils'
 require 'securerandom'
 require 'yaml'

@@ -1,3 +1,4 @@
+# typed: true
 module Kuby
   class Args
     attr_reader :args, :flag_aliases

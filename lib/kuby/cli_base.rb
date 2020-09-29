@@ -1,3 +1,4 @@
+# typed: true
 require 'open3'
 require 'thread'
 

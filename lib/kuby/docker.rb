@@ -1,3 +1,5 @@
+# typed: strict
+
 require 'kuby/docker/errors'
 
 module Kuby
@@ -10,6 +12,7 @@ module Kuby
     autoload :Credentials,    'kuby/docker/credentials'
     autoload :Debian,         'kuby/docker/debian'
     autoload :DevSpec,        'kuby/docker/dev_spec'
+    autoload :Distro,         'kuby/docker/distro'
     autoload :Dockerfile,     'kuby/docker/dockerfile'
     autoload :InlineLayer,    'kuby/docker/inline_layer'
     autoload :Layer,          'kuby/docker/layer'

@@ -1,3 +1,4 @@
+# typed: false
 module Kuby
   class PluginRegistry
     ANY = 'any'.freeze

@@ -1,3 +1,4 @@
+# typed: strict
 module Kuby
   module Kubernetes
     class MissingDeploymentError < StandardError; end

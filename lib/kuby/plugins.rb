@@ -1,3 +1,4 @@
+# typed: strict
 module Kuby
   module Plugins
     autoload :NginxIngress, 'kuby/plugins/nginx_ingress'

@@ -1,3 +1,4 @@
+# typed: false
 require "spec_helper"
 
 describe Kuby::Docker::TimestampTag do

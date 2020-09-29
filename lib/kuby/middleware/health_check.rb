@@ -1,3 +1,4 @@
+# typed: true
 module Kuby
   module Middleware
     class HealthCheck

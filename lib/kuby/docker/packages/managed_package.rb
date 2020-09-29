@@ -1,14 +1,30 @@
+# typed: strict
+
 module Kuby
   module Docker
     module Packages
       class ManagedPackage
-        attr_reader :name, :names_per_distro
+        extend T::Sig
 
+        sig { returns(Symbol) }
+        attr_reader :name
+
+        sig { returns(T::Hash[Symbol, String]) }
+        attr_reader :names_per_distro
+
+        sig {
+          params(
+            name: Symbol,
+            names_per_distro: T::Hash[Symbol, String]
+          )
+          .void
+        }
         def initialize(name, names_per_distro)
           @name = name
           @names_per_distro = names_per_distro
         end
 
+        sig { params(distro: Symbol).returns(String) }
         def package_name_for(distro)
           names_per_distro.fetch(distro) do
             raise UnsupportedDistroError, "Couldn't install #{name} "\
@@ -16,10 +32,12 @@ module Kuby
           end
         end
 
-        def with_version(*)
+        sig { params(ver: String).returns(T.self_type) }
+        def with_version(ver)
           self
         end
 
+        sig { returns(T::Boolean) }
         def managed?
           true
         end
