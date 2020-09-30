@@ -1,4 +1,6 @@
 # typed: false
+
+require 'sorbet-runtime-stub'
 require 'kuby/railtie'
 
 begin
