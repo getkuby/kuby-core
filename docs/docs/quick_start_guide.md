@@ -1,0 +1,235 @@
+---
+id: quick-start-guide
+title: Quick Start Guide
+sidebar_label: Quick Start Guide
+slug: /
+---
+
+Getting your Rails app set up to work with Kuby is pretty straightforward. Here's a quick overview of the necessary steps:
+
+1. Install Docker
+1. Choose a hosting provider
+1. Choose a Docker registry
+1. Add the Kuby gems to your bundle
+1. Configure Kuby
+1. Deploy!
+
+**NOTE**: Kuby is designed to work with Rails 5.1 and up.
+
+## Installing Docker
+
+The easiest way to install Docker for MacOS and Windows is via [Docker Desktop](https://www.docker.com/products/docker-desktop). You will need Docker to build and push the Docker image for your application (described below).
+
+## Choosing a Provider
+
+The first step in deploying your app is to choose a hosting provider. At the time of this writing, Kuby supports [DigitalOcean](https://github.com/getkuby/kuby-digitalocean), [Linode](https://github.com/getkuby/kuby-linode), [Azure](https://github.com/getkuby/kuby-azure), and Amazon's [EKS](https://github.com/getkuby/kuby-eks). Use your provider's dashboard to spin up a Kubernetes cluster. In most cases, this shouldn't involve more than a few button clicks, although for more customizable providers like EKS and Azure you might want to look for specific guides online.
+
+## Choosing a Docker Registry
+
+Kuby uses Docker to package up your application into a Docker _image_. Images are then pushed (i.e. uploaded) to something called a "registry." Registries host Docker images so they can be pulled (i.e. downloaded) by the servers that will eventually run them.
+
+### Docker Hub
+
+There are a number of Docker registries available, some free and some paid. Docker's own offering is called [Docker Hub](https://hub.docker.com/), the de-facto registry for open-source projects and commercial solutions alike. Images hosted on Docker Hub are referred to using an abbreviated URL without a hostname, i.e. `<username>/<repo>`. If you see an image referred to like this, it means it's hosted on Docker Hub.
+
+### Gitlab
+
+Gitlab's Docker registry is a great alternative to Docker Hub. It's free and unlimited. Oh, and a quick note: you don't have to host your code on Gitlab to take advantage of the registry, but they're great for that too.
+
+Images hosted on 3rd-party registries (i.e. not on Docker Hub) are referred to by their full URL. If you choose to use Gitlab's Docker registry, the URL to your Docker image will look like this:
+
+```
+https://registry.gitlab.com/<username>/<repo>
+```
+
+## Adding Kuby to your Bundle
+
+Add the kuby-core gem and the corresponding gem for your chosen provider to your Rails application's Gemfile, for example:
+
+```ruby
+gem 'kuby-core', '< 1.0'
+gem 'kuby-digitalocean', '< 1.0'
+```
+
+Run `bundle install` to install the gems.
+
+## Configuring Kuby
+
+Kuby configuration is done via a [DSL](https://en.wikipedia.org/wiki/Domain-specific_language). There are two main sections, one for Docker and one for Kubernetes. Put the config into a file called kuby.rb in the root directory of your Rails app.
+
+Here's what a complete config looks like:
+
+```ruby
+require 'active_support/core_ext'
+require 'active_support/encrypted_configuration'
+
+Kuby.define('my-app') do
+  app_creds = ActiveSupport::EncryptedConfiguration.new(
+    config_path: File.join('config', 'credentials.yml.enc'),
+    key_path: File.join('config', 'master.key'),
+    env_key: 'RAILS_MASTER_KEY',
+    raise_if_missing_key: true
+  )
+
+  environment(:production) do
+    docker do
+      credentials do
+        username app_creds[:DOCKER_USERNAME]
+        password app_creds[:DOCKER_PASSWORD]
+        email app_creds[:DOCKER_EMAIL]
+      end
+
+      image_url 'registry.gitlab.com/username/repo'
+    end
+
+    kubernetes do
+      provider :digitalocean do
+        access_token app_creds[:DIGITALOCEAN_ACCESS_TOKEN]
+        cluster_id 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
+      end
+
+      add_plugin :rails_app do
+        hostname 'mywebsite.com'
+
+        database do
+          user app_creds[:DB_USER]
+          password app_creds[:DB_PASSWORD]
+        end
+      end
+    end
+  end
+end
+```
+
+Create a Rails initializer at config/initializers/kuby.rb that loads your Kuby config:
+
+```ruby
+require 'kuby'
+Kuby.load!
+```
+
+Let's go over this config in detail.
+
+### Deploy Environments
+
+The first line tells Kuby what you want to call your app:
+
+```ruby
+Kuby.define('my-app')
+```
+
+**NOTE**: The next block loads your Rails credentials file. Since your Rails environment may or may not be loaded when your Kuby config loads, we have to access Rails credentials manually.
+
+The second line defines the _deploy environment_:
+
+```ruby
+environment(:production)
+```
+
+Deploy environments usually closely mirror your Rails environments. For example, you might create a new Rails environment called "staging" or "preprod" that's used to test production changes before they go live.
+
+If you're a small shop or hobbyist though, chances are the "production" deploy environment is all you need.
+
+### Configuring Docker
+
+Kuby can automatically "dockerize" your application. You just need to tell it where to push images and provide some credentials:
+
+```ruby
+docker do
+  credentials do
+    username app_creds[:DOCKER_USERNAME]
+    password app_creds[:DOCKER_PASSWORD]
+    email app_creds[:DOCKER_EMAIL]
+  end
+
+  image_url 'registry.gitlab.com/username/repo'
+end
+```
+
+The username, password, and email fields are used to authenticate with the Docker registry that hosts your images. For Gitlab, you'll need to create a [personal access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) instead of your password. The `image_url` field is the full URL to your image, including the registry's domain.
+
+In the example above, the username, password, and email are all provided as environment variables. It's important to remember to **NEVER** hard-code sensitive information (like passwords) in your Kuby config or check it into source control (i.e. git). Consider using a tool like [dotenv](https://github.com/bkeepers/dotenv) to automatically load the variables from a file when your app starts (NOTE: don't check the .env file into git either!) or pull credentials straight from `Rails.application.credentials`.
+
+### Configuring Kubernetes
+
+Now that your app can be packaged up into a Docker image, it's time to use Kubernetes to run it. There are two top-level concerns in the Kubernetes section of your Kuby config: providers and plugins.
+
+#### Providers
+
+Each Kubernetes definition must have a provider configured. Providers correspond to the hosting provider you chose earlier. For example, you'll need to add the `:digitalocean` provider to deploy to a managed DigitalOcean Kubernetes cluster.
+
+```ruby
+kubernetes do
+  provider :digitalocean do
+    access_token app_creds[:DIGITALOCEAN_ACCESS_TOKEN]
+    cluster_id 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
+  end
+end
+```
+
+Kuby providers are distributed as individual rubygems. Add the one you need to your Gemfile, for example:
+
+```ruby
+gem 'kuby-digitalocean', '< 1.0'
+```
+
+Providers can have different config options, so make sure you consult the gem's README for the provider you've chosen.
+
+#### Plugins
+
+Nearly all Kuby's functionality is provided via plugins. For example, simply add the `:rails_app` plugin to get your Rails app ready to deploy:
+
+```ruby
+add_plugin :rails_app
+```
+
+To indicate your app exists behind a particular domain name, specify the `hostname` option:
+
+```ruby
+add_plugin :rails_app do
+  hostname 'mywebsite.com'
+end
+```
+
+Configuring DNS to point to your Kubernetes cluster is outside the scope of this guide, but all the hosting providers should have tutorials readily available. For example, [here's the one](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars) from DigitalOcean.
+
+Finally, specify your database credentials:
+
+```ruby
+add_plugin(:rails_app) do
+  hostname 'mywebsite.com'
+
+  database do
+    user app_creds[:DB_USER]
+    password app_creds[:DB_PASSWORD]
+  end
+end
+```
+
+## Deploying
+
+Now that Kuby is configured and your Kubernetes cluster is ready, it's time to deploy!
+
+1. Build the Docker image
+
+    ```sh
+    bundle exec kuby -e production build
+    ```
+1. Push the Docker image to the container registry
+
+    ```sh
+    bundle exec kuby -e production push
+    ```
+
+1. Set up your provider
+
+    ```sh
+    bundle exec kuby -e production setup
+    ```
+
+1. Deploy!
+
+    ```sh
+    RAILS_MASTER_KEY=<your master key> bundle exec kuby -e production deploy
+    ```
+1. Rejoice
