@@ -1,8 +1,8 @@
 module.exports = {
   title: 'Kuby',
   tagline: 'Deploy Your Rails App the Easy Way',
-  url: 'https://getkuby.io',
-  baseUrl: '/',
+  url: 'https://getkuby.github.io/kuby-core',
+  baseUrl: '/docs/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
   organizationName: 'getkuby',
