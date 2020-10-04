@@ -65,7 +65,7 @@ function Home() {
               </h3>
               <p>
                 Kuby is 100% open-source and MIT licensed. All contributions welcome!
-                <a href="https://github.com/getkuby/kuby-core/releases" className={styles.heroVersion}>
+                <a href="https://rubygems.org/gems/kuby-core" className={styles.heroVersion}>
                   <img alt="Gem" src="https://img.shields.io/gem/v/kuby-core?color=%238c0000&label=latest%20version&style=for-the-badge"/>
                 </a>
               </p>

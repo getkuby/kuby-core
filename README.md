@@ -22,11 +22,11 @@ Kuby embraces the same convention-over-configuration approach that Rails does. I
 
 ## Getting Started
 
-See the [Quick Start Guide](https://github.com/getkuby/kuby-core/wiki/Quick-Start-Guide)
+See the [Quick Start Guide](https://getkuby.io/docs)
 
 ## More Info
 
-See the [wiki](https://github.com/getkuby/kuby-core/wiki).
+Check out [getkuby.io](https://getkuby.io).
 
 ## Running Tests
 

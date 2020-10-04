@@ -7,7 +7,8 @@ module.exports = {
 
     'Getting Started': [
       'quick-start-guide',
-      'after-the-deploy'
+      'after-the-deploy',
+      'development'
     ],
 
     'Customizing Kuby': [
