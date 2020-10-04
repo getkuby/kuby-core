@@ -1,7 +1,7 @@
 module.exports = {
   title: 'Kuby',
   tagline: 'Deploy Your Rails App the Easy Way',
-  url: 'https://getkuby.github.io/kuby-core',
+  url: 'https://getkuby.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
@@ -77,7 +77,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/getkuby/kuby-docs/edit/master/',
+            'https://github.com/getkuby/kuby-core/edit/master/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
