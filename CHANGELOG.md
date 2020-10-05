@@ -5,6 +5,9 @@
 * Set up Travis CI builds.
 * Add a few tests for custom build phases.
 * Add the `Environment#configured?` method that will return `true` if Kuby has been configured and `false` if configuration hasn't happened or is in progress.
+* Add sorbet typedefs for some classes.
+* Fix issue in Rails generator (hadn't been updated with new `environment` block).
+* Add kuby-core.rb so Bundler setup works for Kuby without having to add a Rails initializer.
 
 ## 0.10.1
 * Fix bug causing some `rails` and `rake` commands to not be executed.
