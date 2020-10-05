@@ -78,7 +78,7 @@ module Kuby
         copy_phase << path
       end
 
-      sig { params(port: String).void }
+      sig { params(port: Integer).void }
       def port(port)
         webserver_phase.port = port
       end

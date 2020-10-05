@@ -30,7 +30,7 @@ module Kuby
             'puma',
             '--workers', '4',
             '--bind', 'tcp://0.0.0.0',
-            '--port', phase.port,
+            '--port', phase.port.to_s,
             '--pidfile', './server.pid',
             './config.ru'
           )
@@ -39,10 +39,10 @@ module Kuby
         end
       end
 
-      DEFAULT_PORT = T.let('8080', String)
+      DEFAULT_PORT = T.let(8080, Integer)
       WEBSERVER_MAP = T.let({ puma: Puma }.freeze, T::Hash[Symbol, T.class_of(Webserver)])
 
-      sig { params(port: String).void }
+      sig { params(port: Integer).void }
       attr_writer :port
 
       sig { returns(T.nilable(Symbol)) }
@@ -55,7 +55,7 @@ module Kuby
       def initialize(environment)
         super
 
-        @port = T.let(@port, T.nilable(String))
+        @port = T.let(@port, T.nilable(Integer))
         @webserver = T.let(@webserver, T.nilable(Symbol))
       end
 
@@ -68,7 +68,7 @@ module Kuby
         ws_class.new(self).apply_to(dockerfile)
       end
 
-      sig { returns(String) }
+      sig { returns(Integer) }
       def port
         @port || DEFAULT_PORT
       end

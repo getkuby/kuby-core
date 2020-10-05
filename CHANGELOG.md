@@ -1,3 +1,6 @@
+## 0.11.1
+* Use integers for ports instead of strings to appease Kubernetes.
+
 ## 0.11.0
 * Defer evaluation of database config until after Kuby has been configured.
   - The issue that prompted this was that the `database` block was being evaluated before the Rails root had been set via `root`. Kuby couldn't find database.yml in a non-standard location and blew up with an error.

@@ -10,10 +10,10 @@ module Kuby
       class Command
         extend T::Sig
 
-        sig { returns(T::Array[String]) }
+        sig { returns(T::Array[T.any(String, Integer)]) }
         attr_reader :args
 
-        sig { params(args: T::Array[String]).void }
+        sig { params(args: T::Array[T.any(String, Integer)]).void }
         def initialize(args)
           @args = args
         end
@@ -143,9 +143,9 @@ module Kuby
         add Copy.new(source, dest, from: from)
       end
 
-      sig { params(args: String).void }
-      def expose(*args)
-        add Expose.new(args)
+      sig { params(port: Integer).void }
+      def expose(port)
+        add Expose.new([port])
       end
 
       sig { params(args: String).void }
@@ -164,11 +164,11 @@ module Kuby
         Digest::SHA256.hexdigest(to_s)
       end
 
-      sig { returns(T::Array[String]) }
+      sig { returns(T::Array[Integer]) }
       def exposed_ports
         commands
           .select { |c| c.is_a?(Expose) }
-          .map { |c| T.must(c.args.first) }
+          .map { |c| T.cast(c.args.first, Integer) }
       end
 
       sig { params(pos: Integer, block: T.proc.void).void }

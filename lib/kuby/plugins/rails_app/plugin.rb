@@ -33,7 +33,6 @@ module Kuby
           @asset_url = DEFAULT_ASSET_URL
           @packs_url = DEFAULT_PACKS_URL
           @asset_path = DEFAULT_ASSET_PATH
-          # @database = Database.get(self)
         end
 
         def configure(&block)

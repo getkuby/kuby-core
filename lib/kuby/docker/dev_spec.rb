@@ -5,16 +5,16 @@ module Kuby
     class WebserverDevPhase < Layer
       extend T::Sig
 
-      DEFAULT_PORT = T.let('3000'.freeze, String)
+      DEFAULT_PORT = T.let(3000, Integer)
 
-      sig { params(port: String).void }
+      sig { params(port: Integer).void }
       attr_writer :port
 
       sig { params(environment: Environment).void }
       def initialize(environment)
         super
 
-        @port = T.let(@port, T.nilable(String))
+        @port = T.let(@port, T.nilable(Integer))
       end
 
       sig { override.params(dockerfile: Dockerfile).void }
@@ -22,7 +22,7 @@ module Kuby
         dockerfile.expose(port)
       end
 
-      sig { returns(String) }
+      sig { returns(Integer) }
       def port
         @port || DEFAULT_PORT
       end
@@ -75,7 +75,7 @@ module Kuby
         @distro_spec = nil
       end
 
-      sig { params(port: String).void }
+      sig { params(port: Integer).void }
       def port(port)
         webserver_phase.port = port
       end
