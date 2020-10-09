@@ -22,7 +22,7 @@ bundle exec kuby -e production remote status
 The obvious way to see if your app is working or not is to try to access it over the Internet. If the deploy succeeded (and `kuby remote status` indicates everything's up and running) but your app is erroring out, chances are something is misconfigured. A good place to look when diagnosing issues is your Rails server log. Run the following command to see a live log tail:
 
 ```bash
-bundle exe kuby -e production remote logs
+bundle exec kuby -e production remote logs
 ```
 
 Establish a shell session by running:
