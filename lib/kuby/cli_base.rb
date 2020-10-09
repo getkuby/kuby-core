@@ -1,24 +1,39 @@
-# typed: true
+# typed: strict
+
 require 'open3'
 require 'thread'
 
 module Kuby
   class CLIBase
+    extend T::Sig
+
+    sig { returns(T.nilable(Process::Status)) }
     def last_status
       Thread.current[status_key]
     end
 
+    sig { params(block: T.proc.params(cmd: String).void).void }
     def before_execute(&block)
+      @before_execute = T.let(@before_execute, T.nilable(T::Array[T.proc.params(cmd: String).void]))
       @before_execute ||= []
       @before_execute << block
     end
 
+    sig { params(block: T.proc.params(cmd: String).void).void }
     def after_execute(&block)
+      @after_execute = T.let(@after_execute, T.nilable(T::Array[T.proc.params(cmd: String).void]))
       @after_execute ||= []
       @after_execute << block
     end
 
-    def with_pipes(out = STDOUT, err = STDERR)
+    sig {
+      params(
+        out: T.any(IO, StringIO),
+        err: T.any(IO, StringIO),
+        block: T.proc.void
+      ).void
+    }
+    def with_pipes(out = STDOUT, err = STDERR, &block)
       previous_stdout = self.stdout
       previous_stderr = self.stderr
       self.stdout = out
@@ -29,29 +44,39 @@ module Kuby
       self.stderr = previous_stderr
     end
 
+    sig { returns(T.nilable(T.any(IO, StringIO))) }
     def stdout
       Thread.current[stdout_key] || STDOUT
     end
 
+    sig { params(new_stdout: T.nilable(T.any(IO, StringIO))).void }
     def stdout=(new_stdout)
       Thread.current[stdout_key] = new_stdout
     end
 
+    sig { returns(T.nilable(T.any(IO, StringIO))) }
     def stderr
       Thread.current[stderr_key] || STDERR
     end
 
+    sig { params(new_stderr: T.nilable(T.any(IO, StringIO))).void }
     def stderr=(new_stderr)
       Thread.current[stderr_key] = new_stderr
     end
 
     private
 
-    def open3_w(env, cmd, opts = {}, &block)
+    sig {
+      params(
+        cmd: T::Array[String],
+        block: T.proc.params(stdin: IO).void
+      ).void
+    }
+    def open3_w(cmd, &block)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
 
-      Open3.popen3(env, cmd_s, opts) do |p_stdin, p_stdout, p_stderr, wait_thread|
+      Open3.popen3(cmd_s) do |p_stdin, p_stdout, p_stderr, wait_thread|
         Thread.new(stdout) do |t_stdout|
           begin
             p_stdout.each { |line| t_stdout.puts(line) }
@@ -66,21 +91,23 @@ module Kuby
           end
         end
 
-        yield(p_stdin).tap do
-          p_stdin.close
-          self.last_status = wait_thread.value
-          run_after_callbacks(cmd)
-          wait_thread.join
-        end
+        yield(p_stdin)
+
+        p_stdin.close
+        self.last_status = T.cast(wait_thread.value, Process::Status)
+        run_after_callbacks(cmd)
+        wait_thread.join
       end
     end
 
+    sig { params(cmd: T::Array[String]).void }
     def execc(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
       exec(cmd_s)
     end
 
+    sig { params(cmd: T::Array[String]).void }
     def systemm(cmd)
       if stdout == STDOUT && stderr == STDERR
         systemm_default(cmd)
@@ -89,6 +116,7 @@ module Kuby
       end
     end
 
+    sig { params(cmd: T::Array[String]).void }
     def systemm_default(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
@@ -98,6 +126,7 @@ module Kuby
       end
     end
 
+    sig { params(cmd: T::Array[String]).void }
     def systemm_open3(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
@@ -118,12 +147,14 @@ module Kuby
         end
 
         p_stdin.close
-        self.last_status = wait_thread.value
+        self.last_status = T.cast(wait_thread.value, Process::Status)
         run_after_callbacks(cmd)
         wait_thread.join
       end
     end
 
+
+    sig { params(cmd: T::Array[String]).returns(String) }
     def backticks(cmd)
       if stdout == STDOUT && stderr == STDERR
         backticks_default(cmd)
@@ -132,6 +163,7 @@ module Kuby
       end
     end
 
+    sig { params(cmd: T::Array[String]).returns(String) }
     def backticks_default(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
@@ -141,6 +173,7 @@ module Kuby
       end
     end
 
+    sig { params(cmd: T::Array[String]).returns(String) }
     def backticks_open3(cmd)
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
@@ -162,7 +195,7 @@ module Kuby
         end
 
         p_stdin.close
-        self.last_status = wait_thread.value
+        self.last_status = T.cast(wait_thread.value, Process::Status)
         run_after_callbacks(cmd)
         wait_thread.join
       end
@@ -170,26 +203,32 @@ module Kuby
       result.string
     end
 
+    sig { params(cmd: T::Array[String]).void }
     def run_before_callbacks(cmd)
       (@before_execute || []).each { |cb| cb.call(cmd) }
     end
 
+    sig { params(cmd: T::Array[String]).void }
     def run_after_callbacks(cmd)
       (@after_execute || []).each { |cb| cb.call(cmd, last_status) }
     end
 
+    sig { params(status: Process::Status).void }
     def last_status=(status)
       Thread.current[status_key] = status
     end
 
+    sig { returns(Symbol) }
     def status_key
       raise NotImplementedError, "#{__method__} must be defined in derived classes"
     end
 
+    sig { returns(Symbol) }
     def stdout_key
       raise NotImplementedError, "#{__method__} must be defined in derived classes"
     end
 
+    sig { returns(Symbol) }
     def stderr_key
       raise NotImplementedError, "#{__method__} must be defined in derived classes"
     end

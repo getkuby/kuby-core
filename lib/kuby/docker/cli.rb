@@ -35,13 +35,13 @@ module Kuby
           executable, 'login', url, '--username', username, '--password-stdin'
         ]
 
-        open3_w({}, cmd) do |stdin, _wait_threads|
+        open3_w(cmd) do |stdin, _wait_threads|
           stdin.puts(password)
         end
 
-        unless last_status.success?
+        unless T.must(last_status).success?
           raise LoginError, 'build failed: docker command exited with '\
-            "status code #{last_status.exitstatus}"
+            "status code #{T.must(last_status).exitstatus}"
         end
       end
 
@@ -72,13 +72,13 @@ module Kuby
           '-f-', '.'
         ]
 
-        open3_w({}, cmd) do |stdin, _wait_threads|
+        open3_w(cmd) do |stdin, _wait_threads|
           stdin.puts(dockerfile.to_s)
         end
 
-        unless last_status.success?
+        unless T.must(last_status).success?
           raise BuildError, 'build failed: docker command exited with '\
-            "status code #{last_status.exitstatus}"
+            "status code #{T.must(last_status).exitstatus}"
         end
       end
 
@@ -124,9 +124,9 @@ module Kuby
           executable, 'push', "#{image_url}:#{tag}"
         ])
 
-        unless last_status.success?
+        unless T.must(last_status).success?
           raise PushError, 'push failed: docker command exited with '\
-            "status code #{last_status.exitstatus}"
+            "status code #{T.must(last_status).exitstatus}"
         end
       end
 
@@ -136,9 +136,9 @@ module Kuby
           executable, 'pull', "#{image_url}:#{tag}"
         ])
 
-        unless last_status.success?
+        unless T.must(last_status).success?
           raise PullError, 'pull failed: docker command exited with '\
-            "status code #{last_status.exitstatus}"
+            "status code #{T.must(last_status).exitstatus}"
         end
       end
 
