@@ -1,3 +1,7 @@
+## 0.11.2
+* Attempt to auto-require the requested provider if it isn't registered.
+* Adjust error message when provider can't be found to include reminder to add a require statement.
+
 ## 0.11.1
 * Use integers for ports instead of strings to appease Kubernetes.
 

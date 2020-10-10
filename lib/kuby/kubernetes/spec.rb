@@ -18,13 +18,28 @@ module Kuby
 
       def provider(provider_name = nil, &block)
         if provider_name
-          if @provider || provider_klass = Kuby.providers[provider_name]
-            @provider ||= provider_klass.new(environment)
+          provider_klass = Kuby.providers[provider_name]
+
+          unless provider_klass
+            begin
+              # attempt to auto-require
+              require "kuby/#{provider_name}"
+              provider_klass = Kuby.providers[provider_name]
+            rescue LoadError
+            end
+          end
+
+          if provider_klass
+            if !@provider || !@provider.is_a?(provider_klass)
+              @provider = provider_klass.new(environment)
+            end
+
             @provider.configure(&block)
           else
             msg = if provider_name
               "no provider registered with name #{provider_name}, "\
-                'do you need to add a gem to your Gemfile?'
+                'do you need to add a gem to your Gemfile and/or a '\
+                'require statement to your Kuby config?'
             else
               'no provider configured'
             end
