@@ -3,6 +3,16 @@ require 'rails/generators'
 require 'rails/generators/base'
 
 class KubyGenerator < Rails::Generators::Base
+  def create_initializer_file
+    create_file(
+      File.join(*%w(config initializers kuby.rb)),
+      <<~END
+        require 'kuby'
+        Kuby.load!
+      END
+    )
+  end
+
   def create_config_file
     create_file(
       'kuby.rb',

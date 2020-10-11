@@ -55,6 +55,20 @@ Run `bundle install` to install the gems.
 
 ## Configuring Kuby
 
+All Kuby configuration is written in Ruby and lives in a file called kuby.rb in your application's root directory.
+
+### Using the Rails Generator
+
+Rather than follow all the steps below, feel free to make use of Kuby's Rails generator, which will create all the files you need and put them in the right places. Just run
+
+```sh
+bundle exec rails generate kuby
+```
+
+and follow the prompts.
+
+### Manual Configuration
+
 Kuby configuration is done via a [DSL](https://en.wikipedia.org/wiki/Domain-specific_language). There are two main sections, one for Docker and one for Kubernetes. Put the config into a file called kuby.rb in the root directory of your Rails app.
 
 Here's what a complete config looks like:
@@ -148,7 +162,7 @@ end
 
 The username, password, and email fields are used to authenticate with the Docker registry that hosts your images. For Gitlab, you'll need to create a [personal access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) instead of your password. The `image_url` field is the full URL to your image, including the registry's domain.
 
-In the example above, the username, password, and email are all provided as environment variables. It's important to remember to **NEVER** hard-code sensitive information (like passwords) in your Kuby config or check it into source control (i.e. git). Consider using a tool like [dotenv](https://github.com/bkeepers/dotenv) to automatically load the variables from a file when your app starts (NOTE: don't check the .env file into git either!) or pull credentials straight from `Rails.application.credentials`.
+In the example above, the username, password, and email are all provided by Rails' [encrypted credentials](https://guides.rubyonrails.org/v5.2/security.html#custom-credentials) feature. It's important to remember to **NEVER** hard-code sensitive information (like passwords) in your Kuby config or check it into source control (i.e. git). If you'd rather not use encrypted credentials, consider using a tool like [dotenv](https://github.com/bkeepers/dotenv) to automatically load your secrets into environment variables when your app starts (NOTE: don't check the .env file into git either!)
 
 ### Configuring Kubernetes
 
@@ -167,12 +181,6 @@ kubernetes do
 end
 ```
 
-Kuby providers are distributed as individual rubygems. Add the one you need to your Gemfile, for example:
-
-```ruby
-gem 'kuby-digitalocean', '< 1.0'
-```
-
 Providers can have different config options, so make sure you consult the gem's README for the provider you've chosen.
 
 #### Plugins
@@ -183,7 +191,7 @@ Nearly all Kuby's functionality is provided via plugins. For example, simply add
 add_plugin :rails_app
 ```
 
-To indicate your app exists behind a particular domain name, specify the `hostname` option:
+To indicate your app serves a particular domain name, specify the `hostname` option:
 
 ```ruby
 add_plugin :rails_app do
