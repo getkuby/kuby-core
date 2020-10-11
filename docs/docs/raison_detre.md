@@ -21,4 +21,10 @@ In the 2020 [Rails Community Survey](https://rails-hosting.com/2020/), participa
 
 ### Kuby is Active Deployment
 
-Kuby's goal is to provide this missing piece of the Rails development story - a deployment mechanism with sane defaults that works for 90% of use cases. Kuby aims to be "Active Deployment" for Rails.
+Kuby was designed to serve the same audience as Rails itself, and should be thought of as residing at the same level as active record, active storage, etc. Active record is designed to abstract away the complexities of database communication, and Kuby is designed to do the same abstracting for deployment. Both come, as DHH is fond of saying, with batteries included.
+
+### Who Should Use Kuby?
+
+Kuby is meant for all types of apps, but there are certainly some types that will benefit from it more than others. You're probably better off using a free Heroku dyno for a super small app that doesn't see a lot of traffic and that only manages a few hundred (or less) database rows. It's not that Kuby is a bad choice for these types of apps, it's just that you're likely to spend less money and less brainpower getting Heroku set up. It's pretty hard to get simpler than `git push heroku master`. Heroku starts to get expensive when you need more resources though, and I've found that, generally speaking, a managed Kubernetes cluster with a single node deployed with Kuby is more cost-effective than the equivalent Heroku paid tier setup.
+
+Kuby also might not be the right choice for very large, highly customized apps that have deviated significantly from Rails conventions. I'm sure you could get Kuby to work for such apps, but it would likely mean customizing Kuby to a large degree. To do so, you'd probably have to have a deeper understanding of how Docker, Kubernetes, and Kuby work.
