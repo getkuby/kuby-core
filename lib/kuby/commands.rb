@@ -1,9 +1,11 @@
-# typed: true
+# typed: strict
+
 require 'kuby/version'
 require 'gli'
 
 module Kuby
   class Commands
+    extend T::Sig
     extend GLI::App
 
     # GLI doesn't have a wildcard option, so it's impossible to tell it to
@@ -17,8 +19,10 @@ module Kuby
     # avoid the usual series of cryptic alias_method calls (note that there
     # is no singleton class version of #prepend in the Ruby language).
     singleton_class.send(:prepend, Module.new do
+      sig { params(args: T::Array[String]).void }
       def run(args)
         if idx = args.index('rails') || idx = args.index('rake')
+          @rails_options = T.let(@rails_options, T.nilable(T::Array[String]))
           @rails_options = args[idx..-1]
           super(args[0..idx])
         else
@@ -27,10 +31,12 @@ module Kuby
       end
     end)
 
+    sig { returns(Kuby::Tasks) }
     def self.tasks
       Kuby::Tasks.new(Kuby.environment)
     end
 
+    sig { void }
     def self.must_be_dev_env!
       unless Kuby.environment.development?
         fail "Command not supported in the '#{Kuby.environment.name}' environment"
@@ -67,6 +73,7 @@ module Kuby
       rc.action do |global_options, options, args|
         must_be_dev_env!
         exit 1 unless tasks.dev_deployment_ok
+        @rails_options = T.let(@rails_options, T.nilable(T::Array[String]))
         Kuby::RailsCommands.run(@rails_options)
       end
 
