@@ -1,3 +1,6 @@
+## 0.11.3
+* I've gone back and forth a few times on this, but I decided to put the initializer code back into the Rails generator.
+
 ## 0.11.2
 * Attempt to auto-require the requested provider if it isn't registered.
 * Adjust error message when provider can't be found to include reminder to add a require statement.
