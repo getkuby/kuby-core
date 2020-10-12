@@ -42,6 +42,16 @@ Images hosted on 3rd-party registries (i.e. not on Docker Hub) are referred to b
 https://registry.gitlab.com/<username>/<repo>
 ```
 
+## Github
+
+Github runs a docker registry, available at docker.pkg.github.com. As with Gitlab, you'll need to refer to the registry using the full URL; Github also requires that the image is tagged with the format `:username/:repo/:image_name`, so your URL will look something like
+
+```
+https://docker.pkg.github.com/<username>/<repo>/<image-name>
+```
+
+You'll also need to get Docker to log in to the registry using a token with the correct access permissions; you can find out more in [the Github package documenation](https://docs.github.com/articles/configuring-docker-for-use-with-github-package-registry/).
+
 ## Adding Kuby to your Bundle
 
 Add the kuby-core gem and the corresponding gem for your chosen provider to your Rails application's Gemfile, for example:
