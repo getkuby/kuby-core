@@ -1,3 +1,7 @@
+## 0.11.4
+* Fix bug causing crash when running CLI commands.
+  - Turns out was caused by adding a Sorbet type annotation inside an anonymous singleton class and forgetting to extend `T::Sig`. Thanks @lazyatom!
+
 ## 0.11.3
 * I've gone back and forth a few times on this, but I decided to put the initializer code back into the Rails generator.
 

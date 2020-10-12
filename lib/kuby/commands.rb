@@ -19,6 +19,8 @@ module Kuby
     # avoid the usual series of cryptic alias_method calls (note that there
     # is no singleton class version of #prepend in the Ruby language).
     singleton_class.send(:prepend, Module.new do
+      extend T::Sig
+
       sig { params(args: T::Array[String]).void }
       def run(args)
         if idx = args.index('rails') || idx = args.index('rake')
