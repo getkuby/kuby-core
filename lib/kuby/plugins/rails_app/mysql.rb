@@ -1,4 +1,5 @@
 # typed: false
+
 require 'kube-dsl'
 require 'kuby/kube-db'
 
@@ -13,6 +14,10 @@ module Kuby
         def initialize(environment, configs)
           @environment = environment
           @configs = configs
+        end
+
+        def requires_credentials?
+          true
         end
 
         def name

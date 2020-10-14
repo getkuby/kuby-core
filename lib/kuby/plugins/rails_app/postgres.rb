@@ -1,4 +1,5 @@
 # typed: false
+
 require 'kube-dsl'
 require 'kuby/kube-db'
 
@@ -16,6 +17,10 @@ module Kuby
 
           user(config['username'])
           password(config['password'])
+        end
+
+        def requires_credentials?
+          true
         end
 
         def name

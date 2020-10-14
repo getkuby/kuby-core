@@ -59,8 +59,10 @@ module Kuby
             tls_enabled false
 
             database do
-              user(DEFAULT_DB_USER) if respond_to?(:user)
-              password(DEFAULT_DB_PASSWORD) if respond_to?(:password)
+              if requires_credentials?
+                user(DEFAULT_DB_USER)
+                password(DEFAULT_DB_PASSWORD)
+              end
             end
           end
 

@@ -1,4 +1,5 @@
 # typed: true
+
 module Kuby
   module Plugins
     module RailsApp
@@ -12,6 +13,18 @@ module Kuby
         def after_configuration
           environment.docker.package_phase.add(:sqlite_dev)
           environment.docker.package_phase.add(:sqlite_client)
+        end
+
+        def requires_credentials?
+          false
+        end
+
+        def user(_user)
+          raise 'SQLite databases do not require a username or password'
+        end
+
+        def password(_password)
+          raise 'SQLite databases do not require a username or password'
         end
 
         def name

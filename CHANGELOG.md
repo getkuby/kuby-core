@@ -1,3 +1,7 @@
+## 0.11.5
+* Raise friendlier error when attempting to add Docker credentials in the development environment.
+* Raise friendlier error when attempting to set a username and password for SQLite databases.
+
 ## 0.11.4
 * Fix bug causing crash when running CLI commands.
   - Turns out was caused by adding a Sorbet type annotation inside an anonymous singleton class and forgetting to extend `T::Sig`. Thanks @lazyatom!

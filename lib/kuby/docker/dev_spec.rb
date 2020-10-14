@@ -115,6 +115,13 @@ module Kuby
         layer_stack.includes?(name)
       end
 
+      sig {
+        params(block: T.nilable(T.proc.void)).returns(Credentials)
+      }
+      def credentials(&block)
+        raise 'Docker credentials are not supported in the development environment'
+      end
+
       sig { returns(Dockerfile) }
       def to_dockerfile
         Dockerfile.new.tap do |df|

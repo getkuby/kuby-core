@@ -1,8 +1,14 @@
 sudo: false
 language: ruby
-script: bundle exec rspec
+before_install:
+  - gem install sorbet
+rvm:
+  - 2.5.8
+  - 2.6.6
+  - 2.7.2
 matrix:
   include:
-  - rvm: 2.5.8
-  - rvm: 2.6.6
-  - rvm: 2.7.2
+  - stage: build
+    script: bundle exec rspec
+  - stage: typecheck
+    script: srb tc
