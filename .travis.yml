@@ -1,14 +1,10 @@
 sudo: false
 language: ruby
-before_install:
-  - gem install sorbet
+script:
 rvm:
   - 2.5.8
   - 2.6.6
   - 2.7.2
-matrix:
-  include:
-  - stage: build
-    script: bundle exec rspec
-  - stage: typecheck
-    script: srb tc
+env:
+  - STAGE=test
+  - STAGE=typecheck
