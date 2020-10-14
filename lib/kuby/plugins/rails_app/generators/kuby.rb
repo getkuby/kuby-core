@@ -14,6 +14,14 @@ class KubyGenerator < Rails::Generators::Base
   end
 
   def create_config_file
+    app_class = Rails.application.class
+
+    app_name = if app_class.respond_to?(:module_parent_name)
+      app_class.module_parent_name
+    else
+      app_class.parent_name
+    end
+
     create_file(
       'kuby.rb',
       <<~END
@@ -21,7 +29,7 @@ class KubyGenerator < Rails::Generators::Base
         require 'active_support/encrypted_configuration'
 
         # Define a production Kuby deploy environment
-        Kuby.define('#{Rails.application.class.module_parent_name}') do
+        Kuby.define('#{app_name}') do
           environment(:production) do
             # Because the Rails environment isn't always loaded when
             # your Kuby config is loaded, provide access to Rails

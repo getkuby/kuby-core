@@ -42,6 +42,8 @@ Images hosted on 3rd-party registries (i.e. not on Docker Hub) are referred to b
 https://registry.gitlab.com/<username>/<repo>
 ```
 
+**NOTE**: Gitlab's Docker registry requires you to authenticate using a personal or deploy access token instead of your Gitlab password. See their [documentation](https://docs.gitlab.com/ee/user/packages/container_registry/#authenticate-with-the-container-registry) for more information.
+
 ## Github
 
 Github runs a docker registry, available at docker.pkg.github.com. As with Gitlab, you'll need to refer to the registry using the full URL; Github also requires that the image is tagged with the format `:username/:repo/:image_name`, so your URL will look something like

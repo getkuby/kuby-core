@@ -1,3 +1,7 @@
+## 0.11.6
+* Fix Rails generator.
+  - Causing `undefined method 'module_parent_name'`. Apparently `module_parent_name` wasn't introduced until Rails 6.
+
 ## 0.11.5
 * Raise friendlier error when attempting to add Docker credentials in the development environment.
 * Raise friendlier error when attempting to set a username and password for SQLite databases.
