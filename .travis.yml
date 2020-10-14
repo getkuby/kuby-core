@@ -1,6 +1,6 @@
 sudo: false
 language: ruby
-script:
+script: scripts/travis.sh
 rvm:
   - 2.5.8
   - 2.6.6
