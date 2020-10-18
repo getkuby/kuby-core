@@ -39,7 +39,7 @@ Gitlab's Docker registry is a great alternative to Docker Hub. It's free and unl
 Images hosted on 3rd-party registries (i.e. not on Docker Hub) are referred to by their full URL. If you choose to use Gitlab's Docker registry, the URL to your Docker image will look like this:
 
 ```
-https://registry.gitlab.com/<username>/<repo>
+registry.gitlab.com/<username>/<repo>
 ```
 
 **NOTE**: Gitlab's Docker registry requires you to authenticate using a personal or deploy access token instead of your Gitlab password. See their [documentation](https://docs.gitlab.com/ee/user/packages/container_registry/#authenticate-with-the-container-registry) for more information.
@@ -49,7 +49,7 @@ https://registry.gitlab.com/<username>/<repo>
 Github runs a docker registry, available at docker.pkg.github.com. As with Gitlab, you'll need to refer to the registry using the full URL; Github also requires that the image is tagged with the format `:username/:repo/:image_name`, so your URL will look something like
 
 ```
-https://docker.pkg.github.com/<username>/<repo>/<image-name>
+docker.pkg.github.com/<username>/<repo>/<image-name>
 ```
 
 You'll also need to get Docker to log in to the registry using a token with the correct access permissions; you can find out more in [the Github package documenation](https://docs.github.com/articles/configuring-docker-for-use-with-github-package-registry/).
