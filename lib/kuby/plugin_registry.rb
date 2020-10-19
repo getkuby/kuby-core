@@ -12,7 +12,7 @@ module Kuby
       plugins_by_env = plugins[plugin_name]
 
       unless plugins_by_env
-        raise MissingPluginError, "no plugin registered with name #{plugin_name}, "\
+        raise Kubernetes::MissingPluginError, "no plugin registered with name #{plugin_name}, "\
           'do you need to add a gem to your Gemfile?'
       end
 

@@ -1,3 +1,7 @@
+## 0.11.7
+* Properly namespace constant lookup for `Kubernetes::MissingPluginError`.
+* Add missing `#storage` method for Postgres plugin.
+
 ## 0.11.6
 * Fix Rails generator.
   - Causing `undefined method 'module_parent_name'`. Apparently `module_parent_name` wasn't introduced until Rails 6.
