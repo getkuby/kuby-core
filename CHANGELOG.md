@@ -1,3 +1,6 @@
+## 0.11.8
+* Alias Rails `config_map` to `env`.
+
 ## 0.11.7
 * Properly namespace constant lookup for `Kubernetes::MissingPluginError`.
 * Add missing `#storage` method for Postgres plugin.

@@ -202,6 +202,8 @@ module Kuby
           @config_map
         end
 
+        alias_method :env, :config_map
+
         def app_secrets(&block)
           spec = self
 
