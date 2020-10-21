@@ -14,6 +14,7 @@ module.exports = {
     'Customizing Kuby': [
       'customizing-docker-build',
       'customizing-kubernetes-resources',
+      'environment-variables',
       'managing-secrets',
       'data-stores',
       'tls-certificates',
