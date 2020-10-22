@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 language: ruby
 script: scripts/travis.sh
 services:
