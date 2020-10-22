@@ -13,8 +13,9 @@ elif [[ "$STAGE" == "integration" ]]; then
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   sudo apt update && sudo apt-get install libmysqlclient-dev nodejs yarn
   gem install rails -v 6.0.3.4
-  rails _6.0.3.4_ new kubyapp -d mysql
+  mkdir kubyapp
   cd kubyapp
+  rails _6.0.3.4_ new . -d mysql
   printf "\ngem 'kuby-core', path: '../'\n" >> Gemfile
   bundle exec rails g kuby
   bundle exec kuby -e production build
