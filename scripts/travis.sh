@@ -8,6 +8,7 @@ elif [[ "$STAGE" == "integration" ]]; then
   source ./scripts/integration.sh
   setup_cluster
 
+  set -o xtrace
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   sudo apt update && sudo apt-get install libmysqlclient-dev nodejs yarn
@@ -17,4 +18,5 @@ elif [[ "$STAGE" == "integration" ]]; then
   printf "\ngem 'kuby-core', path: '../'\n" >> Gemfile
   bundle exec rails g kuby
   bundle exec kuby -e production build
+  set +o xtrace
 fi
