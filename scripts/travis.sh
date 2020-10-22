@@ -5,6 +5,7 @@ if [[ "$STAGE" == 'test' ]]; then
 elif [[ "$STAGE" == 'typecheck' ]]; then
   srb tc
 elif [[ "$STAGE" == "integration" ]]; then
+  unset BUNDLE_GEMFILE
   source ./scripts/integration.sh
   setup_cluster
 
@@ -13,9 +14,8 @@ elif [[ "$STAGE" == "integration" ]]; then
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   sudo apt update && sudo apt-get install libmysqlclient-dev nodejs yarn
   gem install rails -v 6.0.3.4
-  mkdir kubyapp
+  rails _6.0.3.4_ new kubyapp -d mysql
   cd kubyapp
-  rails _6.0.3.4_ new . -d mysql
   printf "\ngem 'kuby-core', path: '../'\n" >> Gemfile
   bundle exec rails g kuby
   bundle exec kuby -e production build
