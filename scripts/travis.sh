@@ -17,6 +17,7 @@ elif [[ "$STAGE" == "integration" ]]; then
   cd ..
   rails _6.0.3.4_ new kubyapp -d mysql
   cp -R ./kuby-core/ ./kubyapp/vendor/kuby-core
+  ls ./kubyapp/vendor/
   cd kubyapp
   printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
   bundle exec rails g kuby
