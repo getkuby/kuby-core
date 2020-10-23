@@ -14,12 +14,12 @@ elif [[ "$STAGE" == "integration" ]]; then
   set -o xtrace
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  sudo apt update && sudo apt-get install libmysqlclient-dev nodejs yarn
+  curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+  sudo apt-get update && sudo apt-get install libmysqlclient-dev nodejs yarn
   gem install rails -v 6.0.3.4
   cd ..
   rails _6.0.3.4_ new kubyapp -d mysql
   cp -R ./kuby-core/ ./kubyapp/vendor/kuby-core
-  ls ./kubyapp/vendor/
   cd kubyapp
   printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
   bundle exec rails g kuby
