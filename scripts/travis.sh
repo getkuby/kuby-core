@@ -12,6 +12,7 @@ elif [[ "$STAGE" == "integration" ]]; then
   setup_cluster
 
   set -o xtrace
+  source ~/.nvm/nvm.sh
   nvm install 15.0.1
   nvm use 15.0.1
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
