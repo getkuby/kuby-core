@@ -21,6 +21,7 @@ elif [[ "$STAGE" == "integration" ]]; then
   cd kubyapp
   printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
   bundle exec rails g kuby
+  printf "Kuby.environment.docker.insert(:vendor, before: :bundler_phase) { |dockerfile| dockerfile.copy('vendor', 'vendor') }\n" >> kuby.rb
   bundle exec kuby -e production build
   set +o xtrace
 fi
