@@ -6,6 +6,8 @@ elif [[ "$STAGE" == 'typecheck' ]]; then
   srb tc
 elif [[ "$STAGE" == "integration" ]]; then
   unset BUNDLE_GEMFILE
+  set -e
+
   source ./scripts/integration.sh
   setup_cluster
 
@@ -22,6 +24,11 @@ elif [[ "$STAGE" == "integration" ]]; then
   printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
   bundle exec rails g kuby
   printf "Kuby.environment.docker.insert(:vendor, before: :bundler_phase) { |dockerfile| dockerfile.copy('vendor', 'vendor') }\n" >> kuby.rb
+  printf "Kuby.environment.docker.image_url('kubyapp')\n" >> kuby.rb
+  printf "Kuby.environment.kubernetes.plugin(:rails_app).tls_enabled(false)\n" >> kuby.rb
+
   bundle exec kuby -e production build
-  set +o xtrace
+  bundle exec kuby -e production deploy
+
+  curl kubyapp-web:8080
 fi
