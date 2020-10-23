@@ -11,13 +11,13 @@ elif [[ "$STAGE" == "integration" ]]; then
   source ./scripts/integration.sh
   setup_cluster
 
-  set -o xtrace
   source ~/.nvm/nvm.sh
+  set -o xtrace
   nvm install 15.0.1
   nvm use 15.0.1
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  sudo apt-get install -y libmysqlclient-dev yarn
+  sudo apt-get update && sudo apt-get install -y libmysqlclient-dev yarn
   gem install rails -v 6.0.3.4
   cd ..
   rails _6.0.3.4_ new kubyapp -d mysql

@@ -1,8 +1,6 @@
 sudo: required
 language: ruby
 script: scripts/travis.sh
-before_install:
-  - source ~/.nvm/nvm.sh && nvm install 15.0.1
 services:
   - docker
 rvm:
