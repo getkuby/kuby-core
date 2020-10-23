@@ -15,7 +15,9 @@ elif [[ "$STAGE" == "integration" ]]; then
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-  sudo apt-get update && sudo apt-get install libmysqlclient-dev nodejs yarn
+  sudo apt-get update
+  sudo apt-get install -y nodejs
+  sudo apt-get install -y libmysqlclient-dev yarn
   gem install rails -v 6.0.3.4
   cd ..
   rails _6.0.3.4_ new kubyapp -d mysql
