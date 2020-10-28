@@ -233,8 +233,10 @@ Now that Kuby is configured and your Kubernetes cluster is ready, it's time to d
 1. Build the Docker image
 
     ```sh
-    bundle exec kuby -e production build
+    RAILS_MASTER_KEY=<your master key> bundle exec kuby -e production build
     ```
+    If your master key is stored in the default location (`config/master.key`), you can run `bundle exec kuby` without setting the `RAILS_MASTER_KEY` variable.
+
 1. Push the Docker image to the container registry
 
     ```sh
@@ -252,4 +254,5 @@ Now that Kuby is configured and your Kubernetes cluster is ready, it's time to d
     ```sh
     RAILS_MASTER_KEY=<your master key> bundle exec kuby -e production deploy
     ```
+    As above, `RAILS_MASTER_KEY` is only required if your key is not stored at `config/master.key`.
 1. Rejoice
