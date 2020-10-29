@@ -1,3 +1,6 @@
+## 0.11.9
+* Use correct Docker Hub registry URL (index.docker.io).
+
 ## 0.11.8
 * Alias Rails `config_map` to `env`.
 
