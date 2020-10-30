@@ -1,5 +1,6 @@
 # typed: true
 require 'kubernetes-cli'
+require 'digest'
 
 module Kuby
   module Kubernetes
@@ -76,6 +77,10 @@ module Kuby
 
       def spec
         environment.kubernetes
+      end
+
+      def generate_hash(data)
+        Digest::SHA1.hexdigest(data)
       end
     end
   end
