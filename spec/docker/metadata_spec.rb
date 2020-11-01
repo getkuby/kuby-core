@@ -49,7 +49,7 @@ describe Kuby::Docker::Metadata do
   describe '#image_hostname' do
     subject { metadata.image_hostname }
 
-    it { is_expected.to eq('www.docker.com') }
+    it { is_expected.to eq('index.docker.io') }
 
     context 'when the image URL contains an explicit host' do
       let(:docker_image_url) { 'registry.foo.com/foo/testapp' }
