@@ -1,3 +1,6 @@
+## 0.11.10
+* Fix spelling in error message.
+
 ## 0.11.9
 * Use correct Docker Hub registry URL (index.docker.io).
 
