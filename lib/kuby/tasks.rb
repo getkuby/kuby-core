@@ -66,7 +66,7 @@ module Kuby
           docker.cli.push(image_url, tag)
         end
       rescue Kuby::Docker::MissingTagError => e
-        msg = "#{e.message} Run rake kuby:build to build the"\
+        msg = "#{e.message} Run kuby build to build the "\
           'Docker image before running this task.'
 
         Kuby.logger.fatal(msg)

@@ -1,4 +1,5 @@
 # typed: true
+
 require 'fileutils'
 require 'securerandom'
 require 'yaml'
@@ -6,6 +7,8 @@ require 'yaml'
 module Kuby
   module Kubernetes
     class Deployer
+      extend T::Sig
+
       attr_reader :environment
       attr_accessor :logdev
 
@@ -93,7 +96,7 @@ module Kuby
         task.run!(verify_result: true, prune: false)
       ensure
         ENV['KUBECONFIG'] = old_kubeconfig
-        FileUtils.rm_rf(tmpdir)
+        FileUtils.rm_rf(T.must(tmpdir))
       end
 
       def restart_rails_deployment_if_necessary

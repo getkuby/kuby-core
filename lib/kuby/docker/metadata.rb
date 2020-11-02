@@ -8,7 +8,7 @@ module Kuby
       extend T::Sig
 
       DEFAULT_DISTRO = :debian
-      DEFAULT_REGISTRY_HOST = T.let('https://www.docker.com'.freeze, String)
+      DEFAULT_REGISTRY_HOST = T.let('https://index.docker.io'.freeze, String)
       DEFAULT_REGISTRY_SCHEME = T.let('https', String)
       LATEST_TAG = T.let('latest'.freeze, String)
 
