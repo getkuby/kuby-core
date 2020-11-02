@@ -20,10 +20,16 @@ elif [[ "$STAGE" == "integration" ]]; then
   cd kubyapp
   printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
   bundle exec rails g kuby
-  printf "Kuby.environment.docker.insert(:vendor, before: :bundler_phase) { |dockerfile| dockerfile.copy('vendor', 'vendor') }\n" >> kuby.rb
-  printf "Kuby.environment.docker.image_url('kubyapp')\n" >> kuby.rb
+  printf "Kuby.environment.docker.insert(:vendor, before: :bundler_phase) do |dockerfile|\n  dockerfile.copy('vendor', 'vendor')\nend\n" >> kuby.rb
+  printf "Kuby.environment.docker.image_url('localhost:5000/kubyapp')\n" >> kuby.rb
   printf "Kuby.environment.kubernetes.plugin(:rails_app).tls_enabled(false)\n" >> kuby.rb
+  echo "Using the following Kuby config:"
+  cat kuby.rb
   echo travis_fold:end:generate_app
+
+  echo travis_fold:start:start_registry
+  docker run -d -p 5000:5000 --name registry registry:2
+  echo travis_fold:end:start_registry
 
   echo travis_fold:start:build
   GLI_DEBUG=true bundle exec kuby -e production build
