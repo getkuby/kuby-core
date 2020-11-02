@@ -43,7 +43,7 @@ module Kuby
 
       hostname = docker.metadata.image_hostname
 
-      unless docker.cli.auths.include?(hostname)
+      if docker.credentials.username && !docker.cli.auths.include?(hostname)
         Kuby.logger.info("Attempting to log in to registry at #{hostname}")
 
         begin

@@ -40,7 +40,8 @@ module Kuby
 
       sig { returns(String) }
       def image_host
-        @image_host ||= "#{full_image_uri.scheme}://#{full_image_uri.host}"
+        uri = full_image_uri
+        @image_host ||= "#{uri.scheme}://#{uri.host}:#{uri.port}"
       end
 
       sig { returns(String) }
@@ -74,7 +75,7 @@ module Kuby
       def full_image_uri
         @full_image_uri ||= if image_url.include?('://')
           URI.parse(image_url)
-        elsif image_url =~ /\A[^.]+\.[^\/]+\//
+        elsif image_url =~ /\A[^.:]+[\.:][^\/]+\//
           URI.parse("#{DEFAULT_REGISTRY_SCHEME}://#{image_url}")
         else
           URI.parse("#{DEFAULT_REGISTRY_HOST}/#{image_url.sub(/\A[\/]+/, '')}")

@@ -1,3 +1,8 @@
+## 0.11.11
+* Add support for a Docker registry running on localhost.
+  - Correctly parse and handle URLs with specific ports.
+  - Only perform a Docker login if a username is provided.
+
 ## 0.11.10
 * Fix spelling in error message.
 
