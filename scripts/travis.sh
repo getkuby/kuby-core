@@ -22,6 +22,8 @@ elif [[ "$STAGE" == "integration" ]]; then
   bundle exec rails g kuby
   printf "Kuby.environment.docker.insert(:vendor, before: :bundler_phase) do |dockerfile|\n  dockerfile.copy('vendor', 'vendor')\nend\n" >> kuby.rb
   printf "Kuby.environment.docker.image_url('http://localhost:5000/kubyapp')\n" >> kuby.rb
+  printf "Kuby.environment.docker.credentials.username(nil)\n"
+  printf "Kuby.environment.docker.credentials.password(nil)\n"
   printf "Kuby.environment.kubernetes.plugin(:rails_app).tls_enabled(false)\n" >> kuby.rb
   echo "Using the following Kuby config:"
   cat kuby.rb
