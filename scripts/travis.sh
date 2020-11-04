@@ -37,6 +37,10 @@ elif [[ "$STAGE" == "integration" ]]; then
   GLI_DEBUG=true bundle exec kuby -e production build
   echo travis_fold:end:build
 
+  echo travis_fold:start:push
+  GLI_DEBUG=true bundle exec kuby -e production push
+  echo travis_fold:end:push
+
   echo travis_fold:start:deploy
   GLI_DEBUG=true bundle exec kuby -e production deploy
   echo travis_fold:end:deploy
