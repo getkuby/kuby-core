@@ -8,8 +8,6 @@ module Kuby
       extend T::Sig
 
       DEFAULT_DISTRO = :debian
-      DEFAULT_REGISTRY_HOST = T.let('https://index.docker.io'.freeze, String)
-      DEFAULT_REGISTRY_SCHEME = T.let('https', String)
       LATEST_TAG = T.let('latest'.freeze, String)
 
       sig { params(image_url: String).void }
@@ -28,7 +26,7 @@ module Kuby
         @image_hostname = T.let(@image_hostname, T.nilable(String))
         @image_repo = T.let(@image_repo, T.nilable(String))
         @distro = T.let(@distro, T.nilable(Symbol))
-        @full_image_uri = T.let(@full_image_uri, T.nilable(URI::Generic))
+        @full_image_uri = T.let(@full_image_uri, T.nilable(DockerURI))
         @default_image_url = T.let(@default_image_url, T.nilable(String))
         @default_tags = T.let(@default_tags, T.nilable(T::Array[String]))
       end
@@ -40,17 +38,12 @@ module Kuby
 
       sig { returns(String) }
       def image_host
-        @image_host ||= "#{full_image_uri.scheme}://#{full_image_uri.host}"
-      end
-
-      sig { returns(String) }
-      def image_hostname
-        @image_hostname ||= T.must(URI(image_host).host)
+        @image_host ||= full_image_uri.host
       end
 
       sig { returns(String) }
       def image_repo
-        @image_repo ||= T.must(full_image_uri.path).sub(/\A[\/]+/, '')
+        @image_repo ||= full_image_uri.path
       end
 
       sig { returns(T::Array[String]) }
@@ -70,15 +63,9 @@ module Kuby
 
       private
 
-      sig { returns(URI::Generic) }
+      sig { returns(DockerURI) }
       def full_image_uri
-        @full_image_uri ||= if image_url.include?('://')
-          URI.parse(image_url)
-        elsif image_url =~ /\A[^.]+\.[^\/]+\//
-          URI.parse("#{DEFAULT_REGISTRY_SCHEME}://#{image_url}")
-        else
-          URI.parse("#{DEFAULT_REGISTRY_HOST}/#{image_url.sub(/\A[\/]+/, '')}")
-        end
+        @full_image_uri ||= DockerURI.parse(image_url)
       end
 
       sig { returns(String) }
@@ -92,15 +79,6 @@ module Kuby
         @default_tags ||= [
           TimestampTag.new(Time.now).to_s, LATEST_TAG
         ]
-      end
-
-      sig { params(url: String).returns(URI::Generic) }
-      def parse_url(url)
-        uri = URI.parse(url)
-        return uri if uri.scheme
-
-        # force a scheme because URI.parse won't work properly without one
-        URI.parse("#{DEFAULT_REGISTRY_SCHEME}://#{url}")
       end
     end
   end
