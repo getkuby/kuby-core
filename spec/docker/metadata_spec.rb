@@ -19,18 +19,18 @@ describe Kuby::Docker::Metadata do
   describe '#image_host' do
     subject { metadata.image_host }
 
-    it { is_expected.to eq("#{described_class::DEFAULT_REGISTRY_HOST}:443") }
+    it { is_expected.to eq(Kuby::Docker::DockerURI::DEFAULT_REGISTRY_HOST) }
 
     context 'when the image URL contains an explicit host' do
       let(:docker_image_url) { 'registry.foo.com/foo/testapp' }
 
-      it { is_expected.to eq('https://registry.foo.com:443') }
+      it { is_expected.to eq('registry.foo.com') }
     end
 
-    context 'when the image URL contains an explicit host with scheme' do
+    context 'when the image URL contains an explicit host' do
       let(:docker_image_url) { 'http://registry.foo.com/foo/testapp' }
 
-      it { is_expected.to eq('http://registry.foo.com:80') }
+      it { is_expected.to eq('registry.foo.com') }
     end
   end
 
@@ -43,18 +43,6 @@ describe Kuby::Docker::Metadata do
       let(:docker_image_url) { 'registry.foo.com/foo/testapp' }
 
       it { is_expected.to eq('foo/testapp') }
-    end
-  end
-
-  describe '#image_hostname' do
-    subject { metadata.image_hostname }
-
-    it { is_expected.to eq('index.docker.io') }
-
-    context 'when the image URL contains an explicit host' do
-      let(:docker_image_url) { 'registry.foo.com/foo/testapp' }
-
-      it { is_expected.to eq('registry.foo.com') }
     end
   end
 

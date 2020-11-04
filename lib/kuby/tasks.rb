@@ -41,10 +41,10 @@ module Kuby
         fail 'Cannot push Docker images built for the development environment'
       end
 
-      hostname = docker.metadata.image_hostname
+      host = docker.metadata.image_host
 
-      if docker.credentials.username && !docker.cli.auths.include?(hostname)
-        Kuby.logger.info("Attempting to log in to registry at #{hostname}")
+      if docker.credentials.username && !docker.cli.auths.include?(host)
+        Kuby.logger.info("Attempting to log in to registry at #{host}")
 
         begin
           docker.cli.login(
@@ -53,7 +53,7 @@ module Kuby
             password: docker.credentials.password
           )
         rescue Kuby::Docker::LoginError => e
-          Kuby.logger.fatal("Couldn't log in to the registry at #{hostname}")
+          Kuby.logger.fatal("Couldn't log in to the registry at #{host}")
           Kuby.logger.fatal(e.message)
           return
         end
