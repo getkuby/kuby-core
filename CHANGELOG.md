@@ -1,3 +1,7 @@
+## 0.11.12
+* Revamp Docker URL parsing
+  - Docker URLs shouldn't have a scheme.
+
 ## 0.11.11
 * Add support for a Docker registry running on localhost.
   - Correctly parse and handle URLs with specific ports.
