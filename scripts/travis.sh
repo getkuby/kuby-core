@@ -17,9 +17,11 @@ elif [[ "$STAGE" == "integration" ]]; then
   cd ..
   rails _6.0.3.4_ new kubyapp -d mysql
   cp -R ./kuby-core/ ./kubyapp/vendor/kuby-core
-  cp ./kuby-core/scripts/kuby.rb ./kubyapp/
   cd kubyapp
   printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
+  printf "\ngem 'docker-remote, github: 'getkuby/docker-remote', branch: 'debug'\n" >> Gemfile
+  bundle exec rails g kuby
+  cp ../kuby-core/scripts/kuby.rb ./
   echo "Using the following Kuby config:"
   cat kuby.rb
   echo travis_fold:end:generate_app
