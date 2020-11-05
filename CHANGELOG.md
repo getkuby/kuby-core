@@ -1,3 +1,6 @@
+## 0.11.13
+* Include port in image host.
+
 ## 0.11.12
 * Revamp Docker URL parsing
   - Docker URLs shouldn't have a scheme.

@@ -38,7 +38,7 @@ module Kuby
 
       sig { returns(String) }
       def image_host
-        @image_host ||= full_image_uri.host
+        @image_host ||= "#{full_image_uri.host}:#{full_image_uri.port}"
       end
 
       sig { returns(String) }
