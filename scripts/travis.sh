@@ -17,14 +17,9 @@ elif [[ "$STAGE" == "integration" ]]; then
   cd ..
   rails _6.0.3.4_ new kubyapp -d mysql
   cp -R ./kuby-core/ ./kubyapp/vendor/kuby-core
+  cp ./kuby-core/scripts/kuby.rb ./kubyapp/
   cd kubyapp
   printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
-  bundle exec rails g kuby
-  printf "Kuby.environment.docker.insert(:vendor, before: :bundler_phase) do |dockerfile|\n  dockerfile.copy('vendor', 'vendor')\nend\n" >> kuby.rb
-  printf "Kuby.environment.docker.image_url('localhost:5000/kubyapp')\n" >> kuby.rb
-  printf "Kuby.environment.docker.credentials.username(nil)\n"
-  printf "Kuby.environment.docker.credentials.password(nil)\n"
-  printf "Kuby.environment.kubernetes.plugin(:rails_app).tls_enabled(false)\n" >> kuby.rb
   echo "Using the following Kuby config:"
   cat kuby.rb
   echo travis_fold:end:generate_app
