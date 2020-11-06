@@ -15,7 +15,7 @@ elif [[ "$STAGE" == "integration" ]]; then
   echo travis_fold:start:generate_app
   gem install rails -v 6.0.3.4
   cd ..
-  sudo apt-get install libsass libsass-dev
+  sudo apt-get install libsass-dev
   rails _6.0.3.4_ new kubyapp -d mysql
   cp -R ./kuby-core/ ./kubyapp/vendor/kuby-core
   cd kubyapp
