@@ -28,7 +28,7 @@ elif [[ "$STAGE" == "integration" ]]; then
   echo travis_fold:end:generate_app
 
   echo travis_fold:start:start_registry
-  docker run -d -p 0.0.0.0:5000:5000 --name registry registry:2
+  docker run -d -p 5000:5000 --name registry registry:2
   echo travis_fold:end:start_registry
 
   echo travis_fold:start:build
@@ -38,6 +38,10 @@ elif [[ "$STAGE" == "integration" ]]; then
   echo travis_fold:start:push
   GLI_DEBUG=true bundle exec kuby -e production push
   echo travis_fold:end:push
+
+  echo travis_fold:start:setup
+  GLI_DEBUG=true bundle exec kuby -e production setup
+  echo travis_fold:end:setup
 
   echo travis_fold:start:deploy
   GLI_DEBUG=true bundle exec kuby -e production deploy
