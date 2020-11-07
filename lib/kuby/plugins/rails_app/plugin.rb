@@ -380,11 +380,35 @@ module Kuby
                     init_container(:create_db) do
                       name "#{kube_spec.selector_app}-create-db"
                       command %w(bundle exec rake kuby:rails_app:db:create_unless_exists)
+
+                      env_from do
+                        config_map_ref do
+                          name kube_spec.config_map.metadata.name
+                        end
+                      end
+
+                      env_from do
+                        secret_ref do
+                          name kube_spec.app_secrets.metadata.name
+                        end
+                      end
                     end
 
                     init_container(:migrate_db) do
                       name "#{kube_spec.selector_app}-migrate-db"
                       command %w(bundle exec rake db:migrate)
+
+                      env_from do
+                        config_map_ref do
+                          name kube_spec.config_map.metadata.name
+                        end
+                      end
+
+                      env_from do
+                        secret_ref do
+                          name kube_spec.app_secrets.metadata.name
+                        end
+                      end
                     end
 
                     image_pull_secret do
