@@ -153,6 +153,7 @@ end
 
 # providers
 Kuby.register_provider(:docker_desktop, Kuby::Kubernetes::DockerDesktopProvider)
+Kuby.register_provider(:bare_metal, Kuby::Kubernetes::BareMetalProvider)
 
 # plugins
 Kuby.register_plugin(:rails_app, Kuby::Plugins::RailsApp::Plugin)
