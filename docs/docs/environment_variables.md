@@ -16,8 +16,10 @@ Kuby.define('my-app') do
   environment(:production) do
     plugin(:rails_app) do
       env do
-        add 'MY_ENV_VAR', ENV['MY_ENV_VAR']
-        add 'MY_STATIC_ENV_VAR', '123abc'
+        data do
+          add 'MY_ENV_VAR', ENV['MY_ENV_VAR']
+          add 'MY_STATIC_ENV_VAR', '123abc'
+        end
       end
     end
   end
