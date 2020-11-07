@@ -35,7 +35,7 @@ module Kuby
 
         def host
           # host is the same as the name thanks to k8s DNS
-          @host ||= database.metadata.name
+          @host ||= "#{database.metadata.name}.#{kubernetes.namespace.metadata.name}.svc.cluster.local"
         end
 
         def rewritten_configs
