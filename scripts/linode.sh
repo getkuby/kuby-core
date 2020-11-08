@@ -8,7 +8,7 @@ swapoff -a
 sudo apt-get update
 sudo apt-get install -y git curl autoconf bison build-essential \
   libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev \
-  libffi-dev libgdbm6 libgdbm-dev libdb-dev docker.io \
+  libffi-dev libgdbm6 libgdbm-dev libdb-dev jq docker.io \
   default-libmysqlclient-dev
 
 # set up asdf
@@ -31,7 +31,6 @@ deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
-# add hostpath storage class so assets etc work
 cat <<EOF > kubeadm-config.yaml
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
@@ -56,24 +55,24 @@ curl -Ns https://docs.projectcalico.org/manifests/tigera-operator.yaml | \
 kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
 
 # make hostpath storage class available
-echo <<EOF | kubectl apply -f -
+cat <<'EOF' | kubectl apply -f -
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
- namespace: kube-system
- name: hostpath
- annotations:
-   storageclass.beta.kubernetes.io/is-default-class: "true"
- labels:
-   addonmanager.kubernetes.io/mode: EnsureExists
+  namespace: kube-system
+  name: hostpath
+  annotations:
+    storageclass.beta.kubernetes.io/is-default-class: "true"
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
 provisioner: kubernetes.io/host-path
 EOF
 
-# allow pods to be scheduled on the master node
+# allow pods to be scheduled on the master node, i.e. the only node
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # generate rails app
-gem install rails -v 6.0.3.4
+gem install rails -v 6.0.3.4 --no-document
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get update && sudo apt-get install -y yarn
@@ -84,8 +83,7 @@ printf "\ngem 'docker-remote', github: 'getkuby/docker-remote', branch: 'debug'\
 printf "\ngem 'kuby-kube-db', github: 'getkuby/kuby-kube-db', branch: 'debug'\n" >> Gemfile
 bundle install
 bundle exec rails g kuby
-rm kuby.rb
-cat <<EOF | sudo tee kuby.rb
+cat <<EOF > kuby.rb
 Kuby.define('Kubyapp') do
   environment(:production) do
     docker do
@@ -104,18 +102,27 @@ Kuby.define('Kubyapp') do
           user 'kubyapp'
           password 'password'
         end
-
-        app_secrets do
-          data do
-            add 'KUBYAPP_DATABASE_PASSWORD', 'password'
-          end
-        end
       end
 
-      provider :docker_desktop
+      provider :bare_metal
     end
   end
 end
+EOF
+cat <<EOF > config/database.yml
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: root
+  password: password
+  host: localhost
+development:
+  <<: *default
+  database: kubyapp_development
+production:
+  <<: *default
+  database: kubyapp_production
 EOF
 
 # start docker registry
@@ -127,9 +134,13 @@ GLI_DEBUG=true bundle exec kuby -e production push
 
 # setup cluster
 GLI_DEBUG=true bundle exec kuby -e production setup
+# force nginx ingress to be a nodeport since we don't have any load balancers
+kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
 
 # deploy!
-GLI_DEBUG=true bundle exec kuby -e production deploy
+GLI_DEBUG=true bundle exec kuby -e production deploy || \
+  GLI_DEBUG=true bundle exec kuby -e production deploy
 
-# attempt to hit the app
-curl kubyapp-web:8080
+# get ingress IP from kubectl; attempt to hit the app
+ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)
+curl -vvv $ingress_ip:80 -H "Host: localhost" --fail
