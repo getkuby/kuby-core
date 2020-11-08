@@ -123,6 +123,7 @@ class HomeController < ApplicationController
   end
 end
 EOF
+mkdir app/views/home/
 touch app/views/home/index.html.erb
 echo travis_fold:end:generate_app
 
