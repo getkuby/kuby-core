@@ -77,6 +77,11 @@ Kuby.define('Kubyapp') do
         dockerfile.copy('vendor', 'vendor')
       end
 
+      insert :prebundler_phase, before: :bundler_phase do |dockerfile|
+        dockerfile.run('gem install prebundler')
+        dockerfile.copy('./.prebundle_config', './')
+      end
+
       bundler_phase.executable = 'prebundle'
 
       image_url 'localhost:5000/kubyapp'
