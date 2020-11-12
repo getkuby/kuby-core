@@ -127,7 +127,7 @@ class HomeController < ApplicationController
   end
 end
 EOF
-cat <<"EOF" > .prebundle_config
+cat <<EOF > .prebundle_config
 require 'aws-sdk'
 
 Prebundler.configure do |config|
