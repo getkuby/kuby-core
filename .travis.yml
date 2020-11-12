@@ -1,5 +1,6 @@
 sudo: required
 language: ruby
+cache: bundler
 script: scripts/travis.sh
 services:
   - docker

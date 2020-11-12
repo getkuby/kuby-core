@@ -66,7 +66,6 @@ cd kubyapp
 printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: 'kubeadm'\n" >> Gemfile
 printf "gem 'docker-remote', github: 'getkuby/docker-remote', branch: 'debug'\n" >> Gemfile
 printf "gem 'kuby-kube-db', github: 'getkuby/kuby-kube-db', branch: 'debug'\n" >> Gemfile
-printf "gem 'prebundler'\n" >> Gemfile
 bundle install
 bundle exec rails g kuby
 cat <<'EOF' > kuby.rb
