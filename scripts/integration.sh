@@ -28,10 +28,7 @@ sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
 sudo chown $(id -u):$(id -g) ~/.kube/config
 
 # start up the calico CNI
-# this sed hack is necessary because of https://github.com/tigera/operator/issues/992
-curl -Ns https://docs.projectcalico.org/manifests/tigera-operator.yaml | \
-  sed 's/v1.10.8/1.10.8/g' | \
-  kubectl create -f -
+kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
 kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
 # make hostpath storage class available
 cat <<'EOF' | kubectl apply -f -
@@ -67,17 +64,20 @@ cd ..
 rails _6.0.3.4_ new kubyapp -d mysql
 cd kubyapp
 printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: 'kubeadm'\n" >> Gemfile
-printf "\ngem 'docker-remote', github: 'getkuby/docker-remote', branch: 'debug'\n" >> Gemfile
-printf "\ngem 'kuby-kube-db', github: 'getkuby/kuby-kube-db', branch: 'debug'\n" >> Gemfile
+printf "gem 'docker-remote', github: 'getkuby/docker-remote', branch: 'debug'\n" >> Gemfile
+printf "gem 'kuby-kube-db', github: 'getkuby/kuby-kube-db', branch: 'debug'\n" >> Gemfile
+printf "gem 'prebundler'\n" >> Gemfile
 bundle install
 bundle exec rails g kuby
-cat <<EOF > kuby.rb
+cat <<'EOF' > kuby.rb
 Kuby.define('Kubyapp') do
   environment(:production) do
     docker do
       insert(:vendor, before: :bundler_phase) do |dockerfile|
         dockerfile.copy('vendor', 'vendor')
       end
+
+      bundler_phase.executable = 'prebundle'
 
       image_url 'localhost:5000/kubyapp'
     end
@@ -97,7 +97,7 @@ Kuby.define('Kubyapp') do
   end
 end
 EOF
-cat <<EOF > config/database.yml
+cat <<'EOF' > config/database.yml
 default: &default
   adapter: mysql2
   encoding: utf8mb4
@@ -112,15 +112,31 @@ production:
   <<: *default
   database: kubyapp_production
 EOF
-cat <<EOF > config/routes.rb
+cat <<'EOF' > config/routes.rb
 Rails.application.routes.draw do
   root to: 'home#index'
 end
 EOF
-cat <<EOF > app/controllers/home_controller.rb
+cat <<'EOF' > app/controllers/home_controller.rb
 class HomeController < ApplicationController
   def index
   end
+end
+EOF
+cat <<"EOF" > .prebundle_config
+require 'aws-sdk'
+
+Prebundler.configure do |config|
+  config.storage_backend = Prebundler::S3Backend.new(
+    client: Aws::S3::Client.new(
+      region: 'default',
+      credentials: Aws::Credentials.new('${PREBUNDLER_LINODE_ACCESS_KEY_ID}', '${PREBUNDLER_LINODE_SECRET_ACCESS_KEY}'),
+      endpoint: 'https://us-east-1.linodeobjects.com',
+      http_continue_timeout: 0
+    ),
+    bucket: 'kuby-prebundle',
+    region: 'us-east-1'
+  )
 end
 EOF
 mkdir app/views/home/
