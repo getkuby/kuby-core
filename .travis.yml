@@ -4,8 +4,8 @@ script: scripts/travis.sh
 services:
   - docker
 rvm:
-  - 2.5.8
-  # - 2.6.6
+  # - 2.5.8
+  - 2.6.6
   # - 2.7.2
 env:
   # - STAGE=test
