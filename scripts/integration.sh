@@ -155,5 +155,4 @@ curl -vvv $ingress_ip:80 \
   --connect-timeout 5 \
   --max-time 10 \
   --retry 5 \
-  --retry-max-time 40 \
-  --retry-all-errors
+  --retry-max-time 40
