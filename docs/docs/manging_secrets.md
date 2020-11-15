@@ -26,8 +26,10 @@ Kuby.define('my-app') do
   environment(:production) do
     plugin(:rails_app) do
       app_secrets do
-        add 'GMAIL_USERNAME', 'foo@bar.com'
-        add 'GMAIL_PASSWORD', '123abc'
+        data do
+          add 'GMAIL_USERNAME', 'foo@bar.com'
+          add 'GMAIL_PASSWORD', '123abc'
+        end
       end
     end
   end
@@ -41,8 +43,10 @@ Kuby.define('my-app') do
   environment(:production) do
     plugin(:rails_app) do
       app_secrets do
-        add 'GMAIL_USERNAME', ENV['GMAIL_USERNAME']
-        add 'GMAIL_PASSWORD', ENV['GMAIL_PASSWORD']
+        data do
+          add 'GMAIL_USERNAME', ENV['GMAIL_USERNAME']
+          add 'GMAIL_PASSWORD', ENV['GMAIL_PASSWORD']
+        end
       end
     end
   end
