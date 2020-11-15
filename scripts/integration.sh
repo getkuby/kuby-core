@@ -75,13 +75,6 @@ Kuby.define('Kubyapp') do
         dockerfile.copy('vendor', 'vendor')
       end
 
-      insert :prebundler_phase, before: :bundler_phase do |dockerfile|
-        dockerfile.run('gem install prebundler')
-        dockerfile.copy('./.prebundle_config', './')
-      end
-
-      bundler_phase.executable = 'prebundle'
-
       image_url 'localhost:5000/kubyapp'
     end
 
@@ -172,4 +165,11 @@ echo travis_fold:end:deploy
 
 # get ingress IP from kubectl; attempt to hit the app
 ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)
-curl -vvv $ingress_ip:80 -H "Host: localhost" --fail
+curl -vvv $ingress_ip:80 \
+  -H "Host: localhost"\
+  --fail \
+  --connect-timeout 5 \
+  --max-time 10 \
+  --retry 5 \
+  --retry-max-time 40 \
+  --retry-all-errors
