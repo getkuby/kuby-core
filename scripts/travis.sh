@@ -3,7 +3,7 @@
 if [[ "$STAGE" == 'test' ]]; then
   bundle exec rspec
 elif [[ "$STAGE" == 'typecheck' ]]; then
-  srb tc
+  bundle exec srb tc
 elif [[ "$STAGE" == "integration" ]]; then
   source scripts/integration.sh
 fi
