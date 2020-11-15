@@ -119,22 +119,6 @@ class HomeController < ApplicationController
   end
 end
 EOF
-cat <<EOF > .prebundle_config
-require 'aws-sdk'
-
-Prebundler.configure do |config|
-  config.storage_backend = Prebundler::S3Backend.new(
-    client: Aws::S3::Client.new(
-      region: 'default',
-      credentials: Aws::Credentials.new('${PREBUNDLER_LINODE_ACCESS_KEY_ID}', '${PREBUNDLER_LINODE_SECRET_ACCESS_KEY}'),
-      endpoint: 'https://us-east-1.linodeobjects.com',
-      http_continue_timeout: 0
-    ),
-    bucket: 'kuby-prebundle',
-    region: 'us-east-1'
-  )
-end
-EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
 echo travis_fold:end:generate_app

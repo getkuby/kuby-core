@@ -12,9 +12,6 @@ module Kuby
       )
 
       sig { returns(T.nilable(String)) }
-      attr_accessor :executable
-
-      sig { returns(T.nilable(String)) }
       attr_reader :version
 
       sig { params(version: String).void }
@@ -36,7 +33,6 @@ module Kuby
       def initialize(environment)
         super
 
-        @executable = T.let(@executable, 'bundle')
         @version = T.let(@version, T.nilable(String))
         @gemfile = T.let(@gemfile, T.nilable(String))
         @without = T.let(@without, T.nilable(T::Array[String]))
@@ -64,7 +60,7 @@ module Kuby
         end
 
         dockerfile.run(
-          executable, 'install',
+          'bundle', 'install',
           '--jobs', '$(nproc)',
           '--retry', '3',
           '--gemfile', gf
