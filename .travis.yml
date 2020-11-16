@@ -14,11 +14,11 @@ jobs:
     env: STAGE=test
 
   - rvm: 2.5
-    env: STAGE=typecheck
+    env: STAGE=typecheck BUNDLE_PATH=/bundle
   - rvm: 2.6
-    env: STAGE=typecheck
+    env: STAGE=typecheck BUNDLE_PATH=/bundle
   - rvm: 2.7
-    env: STAGE=typecheck
+    env: STAGE=typecheck BUNDLE_PATH=/bundle
 
   - rvm: 2.7
     env: STAGE=integration
