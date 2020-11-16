@@ -1,6 +1,5 @@
 sudo: required
 language: ruby
-cache: bundler
 script: scripts/travis.sh
 services:
   - docker
@@ -14,11 +13,11 @@ jobs:
     env: STAGE=test
 
   - rvm: 2.5
-    env: STAGE=typecheck BUNDLE_PATH=/bundle
+    env: STAGE=typecheck
   - rvm: 2.6
-    env: STAGE=typecheck BUNDLE_PATH=/bundle
+    env: STAGE=typecheck
   - rvm: 2.7
-    env: STAGE=typecheck BUNDLE_PATH=/bundle
+    env: STAGE=typecheck
 
   - rvm: 2.7
     env: STAGE=integration
