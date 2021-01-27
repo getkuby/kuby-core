@@ -42,6 +42,11 @@ module Kuby
       end
 
       sig { returns(String) }
+      def image_hostname
+        @image_hostname ||= full_image_uri.host
+      end
+
+      sig { returns(String) }
       def image_repo
         @image_repo ||= full_image_uri.path
       end
