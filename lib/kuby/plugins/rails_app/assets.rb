@@ -301,11 +301,13 @@ module Kuby
 
         def dockerfile
           @dockerfile ||= Docker::Dockerfile.new.tap do |df|
-            cur_tag = docker.tag
+            require 'pry-byebug'
+            binding.pry
+            cur_tag = docker.tags.latest_timestamp_tag.to_s
             app_name = environment.app_name.downcase
 
             tags = begin
-              [docker.previous_tag(cur_tag), cur_tag]
+              [docker.tags.previous_timestamp_tag(cur_tag).to_s, cur_tag]
             rescue MissingTagError
               [cur_tag]
             end

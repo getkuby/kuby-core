@@ -28,13 +28,15 @@ module Kuby
         build_args['RAILS_MASTER_KEY'] = ENV['RAILS_MASTER_KEY']
       end
 
-      Kuby.logger.info("Building main dockerfile")
-      docker.cli.build(
-        docker.to_image, build_args: build_args
-      )
+      docker.to_image.tap do |image|
+        Kuby.logger.info("Building #{image.image_url} with tags #{image.tags.join(', ')}")
+        docker.cli.build(
+          docker.to_image, build_args: build_args
+        )
+      end
 
-      Kuby.logger.info("Building plugin dockerfiles")
       kubernetes.docker_images.each do |image|
+        Kuby.logger.info("Building #{image.image_url} with tags #{image.tags.join(', ')}")
         docker.cli.build(image)
       end
     end
