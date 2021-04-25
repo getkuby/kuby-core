@@ -10,7 +10,8 @@ module Kuby
         [:nodejs, '12.14.1'],
         [:yarn, '1.21.1'],
         [:c_toolchain, nil],
-        [:tzdata, nil]
+        [:tzdata, nil],
+        [:git, nil]
       ].freeze, T::Array[[Symbol, T.nilable(String)]])
 
       sig { returns(Layer) }

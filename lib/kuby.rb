@@ -173,3 +173,5 @@ Kuby.register_package(:c_toolchain,
   debian: 'build-essential',
   alpine: 'build-base'
 )
+
+Kuby.register_package(:git, 'git')
