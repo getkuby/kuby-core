@@ -7,9 +7,6 @@ module Kuby
 
       DEFAULT_WORKING_DIR = T.let('/usr/src/app'.freeze, String)
 
-      sig { returns(T.nilable(String)) }
-      attr_reader :base_image
-
       sig { params(base_image: String).void }
       attr_writer :base_image
 
@@ -36,11 +33,16 @@ module Kuby
 
       sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
-        dockerfile.from(base_image || default_base_image)
+        dockerfile.from(base_image)
         dockerfile.workdir(working_dir || DEFAULT_WORKING_DIR)
         dockerfile.env("RAILS_ENV=#{rails_env || Kuby.env}")
         dockerfile.env("KUBY_ENV=#{Kuby.env}")
         dockerfile.arg('RAILS_MASTER_KEY')
+      end
+
+      sig { returns(String) }
+      def base_image
+        @base_image || default_base_image
       end
 
       private

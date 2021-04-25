@@ -133,10 +133,14 @@ module Kuby
       end
 
       sig { returns(Dockerfile) }
-      def to_dockerfile
-        Dockerfile.new.tap do |df|
+      def to_image
+        dockerfile = Dockerfile.new.tap do |df|
           layer_stack.each { |layer| layer.apply_to(df) }
         end
+
+        Docker::Image.new(
+          dockerfile, metadata.image_url, metadata.tags
+        )
       end
 
       sig { returns(SetupPhase) }

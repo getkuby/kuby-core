@@ -53,19 +53,11 @@ module Kuby
         config.fetch('auths', {}).keys
       end
 
-      sig {
-        params(
-          dockerfile: Dockerfile,
-          image_url: String,
-          tags: T::Array[String],
-          build_args: T::Hash[T.any(Symbol, String), String]
-        )
-        .void
-      }
-      def build(dockerfile:, image_url:, tags:, build_args: {})
+      sig { params(image: Image, build_args: T::Hash[T.any(Symbol, String), String]).void }
+      def build(image, build_args: {})
         cmd = [
           executable, 'build',
-          *tags.flat_map { |tag| ['-t', "#{image_url}:#{tag}"] },
+          *image.tags.flat_map { |tag| ['-t', "#{image.image_url}:#{tag}"] },
           *build_args.flat_map do |arg, val|
             ['--build-arg', Shellwords.shellescape("#{arg}=#{val}")]
           end,
@@ -73,7 +65,7 @@ module Kuby
         ]
 
         open3_w(cmd) do |stdin, _wait_threads|
-          stdin.puts(dockerfile.to_s)
+          stdin.puts(image.dockerfile.to_s)
         end
 
         unless T.must(last_status).success?

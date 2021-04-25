@@ -15,6 +15,7 @@ module Kuby
     autoload :Distro,         'kuby/docker/distro'
     autoload :Dockerfile,     'kuby/docker/dockerfile'
     autoload :DockerURI,      'kuby/docker/docker_uri'
+    autoload :Image,          'kuby/docker/image'
     autoload :InlineLayer,    'kuby/docker/inline_layer'
     autoload :Layer,          'kuby/docker/layer'
     autoload :LayerStack,     'kuby/docker/layer_stack'

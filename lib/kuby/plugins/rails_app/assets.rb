@@ -47,38 +47,6 @@ module Kuby
           end
         end
 
-        def configure_deployment(deployment, docker_image)
-          spec = self
-
-          deployment.spec.template.spec do
-            init_container(:copy_assets) do
-              name "#{spec.selector_app}-copy-assets"
-              command %w(bundle exec rake kuby:rails_app:assets:copy)
-              image docker_image
-
-              volume_mount do
-                name 'assets'
-                mount_path RAILS_MOUNT_PATH
-              end
-            end
-
-            container(:web) do
-              volume_mount do
-                name 'assets'
-                mount_path NGINX_MOUNT_PATH
-              end
-            end
-
-            volume do
-              name 'assets'
-
-              persistent_volume_claim do
-                claim_name spec.volume_claim.metadata.name
-              end
-            end
-          end
-        end
-
         def copy_task
           @copy_task ||= AssetCopyTask.new(
             from: asset_path, to: RAILS_MOUNT_PATH
@@ -238,7 +206,7 @@ module Kuby
                   container(:nginx) do
                     name "#{kube_spec.selector_app}-#{kube_spec.role}"
                     image_pull_policy 'IfNotPresent'
-                    image NGINX_IMAGE
+                    image "#{kube_spec.docker.metadata.image_url}:#{kube_spec.kubernetes.tag}"
 
                     port do
                       container_port NGINX_PORT
@@ -250,11 +218,6 @@ module Kuby
                       name 'nginx-config'
                       mount_path '/etc/nginx/nginx.conf'
                       sub_path 'nginx.conf'
-                    end
-
-                    volume_mount do
-                      name 'assets'
-                      mount_path NGINX_MOUNT_PATH
                     end
 
                     readiness_probe do
@@ -280,14 +243,6 @@ module Kuby
                     end
                   end
 
-                  volume do
-                    name 'assets'
-
-                    persistent_volume_claim do
-                      claim_name kube_spec.volume_claim.metadata.name
-                    end
-                  end
-
                   restart_policy 'Always'
                   service_account_name kube_spec.service_account.metadata.name
                 end
@@ -299,36 +254,17 @@ module Kuby
           @deployment
         end
 
-        def volume_claim
-          spec = self
-
-          @volume_claim ||= KubeDSL.persistent_volume_claim do
-            metadata do
-              name "#{spec.selector_app}-#{spec.role}"
-              namespace spec.namespace.metadata.name
-            end
-
-            spec do
-              access_modes ['ReadWriteOnce']
-              storage_class_name spec.environment.kubernetes.provider.storage_class_name
-
-              resources do
-                requests do
-                  add :storage, '10Gi'
-                end
-              end
-            end
-          end
-        end
-
         def resources
           @resources ||= [
             service,
             service_account,
             nginx_config,
-            deployment,
-            volume_claim
+            deployment
           ]
+        end
+
+        def docker_images
+          @docker_images ||= [docker_spec]
         end
 
         def namespace
@@ -341,6 +277,58 @@ module Kuby
 
         def role
           ROLE
+        end
+
+        def docker
+          environment.docker
+        end
+
+        def kubernetes
+          environment.kubernetes
+        end
+
+        def docker_images
+          @docker_images ||= [
+            Docker::Image.new(
+              dockerfile,
+              docker.metadata.image_url,
+              docker.metadata.tags.map { |t| "#{t}-assets" }
+            )
+          ]
+        end
+
+        private
+
+        def dockerfile
+          @dockerfile ||= Docker::Dockerfile.new.tap do |df|
+            cur_tag = docker.tag
+            app_name = environment.app_name.downcase
+
+            tags = begin
+              [docker.previous_tag(cur_tag), cur_tag]
+            rescue MissingTagError
+              [cur_tag]
+            end
+
+            # this can handle more than 2 tags by virtue of using each_cons :)
+            tags.each_cons(2) do |prev_tag, tag|
+              prev_image_name = "#{app_name}-#{prev_tag}"
+              df.from("#{docker.metadata.image_url}:#{prev_tag}", as: prev_image_name)
+              df.run("mkdir -p #{RAILS_MOUNT_PATH}")
+              df.run("bundle exec rake kuby:rails_app:assets:copy")
+
+              if tag
+                image_name = "#{app_name}-#{tag}"
+                df.from("#{docker.metadata.image_url}:#{tag}", as: image_name)
+                df.copy("--from=#{prev_image_name} #{RAILS_MOUNT_PATH}", RAILS_MOUNT_PATH)
+              end
+
+              df.run("bundle exec rake kuby:rails_app:assets:copy")
+            end
+
+            df.from(NGINX_IMAGE)
+            df.copy("--from=#{"#{app_name}-#{tags[-1]}"} #{RAILS_MOUNT_PATH}", NGINX_MOUNT_PATH)
+          end
         end
       end
     end

@@ -28,12 +28,13 @@ module Kuby
         build_args['RAILS_MASTER_KEY'] = ENV['RAILS_MASTER_KEY']
       end
 
-      docker.cli.build(
-        dockerfile: docker.to_dockerfile,
-        image_url:  docker.metadata.image_url,
-        tags:       docker.metadata.tags,
-        build_args: build_args
-      )
+      # docker.cli.build(
+      #   docker.to_image, build_args: build_args
+      # )
+
+      kubernetes.docker_images.each do |image|
+        docker.cli.build(image)
+      end
     end
 
     def push

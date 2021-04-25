@@ -86,7 +86,6 @@ module Kuby
 
           if assets = environment.kubernetes.plugin(:rails_assets)
             assets.configure_ingress(ingress, hostname)
-            assets.configure_deployment(deployment, image_with_tag)
           end
 
           spec = self

@@ -8,10 +8,6 @@ module Kuby
       sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
         dockerfile.run(
-          'bundle', 'exec', 'rake', 'webpacker:install'
-        )
-
-        dockerfile.run(
           'bundle', 'exec', 'rake', 'assets:precompile'
         )
       end

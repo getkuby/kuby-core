@@ -172,6 +172,10 @@ module Kuby
         ].compact)
       end
 
+      def docker_images
+        @docker_images ||= @plugins.flat_map { |_, plugin| plugin.docker_images }
+      end
+
       def selector_app
         @selector_app ||= environment.app_name.downcase
       end

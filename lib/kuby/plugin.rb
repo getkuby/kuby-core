@@ -21,8 +21,8 @@ module Kuby
       []
     end
 
-    # additional dockerfiles that should be built and pushed
-    def dockerfiles
+    # additional docker images that should be built and pushed
+    def docker_images
       []
     end
 
