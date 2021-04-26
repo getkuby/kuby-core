@@ -132,15 +132,17 @@ module Kuby
         @credentials
       end
 
-      sig { returns(Dockerfile) }
+      sig { returns(Docker::Image) }
       def to_image
-        dockerfile = Dockerfile.new.tap do |df|
-          layer_stack.each { |layer| layer.apply_to(df) }
-        end
+        @image ||= begin
+          dockerfile = Dockerfile.new.tap do |df|
+            layer_stack.each { |layer| layer.apply_to(df) }
+          end
 
-        Docker::Image.new(
-          dockerfile, metadata.image_url, metadata.tags
-        )
+          Docker::TimestampedImage.new(
+            dockerfile, metadata.image_url, credentials
+          )
+        end
       end
 
       sig { returns(SetupPhase) }

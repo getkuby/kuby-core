@@ -8,33 +8,32 @@ module Kuby
       sig { returns CLI }
       attr_reader :cli
 
-      sig { returns(Metadata) }
-      attr_reader :metadata
+      sig { returns(String) }
+      attr_reader :image_url
 
       sig {
         params(
           cli: CLI,
-          metadata: Metadata
+          image_url: String
         )
         .void
       }
-      def initialize(cli, metadata)
+      def initialize(cli, image_url)
         @cli = cli
-        @metadata = metadata
-
+        @image_url = image_url
         @latest_timestamp_tag = T.let(@latest_timestamp_tag, T.nilable(TimestampTag))
       end
 
       sig { returns(T::Array[String]) }
       def tags
-        images = cli.images(metadata.image_url)
+        images = cli.images(image_url)
         images.map { |image| T.must(image[:tag]) }
       end
 
       sig { returns(T::Array[String]) }
       def latest_tags
         # find "latest" tag
-        images = cli.images(metadata.image_url)
+        images = cli.images(image_url)
         latest = images.find { |image| image[:tag] == Tags::LATEST }
 
         unless latest

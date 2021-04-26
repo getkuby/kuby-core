@@ -8,19 +8,19 @@ module Kuby
       sig { returns(::Docker::Remote::Client) }
       attr_reader :remote_client
 
-      sig { returns(Metadata) }
-      attr_reader :metadata
+      sig { returns(String) }
+      attr_reader :image_url
 
       sig {
         params(
           remote_client: ::Docker::Remote::Client,
-          metadata: Metadata
+          image_url: String
         )
         .void
       }
-      def initialize(remote_client, metadata)
+      def initialize(remote_client, image_url)
         @remote_client = remote_client
-        @metadata = metadata
+        @image_url = image_url
       end
 
       sig { returns(T::Array[String]) }

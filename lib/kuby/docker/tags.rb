@@ -13,21 +13,21 @@ module Kuby
       sig { returns(::Docker::Remote::Client) }
       attr_reader :remote_client
 
-      sig { returns Metadata }
-      attr_reader :metadata
+      sig { returns(String) }
+      attr_reader :image_url
 
       sig {
         params(
           cli: CLI,
           remote_client: ::Docker::Remote::Client,
-          metadata: Metadata
+          image_url: String
         )
         .void
       }
-      def initialize(cli, remote_client, metadata)
+      def initialize(cli, remote_client, image_url)
         @cli = cli
         @remote_client = remote_client
-        @metadata = metadata
+        @image_url = image_url
 
         @local = T.let(@local, T.nilable(LocalTags))
         @remote = T.let(@remote, T.nilable(RemoteTags))
@@ -47,8 +47,8 @@ module Kuby
       sig {
         params(current_tag: String).returns(T.nilable(TimestampTag))
       }
-      def previous_timestamp_tag(current_tag)
-        current_tag = TimestampTag.try_parse(current_tag)
+      def previous_timestamp_tag(current_tag = nil)
+        current_tag = TimestampTag.try_parse(current_tag || latest_timestamp_tag)
         return nil unless current_tag
 
         all_tags = timestamp_tags.sort
@@ -63,14 +63,14 @@ module Kuby
         all_tags[idx - 1]
       end
 
-      sig { returns(T::Array[TimestampTag]) }
-      def timestamp_tags
-        (local.timestamp_tags + remote.timestamp_tags).uniq
-      end
-
       sig { returns(T.nilable(TimestampTag)) }
       def latest_timestamp_tag
         @latest_timestamp_tag ||= timestamp_tags.sort.last
+      end
+
+      sig { returns(T::Array[TimestampTag]) }
+      def timestamp_tags
+        (local.timestamp_tags + remote.timestamp_tags).uniq
       end
 
       sig { returns(T.self_type) }
@@ -80,12 +80,12 @@ module Kuby
 
       sig { returns(LocalTags) }
       def local
-        @local ||= LocalTags.new(cli, metadata)
+        @local ||= LocalTags.new(cli, image_url)
       end
 
       sig { returns(RemoteTags) }
       def remote
-        @remote ||= RemoteTags.new(remote_client, metadata)
+        @remote ||= RemoteTags.new(remote_client, image_url)
       end
     end
   end

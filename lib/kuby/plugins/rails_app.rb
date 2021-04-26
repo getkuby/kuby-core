@@ -2,14 +2,15 @@
 module Kuby
   module Plugins
     module RailsApp
-      autoload :AssetCopyTask,   'kuby/plugins/rails_app/asset_copy_task'
-      autoload :Assets,          'kuby/plugins/rails_app/assets'
-      autoload :Database,        'kuby/plugins/rails_app/database'
-      autoload :MySQL,           'kuby/plugins/rails_app/mysql'
-      autoload :Plugin,          'kuby/plugins/rails_app/plugin'
-      autoload :Postgres,        'kuby/plugins/rails_app/postgres'
-      autoload :RewriteDbConfig, 'kuby/plugins/rails_app/rewrite_db_config'
-      autoload :Sqlite,          'kuby/plugins/rails_app/sqlite'
+      autoload :AssetCopyTask,          'kuby/plugins/rails_app/asset_copy_task'
+      autoload :Assets,                 'kuby/plugins/rails_app/assets'
+      autoload :Database,               'kuby/plugins/rails_app/database'
+      autoload :MySQL,                  'kuby/plugins/rails_app/mysql'
+      autoload :Plugin,                 'kuby/plugins/rails_app/plugin'
+      autoload :Postgres,               'kuby/plugins/rails_app/postgres'
+      autoload :RewriteDbConfig,        'kuby/plugins/rails_app/rewrite_db_config'
+      autoload :Sqlite,                 'kuby/plugins/rails_app/sqlite'
+      autoload :TimestampedAssetsImage, 'kuby/plugins/rails_app/timestamped_assets_image'
     end
   end
 end

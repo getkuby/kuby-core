@@ -288,12 +288,10 @@ module Kuby
         end
 
         def docker_images
+          require 'pry-byebug'
+          binding.pry
           @docker_images ||= [
-            Docker::Image.new(
-              dockerfile,
-              docker.metadata.image_url,
-              docker.metadata.tags.map { |t| "#{t}-assets" }
-            )
+            RailsApp::TimestampedAssetsImage.new(docker.to_image, dockerfile)
           ]
         end
 
@@ -301,8 +299,6 @@ module Kuby
 
         def dockerfile
           @dockerfile ||= Docker::Dockerfile.new.tap do |df|
-            require 'pry-byebug'
-            binding.pry
             cur_tag = docker.tags.latest_timestamp_tag.to_s
             app_name = environment.app_name.downcase
 
