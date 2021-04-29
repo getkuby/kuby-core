@@ -288,22 +288,21 @@ module Kuby
         end
 
         def docker_images
-          require 'pry-byebug'
-          binding.pry
           @docker_images ||= [
-            RailsApp::TimestampedAssetsImage.new(docker.to_image, dockerfile)
+            RailsApp::TimestampedAssetsImage.new(docker.to_image, -> { dockerfile })
           ]
         end
 
         private
 
         def dockerfile
-          @dockerfile ||= Docker::Dockerfile.new.tap do |df|
-            cur_tag = docker.tags.latest_timestamp_tag.to_s
+          Docker::Dockerfile.new.tap do |df|
+            base_image = docker.to_image.current_version
+            cur_tag = base_image.main_tag
             app_name = environment.app_name.downcase
 
             tags = begin
-              [docker.tags.previous_timestamp_tag(cur_tag).to_s, cur_tag]
+              [base_image.previous_timestamp_tag(cur_tag).to_s, cur_tag]
             rescue MissingTagError
               [cur_tag]
             end
@@ -311,13 +310,13 @@ module Kuby
             # this can handle more than 2 tags by virtue of using each_cons :)
             tags.each_cons(2) do |prev_tag, tag|
               prev_image_name = "#{app_name}-#{prev_tag}"
-              df.from("#{docker.metadata.image_url}:#{prev_tag}", as: prev_image_name)
+              df.from("#{base_image.image_url}:#{prev_tag}", as: prev_image_name)
               df.run("mkdir -p #{RAILS_MOUNT_PATH}")
               df.run("bundle exec rake kuby:rails_app:assets:copy")
 
               if tag
                 image_name = "#{app_name}-#{tag}"
-                df.from("#{docker.metadata.image_url}:#{tag}", as: image_name)
+                df.from("#{base_image.image_url}:#{tag}", as: image_name)
                 df.copy("--from=#{prev_image_name} #{RAILS_MOUNT_PATH}", RAILS_MOUNT_PATH)
               end
 

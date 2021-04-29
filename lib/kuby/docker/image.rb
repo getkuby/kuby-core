@@ -1,7 +1,7 @@
 module Kuby
   module Docker
     class Image
-      attr_reader :dockerfile, :image_url, :credentials, :tags
+      attr_reader :image_url, :credentials, :main_tag, :alias_tags
 
       def initialize(dockerfile, image_url, credentials, main_tag = nil, alias_tags = [])
         @dockerfile = dockerfile
@@ -23,6 +23,10 @@ module Kuby
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
 
+      def dockerfile
+        @dockerfile.respond_to?(:call) ? @dockerfile.call : @dockerfile
+      end
+
       def image_host
         @image_host ||= "#{image_uri.host}:#{image_uri.port}"
       end
@@ -39,7 +43,19 @@ module Kuby
         @full_image_uri ||= DockerURI.parse(image_url)
       end
 
+      def tags
+        [main_tag, *alias_tags]
+      end
+
+      def build(*)
+        raise NotImplementedError, 'please use a Docker::Image subclass'
+      end
+
       private
+
+      def docker_cli
+        @docker_cli ||= Docker::CLI.new
+      end
 
       def duplicate_with_tags(main_tag, alias_tags)
         self.class.new(dockerfile, image_url, credentials, main_tag, alias_tags)

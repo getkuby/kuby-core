@@ -10,9 +10,9 @@ module Kuby
         end
 
         def new_version
-          @new_version ||= duplicate_with_annotated_tags(
-            base_image.new_version
-          )
+          # Asset images track the base image, so return the current version
+          # here. There can be no asset image without a base image.
+          current_version
         end
 
         def current_version
@@ -25,6 +25,10 @@ module Kuby
           @previous_version ||= duplicate_with_annotated_tags(
             base_image.previous_version
           )
+        end
+
+        def build(build_args = {})
+          docker_cli.build(current_version, build_args)
         end
 
         private

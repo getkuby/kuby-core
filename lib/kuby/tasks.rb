@@ -1,6 +1,8 @@
 # typed: false
 require 'rouge'
 
+require 'pry-byebug'
+
 module Kuby
   class Tasks
     attr_reader :environment
@@ -29,16 +31,10 @@ module Kuby
       end
 
       docker.to_image.tap do |image|
-        Kuby.logger.info("Building #{image.image_url} with tags #{image.tags.join(', ')}")
-        docker.cli.build(
-          docker.to_image, build_args: build_args
-        )
+        image.build(build_args)
       end
 
-      kubernetes.docker_images.each do |image|
-        Kuby.logger.info("Building #{image.image_url} with tags #{image.tags.join(', ')}")
-        docker.cli.build(image)
-      end
+      kubernetes.docker_images.each(&:build)
     end
 
     def push
