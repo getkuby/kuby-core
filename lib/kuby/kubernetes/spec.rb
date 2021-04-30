@@ -152,10 +152,10 @@ module Kuby
             end
 
             docker_config do
-              registry_host spec.docker.metadata.image_hostname
-              username spec.docker.credentials.username
-              password spec.docker.credentials.password
-              email spec.docker.credentials.email
+              registry_host spec.docker.image.image_hostname
+              username spec.docker.image.credentials.username
+              password spec.docker.image.credentials.password
+              email spec.docker.image.credentials.email
             end
           end
 
