@@ -297,7 +297,7 @@ module Kuby
 
         def dockerfile
           Docker::Dockerfile.new.tap do |df|
-            base_image = docker.to_image.current_version
+            base_image = docker.image.current_version
             cur_tag = base_image.main_tag
             app_name = environment.app_name.downcase
 
