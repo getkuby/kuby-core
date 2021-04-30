@@ -47,6 +47,10 @@ module Kuby
         @new_version = nil
       end
 
+      def push(tag)
+        docker_cli.push(image_url, tag)
+      end
+
       private
 
       def remote_client

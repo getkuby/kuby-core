@@ -51,11 +51,15 @@ module Kuby
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
 
-      private
+      def push(*)
+        raise NotImplementedError, 'please use a Docker::Image subclass'
+      end
 
       def docker_cli
         @docker_cli ||= Docker::CLI.new
       end
+
+      private
 
       def duplicate_with_tags(main_tag, alias_tags)
         self.class.new(dockerfile, image_url, credentials, main_tag, alias_tags)

@@ -24,17 +24,9 @@ module Kuby
     end
 
     def build
-      build_args = {}
-
-      unless ENV.fetch('RAILS_MASTER_KEY', '').empty?
-        build_args['RAILS_MASTER_KEY'] = ENV['RAILS_MASTER_KEY']
+      kubernetes.docker_images.each do |image|
+        image.build
       end
-
-      docker.to_image.tap do |image|
-        image.build(build_args)
-      end
-
-      kubernetes.docker_images.each(&:build)
     end
 
     def push
@@ -42,30 +34,30 @@ module Kuby
         fail 'Cannot push Docker images built for the development environment'
       end
 
-      host = docker.metadata.image_host
+      kubernetes.docker_images.each do |image|
+        push_image(image)
+      end
+    end
 
-      if docker.credentials.username && !docker.cli.auths.include?(host)
-        Kuby.logger.info("Attempting to log in to registry at #{host}")
+    def push_image(image)
+      if image.credentials.username && !image.docker_cli.auths.include?(image.image_host)
+        Kuby.logger.info("Attempting to log in to registry at #{image.image_host}")
 
         begin
-          docker.cli.login(
-            url: docker.metadata.image_host,
-            username: docker.credentials.username,
-            password: docker.credentials.password
+          image.docker_cli.login(
+            url: image.image_host,
+            username: image.credentials.username,
+            password: image.credentials.password
           )
         rescue Kuby::Docker::LoginError => e
-          Kuby.logger.fatal("Couldn't log in to the registry at #{host}")
+          Kuby.logger.fatal("Couldn't log in to the registry at #{image.image_host}")
           Kuby.logger.fatal(e.message)
           return
         end
       end
 
-      image_url = docker.metadata.image_url
-
       begin
-        docker.tags.local.latest_tags.each do |tag|
-          docker.cli.push(image_url, tag)
-        end
+        image.tags.each { |tag| image.push(tag) }
       rescue Kuby::Docker::MissingTagError => e
         msg = "#{e.message} Run kuby build to build the "\
           'Docker image before running this task.'

@@ -69,11 +69,6 @@ module Kuby
           raise MissingPackageError, "package '#{package_name}' hasn't been registered"
         end
       end
-
-      sig { returns(Metadata) }
-      def metadata
-        environment.docker.metadata
-      end
     end
   end
 end

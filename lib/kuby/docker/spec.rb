@@ -7,8 +7,13 @@ module Kuby
     class Spec
       extend T::Sig
 
+      DEFAULT_DISTRO = :debian
+
       sig { returns(Environment) }
       attr_reader :environment
+
+      sig { returns(String) }
+      attr_reader :image_url_str
 
       sig { params(environment: Environment).void }
       def initialize(environment)
@@ -22,13 +27,15 @@ module Kuby
         @copy_phase = T.let(@copy_phase, T.nilable(CopyPhase))
         @assets_phase = T.let(@assets_phase, T.nilable(AssetsPhase))
         @webserver_phase = T.let(@webserver_phase, T.nilable(WebserverPhase))
-        @metadata = T.let(@metadata, T.nilable(Metadata))
 
+        @distro_name = T.let(@distro_name, T.nilable(Symbol))
         @distro_spec = T.let(@distro_spec, T.nilable(Distro))
-        @cli = T.let(@cli, T.nilable(CLI))
-        @remote_client = T.let(@remote_client, T.nilable(::Docker::Remote::Client))
-        @tags = T.let(@tags, T.nilable(Tags))
         @layer_stack = T.let(@layer_stack, T.nilable(Kuby::Docker::LayerStack))
+      end
+
+      sig { returns(Symbol) }
+      def distro_name
+        @distro_name || DEFAULT_DISTRO
       end
 
       sig { params(image_url: String).void }
@@ -69,7 +76,7 @@ module Kuby
 
       sig { params(distro_name: Symbol).void }
       def distro(distro_name)
-        metadata.distro = distro_name
+        @distro_name = distro_name
         @distro_spec = nil
       end
 
@@ -85,7 +92,7 @@ module Kuby
 
       sig { params(url: String).void }
       def image_url(url)
-        metadata.image_url = url
+        @image_url_str = url
       end
 
       sig {
@@ -132,22 +139,22 @@ module Kuby
         @credentials
       end
 
-      sig { returns(Docker::Image) }
-      def to_image
+      sig { returns(Docker::AppImage) }
+      def image
         @image ||= begin
           dockerfile = Dockerfile.new.tap do |df|
             layer_stack.each { |layer| layer.apply_to(df) }
           end
 
-          Docker::TimestampedImage.new(
-            dockerfile, metadata.image_url, credentials
+          Docker::AppImage.new(
+            dockerfile, image_url_str, credentials
           )
         end
       end
 
       sig { returns(SetupPhase) }
       def setup_phase
-        @setup_phase ||= SetupPhase.new(environment)
+        @setup_phase ||= SetupPhase.new(environment, self)
       end
 
       sig { returns(PackagePhase) }
@@ -180,60 +187,13 @@ module Kuby
         @webserver_phase ||= WebserverPhase.new(environment)
       end
 
-      sig { returns(Metadata) }
-      def metadata
-        @metadata ||= Metadata.new(environment)
-      end
-
-      sig { returns(String) }
-      def tag
-        t = ENV.fetch('KUBY_DOCKER_TAG') do
-          tags.latest_timestamp_tag
-        end
-
-        unless t
-          raise MissingTagError, 'could not find latest timestamped tag'
-        end
-
-        t.to_s
-      end
-
-      sig { params(current_tag: String).returns(String) }
-      def previous_tag(current_tag)
-        t = tags.previous_timestamp_tag(current_tag)
-
-        unless t
-          raise MissingTagError, 'could not find previous timestamped tag'
-        end
-
-        t.to_s
-      end
-
-      sig { returns(CLI) }
-      def cli
-        @cli ||= Docker::CLI.new
-      end
-
-      sig { returns(::Docker::Remote::Client) }
-      def remote_client
-        @remote_client ||= ::Docker::Remote::Client.new(
-          metadata.image_host, metadata.image_repo,
-          credentials.username, credentials.password,
-        )
-      end
-
       sig { returns(Distro) }
       def distro_spec
-        @distro_spec ||= if distro_klass = Kuby.distros[metadata.distro]
+        @distro_spec ||= if distro_klass = Kuby.distros[distro_name]
           distro_klass.new(self)
         else
-          raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
+          raise MissingDistroError, "distro '#{distro_name}' hasn't been registered"
         end
-      end
-
-      sig { returns(Tags) }
-      def tags
-        @tags ||= Tags.new(cli, remote_client, metadata)
       end
 
       private

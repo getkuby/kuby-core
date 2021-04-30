@@ -21,13 +21,6 @@ module Kuby
         raise NotImplementedError,
           "#{__method__} must be defined in derived classes"
       end
-
-      private
-
-      sig { returns(Metadata) }
-      def metadata
-        environment.docker.metadata
-      end
     end
   end
 end

@@ -12,11 +12,12 @@ module Kuby
     end
 
     def docker(&block)
-      @docker ||= if development?
-        Docker::DevSpec.new(self)
-      else
-        Docker::Spec.new(self)
-      end
+      @docker ||= Docker::Spec.new(self)
+      # @docker ||= if development?
+      #   Docker::DevSpec.new(self)
+      # else
+      #   Docker::Spec.new(self)
+      # end
 
       @docker.instance_eval(&block) if block
       @docker

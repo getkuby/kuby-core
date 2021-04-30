@@ -289,7 +289,7 @@ module Kuby
 
         def docker_images
           @docker_images ||= [
-            RailsApp::TimestampedAssetsImage.new(docker.to_image, -> { dockerfile })
+            RailsApp::AssetsImage.new(docker.image, -> { dockerfile })
           ]
         end
 

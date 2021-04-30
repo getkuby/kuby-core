@@ -1,7 +1,7 @@
 module Kuby
   module Plugins
     module RailsApp
-      class TimestampedAssetsImage < ::Kuby::Docker::Image
+      class AssetsImage < ::Kuby::Docker::Image
         attr_reader :base_image
 
         def initialize(base_image, dockerfile, main_tag = nil, alias_tags = [])
@@ -29,6 +29,10 @@ module Kuby
 
         def build(build_args = {})
           docker_cli.build(current_version, build_args)
+        end
+
+        def push(tag)
+          docker_cli.push(image_url, tag)
         end
 
         private

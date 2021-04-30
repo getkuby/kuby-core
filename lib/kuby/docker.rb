@@ -5,6 +5,7 @@ require 'kuby/docker/errors'
 module Kuby
   module Docker
     autoload :Alpine,           'kuby/docker/alpine'
+    autoload :AppImage,         'kuby/docker/app_image'
     autoload :AssetsPhase,      'kuby/docker/assets_phase'
     autoload :BundlerPhase,     'kuby/docker/bundler_phase'
     autoload :CLI,              'kuby/docker/cli'
@@ -26,7 +27,6 @@ module Kuby
     autoload :RemoteTags,       'kuby/docker/remote_tags'
     autoload :SetupPhase,       'kuby/docker/setup_phase'
     autoload :Spec,             'kuby/docker/spec'
-    autoload :Tags,             'kuby/docker/tags'
     autoload :TimestampedImage, 'kuby/docker/timestamped_image'
     autoload :TimestampTag,     'kuby/docker/timestamp_tag'
     autoload :WebserverPhase,   'kuby/docker/webserver_phase'

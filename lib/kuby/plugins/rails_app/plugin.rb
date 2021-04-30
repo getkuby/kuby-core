@@ -247,7 +247,7 @@ module Kuby
               annotations do
                 add(
                   'getkuby.io/dockerfile-checksum',
-                  kube_spec.environment.docker.to_dockerfile.checksum
+                  kube_spec.environment.docker.image.dockerfile.checksum
                 )
               end
             end

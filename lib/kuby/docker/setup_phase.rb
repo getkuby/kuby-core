@@ -22,13 +22,17 @@ module Kuby
       sig { params(rails_env: String).void }
       attr_writer :rails_env
 
-      sig { params(environment: Environment).void }
-      def initialize(environment)
-        super
+      sig { returns(Docker::Spec) }
+      attr_reader :docker_spec
+
+      sig { params(environment: Environment, docker_spec: Docker::Spec).void }
+      def initialize(environment, docker_spec)
+        super(environment)
 
         @base_image = T.let(@base_image, T.nilable(String))
         @working_dir = T.let(@working_dir, T.nilable(String))
         @rails_env = T.let(@rails_env, T.nilable(String))
+        @docker_spec = T.let(docker_spec, T.nilable(Docker::Spec))
       end
 
       sig { override.params(dockerfile: Dockerfile).void }
@@ -49,13 +53,13 @@ module Kuby
 
       sig { returns(String) }
       def default_base_image
-        case metadata.distro
+        case docker_spec.distro_name
           when :debian
             "ruby:#{RUBY_VERSION}"
           when :alpine
             "ruby:#{RUBY_VERSION}-alpine"
           else
-            raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
+            raise MissingDistroError, "distro '#{docker_spec.distro_name}' hasn't been registered"
         end
       end
     end

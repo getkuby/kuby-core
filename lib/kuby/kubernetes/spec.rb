@@ -173,7 +173,9 @@ module Kuby
       end
 
       def docker_images
-        @docker_images ||= @plugins.flat_map { |_, plugin| plugin.docker_images }
+        @docker_images ||= [
+          docker.image, *@plugins.flat_map { |_, plugin| plugin.docker_images }
+        ]
       end
 
       def selector_app
