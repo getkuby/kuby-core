@@ -44,7 +44,7 @@ module Kuby
       end
 
       def tags
-        [main_tag, *alias_tags]
+        [main_tag, *alias_tags].compact
       end
 
       def build(*)

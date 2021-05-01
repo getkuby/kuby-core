@@ -11,13 +11,13 @@ module Kuby
 
       def current_version
         @current_version ||= duplicate_with_tags(
-          latest_timestamp_tag, [LATEST_TAG]
+          latest_timestamp_tag.to_s, [LATEST_TAG]
         )
       end
 
       def previous_version(current_tag = nil)
         @previous_version ||= duplicate_with_tags(
-          previous_timestamp_tag(current_tag), []
+          previous_timestamp_tag(current_tag).to_s, []
         )
       end
 

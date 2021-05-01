@@ -25,6 +25,8 @@ module Kuby
 
     def build
       kubernetes.docker_images.each do |image|
+        image = image.new_version
+        Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
         image.build
       end
     end
@@ -35,6 +37,8 @@ module Kuby
       end
 
       kubernetes.docker_images.each do |image|
+        image = image.current_version
+        Kuby.logger.info("Pushing image #{image.image_url} with tags #{image.tags.join(', ')}")
         push_image(image)
       end
     end
