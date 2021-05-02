@@ -13847,7 +13847,7 @@ module OpenSSL::SSL
 end
 
 class OpenSSL::SSL::SSLContext
-  def add_certificate(*_); end
+  def add_certificate(certificate, pkey, extra_certs = nil); end
 
   def alpn_protocols(); end
 

@@ -1,3 +1,6 @@
+## 0.11.14
+* Don't include port in image host for registry secrets (no idea why)
+
 ## 0.11.13
 * Include port in image host.
 

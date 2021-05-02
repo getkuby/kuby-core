@@ -7,21 +7,26 @@ module Kuby
   class CLIBase
     extend T::Sig
 
+    BeforeCallback = T.type_alias { T.proc.params(cmd: T::Array[String]).void }
+    AfterCallback = T.type_alias do
+      T.proc.params(cmd: T::Array[String], last_status: T.nilable(Process::Status)).void
+    end
+
     sig { returns(T.nilable(Process::Status)) }
     def last_status
       Thread.current[status_key]
     end
 
-    sig { params(block: T.proc.params(cmd: String).void).void }
+    sig { params(block: BeforeCallback).void }
     def before_execute(&block)
-      @before_execute = T.let(@before_execute, T.nilable(T::Array[T.proc.params(cmd: String).void]))
+      @before_execute = T.let(@before_execute, T.nilable(T::Array[BeforeCallback]))
       @before_execute ||= []
       @before_execute << block
     end
 
-    sig { params(block: T.proc.params(cmd: String).void).void }
+    sig { params(block: AfterCallback).void }
     def after_execute(&block)
-      @after_execute = T.let(@after_execute, T.nilable(T::Array[T.proc.params(cmd: String).void]))
+      @after_execute = T.let(@after_execute, T.nilable(T::Array[AfterCallback]))
       @after_execute ||= []
       @after_execute << block
     end
