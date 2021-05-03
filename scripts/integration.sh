@@ -106,6 +106,7 @@ class PrebundlerPhase < Kuby::Docker::BundlerPhase
     dockerfile.env('PREBUNDLER_SECRET_ACCESS_KEY', app_creds[:PREBUNDLER_SECRET_ACCESS_KEY])
 
     dockerfile.copy('.prebundle_config', '.')
+    dockerfile.run(%w(pwd))
     # dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
 
     super
