@@ -72,7 +72,25 @@ rails _6.0.3.4_ new kubyapp -d mysql
 cd kubyapp
 printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: 'kubeadm'\n" >> Gemfile
 printf "gem 'kuby-kube-db', github: 'getkuby/kuby-kube-db', branch: 'debug'\n" >> Gemfile
-bundle install
+# bundle install
+cat <<'EOF' > .prebundle_config
+Prebundler.configure do |config|
+  config.storage_backend = Prebundler::S3Backend.new(
+    client: Aws::S3::Client.new(
+      region: 'default',
+      credentials: Aws::Credentials.new(
+        ENV['PREBUNDLER_ACCESS_KEY_ID'],
+        ENV['PREBUNDLER_SECRET_ACCESS_KEY']
+      ),
+      endpoint: 'https://us-east-1.linodeobjects.com',
+      http_continue_timeout: 0
+    ),
+    bucket: 'prebundler',
+    region: 'us-east-1'
+  )
+end
+EOF
+prebundle install --jobs 2 --retry 3
 bundle exec rails g kuby
 cat <<'EOF' > kuby.rb
 Kuby.define('Kubyapp') do
