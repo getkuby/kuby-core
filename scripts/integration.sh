@@ -83,6 +83,9 @@ EOF
 prebundle install --jobs 2 --retry 3
 bundle exec bin/rails g kuby
 cat <<'EOF' > kuby.rb
+require 'active_support/core_ext'
+require 'active_support/encrypted_configuration'
+
 class PrebundlerPhase < Kuby::Docker::BundlerPhase
   def apply_to(dockerfile)
     dockerfile.run(<<~END)
@@ -92,6 +95,16 @@ class PrebundlerPhase < Kuby::Docker::BundlerPhase
         bundle exec rake build && \
         gem install pkg/prebundler-0.11.7.gem
     END
+
+    app_creds = ActiveSupport::EncryptedConfiguration.new(
+      config_path: File.join('config', 'credentials.yml.enc'),
+      key_path: File.join('config', 'master.key'),
+      env_key: 'RAILS_MASTER_KEY',
+      raise_if_missing_key: true
+    )
+
+    dockerfile.env('PREBUNDLER_ACCESS_KEY_ID', app_creds[:PREBUNDLER_ACCESS_KEY_ID])
+    dockerfile.env('PREBUNDLER_SECRET_ACCESS_KEY', app_creds[:PREBUNDLER_SECRET_ACCESS_KEY])
 
     dockerfile.copy('.prebundle_config', '.')
     # dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
