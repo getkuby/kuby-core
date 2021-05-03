@@ -48,16 +48,6 @@ EOF
 kubectl taint nodes --all node-role.kubernetes.io/master-
 echo travis_fold:end:setup_cluster
 
-# setup nvm/node
-echo travis_fold:start:setup_node
-source ~/.nvm/nvm.sh
-nvm install 14.13.0
-nvm use 14.13.0
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt-get update && sudo apt-get install -y yarn
-echo travis_fold:end:setup_node
-
 # generate rails app
 echo travis_fold:start:generate_app
 git clone --depth=1 https://github.com/camertron/prebundler --branch=fix_nokogiri_issues
