@@ -124,7 +124,7 @@ Kuby.define('Kubyapp') do
 
       image_url 'localhost:5000/kubyapp'
 
-      insert :prebundler_phase, PrebundlerPhase.new, after: :bundler_phase
+      insert :prebundler_phase, PrebundlerPhase.new(environment), after: :bundler_phase
       delete :bundler_phase
     end
 
