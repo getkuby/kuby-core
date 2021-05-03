@@ -95,7 +95,7 @@ cat <<'EOF' > kuby.rb
 class PrebundlerPhase < Kuby::Docker::BundlerPhase
   def apply_to(dockerfile)
     dockerfile.run(<<~END)
-      git clone --depth=1 https://github.com/camertron/prebundler --branch=fix_nokogiri_issues &&
+      git clone --depth=1 https://github.com/camertron/prebundler --branch=fix_nokogiri_issues && \
         cd prebundler && \
         bundle install --jobs 2 --retry 3 && \
         bundle exec rake build && \
