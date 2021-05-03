@@ -60,6 +60,12 @@ echo travis_fold:end:setup_node
 
 # generate rails app
 echo travis_fold:start:generate_app
+git clone --depth=1 https://github.com/camertron/prebundler --branch=fix_nokogiri_issues
+pushd prebundler; \
+  bundle install --jobs 2 --retry 3 && \
+  bundle exec rake build && \
+  gem install pkg/prebundler-0.11.7.gem; \
+  popd
 gem install rails -v 6.0.3.4 --no-document
 cd ..
 rails _6.0.3.4_ new kubyapp -d mysql

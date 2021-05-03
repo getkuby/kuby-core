@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 
-$STDOUT.sync = true
+$stdout.sync = true
 
 require 'kuby'
 exit Kuby::Commands.run(ARGV)
