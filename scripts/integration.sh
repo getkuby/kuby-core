@@ -60,7 +60,6 @@ cd ..
 git clone --depth=1 https://github.com/getkuby/kuby_test.git
 cd kuby_test
 printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: 'kubeadm'\n" >> Gemfile
-printf "gem 'kuby-kube-db', github: 'getkuby/kuby-kube-db', branch: 'debug'\n" >> Gemfile
 bundle lock
 # bundle install
 cat <<'EOF' > .prebundle_config
