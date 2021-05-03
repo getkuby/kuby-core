@@ -1,6 +1,7 @@
 sudo: required
 language: ruby
 script: scripts/travis.sh
+install:
 services:
   - docker
 jobs:
