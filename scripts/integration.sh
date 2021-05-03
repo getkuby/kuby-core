@@ -48,8 +48,8 @@ EOF
 kubectl taint nodes --all node-role.kubernetes.io/master-
 echo travis_fold:end:setup_cluster
 
-# generate rails app
-echo travis_fold:start:generate_app
+# clone rails app
+echo travis_fold:start:clone_app
 git clone --depth=1 https://github.com/camertron/prebundler --branch=fix_nokogiri_issues
 pushd prebundler; \
   bundle install --jobs 2 --retry 3 && \
@@ -176,7 +176,7 @@ end
 EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
-echo travis_fold:end:generate_app
+echo travis_fold:end:clone_app
 
 # start docker registry
 echo travis_fold:start:start_registry

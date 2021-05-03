@@ -17,8 +17,8 @@ jobs:
     env: STAGE=typecheck
   - rvm: 2.6
     env: STAGE=typecheck
-  - rvm: 2.7
+  - rvm: 2.7.2
     env: STAGE=typecheck
 
-  - rvm: 2.7
+  - rvm: 2.7.2
     env: STAGE=integration
