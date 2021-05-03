@@ -61,6 +61,7 @@ git clone --depth=1 https://github.com/getkuby/kuby_test.git
 cd kuby_test
 printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: 'kubeadm'\n" >> Gemfile
 printf "gem 'kuby-kube-db', github: 'getkuby/kuby-kube-db', branch: 'debug'\n" >> Gemfile
+bundle lock
 # bundle install
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
@@ -80,7 +81,7 @@ Prebundler.configure do |config|
 end
 EOF
 prebundle install --jobs 2 --retry 3
-bundle exec rails g kuby
+bundle exec bin/rails g kuby
 cat <<'EOF' > kuby.rb
 class PrebundlerPhase < Kuby::Docker::BundlerPhase
   def apply_to(dockerfile)
