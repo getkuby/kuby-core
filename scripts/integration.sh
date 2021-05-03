@@ -101,6 +101,8 @@ class PrebundlerPhase < Kuby::Docker::BundlerPhase
         bundle exec rake build && \
         gem install pkg/prebundler-0.11.7.gem
     END
+
+    dockerfile.copy('.prebundle_config', '.')
     # dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
 
     super
