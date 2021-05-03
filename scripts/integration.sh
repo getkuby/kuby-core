@@ -66,10 +66,9 @@ pushd prebundler; \
   bundle exec rake build && \
   gem install pkg/prebundler-0.11.7.gem; \
   popd
-gem install rails -v 6.0.3.4 --no-document
 cd ..
-rails _6.0.3.4_ new kubyapp -d mysql
-cd kubyapp
+git clone --depth=1 https://github.com/getkuby/kuby_test.git
+cd kuby_test
 printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: 'kubeadm'\n" >> Gemfile
 printf "gem 'kuby-kube-db', github: 'getkuby/kuby-kube-db', branch: 'debug'\n" >> Gemfile
 # bundle install
@@ -93,6 +92,29 @@ EOF
 prebundle install --jobs 2 --retry 3
 bundle exec rails g kuby
 cat <<'EOF' > kuby.rb
+class PrebundlerPhase < Kuby::Docker::BundlerPhase
+  def apply_to(dockerfile)
+    dockerfile.run(<<~END)
+      git clone --depth=1 https://github.com/camertron/prebundler --branch=fix_nokogiri_issues &&
+        cd prebundler && \
+        bundle install --jobs 2 --retry 3 && \
+        bundle exec rake build && \
+        gem install pkg/prebundler-0.11.7.gem
+    END
+    # dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
+
+    super
+
+    dockerfile.commands.each do |cmd|
+      next unless cmd.is_a?(Kuby::Docker::Dockerfile::Run)
+
+      if cmd.args[0..1] == ['bundle', 'install']
+        cmd.args[0] = 'prebundle'
+      end
+    end
+  end
+end
+
 Kuby.define('Kubyapp') do
   environment(:production) do
     docker do
@@ -101,6 +123,9 @@ Kuby.define('Kubyapp') do
       end
 
       image_url 'localhost:5000/kubyapp'
+
+      insert :prebundler_phase, PrebundlerPhase.new, after: :bundler_phase
+      delete :bundler_phase
     end
 
     kubernetes do
