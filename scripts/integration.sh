@@ -50,18 +50,11 @@ echo travis_fold:end:setup_cluster
 
 # clone rails app
 echo travis_fold:start:clone_app
-git clone --depth=1 https://github.com/camertron/prebundler --branch=fix_nokogiri_issues
-pushd prebundler; \
-  bundle install --jobs 2 --retry 3 && \
-  bundle exec rake build && \
-  gem install pkg/prebundler-0.11.7.gem; \
-  popd
-cd ..
+gem install prebundler -v '< 1'
 git clone --depth=1 https://github.com/getkuby/kuby_test.git
 cd kuby_test
-printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: 'kubeadm'\n" >> Gemfile
+printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: '$TRAVIS_BRANCH'\n" >> Gemfile
 bundle lock
-# bundle install
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
   config.storage_backend = Prebundler::S3Backend.new(
@@ -87,14 +80,6 @@ require 'active_support/encrypted_configuration'
 
 class PrebundlerPhase < Kuby::Docker::BundlerPhase
   def apply_to(dockerfile)
-    dockerfile.run(<<~END)
-      git clone --depth=1 https://github.com/camertron/prebundler --branch=fix_nokogiri_issues && \
-        cd prebundler && \
-        bundle install --jobs 2 --retry 3 && \
-        bundle exec rake build && \
-        gem install pkg/prebundler-0.11.7.gem
-    END
-
     app_creds = ActiveSupport::EncryptedConfiguration.new(
       config_path: File.join('config', 'credentials.yml.enc'),
       key_path: File.join('config', 'master.key'),
@@ -106,7 +91,7 @@ class PrebundlerPhase < Kuby::Docker::BundlerPhase
     dockerfile.env('PREBUNDLER_SECRET_ACCESS_KEY', app_creds[:PREBUNDLER_SECRET_ACCESS_KEY])
 
     dockerfile.copy('.prebundle_config', '.')
-    # dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
+    dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
 
     super
 
