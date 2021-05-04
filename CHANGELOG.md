@@ -1,3 +1,6 @@
+## 0.11.15
+* Copy over .npmrc and .yarnrc before running yarn install.
+
 ## 0.11.14
 * Don't include port in image host for registry secrets (no idea why)
 
