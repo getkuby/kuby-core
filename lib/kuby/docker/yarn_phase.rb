@@ -7,11 +7,8 @@ module Kuby
 
       sig { params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
-        dockerfile.copy('package.json', '.')
-        # use wildcards as a hack to only copy the files if they exist
-        dockerfile.copy('yarn.lock*', '.')
-        dockerfile.copy('.npmrc*', '.')
-        dockerfile.copy('.yarnrc*', '.')
+        # use character classes as a hack to only copy the files if they exist
+        dockerfile.copy('package.json yarn.loc[k] .npmr[c] .yarnr[c]', '.')
         dockerfile.run('yarn', 'install')
       end
     end
