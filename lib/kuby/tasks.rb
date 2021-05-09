@@ -11,12 +11,16 @@ module Kuby
       @environment = environment
     end
 
-    def print_dockerfile
-      theme = Rouge::Themes::Base16::Solarized.new
-      formatter = Rouge::Formatters::Terminal256.new(theme)
-      lexer = Rouge::Lexers::Docker.new
-      tokens = lexer.lex(Kuby.environment.docker.to_dockerfile.to_s)
-      puts formatter.format(tokens)
+    def print_dockerfiles
+      kubernetes.docker_images.each do |image|
+        image = image.current_version
+        Kuby.logger.info("Dockerfile for image #{image.image_url} with tags #{image.tags.join(', ')}")
+        theme = Rouge::Themes::Base16::Solarized.new
+        formatter = Rouge::Formatters::Terminal256.new(theme)
+        lexer = Rouge::Lexers::Docker.new
+        tokens = lexer.lex(image.dockerfile.to_s)
+        puts formatter.format(tokens)
+      end
     end
 
     def setup

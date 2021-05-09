@@ -80,12 +80,13 @@ module Kuby
 
       sig { returns(String) }
       def default_gemfile
-        Bundler
-          .definition
-          .gemfiles
-          .first
-          .relative_path_from(Pathname(Dir.getwd))
-          .to_s
+        'Gemfile'
+        # Bundler
+        #   .definition
+        #   .gemfiles
+        #   .first
+        #   .relative_path_from(Pathname(Dir.getwd))
+        #   .to_s
       end
     end
   end

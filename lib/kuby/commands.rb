@@ -82,10 +82,10 @@ module Kuby
       end
     end
 
-    desc 'Prints the effective Dockerfile used to build the Docker image.'
-    command :dockerfile do |c|
+    desc 'Prints the effective Dockerfiles used to build Docker images.'
+    command :dockerfiles do |c|
       c.action do |global_options, options, args|
-        tasks.print_dockerfile
+        tasks.print_dockerfiles
       end
     end
 
