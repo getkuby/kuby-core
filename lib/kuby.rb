@@ -52,24 +52,6 @@ module Kuby
       @definition = Definition.new(name.to_s)
       @definition.instance_eval(&block)
 
-      # default development environment
-      @definition.environment(:development) do
-        kubernetes do
-          add_plugin(:rails_app) do
-            tls_enabled false
-
-            database do
-              if requires_credentials?
-                user(DEFAULT_DB_USER)
-                password(DEFAULT_DB_PASSWORD)
-              end
-            end
-          end
-
-          provider :docker_desktop
-        end
-      end
-
       @definition.environments.each do |_, env|
         env.kubernetes.after_configuration
       end

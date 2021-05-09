@@ -47,27 +47,23 @@ module Kuby
             environment.kubernetes.plugins[@database.plugin_name] = @database.plugin
             environment.kubernetes.add_plugin(:kube_db)
 
-            unless environment.development?
-              environment.docker do
-                insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase
-              end
+            environment.docker do
+              insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase
             end
           end
 
-          unless environment.development?
-            environment.kubernetes.add_plugin(:nginx_ingress)
-            environment.kubernetes.add_plugin(:rails_assets) do
-              asset_url context.asset_url
-              packs_url context.packs_url
-              asset_path context.asset_path
-            end
+          environment.kubernetes.add_plugin(:nginx_ingress)
+          environment.kubernetes.add_plugin(:rails_assets) do
+            asset_url context.asset_url
+            packs_url context.packs_url
+            asset_path context.asset_path
+          end
 
-            if @tls_enabled
-              context = self
+          if @tls_enabled
+            context = self
 
-              environment.kubernetes.add_plugin(:cert_manager) do
-                email context.environment.docker.credentials.email
-              end
+            environment.kubernetes.add_plugin(:cert_manager) do
+              email context.environment.docker.credentials.email
             end
           end
         end
@@ -98,14 +94,12 @@ module Kuby
                     image image_with_tag
                   end
 
-                  unless spec.environment.development?
-                    init_container(:create_db) do
-                      image image_with_tag
-                    end
+                  init_container(:create_db) do
+                    image image_with_tag
+                  end
 
-                    init_container(:migrate_db) do
-                      image image_with_tag
-                    end
+                  init_container(:migrate_db) do
+                    image image_with_tag
                   end
                 end
               end
@@ -302,93 +296,63 @@ module Kuby
                       end
                     end
 
-                    unless kube_spec.environment.development?
-                      readiness_probe do
-                        success_threshold 1
-                        failure_threshold 2
-                        initial_delay_seconds 15
-                        period_seconds 3
-                        timeout_seconds 1
+                    readiness_probe do
+                      success_threshold 1
+                      failure_threshold 2
+                      initial_delay_seconds 15
+                      period_seconds 3
+                      timeout_seconds 1
 
-                        http_get do
-                          path '/healthz'
-                          port kube_spec.docker.webserver_phase.port
-                          scheme 'HTTP'
-                        end
+                      http_get do
+                        path '/healthz'
+                        port kube_spec.docker.webserver_phase.port
+                        scheme 'HTTP'
                       end
                     end
 
-                    if kube_spec.environment.development?
-                      env do
-                        name 'BUNDLE_PATH'
-                        value '/bundle'
-                      end
+                    env do
+                      name 'BUNDLE_PATH'
+                      value '/bundle'
+                    end
 
-                      env do
-                        name 'GEM_HOME'
-                        value '/bundle'
-                      end
+                    env do
+                      name 'GEM_HOME'
+                      value '/bundle'
+                    end
 
-                      env do
-                        name 'BOOTSNAP_CACHE_DIR'
-                        value '/usr/src/bootsnap'
-                      end
+                    env do
+                      name 'BOOTSNAP_CACHE_DIR'
+                      value '/usr/src/bootsnap'
+                    end
 
-                      volume_mount do
-                        name "#{kube_spec.selector_app}-code"
-                        mount_path '/usr/src/app'
-                      end
+                    volume_mount do
+                      name "#{kube_spec.selector_app}-code"
+                      mount_path '/usr/src/app'
+                    end
 
-                      volume_mount do
-                        name "#{kube_spec.selector_app}-bundle"
-                        mount_path '/bundle'
-                      end
+                    volume_mount do
+                      name "#{kube_spec.selector_app}-bundle"
+                      mount_path '/bundle'
+                    end
 
-                      volume_mount do
-                        name "#{kube_spec.selector_app}-bootsnap"
-                        mount_path '/usr/src/bootsnap'
-                      end
+                    volume_mount do
+                      name "#{kube_spec.selector_app}-bootsnap"
+                      mount_path '/usr/src/bootsnap'
                     end
                   end
 
-                  if kube_spec.environment.development?
-                    volume do
-                      name "#{kube_spec.selector_app}-code"
+                  init_container(:create_db) do
+                    name "#{kube_spec.selector_app}-create-db"
+                    command %w(bundle exec rake kuby:rails_app:db:create_unless_exists)
+                  end
 
-                      persistent_volume_claim do
-                        claim_name kube_spec.code_volume_claim.metadata.name
-                      end
-                    end
+                  init_container(:migrate_db) do
+                    name "#{kube_spec.selector_app}-migrate-db"
+                    command %w(bundle exec rake db:migrate)
+                  end
 
-                    volume do
-                      name "#{kube_spec.selector_app}-bundle"
-
-                      persistent_volume_claim do
-                        claim_name kube_spec.bundle_volume_claim.metadata.name
-                      end
-                    end
-
-                    volume do
-                      name "#{kube_spec.selector_app}-bootsnap"
-
-                      persistent_volume_claim do
-                        claim_name kube_spec.bootsnap_volume_claim.metadata.name
-                      end
-                    end
-                  else
-                    init_container(:create_db) do
-                      name "#{kube_spec.selector_app}-create-db"
-                      command %w(bundle exec rake kuby:rails_app:db:create_unless_exists)
-                    end
-
-                    init_container(:migrate_db) do
-                      name "#{kube_spec.selector_app}-migrate-db"
-                      command %w(bundle exec rake db:migrate)
-                    end
-
-                    image_pull_secret do
-                      name kube_spec.environment.kubernetes.registry_secret.metadata.name
-                    end
+                  image_pull_secret do
+                    name kube_spec.environment.kubernetes.registry_secret.metadata.name
                   end
 
                   restart_policy 'Always'
@@ -445,118 +409,6 @@ module Kuby
           @ingress
         end
 
-        def code_volume(&block)
-          spec = self
-
-          if environment.development?
-            @code_volume ||= KubeDSL.persistent_volume do
-              metadata do
-                name "#{spec.selector_app}-code"
-              end
-
-              spec do
-                access_modes ['ReadWriteMany']
-
-                capacity do
-                  add :storage, '1Mi'
-                end
-
-                host_path do
-                  path File.expand_path(spec.root)
-                end
-
-                storage_class_name 'hostpath'
-              end
-            end
-
-            @code_volume.instance_eval(&block) if block
-            @code_volume
-          end
-        end
-
-        def code_volume_claim(&block)
-          spec = self
-
-          if environment.development?
-            @code_volume_claim ||= KubeDSL.persistent_volume_claim do
-              metadata do
-                name "#{spec.selector_app}-code"
-                namespace spec.namespace.metadata.name
-              end
-
-              spec do
-                access_modes ['ReadWriteMany']
-
-                resources do
-                  requests do
-                    add :storage, '1Mi'
-                  end
-                end
-
-                storage_class_name 'hostpath'
-                volume_name spec.code_volume.metadata.name
-              end
-            end
-
-            @code_volume_claim.instance_eval(&block) if block
-            @code_volume_claim
-          end
-        end
-
-        def bundle_volume_claim(&block)
-          spec = self
-
-          if environment.development?
-            @bundle_volume_claim ||= KubeDSL.persistent_volume_claim do
-              metadata do
-                name "#{spec.selector_app}-bundle"
-                namespace spec.namespace.metadata.name
-              end
-
-              spec do
-                access_modes ['ReadWriteMany']
-                storage_class_name 'hostpath'
-
-                resources do
-                  requests do
-                    add :storage, '2Gi'
-                  end
-                end
-              end
-            end
-
-            @bundle_volume_claim.instance_eval(&block) if block
-            @bundle_volume_claim
-          end
-        end
-
-        def bootsnap_volume_claim(&block)
-          spec = self
-
-          if environment.development?
-            @bootsnap_volume_claim ||= KubeDSL.persistent_volume_claim do
-              metadata do
-                name "#{spec.selector_app}-bootsnap"
-                namespace spec.namespace.metadata.name
-              end
-
-              spec do
-                access_modes ['ReadWriteMany']
-                storage_class_name 'hostpath'
-
-                resources do
-                  requests do
-                    add :storage, '2Gi'
-                  end
-                end
-              end
-            end
-
-            @bootsnap_volume_claim.instance_eval(&block) if block
-            @bootsnap_volume_claim
-          end
-        end
-
         def resources
           @resources ||= [
             service,
@@ -565,10 +417,6 @@ module Kuby
             app_secrets,
             deployment,
             ingress,
-            code_volume,
-            code_volume_claim,
-            bundle_volume_claim,
-            bootsnap_volume_claim,
             *database&.plugin&.resources
           ]
         end

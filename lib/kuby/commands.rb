@@ -38,13 +38,6 @@ module Kuby
       Kuby::Tasks.new(Kuby.environment)
     end
 
-    sig { void }
-    def self.must_be_dev_env!
-      unless Kuby.environment.development?
-        fail "Command not supported in the '#{Kuby.environment.name}' environment"
-      end
-    end
-
     program_desc 'Kuby command-line interface. Kuby is a convention '\
       'over configuration approach for running Rails apps in Kubernetes.'
 
@@ -66,55 +59,6 @@ module Kuby
 
       # GLI will abort unless this block returns a truthy value
       true
-    end
-
-    # These are only stubs included to fill out the help screens. Rails
-    # commands are handled by the RailsCommands class.
-    desc 'Runs a Rails command.'
-    command :rails do |rc|
-      rc.action do |global_options, options, args|
-        must_be_dev_env!
-        exit 1 unless tasks.dev_deployment_ok
-        @rails_options = T.let(@rails_options, T.nilable(T::Array[String]))
-        Kuby::RailsCommands.run(@rails_options)
-      end
-
-      rc.desc 'Runs the rails server (run `rails server --help` for options)'
-      rc.command [:server, :s] do |c|
-        c.action do |global_options, options, args|
-          must_be_dev_env!
-          exit 1 unless tasks.dev_deployment_ok
-          Kuby::RailsCommands.run(@rails_options)
-        end
-      end
-
-      rc.desc 'Runs a script in the Rails environment (run `rails runner --help` for options)'
-      rc.command [:runner, :r] do |c|
-        c.action do |global_options, options, args|
-          must_be_dev_env!
-          exit 1 unless tasks.dev_deployment_ok
-          Kuby::RailsCommands.run(@rails_options)
-        end
-      end
-
-      rc.desc 'Starts an interactive Ruby console with the Rails environment loaded '\
-        '(run `rails console --help` for options)'
-      rc.command [:console, :c] do |c|
-        c.action do |global_options, options, args|
-          must_be_dev_env!
-          exit 1 unless tasks.dev_deployment_ok
-          Kuby::RailsCommands.run(@rails_options)
-        end
-      end
-    end
-
-    desc 'Runs a rake task.'
-    command :rake do |rc|
-      rc.action do |global_options, options, args|
-        must_be_dev_env!
-        exit 1 unless tasks.dev_deployment_ok
-        Kuby::RailsCommands.run(@rails_options)
-      end
     end
 
     desc 'Builds the Docker image.'
@@ -197,7 +141,6 @@ module Kuby
       rc.desc 'Tails (i.e. continuously streams) the Rails log from your running application.'
       rc.command :logs do |c|
         c.action do |global_options, options, args|
-          exit 1 unless tasks.dev_deployment_ok
           tasks.remote_logs
         end
       end
@@ -205,7 +148,6 @@ module Kuby
       rc.desc 'Lists running Kubernetes pods.'
       rc.command :status do |c|
         c.action do |global_options, options, args|
-          exit 1 unless tasks.dev_deployment_ok
           tasks.remote_status
         end
       end
@@ -213,7 +155,6 @@ module Kuby
       rc.desc 'Runs an arbitrary command inside a running Rails pod.'
       rc.command :exec do |c|
         c.action do |global_options, options, args|
-          exit 1 unless tasks.dev_deployment_ok
           tasks.remote_exec(args)
         end
       end
@@ -221,7 +162,6 @@ module Kuby
       rc.desc 'Establishes a shell inside a running Rails pod.'
       rc.command :shell do |c|
         c.action do |global_options, options, args|
-          exit 1 unless tasks.dev_deployment_ok
           tasks.remote_shell
         end
       end
@@ -229,7 +169,6 @@ module Kuby
       rc.desc 'Establishes a Rails console inside a running Rails pod.'
       rc.command :console do |c|
         c.action do |global_options, options, args|
-          exit 1 unless tasks.dev_deployment_ok
           tasks.remote_console
         end
       end
@@ -237,7 +176,6 @@ module Kuby
       rc.desc 'Establishes a database console inside a running Rails pod.'
       rc.command :dbconsole do |c|
         c.action do |global_options, options, args|
-          exit 1 unless tasks.dev_deployment_ok
           tasks.remote_dbconsole
         end
       end
@@ -245,7 +183,6 @@ module Kuby
       rc.desc "Restarts the Rails app's web pods."
       rc.command :restart do |c|
         c.action do |global_options, options, args|
-          exit 1 unless tasks.dev_deployment_ok
           tasks.remote_restart
         end
       end

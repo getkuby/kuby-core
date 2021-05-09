@@ -32,10 +32,6 @@ module Kuby
     end
 
     def push
-      if environment.development?
-        fail 'Cannot push Docker images built for the development environment'
-      end
-
       kubernetes.docker_images.each do |image|
         image = image.current_version
         Kuby.logger.info("Pushing image #{image.image_url} with tags #{image.tags.join(', ')}")
@@ -64,7 +60,7 @@ module Kuby
         image.tags.each { |tag| image.push(tag) }
       rescue Kuby::Docker::MissingTagError => e
         msg = "#{e.message} Run kuby build to build the "\
-          'Docker image before running this task.'
+          'Docker images before running this task.'
 
         Kuby.logger.fatal(msg)
         Kuby.logger.fatal(e.message)
@@ -130,40 +126,6 @@ module Kuby
     def remote_restart
       deployment = rails_app.deployment.metadata.name
       kubernetes_cli.restart_deployment(namespace, deployment)
-    end
-
-    def dev_deployment_ok
-      return true unless Kuby.environment.development?
-
-      deployments = kubernetes_cli.get_objects(
-        'deployments', namespace, match_labels.serialize
-      )
-
-      if deployments.empty?
-        puts 'No development environment detected.'
-        STDOUT.write('Set up development environment? (y/n): ')
-        answer = STDIN.gets.strip.downcase
-        return false unless answer =~ /ye?s?/
-        return DevSetup.new(environment).run
-      else
-        depl = deployments.first
-        deployed_checksum = depl.dig('metadata', 'annotations', 'getkuby.io/dockerfile-checksum')
-        current_checksum = docker.to_dockerfile.checksum
-
-        if deployed_checksum != current_checksum
-          puts "Development environment appears to be out-of-date."
-          puts "Environment checksum: #{deployed_checksum}"
-          puts "Current checksum:     #{current_checksum}"
-          STDOUT.write('Update development environment? (y/n): ')
-          answer = STDIN.gets.strip.downcase
-          # return true here to prevent letting an out-of-date deployment
-          # stop us from running commands
-          return true unless answer =~ /ye?s?/
-          return DevSetup.new(environment).run
-        end
-      end
-
-      true
     end
 
     private

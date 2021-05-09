@@ -144,24 +144,22 @@ module Kuby
       def registry_secret(&block)
         spec = self
 
-        unless environment.development?
-          @registry_secret ||= RegistrySecret.new do
-            metadata do
-              name "#{spec.selector_app}-registry-secret"
-              namespace spec.namespace.metadata.name
-            end
-
-            docker_config do
-              registry_host spec.docker.image.image_hostname
-              username spec.docker.image.credentials.username
-              password spec.docker.image.credentials.password
-              email spec.docker.image.credentials.email
-            end
+        @registry_secret ||= RegistrySecret.new do
+          metadata do
+            name "#{spec.selector_app}-registry-secret"
+            namespace spec.namespace.metadata.name
           end
 
-          @registry_secret.instance_eval(&block) if block
-          @registry_secret
+          docker_config do
+            registry_host spec.docker.image.image_hostname
+            username spec.docker.image.credentials.username
+            password spec.docker.image.credentials.password
+            email spec.docker.image.credentials.email
+          end
         end
+
+        @registry_secret.instance_eval(&block) if block
+        @registry_secret
       end
 
       def resources

@@ -13,7 +13,6 @@ module ActiveSupport::HashWithIndifferentAccess; end
 module ApplicationCable::ActionCable::Channel::Base; end
 module ApplicationCable::ActionCable::Connection::Base; end
 module KubeDSL::DSL::Extensions::V1beta1::Ingress; end
-module Kuby::Docker::DevSpec::LayerStack; end
 module Kuby::Docker::PackageList::Package; end
 module Kuby::Docker::Spec::LayerStack; end
 module Kuby::PluginRegistry::MissingPluginError; end

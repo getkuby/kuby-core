@@ -13,12 +13,6 @@ module Kuby
 
     def docker(&block)
       @docker ||= Docker::Spec.new(self)
-      # @docker ||= if development?
-      #   Docker::DevSpec.new(self)
-      # else
-      #   Docker::Spec.new(self)
-      # end
-
       @docker.instance_eval(&block) if block
       @docker
     end
@@ -31,10 +25,6 @@ module Kuby
 
     def app_name
       definition.app_name
-    end
-
-    def development?
-      name == 'development'
     end
   end
 end
