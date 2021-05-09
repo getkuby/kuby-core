@@ -52,7 +52,7 @@ module Kuby
         block: T.nilable(T.proc.returns(T.untyped))
       ).void
     }
-    def fatal(progname_or_msg, &block)
+    def fatal(progname_or_msg = nil, &block)
       if block
         super(progname_or_msg) { ColorizedString[block.call].red }
       else

@@ -1,4 +1,4 @@
-$:.unshift File.join(File.dirname(__FILE__), 'lib')
+$:.unshift File.expand_path('lib', __dir__)
 require 'kuby/version'
 
 Gem::Specification.new do |s|

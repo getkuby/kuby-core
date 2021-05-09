@@ -5,7 +5,8 @@ gemspec
 group :development, :test do
   gem 'pry-byebug'
   gem 'rake'
-  gem 'sorbet', '~> 0.5'
+  # lock to a specific version to prevent breaking CI when new versions come out
+  gem 'sorbet', '= 0.5.6397'
 end
 
 group :test do

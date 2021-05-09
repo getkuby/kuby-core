@@ -2,6 +2,7 @@
 
 require 'fileutils'
 require 'securerandom'
+require 'tmpdir'
 require 'yaml'
 
 module Kuby

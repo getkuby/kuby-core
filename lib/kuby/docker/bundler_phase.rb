@@ -51,10 +51,6 @@ module Kuby
         dockerfile.copy(gf, '.')
         dockerfile.copy(lf, '.')
 
-        # set bundle path so docker will cache the bundle
-        dockerfile.run('mkdir', './bundle')
-        dockerfile.env('BUNDLE_PATH=./bundle')
-
         unless wo.empty?
           dockerfile.env("BUNDLE_WITHOUT='#{wo.join(' ')}'")
         end

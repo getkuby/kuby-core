@@ -3,6 +3,7 @@ require 'kuby/kubernetes/errors'
 
 module Kuby
   module Kubernetes
+    autoload :BareMetalProvider,     'kuby/kubernetes/bare_metal_provider'
     autoload :Deployer,              'kuby/kubernetes/deployer'
     autoload :DeployTask,            'kuby/kubernetes/deploy_task'
     autoload :DockerConfig,          'kuby/kubernetes/docker_config'
