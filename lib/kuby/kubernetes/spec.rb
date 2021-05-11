@@ -72,7 +72,7 @@ module Kuby
       end
 
       def before_deploy
-        @tag ||= docker.tag
+        @tag ||= docker.image.main_tag
 
         provider.before_deploy(resources)
         @plugins.each { |_, plg| plg.before_deploy(resources) }
@@ -81,7 +81,7 @@ module Kuby
       end
 
       def after_deploy
-        @tag ||= docker.tag
+        @tag ||= docker.image.main_tag
 
         @plugins.each { |_, plg| plg.after_deploy(resources) }
         provider.after_deploy(resources)

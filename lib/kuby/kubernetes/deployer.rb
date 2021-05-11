@@ -102,7 +102,7 @@ module Kuby
 
       def restart_rails_deployment_if_necessary
         deployed_image = nil
-        current_image = "#{docker.metadata.image_url}:#{docker.tag}"
+        current_image = "#{docker.image.image_url}:#{kubernetes.tag}"
 
         if rails_app = kubernetes.plugin(:rails_app)
           deployment_name = rails_app.deployment.metadata.name

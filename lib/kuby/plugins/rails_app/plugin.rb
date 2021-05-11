@@ -78,7 +78,7 @@ module Kuby
             cert_manager.annotate_ingress(ingress)
           end
 
-          image_with_tag = "#{docker.metadata.image_url}:#{kubernetes.tag}"
+          image_with_tag = "#{docker.image.image_url}:#{kubernetes.tag || 'latest'}"
 
           if assets = environment.kubernetes.plugin(:rails_assets)
             assets.configure_ingress(ingress, hostname)
@@ -308,36 +308,6 @@ module Kuby
                         port kube_spec.docker.webserver_phase.port
                         scheme 'HTTP'
                       end
-                    end
-
-                    env do
-                      name 'BUNDLE_PATH'
-                      value '/bundle'
-                    end
-
-                    env do
-                      name 'GEM_HOME'
-                      value '/bundle'
-                    end
-
-                    env do
-                      name 'BOOTSNAP_CACHE_DIR'
-                      value '/usr/src/bootsnap'
-                    end
-
-                    volume_mount do
-                      name "#{kube_spec.selector_app}-code"
-                      mount_path '/usr/src/app'
-                    end
-
-                    volume_mount do
-                      name "#{kube_spec.selector_app}-bundle"
-                      mount_path '/bundle'
-                    end
-
-                    volume_mount do
-                      name "#{kube_spec.selector_app}-bootsnap"
-                      mount_path '/usr/src/bootsnap'
                     end
                   end
 

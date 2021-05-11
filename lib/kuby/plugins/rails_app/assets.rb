@@ -206,7 +206,7 @@ module Kuby
                   container(:nginx) do
                     name "#{kube_spec.selector_app}-#{kube_spec.role}"
                     image_pull_policy 'IfNotPresent'
-                    image "#{kube_spec.docker.metadata.image_url}:#{kube_spec.kubernetes.tag}"
+                    image "#{kube_spec.image.image_url}:#{kube_spec.kubernetes.tag || 'latest'}-assets"
 
                     port do
                       container_port NGINX_PORT
@@ -288,9 +288,11 @@ module Kuby
         end
 
         def docker_images
-          @docker_images ||= [
-            RailsApp::AssetsImage.new(docker.image, -> { dockerfile })
-          ]
+          @docker_images ||= [image]
+        end
+
+        def image
+          @image ||= RailsApp::AssetsImage.new(docker.image, -> { dockerfile })
         end
 
         private
