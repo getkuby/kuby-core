@@ -21,7 +21,6 @@ module Kuby
   autoload :Plugin,         'kuby/plugin'
   autoload :PluginRegistry, 'kuby/plugin_registry'
   autoload :Plugins,        'kuby/plugins'
-  autoload :RailsCommands,  'kuby/rails_commands'
   autoload :Tasks,          'kuby/tasks'
   autoload :TrailingHash,   'kuby/trailing_hash'
 
