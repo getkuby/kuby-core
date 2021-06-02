@@ -6,7 +6,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rake'
   # lock to a specific version to prevent breaking CI when new versions come out
-  gem 'sorbet', '= 0.5.6397'
+  gem 'sorbet', '= 0.5.6427'
 end
 
 group :test do

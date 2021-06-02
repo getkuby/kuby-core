@@ -4,6 +4,8 @@ require 'kuby/docker/errors'
 
 module Kuby
   module Docker
+    LATEST_TAG = T.let('latest'.freeze, String)
+
     autoload :Alpine,           'kuby/docker/alpine'
     autoload :AppImage,         'kuby/docker/app_image'
     autoload :AssetsPhase,      'kuby/docker/assets_phase'

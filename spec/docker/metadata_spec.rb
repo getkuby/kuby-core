@@ -53,7 +53,7 @@ describe Kuby::Docker::Metadata do
       Timecop.freeze do
         expect(subject).to eq([
           Time.now.strftime('%Y%m%d%H%M%S'),
-          Kuby::Docker::Metadata::LATEST_TAG
+          Kuby::Docker::LATEST_TAG
         ])
       end
     end

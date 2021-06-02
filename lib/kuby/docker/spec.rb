@@ -12,7 +12,7 @@ module Kuby
       sig { returns(Environment) }
       attr_reader :environment
 
-      sig { returns(String) }
+      sig { returns(T.nilable(String)) }
       attr_reader :image_url_str
 
       sig { params(environment: Environment).void }
@@ -31,6 +31,9 @@ module Kuby
         @distro_name = T.let(@distro_name, T.nilable(Symbol))
         @distro_spec = T.let(@distro_spec, T.nilable(Distro))
         @layer_stack = T.let(@layer_stack, T.nilable(Kuby::Docker::LayerStack))
+
+        @image_url_str = T.let(@image_url_str, T.nilable(String))
+        @image = T.let(@image, T.nilable(Docker::AppImage))
       end
 
       sig { returns(Symbol) }
@@ -147,7 +150,7 @@ module Kuby
           end
 
           Docker::AppImage.new(
-            dockerfile, image_url_str, credentials
+            dockerfile, T.must(image_url_str), credentials
           )
         end
       end

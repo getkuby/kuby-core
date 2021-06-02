@@ -8,7 +8,6 @@ module Kuby
       extend T::Sig
 
       DEFAULT_DISTRO = :debian
-      LATEST_TAG = T.let('latest'.freeze, String)
 
       sig { params(image_url: String).void }
       attr_writer :image_url
@@ -82,7 +81,7 @@ module Kuby
       sig { returns(T::Array[String]) }
       def default_tags
         @default_tags ||= [
-          TimestampTag.new(Time.now).to_s, LATEST_TAG
+          TimestampTag.new(Time.now).to_s, Kuby::Docker::LATEST_TAG
         ]
       end
     end

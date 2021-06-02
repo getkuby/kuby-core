@@ -305,7 +305,7 @@ module Kuby
 
             tags = begin
               [base_image.previous_timestamp_tag(cur_tag).to_s, cur_tag]
-            rescue MissingTagError
+            rescue Kuby::Docker::MissingTagError
               [cur_tag]
             end
 

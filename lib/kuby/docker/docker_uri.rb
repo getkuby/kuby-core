@@ -1,11 +1,14 @@
-# typed: false
+# typed: strict
 
 module Kuby
   module Docker
     class DockerURI
-      DEFAULT_REGISTRY_HOST = 'index.docker.io'.freeze
-      DEFAULT_REGISTRY_PORT = 443
+      extend T::Sig
 
+      DEFAULT_REGISTRY_HOST = T.let('index.docker.io'.freeze, String)
+      DEFAULT_REGISTRY_PORT = T.let(443, Integer)
+
+      sig { params(url: String).returns(DockerURI) }
       def self.parse(url)
         if idx = url.index('://')
           url = url[(idx + 3)..-1] || ''
@@ -13,17 +16,25 @@ module Kuby
 
         host_port, *path = url.split('/')
         host, port, *path = if host_port =~ /[.:]/
-          hst, prt = host_port.split(':')
-          [hst, prt || DEFAULT_REGISTRY_PORT, *path]
+          hst, prt = T.must(host_port).split(':')
+          [T.must(hst), prt || DEFAULT_REGISTRY_PORT, *path]
         else
           [DEFAULT_REGISTRY_HOST, DEFAULT_REGISTRY_PORT, host_port, *path]
         end
 
-        new(host, port.to_i, path.join('/'))
+        new(host.to_s, port.to_i, (path || []).join('/'))
       end
 
-      attr_reader :host, :port, :path
+      sig { returns(String) }
+      attr_reader :host
 
+      sig { returns(Integer) }
+      attr_reader :port
+
+      sig { returns(String) }
+      attr_reader :path
+
+      sig { params(host: String, port: Integer, path: String).void }
       def initialize(host, port, path)
         @host = host
         @port = port

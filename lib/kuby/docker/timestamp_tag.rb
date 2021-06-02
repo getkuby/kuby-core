@@ -9,8 +9,10 @@ module Kuby
 
       FORMAT = T.let('%Y%m%d%H%M%S'.freeze, String)
 
-      sig { params(str: String).returns(T.nilable(TimestampTag)) }
+      sig { params(str: T.nilable(String)).returns(T.nilable(TimestampTag)) }
       def self.try_parse(str)
+        return nil unless str
+
         # The strptime function stops scanning after the pattern has been matched, so
         # we check for all numbers here to prevent things like 20210424165405-assets
         # from being treated as a timestamp tag.

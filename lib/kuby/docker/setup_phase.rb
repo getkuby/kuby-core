@@ -22,7 +22,7 @@ module Kuby
       sig { params(rails_env: String).void }
       attr_writer :rails_env
 
-      sig { returns(Docker::Spec) }
+      sig { returns(T.nilable(Docker::Spec)) }
       attr_reader :docker_spec
 
       sig { params(environment: Environment, docker_spec: Docker::Spec).void }
@@ -53,13 +53,15 @@ module Kuby
 
       sig { returns(String) }
       def default_base_image
-        case docker_spec.distro_name
+        spec = T.must(docker_spec)
+
+        case spec.distro_name
           when :debian
             "ruby:#{RUBY_VERSION}"
           when :alpine
             "ruby:#{RUBY_VERSION}-alpine"
           else
-            raise MissingDistroError, "distro '#{docker_spec.distro_name}' hasn't been registered"
+            raise MissingDistroError, "distro '#{spec.distro_name}' hasn't been registered"
         end
       end
     end

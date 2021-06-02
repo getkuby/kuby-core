@@ -13,7 +13,6 @@ module Kuby
   autoload :CLIBase,        'kuby/cli_base'
   autoload :Commands,       'kuby/commands'
   autoload :Definition,     'kuby/definition'
-  autoload :DevSetup,       'kuby/dev_setup'
   autoload :Docker,         'kuby/docker'
   autoload :Environment,    'kuby/environment'
   autoload :Kubernetes,     'kuby/kubernetes'

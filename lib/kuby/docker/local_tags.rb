@@ -34,10 +34,10 @@ module Kuby
       def latest_tags
         # find "latest" tag
         images = cli.images(image_url)
-        latest = images.find { |image| image[:tag] == Tags::LATEST }
+        latest = images.find { |image| image[:tag] == Kuby::Docker::LATEST_TAG }
 
         unless latest
-          raise MissingTagError.new(Tags::LATEST)
+          raise MissingTagError.new(Kuby::Docker::LATEST_TAG)
         end
 
         # find all tags that point to the same image as 'latest'
