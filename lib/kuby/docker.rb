@@ -22,7 +22,6 @@ module Kuby
     autoload :Layer,            'kuby/docker/layer'
     autoload :LayerStack,       'kuby/docker/layer_stack'
     autoload :LocalTags,        'kuby/docker/local_tags'
-    autoload :Metadata,         'kuby/docker/metadata'
     autoload :Packages,         'kuby/docker/packages'
     autoload :PackagePhase,     'kuby/docker/package_phase'
     autoload :RemoteTags,       'kuby/docker/remote_tags'

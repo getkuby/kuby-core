@@ -1,5 +1,7 @@
 # typed: strict
 
+require 'docker/remote'
+
 module Kuby
   module Docker
     class TimestampedImage < Image
@@ -47,10 +49,10 @@ module Kuby
         )
       end
 
-      sig { params(current_tag: T.nilable(String)).returns(T.nilable(TimestampTag)) }
+      sig { params(current_tag: T.nilable(String)).returns(TimestampTag) }
       def previous_timestamp_tag(current_tag = nil)
-        current_tag = TimestampTag.try_parse(current_tag || latest_timestamp_tag&.to_s)
-        return nil unless current_tag
+        current_tag = TimestampTag.try_parse(current_tag || latest_timestamp_tag.to_s)
+        raise MissingTagError, 'could not find current timestamp tag' unless current_tag
 
         all_tags = timestamp_tags.sort
 
@@ -59,14 +61,16 @@ module Kuby
         end
 
         idx ||= 0
-        return nil unless idx > 0
+        raise MissingTagError, 'could not find previous timestamp tag' unless idx > 0
 
-        all_tags[idx - 1]
+        T.must(all_tags[idx - 1])
       end
 
-      sig { returns(T.nilable(TimestampTag)) }
+      sig { returns(TimestampTag) }
       def latest_timestamp_tag
-        timestamp_tags.sort.last
+        tag = timestamp_tags.sort.last
+        raise MissingTagError, 'could not find latest timestamp tag' unless tag
+        tag
       end
 
       sig { params(build_args: T::Hash[String, String]).void }

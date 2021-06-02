@@ -1,12 +1,11 @@
 # typed: false
 require 'spec_helper'
-require 'timecop'
 
 describe Kuby::Docker::Spec do
   let(:spec) { definition.environment.docker }
 
   describe '#base_image' do
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     it 'uses the default base image for Debian' do
       expect(subject).to include("FROM ruby:#{RUBY_VERSION}\n")
@@ -34,7 +33,7 @@ describe Kuby::Docker::Spec do
       Kuby::Docker::SetupPhase::DEFAULT_WORKING_DIR
     end
 
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     it 'uses the default working dir' do
       expect(subject).to(
@@ -52,7 +51,7 @@ describe Kuby::Docker::Spec do
   end
 
   describe '#rails_env' do
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     it 'uses the name of the current Kuby environment' do
       expect(subject).to include("ENV RAILS_ENV=#{spec.environment.name}\n")
@@ -73,7 +72,7 @@ describe Kuby::Docker::Spec do
   end
 
   describe '#bundler_version' do
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     it 'installs the current bundler version' do
       expect(subject).to(
@@ -91,7 +90,7 @@ describe Kuby::Docker::Spec do
   end
 
   describe '#gemfile' do
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     it 'uses the default Gemfile' do
       expect(subject).to include("COPY Gemfile .\n")
@@ -111,7 +110,7 @@ describe Kuby::Docker::Spec do
   end
 
   describe '#package' do
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     it 'installs the given package' do
       # configured in spec_helper.rb
@@ -122,7 +121,7 @@ describe Kuby::Docker::Spec do
   end
 
   describe '#files' do
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     it 'copies the current directory contents by default' do
       expect(subject).to include("COPY ./ .\n")
@@ -142,7 +141,7 @@ describe Kuby::Docker::Spec do
       Kuby::Docker::WebserverPhase::DEFAULT_PORT
     end
 
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     it 'exposes the default port' do
       expect(subject).to include("EXPOSE #{default_port}\n")
@@ -157,116 +156,8 @@ describe Kuby::Docker::Spec do
     end
   end
 
-  describe '#tag' do
-    let(:tag) { make_ts_tag(Time.now) }
-
-    subject { spec.tag }
-
-    context 'with no local or remote tags' do
-      it 'raises an error' do
-        expect { subject }.to raise_error(Kuby::Docker::MissingTagError)
-      end
-    end
-
-    context 'with an available remote tag' do
-      before { docker_remote_client.tags << tag }
-
-      it { is_expected.to eq(tag) }
-    end
-
-    context 'with an available local tag' do
-      before do
-        docker_cli.build(
-          dockerfile: nil,
-          image_url: docker_image_url,
-          tags: [tag]
-        )
-      end
-
-      it { is_expected.to eq(tag) }
-    end
-
-    context 'with multiple remote tags' do
-      let(:time) { Time.now }
-
-      before do
-        docker_remote_client.tags +=
-          [time - 5, time + 10, time - 10, time + 15].map do |t|
-            make_ts_tag(t)
-          end
-      end
-
-      it { is_expected.to eq(make_ts_tag(time + 15)) }
-    end
-
-    context 'with multiple local and remote tags' do
-      let(:time) { Time.now }
-
-      before do
-        docker_remote_client.tags +=
-          [time - 5, time + 10, time - 10, time + 15].map do |t|
-            make_ts_tag(t)
-          end
-
-        docker_cli.build(
-          dockerfile: nil,
-          image_url: docker_image_url,
-          tags: [time - 3, time + 6, time - 6, time + 18].map do |t|
-            make_ts_tag(t)
-          end
-        )
-      end
-
-      it { is_expected.to eq(make_ts_tag(time + 18)) }
-    end
-  end
-
-  describe '#previous_tag' do
-    let(:time) { Time.now }
-    let(:current_tag) { make_ts_tag(time) }
-
-    before do
-      docker_remote_client.tags << current_tag
-      docker_cli.build(
-        dockerfile: nil,
-        image_url: docker_image_url,
-        tags: [current_tag]
-      )
-    end
-
-    subject { spec.previous_tag(current_tag) }
-
-    context 'with no previous local or remote tag' do
-      it 'raises an error' do
-        expect { subject }.to raise_error(Kuby::Docker::MissingTagError)
-      end
-    end
-
-    context 'with an available previous remote tag' do
-      let(:previous_tag) { make_ts_tag(time - 5) }
-
-      before { docker_remote_client.tags << previous_tag }
-
-      it { is_expected.to eq(previous_tag) }
-    end
-
-    context 'with an available previous local tag' do
-      let(:previous_tag) { make_ts_tag(time - 5) }
-
-      before do
-        docker_cli.build(
-        dockerfile: nil,
-        image_url: docker_image_url,
-        tags: [previous_tag]
-        )
-      end
-
-      it { is_expected.to eq(previous_tag) }
-    end
-  end
-
   describe '#insert' do
-    subject { spec.to_dockerfile.to_s }
+    subject { spec.image.dockerfile.to_s }
 
     context 'with a custom class-based build phase' do
       before do

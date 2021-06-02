@@ -37,7 +37,7 @@ module Kuby
         latest = images.find { |image| image[:tag] == Kuby::Docker::LATEST_TAG }
 
         unless latest
-          raise MissingTagError.new(Kuby::Docker::LATEST_TAG)
+          raise MissingTagError, "could not find tag #{Kuby::Docker::LATEST_TAG}"
         end
 
         # find all tags that point to the same image as 'latest'

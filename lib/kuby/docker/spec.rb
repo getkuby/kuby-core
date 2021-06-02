@@ -1,7 +1,5 @@
 # typed: strict
 
-require 'docker/remote'
-
 module Kuby
   module Docker
     class Spec

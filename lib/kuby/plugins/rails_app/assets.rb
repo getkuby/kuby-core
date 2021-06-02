@@ -233,6 +233,10 @@ module Kuby
                         scheme 'HTTP'
                       end
                     end
+
+                    image_pull_secret do
+                      name kube_spec.environment.kubernetes.registry_secret.metadata.name
+                    end
                   end
 
                   volume do

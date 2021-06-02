@@ -71,22 +71,21 @@ module SpecHelpers
           end
         end
       end
-
-      environment(:development) do
-        kubernetes do
-          configure_plugin(:rails_app) do
-            root File.expand_path(File.join(*%w(. dummy)), __dir__)
-          end
-        end
-      end
     end
 
     docker = definition.environment.docker
 
-    docker.instance_variable_set(:@remote_client, docker_remote_client)
-    docker.instance_variable_set(:@cli, docker_cli)
-
     definition
+  end
+
+  before do
+    allow_any_instance_of(Kuby::Docker::TimestampedImage).to(
+      receive(:remote_client).and_return(docker_remote_client)
+    )
+
+    allow_any_instance_of(Kuby::Docker::Image).to(
+      receive(:docker_cli).and_return(docker_cli)
+    )
   end
 
   def make_ts_tag(time)
