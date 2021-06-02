@@ -1,8 +1,6 @@
 # typed: false
 require 'rouge'
 
-require 'pry-byebug'
-
 module Kuby
   class Tasks
     attr_reader :environment
