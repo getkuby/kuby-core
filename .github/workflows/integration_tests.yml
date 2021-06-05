@@ -17,3 +17,6 @@ jobs:
         run: gem install bundler
       - name: Run Tests
         run: scripts/integration.sh
+        env:
+          PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
+          PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"
