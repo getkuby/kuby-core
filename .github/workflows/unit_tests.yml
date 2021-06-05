@@ -1,0 +1,13 @@
+name: kuby-core unit tests
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [2.5, 2.6, 2.7]
+    steps:
+      - name: bundle
+        run: bundle install --jobs 2 --retry 3
+      - name: rspec
+        run: bundle exec rspec
