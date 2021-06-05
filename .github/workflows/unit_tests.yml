@@ -1,4 +1,4 @@
-name: kuby-core unit tests
+name: Unit Tests
 on: [push]
 jobs:
   build:
@@ -7,6 +7,8 @@ jobs:
       matrix:
         ruby: [2.5, 2.6, 2.7]
     steps:
+      - name: install bundler
+        run: gem install bundler
       - name: bundle
         run: bundle install --jobs 2 --retry 3
       - name: rspec
