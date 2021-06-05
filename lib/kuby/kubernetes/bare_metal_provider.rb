@@ -19,7 +19,7 @@ module Kuby
       attr_reader :config
 
       sig { void }
-      def initialize
+      def initialize(environment)
         @config = T.let(Config.new, Config)
         super
       end
