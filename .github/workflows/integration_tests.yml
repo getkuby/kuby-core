@@ -4,6 +4,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Disable Swap
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
       - uses: actions/checkout@v2
       - name: Set up Ruby ${{ matrix.ruby-version }}
         uses: ruby/setup-ruby@v1
