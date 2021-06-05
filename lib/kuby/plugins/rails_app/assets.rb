@@ -206,7 +206,7 @@ module Kuby
                   container(:nginx) do
                     name "#{kube_spec.selector_app}-#{kube_spec.role}"
                     image_pull_policy 'IfNotPresent'
-                    image "#{kube_spec.image.image_url}:#{kube_spec.kubernetes.tag || 'latest'}-assets"
+                    image "#{kube_spec.image.image_url}:#{kube_spec.kubernetes.tag || Kuby::Docker::LATEST_TAG}-assets"
 
                     port do
                       container_port NGINX_PORT

@@ -75,10 +75,10 @@ module Kuby
         def before_deploy(manifest)
           # Make sure plugin has been configured. If not, do nothing.
           if cert_manager = environment.kubernetes.plugin(:cert_manager)
-            cert_manager.annotate_ingress(ingress)
+            cert_manager.annotate_ingress(ingress) if tls_enabled
           end
 
-          image_with_tag = "#{docker.image.image_url}:#{kubernetes.tag || 'latest'}"
+          image_with_tag = "#{docker.image.image_url}:#{kubernetes.tag || Kuby::Docker::LATEST_TAG}"
 
           if assets = environment.kubernetes.plugin(:rails_assets)
             assets.configure_ingress(ingress, hostname)
