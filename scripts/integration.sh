@@ -73,20 +73,10 @@ prebundle install --jobs 2 --retry 3
 yarn install
 bundle exec bin/rails g kuby
 cat <<'EOF' > kuby.rb
-require 'active_support/core_ext'
-require 'active_support/encrypted_configuration'
-
 class PrebundlerPhase < Kuby::Docker::BundlerPhase
   def apply_to(dockerfile)
-    app_creds = ActiveSupport::EncryptedConfiguration.new(
-      config_path: File.join('config', 'credentials.yml.enc'),
-      key_path: File.join('config', 'master.key'),
-      env_key: 'RAILS_MASTER_KEY',
-      raise_if_missing_key: true
-    )
-
-    dockerfile.env('PREBUNDLER_ACCESS_KEY_ID', app_creds[:PREBUNDLER_ACCESS_KEY_ID])
-    dockerfile.env('PREBUNDLER_SECRET_ACCESS_KEY', app_creds[:PREBUNDLER_SECRET_ACCESS_KEY])
+    dockerfile.arg('PREBUNDLER_ACCESS_KEY_ID')
+    dockerfile.arg('PREBUNDLER_SECRET_ACCESS_KEY')
 
     dockerfile.copy('.prebundle_config', '.')
     dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
@@ -160,7 +150,7 @@ touch app/views/home/index.html.erb
 docker run -d -p 5000:5000 --name registry registry:2
 
 # build and push
-GLI_DEBUG=true bundle exec kuby -e production build
+GLI_DEBUG=true bundle exec kuby -e production build -a PREBUNDLER_ACCESS_KEY_ID=${PREBUNDLER_ACCESS_KEY_ID} -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e production push
 
 # setup cluster

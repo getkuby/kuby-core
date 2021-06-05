@@ -63,8 +63,15 @@ module Kuby
 
     desc 'Builds the Docker image.'
     command :build do |c|
+      c.flag [:a, :arg], required: false, multiple: true
       c.action do |global_options, options, args|
-        tasks.build
+        build_args = Hash[*(options[:arg] || []).flat_map do |a|
+          key, value = a.split('=')
+          value = value[1..-2] if value.start_with?('"') || value.start_with?("'")
+          [key, value]
+        end]
+
+        tasks.build(build_args)
       end
     end
 

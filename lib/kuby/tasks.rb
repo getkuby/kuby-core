@@ -25,11 +25,11 @@ module Kuby
       environment.kubernetes.setup
     end
 
-    def build
+    def build(build_args = {})
       kubernetes.docker_images.each do |image|
         image = image.new_version
         Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
-        image.build
+        image.build(build_args)
       end
     end
 
