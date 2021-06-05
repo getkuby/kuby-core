@@ -70,6 +70,7 @@ Prebundler.configure do |config|
 end
 EOF
 prebundle install --jobs 2 --retry 3
+yarn install
 bundle exec bin/rails g kuby
 cat <<'EOF' > kuby.rb
 require 'active_support/core_ext'
@@ -105,10 +106,6 @@ end
 Kuby.define('Kubyapp') do
   environment(:production) do
     docker do
-      insert(:vendor, before: :bundler_phase) do |dockerfile|
-        dockerfile.copy('vendor', 'vendor')
-      end
-
       image_url 'localhost:5000/kubyapp'
 
       insert :prebundler_phase, PrebundlerPhase.new(environment), after: :bundler_phase
