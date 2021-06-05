@@ -1,20 +1,15 @@
-name: Unit Tests
+name: Integration Tests
 on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby-version: [2.5, 2.6, 2.7, 3.0]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby ${{ matrix.ruby-version }}
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby-version }}
+          ruby-version: 2.7
       - name: Install Bundler
         run: gem install bundler
-      - name: Install Dependencies
-        run: bundle install --jobs 2 --retry 3
       - name: Run Tests
-        run: bundle exec rspec
+        run: scripts/integration.sh

@@ -5,7 +5,6 @@ set -ev
 unset BUNDLE_GEMFILE
 K8S_VERSION='1.19.10-00'
 
-echo travis_fold:start:setup_cluster
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
@@ -46,14 +45,12 @@ provisioner: kubernetes.io/host-path
 EOF
 # allow pods to be scheduled on the master node
 kubectl taint nodes --all node-role.kubernetes.io/master-
-echo travis_fold:end:setup_cluster
 
 # clone rails app
-echo travis_fold:start:clone_app
 gem install prebundler -v '< 1'
 git clone --depth=1 https://github.com/getkuby/kuby_test.git
 cd kuby_test
-printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: '$TRAVIS_BRANCH'\n" >> Gemfile
+printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: 'master'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
@@ -161,31 +158,22 @@ end
 EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
-echo travis_fold:end:clone_app
 
 # start docker registry
-echo travis_fold:start:start_registry
 docker run -d -p 5000:5000 --name registry registry:2
-echo travis_fold:end:start_registry
 
 # build and push
-echo travis_fold:start:build_and_push
 GLI_DEBUG=true bundle exec kuby -e production build
 GLI_DEBUG=true bundle exec kuby -e production push
-echo travis_fold:end:build_and_push
 
 # setup cluster
-echo travis_fold:start:setup
 GLI_DEBUG=true bundle exec kuby -e production setup
 # force nginx ingress to be a nodeport since we don't have any load balancers
 kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
-echo travis_fold:end:setup
 
 # deploy!
-echo travis_fold:start:deploy
 GLI_DEBUG=true bundle exec kuby -e production deploy || \
   GLI_DEBUG=true bundle exec kuby -e production deploy
-echo travis_fold:end:deploy
 
 # get ingress IP from kubectl; attempt to hit the app
 ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)
