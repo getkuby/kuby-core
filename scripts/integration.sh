@@ -156,7 +156,7 @@ GLI_DEBUG=true bundle exec kuby -e production push
 # setup cluster
 GLI_DEBUG=true bundle exec kuby -e production setup
 # force nginx ingress to be a nodeport since we don't have any load balancers
-kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
+kubectl -n ingress-nginx patch svc ingress-nginx-controller -p '{"spec":{"type":"NodePort"}}'
 
 # deploy!
 GLI_DEBUG=true bundle exec kuby -e production deploy || \
