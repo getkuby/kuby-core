@@ -13,7 +13,7 @@ module Kuby
       VERSION = '0.46.0'.freeze
       DEFAULT_PROVIDER = 'cloud'.freeze
       NAMESPACE = 'ingress-nginx'.freeze
-      SERVICE_NAME = 'ingress-nginx'.freeze
+      SERVICE_NAME = 'ingress-nginx-controller'.freeze
 
       SETUP_RESOURCES = [
         "https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v#{VERSION}/deploy/static/provider/%{provider}/deploy.yaml"
@@ -53,7 +53,7 @@ module Kuby
       private
 
       def already_deployed?
-        kubernetes_cli.get_object('Service', 'ingress-nginx', 'ingress-nginx-controller')
+        kubernetes_cli.get_object('Service', NAMESPACE, service_name)
         true
       rescue KubernetesCLI::GetResourceError
         return false
