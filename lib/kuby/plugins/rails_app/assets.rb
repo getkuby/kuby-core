@@ -310,7 +310,7 @@ module Kuby
             tags = begin
               [base_image.previous_timestamp_tag(cur_tag).to_s, cur_tag]
             rescue Kuby::Docker::MissingTagError
-              [cur_tag]
+              [cur_tag, nil]
             end
 
             # this can handle more than 2 tags by virtue of using each_cons :)
@@ -324,13 +324,12 @@ module Kuby
                 image_name = "#{app_name}-#{tag}"
                 df.from("#{base_image.image_url}:#{tag}", as: image_name)
                 df.copy("--from=#{prev_image_name} #{RAILS_MOUNT_PATH}", RAILS_MOUNT_PATH)
+                df.run("bundle exec rake kuby:rails_app:assets:copy")
               end
-
-              df.run("bundle exec rake kuby:rails_app:assets:copy")
             end
 
             df.from(NGINX_IMAGE)
-            df.copy("--from=#{"#{app_name}-#{tags[-1]}"} #{RAILS_MOUNT_PATH}", NGINX_MOUNT_PATH)
+            df.copy("--from=#{"#{app_name}-#{tags.compact.last}"} #{RAILS_MOUNT_PATH}", NGINX_MOUNT_PATH)
           end
         end
       end
