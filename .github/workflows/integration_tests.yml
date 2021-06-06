@@ -15,10 +15,6 @@ jobs:
           ruby-version: 2.7
       - name: Install Bundler
         run: gem install bundler
-      - name: Add Masks
-        run: |
-          echo "::add-mask::PREBUNDLER_ACCESS_KEY_ID"
-          echo "::add-mask::PREBUNDLER_SECRET_ACCESS_KEY"
       - name: Run Tests
         run: scripts/integration.sh
         env:

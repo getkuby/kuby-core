@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
 
   s.add_dependency 'colorize', '~> 0.8'
-  s.add_dependency 'docker-remote', '~> 0.5'
+  s.add_dependency 'docker-remote', '~> 0.6'
   s.add_dependency 'gli', '~> 2.0'
   s.add_dependency 'helm-cli', '~> 0.3'
   # See: https://github.com/Shopify/krane/pull/720

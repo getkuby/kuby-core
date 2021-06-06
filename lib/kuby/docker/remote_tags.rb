@@ -1,5 +1,7 @@
 # typed: strict
 
+require 'docker/remote'
+
 module Kuby
   module Docker
     class RemoteTags
@@ -26,6 +28,9 @@ module Kuby
       sig { returns(T::Array[String]) }
       def tags
         remote_client.tags
+      rescue ::Docker::Remote::UnknownRepoError
+        # this can happen if we've never pushed to the repo before
+        []
       end
 
       sig { returns(T::Array[String]) }

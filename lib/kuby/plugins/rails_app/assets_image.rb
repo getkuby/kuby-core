@@ -28,7 +28,7 @@ module Kuby
         end
 
         def build(build_args = {})
-          docker_cli.build(current_version, build_args)
+          docker_cli.build(current_version, build_args: build_args)
         end
 
         def push(tag)
