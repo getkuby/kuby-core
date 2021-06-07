@@ -1,0 +1,17 @@
+name: Typecheck
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - name: Install Bundler
+        run: gem install bundler
+      - name: Install Dependencies
+        run: bundle install --jobs 2 --retry 3
+      - name: Run Sorbet
+        run: bundle exec srb tc

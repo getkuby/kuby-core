@@ -9,7 +9,7 @@ jobs:
           sudo swapoff -a
           sudo rm -f /swapfile
       - uses: actions/checkout@v2
-      - name: Set up Ruby ${{ matrix.ruby-version }}
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
