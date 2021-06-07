@@ -12,9 +12,14 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-      - name: Install Bundler
-        run: gem install bundler
+      - name: Install Bundler and Prebundler
+        run: gem install bundler prebundler
+      - name: Lock Dependencies
+        run: bundle lock
       - name: Install Dependencies
-        run: bundle install --jobs 2 --retry 3
+        run: prebundle install --jobs 2 --retry 3
+        env:
+          PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
+          PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"
       - name: Run Tests
         run: bundle exec rspec
