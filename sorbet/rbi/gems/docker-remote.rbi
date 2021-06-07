@@ -7,9 +7,15 @@
 #
 #   https://github.com/sorbet/sorbet-typed/new/master?filename=lib/docker-remote/all/docker-remote.rbi
 #
-# docker-remote-0.1.0
+# docker-remote-0.6.0
 
 module Docker
 end
 module Docker::Remote
+  class ClientError < StandardError; end
+  class ServerError < StandardError; end
+  class UnauthorizedError < ClientError; end
+  class NotFoundError < ClientError; end
+  class UnknownRepoError < ClientError; end
+  class UnsupportedAuthTypeError < StandardError; end
 end

@@ -156,14 +156,14 @@ GLI_DEBUG=true bundle exec kuby -e production push
 # setup cluster
 GLI_DEBUG=true bundle exec kuby -e production setup
 # force nginx ingress to be a nodeport since we don't have any load balancers
-kubectl -n ingress-nginx patch svc ingress-nginx-controller -p '{"spec":{"type":"NodePort"}}'
+kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
 
 # deploy! (do this twice in case the db doesn't start in time and the deploy fails)
 GLI_DEBUG=true bundle exec kuby -e production deploy || \
   GLI_DEBUG=true bundle exec kuby -e production deploy
 
 # get ingress IP from kubectl; attempt to hit the app
-ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o json | jq -r .spec.clusterIP)
+ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)
 curl -vvv $ingress_ip:80 \
   -H "Host: localhost"\
   --fail \

@@ -65,11 +65,13 @@ module Kuby
     command :build do |c|
       c.flag [:a, :arg], required: false, multiple: true
       c.action do |global_options, options, args|
-        build_args = Hash[*(options[:arg] || []).flat_map do |a|
-          key, value = a.split('=')
-          value = value[1..-2] if value.start_with?('"') || value.start_with?("'")
-          [key, value]
-        end]
+        build_args = {}.tap do |build_args|
+          (options[:arg] || []).each do |a|
+            key, value = a.split('=')
+            value = value[1..-2] if value.start_with?('"') || value.start_with?("'")
+            build_args[key] = value
+          end
+        end
 
         tasks.build(build_args)
       end

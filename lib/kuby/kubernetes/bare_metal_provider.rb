@@ -18,7 +18,7 @@ module Kuby
       sig { returns(Config) }
       attr_reader :config
 
-      sig { void }
+      sig { params(environment: Environment).void }
       def initialize(environment)
         @config = T.let(Config.new, Config)
         super
