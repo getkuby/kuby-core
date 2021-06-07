@@ -7,7 +7,6 @@ group :development, :test do
   gem 'rake'
   # lock to a specific version to prevent breaking CI when new versions come out
   gem 'sorbet', '= 0.5.6427'
-  gem 'webrick'
 end
 
 group :test do
