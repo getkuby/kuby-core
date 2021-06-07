@@ -1,5 +1,5 @@
 # typed: true
 
 module Kuby
-  VERSION = '0.11.16'.freeze
+  VERSION = '0.12.0'.freeze
 end

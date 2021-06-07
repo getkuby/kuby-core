@@ -1,3 +1,21 @@
+## 0.12.0
+* Fix issue causing volume mount errors when k8s tries to schedule asset pods on multiple nodes (fixes #42).
+  - Persistent volumes can only be mounted on a single physical node.
+  - Kuby now creates a separate assets image powered by nginx.
+  - Ingress routes requests to either the Rails service or assets service depending on the URL (i.e. /assets).
+  - Since the ingress layer is now essential, the Docker Desktop provider no longer deletes ingresses or monkeys with service objects. You'll have to either 1) add an entry for your hostname to your hosts file, or 2) set the `Host` header when making requests to your app.
+* Plugins can now specify additional Dockerfiles to build during `kuby build`.
+* Switch from TravisCI to Github Actions.
+* Remove support for development environments.
+  - Proved to be too difficult to maintain.
+  - Kuby is a _deployment_ tool anyway, not a dev tool.
+  - Maybe we can turn the dev stuff into a gem at some point.
+* Refactor Docker image logic.
+  - Introduced the `Image` class and friends.
+  - Deleted the `Kuby::Docker::Metadata` class.
+* Add missing git dependency to Alpine distro.
+* Add a bare metal provider (fixes #10).
+
 ## 0.11.16
 * Fix yarn phase
   - Apparently you have to copy at least one file, TIL.
