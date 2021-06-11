@@ -1,6 +1,7 @@
 ## Kuby
 
-[![Build Status](https://travis-ci.com/getkuby/kuby-core.svg?branch=master)](https://travis-ci.com/getkuby/kuby-core)
+![Unit Tests](https://github.com/getkuby/kuby-core/actions/workflows/unit_tests.yml/badge.svg?branch=master)
+![Integration Tests](https://github.com/getkuby/kuby-core/actions/workflows/integration_tests.yml/badge.svg?branch=master)
 
 Deploy your Rails app the easy way.
 
