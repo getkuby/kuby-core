@@ -45,10 +45,10 @@ bundle exec kuby -e production remote dbconsole
 
 ### Other Useful Commands
 
-Print out the Dockerfile:
+Print out all the Dockerfiles:
 
 ```bash
-bundle exec kuby -e production dockerfile
+bundle exec kuby -e production dockerfiles
 ```
 
 Print out all your Kubernetes configs:
