@@ -107,6 +107,18 @@ describe Kuby::Docker::Spec do
         expect(subject).to match(/RUN bundle install .* --gemfile foo\/bar\/Gemfile/)
       end
     end
+
+    context 'when multiple gemfiles are specified' do
+      before { spec.bundler_phase.gemfiles('gemfiles/a.gemfile', 'gemfiles/b.gemfile') }
+
+      it 'uses all gemfiles including the default one' do
+        expect(subject).to include("COPY Gemfile .\n")
+        expect(subject).to include("COPY Gemfile.lock .\n")
+        expect(subject).to include("COPY gemfiles/a.gemfile gemfiles/a.gemfile\n")
+        expect(subject).to include("COPY gemfiles/b.gemfile gemfiles/b.gemfile\n")
+        expect(subject).to match(/RUN bundle install .* --gemfile Gemfile/)
+      end
+    end
   end
 
   describe '#package' do
