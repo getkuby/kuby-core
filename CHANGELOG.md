@@ -1,3 +1,7 @@
+## 0.13.0
+* Fix handling rails/rake options in remote exec (@palkan, #60)
+* Add `bundler_phase.gemfiles(*paths)` to allow adding additional gemfiles (@palkan, #61)
+
 ## 0.12.0
 * Fix issue causing volume mount errors when k8s tries to schedule asset pods on multiple nodes (fixes #42).
   - Persistent volumes can only be mounted on a single physical node.
