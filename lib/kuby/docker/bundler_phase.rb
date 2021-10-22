@@ -35,6 +35,7 @@ module Kuby
 
         @version = T.let(@version, T.nilable(String))
         @gemfile = T.let(@gemfile, T.nilable(String))
+        @gemfiles = T.let([], T::Array[String])
         @without = T.let(@without, T.nilable(T::Array[String]))
       end
 
@@ -51,6 +52,10 @@ module Kuby
         dockerfile.copy(gf, '.')
         dockerfile.copy(lf, '.')
 
+        @gemfiles.each do |file|
+          dockerfile.copy(file, file)
+        end
+
         unless wo.empty?
           dockerfile.env("BUNDLE_WITHOUT='#{wo.join(' ')}'")
         end
@@ -65,6 +70,11 @@ module Kuby
         # generate binstubs and add the bin directory to our path
         dockerfile.run('bundle', 'binstubs', '--all')
         dockerfile.env("PATH=./bin:$PATH")
+      end
+
+      sig { params(paths: String).void }
+      def gemfiles(*paths)
+        @gemfiles.concat(paths)
       end
 
       private
