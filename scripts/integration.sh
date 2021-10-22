@@ -170,4 +170,7 @@ curl -vvv $ingress_ip:80 \
   --connect-timeout 5 \
   --max-time 10 \
   --retry 5 \
-  --retry-max-time 40
+  --retry-max-time 40 || exit $?
+
+# execute remote command
+GLI_DEBUG=true bundle exec kuby -e production remote exec "bundle exec rails runner 'puts \"Hello from Kuby\"'" | grep "Hello from Kuby"
