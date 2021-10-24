@@ -158,7 +158,7 @@ GLI_DEBUG=true bundle exec kuby -e production setup
 # force nginx ingress to be a nodeport since we don't have any load balancers
 kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
 
-# deploy! (do this twice in case the db doesn't start in time and the deploy fails)
+# deploy!
 GLI_DEBUG=true bundle exec kuby -e production deploy || true
 
 while [[ "$(kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | jq -r .status.phase)" != "Running" ]]; do
@@ -166,7 +166,10 @@ while [[ "$(kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | j
   sleep 5
 done
 
-GLI_DEBUG=true bundle exec kuby -e production deploy
+# Do this twice in case the db doesn't start in time and the deploy fails.
+# This can happen even after waiting for the pod to start above, not sure why.
+GLI_DEBUG=true bundle exec kuby -e production deploy ||
+  GLI_DEBUG=true bundle exec kuby -e production deploy
 
 # get ingress IP from kubectl; attempt to hit the app
 ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)
