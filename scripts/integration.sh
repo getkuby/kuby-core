@@ -159,8 +159,14 @@ GLI_DEBUG=true bundle exec kuby -e production setup
 kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
 
 # deploy! (do this twice in case the db doesn't start in time and the deploy fails)
-GLI_DEBUG=true bundle exec kuby -e production deploy || \
-  GLI_DEBUG=true bundle exec kuby -e production deploy
+GLI_DEBUG=true bundle exec kuby -e production deploy || true
+
+while [[ "$(kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | jq -r .status.phase)" != "Running" ]]; do
+  echo "Waiting for MySQL pod to start..."
+  sleep 5
+done
+
+GLI_DEBUG=true bundle exec kuby -e production deploy
 
 # get ingress IP from kubectl; attempt to hit the app
 ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)

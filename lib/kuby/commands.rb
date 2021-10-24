@@ -25,9 +25,10 @@ module Kuby
       def run(args)
         if idx = args.index('rails') || idx = args.index('rake')
           @rails_options = T.let(@rails_options, T.nilable(T::Array[String]))
-          @rails_options = args[(idx+1)..-1]
+          @rails_options = args[(idx + 1)..-1]
           super(args[0..idx])
         else
+          @rails_options = []
           super
         end
       end
@@ -164,7 +165,7 @@ module Kuby
       rc.desc 'Runs an arbitrary command inside a running Rails pod.'
       rc.command :exec do |c|
         c.action do |global_options, options, args|
-          tasks.remote_exec(args + @rails_options)
+          tasks.remote_exec([*args, *@rails_options])
         end
       end
 
