@@ -68,7 +68,7 @@ module Kuby
       c.action do |global_options, options, args|
         build_args = {}.tap do |build_args|
           (options[:arg] || []).each do |a|
-            key, value = a.split('=')
+            key, value = a.split('=', 2)
             value = value[1..-2] if value.start_with?('"') || value.start_with?("'")
             build_args[key] = value
           end
