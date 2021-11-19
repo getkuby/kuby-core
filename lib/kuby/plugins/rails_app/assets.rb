@@ -317,14 +317,15 @@ module Kuby
             tags.each_cons(2) do |prev_tag, tag|
               prev_image_name = "#{app_name}-#{prev_tag}"
               df.from("#{base_image.image_url}:#{prev_tag}", as: prev_image_name)
+              df.arg('RAILS_MASTER_KEY')
               df.run("mkdir -p #{RAILS_MOUNT_PATH}")
-              df.run("bundle exec rake kuby:rails_app:assets:copy")
+              df.run("env RAILS_MASTER_KEY=$RAILS_MASTER_KEY bundle exec rake kuby:rails_app:assets:copy")
 
               if tag
                 image_name = "#{app_name}-#{tag}"
                 df.from("#{base_image.image_url}:#{tag}", as: image_name)
                 df.copy("--from=#{prev_image_name} #{RAILS_MOUNT_PATH}", RAILS_MOUNT_PATH)
-                df.run("bundle exec rake kuby:rails_app:assets:copy")
+                df.run("env RAILS_MASTER_KEY=$RAILS_MASTER_KEY bundle exec rake kuby:rails_app:assets:copy")
               end
             end
 
