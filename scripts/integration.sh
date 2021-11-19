@@ -93,6 +93,14 @@ class PrebundlerPhase < Kuby::Docker::BundlerPhase
   end
 end
 
+# keep this in here to make sure RAILS_MASTER_KEY is being provided somehow
+app_creds = ActiveSupport::EncryptedConfiguration.new(
+  config_path: File.join('config', 'credentials.yml.enc'),
+  key_path: File.join('config', 'master.key'),
+  env_key: 'RAILS_MASTER_KEY',
+  raise_if_missing_key: true
+)
+
 Kuby.define('Kubyapp') do
   environment(:production) do
     docker do
@@ -166,9 +174,10 @@ while [[ "$(kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | j
   sleep 5
 done
 
-# Do this twice in case the db doesn't start in time and the deploy fails.
+# Do this three times in case the db doesn't start in time and the deploy fails.
 # This can happen even after waiting for the pod to start above, not sure why.
 GLI_DEBUG=true bundle exec kuby -e production deploy ||
+  GLI_DEBUG=true bundle exec kuby -e production deploy ||
   GLI_DEBUG=true bundle exec kuby -e production deploy
 
 # get ingress IP from kubectl; attempt to hit the app
