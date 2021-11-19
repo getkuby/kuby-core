@@ -93,6 +93,9 @@ class PrebundlerPhase < Kuby::Docker::BundlerPhase
   end
 end
 
+require 'active_support/core_ext'
+require 'active_support/encrypted_configuration'
+
 # keep this in here to make sure RAILS_MASTER_KEY is being provided somehow
 app_creds = ActiveSupport::EncryptedConfiguration.new(
   config_path: File.join('config', 'credentials.yml.enc'),
