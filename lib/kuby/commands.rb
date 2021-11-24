@@ -74,7 +74,7 @@ module Kuby
           end
         end
 
-        tasks.build(build_args)
+        tasks.build(build_args, args)
       end
     end
 

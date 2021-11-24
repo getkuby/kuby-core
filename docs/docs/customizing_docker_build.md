@@ -111,3 +111,17 @@ end
 1. `copy(source, dest, from: nil)`
 1. `expose(port)`
 1. `cmd(command)`
+
+## Docker build options
+
+You can also provide arbitrary options to the `docker build` command:
+
+```bash
+bundle exec kuby build -- [options]
+```
+
+For example, you can specify a [custom build target](https://docs.docker.com/engine/reference/commandline/build/#custom-build-outputs):
+
+```bash
+bundle exec kuby build -- --output type=tar,dest=out.tar
+```
