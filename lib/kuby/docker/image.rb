@@ -5,6 +5,9 @@ module Kuby
     class Image
       extend T::Sig
 
+      sig { returns(T.nilable(String)) }
+      attr_reader :identifier
+
       sig { returns(String) }
       attr_reader :image_url
 
@@ -32,6 +35,7 @@ module Kuby
         @credentials = T.let(credentials, Credentials)
         @main_tag = T.let(main_tag, T.nilable(String))
         @alias_tags = T.let(alias_tags, T::Array[String])
+        @identifier = T.let(@identifier, T.nilable(String))
 
         @image_host = T.let(@image_host, T.nilable(String))
         @image_hostname = T.let(@image_hostname, T.nilable(String))

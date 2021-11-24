@@ -7,6 +7,7 @@ module Kuby
         def initialize(base_image, dockerfile, main_tag = nil, alias_tags = [])
           super(dockerfile, base_image.image_url, base_image.credentials, main_tag, alias_tags)
           @base_image = base_image
+          @identifier = "assets"
         end
 
         def new_version

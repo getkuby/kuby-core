@@ -9,10 +9,13 @@ module Kuby
       @environment = environment
     end
 
-    def print_dockerfiles
+    def print_dockerfiles(only = nil)
       kubernetes.docker_images.each do |image|
+        next if only && image.identifier != only
+
         image = image.current_version
-        Kuby.logger.info("Dockerfile for image #{image.image_url} with tags #{image.tags.join(', ')}")
+        identifier = image.identifier ? " ##{image.identifier}" : ""
+        Kuby.logger.info("Dockerfile for#{identifier} image #{image.image_url} with tags #{image.tags.join(', ')}")
         theme = Rouge::Themes::Base16::Solarized.new
         formatter = Rouge::Formatters::Terminal256.new(theme)
         lexer = Rouge::Lexers::Docker.new
@@ -25,16 +28,20 @@ module Kuby
       environment.kubernetes.setup
     end
 
-    def build(build_args = {}, args = [])
+    def build(build_args = {}, args = [], only = nil)
       kubernetes.docker_images.each do |image|
+        next if only && image.identifier != only
+
         image = image.new_version
         Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
         image.build(build_args, args)
       end
     end
 
-    def push
+    def push(only = nil)
       kubernetes.docker_images.each do |image|
+        next if only && image.identifier != only
+
         image = image.current_version
         Kuby.logger.info("Pushing image #{image.image_url} with tags #{image.tags.join(', ')}")
         push_image(image)

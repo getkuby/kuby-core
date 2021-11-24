@@ -6,6 +6,20 @@ module Kuby
     class AppImage < ::Kuby::Docker::TimestampedImage
       extend T::Sig
 
+      sig {
+        params(
+          dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
+          image_url: String,
+          credentials: Credentials,
+          main_tag: T.nilable(String),
+          alias_tags: T::Array[String]
+        ).void
+      }
+      def initialize(dockerfile, image_url, credentials, main_tag = nil, alias_tags = [])
+        super
+        @identifier = "app"
+      end
+
       sig { params(build_args: T::Hash[String, String], args: T::Array[String]).returns(AppImage) }
       def build(build_args = {}, args = [])
         unless ENV.fetch('RAILS_MASTER_KEY', '').empty?
