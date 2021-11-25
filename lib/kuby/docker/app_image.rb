@@ -20,13 +20,13 @@ module Kuby
         @identifier = "app"
       end
 
-      sig { params(build_args: T::Hash[String, String], args: T::Array[String]).returns(AppImage) }
-      def build(build_args = {}, args = [])
+      sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String]).returns(AppImage) }
+      def build(build_args = {}, docker_args = [])
         unless ENV.fetch('RAILS_MASTER_KEY', '').empty?
           build_args['RAILS_MASTER_KEY'] = T.must(ENV['RAILS_MASTER_KEY'])
         end
 
-        super(build_args, args)
+        super(build_args, docker_args)
       end
     end
   end

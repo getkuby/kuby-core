@@ -28,13 +28,13 @@ module Kuby
       environment.kubernetes.setup
     end
 
-    def build(build_args = {}, args = [], only = nil)
+    def build(build_args = {}, docker_args = [], only = nil)
       kubernetes.docker_images.each do |image|
         next if only && image.identifier != only
 
         image = image.new_version
         Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
-        image.build(build_args, args)
+        image.build(build_args, docker_args)
       end
     end
 
