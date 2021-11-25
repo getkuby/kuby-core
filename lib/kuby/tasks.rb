@@ -84,10 +84,16 @@ module Kuby
       environment.kubernetes.rollback
     end
 
-    def print_resources
+    def print_resources(kind = nil, name_pattern = nil)
       kubernetes.before_deploy
 
+      name_rxp = Regexp.new(name_pattern) if name_pattern
+
       kubernetes.resources.each do |res|
+        next if kind && res.kind_sym.to_s != kind
+
+        next if name_rxp && !name_rxp.match?(res.metadata.name)
+
         puts res.to_resource.serialize.to_yaml
       end
     end

@@ -120,8 +120,10 @@ module Kuby
 
     desc 'Prints the effective Kubernetes resources that will be applied on deploy.'
     command :resources do |c|
+      c.flag [:K, :kind], required: false
+      c.flag [:N, :name], required: false
       c.action do |global_options, options, args|
-        tasks.print_resources
+        tasks.print_resources(options[:kind], options[:name])
       end
     end
 
