@@ -120,7 +120,7 @@ You can pass additional build args via the `-a` (`--arg`) flag. For example, you
 bundle exec kuby build -a SOURCE_COMMIT=$COMMIT_SHA
 ```
 
-**NOTE:** You should take care of adding `ARG SOURCE_COMMIT` and `ENV SOURCE_COMMIT=$SOURCE_COMMIT` yourself (see above).
+**NOTE:** You will need to add `ARG SOURCE_COMMIT` and `ENV SOURCE_COMMIT=$SOURCE_COMMIT` to the Dockerfile yourself (see above).
 
 By default, `kuby build` builds all the registered Docker images. Sometimes it could be useful to build a particular one. For that, you can use the `--only` option:
 
