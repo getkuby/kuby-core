@@ -51,11 +51,25 @@ Print out all the Dockerfiles:
 bundle exec kuby -e production dockerfiles
 ```
 
+You can also show a Dockerfile for a particular image (using its identifier):
+
+```bash
+bundle exec kuby -e production dockerfiles --only app
+```
+
 Print out all your Kubernetes configs:
 
 ```bash
 bundle exec kuby -e production resources
 ```
+
+You can also specify Kind and/or Name filters:
+
+```bash
+bundle exec kuby -e production resources --kind service --name ".+-(web|rpc)"
+```
+
+NOTE: `--kind` uses the exact match and `--name` accepts regular expressions.
 
 Run an arbitrary kubectl command:
 

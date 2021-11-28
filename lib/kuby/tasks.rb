@@ -9,10 +9,13 @@ module Kuby
       @environment = environment
     end
 
-    def print_dockerfiles
+    def print_dockerfiles(only = nil)
       kubernetes.docker_images.each do |image|
+        next if only && image.identifier != only
+
         image = image.current_version
-        Kuby.logger.info("Dockerfile for image #{image.image_url} with tags #{image.tags.join(', ')}")
+        identifier = image.identifier ? " ##{image.identifier}" : ""
+        Kuby.logger.info("Dockerfile for#{identifier} image #{image.image_url} with tags #{image.tags.join(', ')}")
         theme = Rouge::Themes::Base16::Solarized.new
         formatter = Rouge::Formatters::Terminal256.new(theme)
         lexer = Rouge::Lexers::Docker.new
@@ -25,16 +28,20 @@ module Kuby
       environment.kubernetes.setup
     end
 
-    def build(build_args = {})
+    def build(build_args = {}, docker_args = [], only = nil)
       kubernetes.docker_images.each do |image|
+        next if only && image.identifier != only
+
         image = image.new_version
         Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
-        image.build(build_args)
+        image.build(build_args, docker_args)
       end
     end
 
-    def push
+    def push(only = nil)
       kubernetes.docker_images.each do |image|
+        next if only && image.identifier != only
+
         image = image.current_version
         Kuby.logger.info("Pushing image #{image.image_url} with tags #{image.tags.join(', ')}")
         push_image(image)
@@ -77,10 +84,16 @@ module Kuby
       environment.kubernetes.rollback
     end
 
-    def print_resources
+    def print_resources(kind = nil, name_pattern = nil)
       kubernetes.before_deploy
 
+      name_rxp = Regexp.new(name_pattern) if name_pattern
+
       kubernetes.resources.each do |res|
+        next if kind && res.kind_sym.to_s != kind
+
+        next if name_rxp && !name_rxp.match?(res.metadata.name)
+
         puts res.to_resource.serialize.to_yaml
       end
     end

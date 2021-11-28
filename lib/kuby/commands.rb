@@ -65,7 +65,8 @@ module Kuby
     desc 'Builds the Docker image.'
     command :build do |c|
       c.flag [:a, :arg], required: false, multiple: true
-      c.action do |global_options, options, args|
+      c.flag [:only], required: false
+      c.action do |global_options, options, docker_args|
         build_args = {}.tap do |build_args|
           (options[:arg] || []).each do |a|
             key, value = a.split('=', 2)
@@ -74,14 +75,15 @@ module Kuby
           end
         end
 
-        tasks.build(build_args)
+        tasks.build(build_args, docker_args, options[:only])
       end
     end
 
     desc 'Pushes the Docker image to the configured registry.'
     command :push do |c|
+      c.flag [:only], required: false
       c.action do |global_options, options, args|
-        tasks.push
+        tasks.push(options[:only])
       end
     end
 
@@ -94,8 +96,9 @@ module Kuby
 
     desc 'Prints the effective Dockerfiles used to build Docker images.'
     command :dockerfiles do |c|
+      c.flag [:only], required: false
       c.action do |global_options, options, args|
-        tasks.print_dockerfiles
+        tasks.print_dockerfiles(options[:only])
       end
     end
 
@@ -117,8 +120,10 @@ module Kuby
 
     desc 'Prints the effective Kubernetes resources that will be applied on deploy.'
     command :resources do |c|
+      c.flag [:K, :kind], required: false
+      c.flag [:N, :name], required: false
       c.action do |global_options, options, args|
-        tasks.print_resources
+        tasks.print_resources(options[:kind], options[:name])
       end
     end
 

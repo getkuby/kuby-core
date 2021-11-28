@@ -111,3 +111,42 @@ end
 1. `copy(source, dest, from: nil)`
 1. `expose(port)`
 1. `cmd(command)`
+
+## Docker build options
+
+You can pass additional build args via the `-a` (`--arg`) flag. For example, you can add a current Git commit info to a container:
+
+```bash
+bundle exec kuby build -a SOURCE_COMMIT=$COMMIT_SHA
+```
+
+**NOTE:** You will need to add `ARG SOURCE_COMMIT` and `ENV SOURCE_COMMIT=$SOURCE_COMMIT` to the Dockerfile yourself (see above).
+
+By default, `kuby build` builds all the registered Docker images. Sometimes it could be useful to build a particular one. For that, you can use the `--only` option:
+
+```bash
+bundle exec kuby build --only app
+```
+
+The value for the `--only` option is an image identifier. You can see it in the output of the `kuby dockerfiles` command:
+
+```bash
+$ bundle exec kuby dockerfiles
+
+Dockerfile for #app image my.registry/my/app with tags 20211119151614, latest
+...
+```
+
+A similar option is available for the `push` and `dockerfiles` commands, e.g., `kuby push --only app`.
+
+You can also provide arbitrary options to the `docker build` command:
+
+```bash
+bundle exec kuby build -- [options]
+```
+
+For example, you can specify a [custom build target](https://docs.docker.com/engine/reference/commandline/build/#custom-build-outputs):
+
+```bash
+bundle exec kuby build -- --output type=tar,dest=out.tar
+```
