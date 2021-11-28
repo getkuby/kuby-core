@@ -1,3 +1,7 @@
+## 0.14.0
+* Make RAILS_MASTER_KEY available in the assets image (@palkan, #63)
+* Allow specifying custom docker build options via CLI (@palkan, #65)
+
 ## 0.13.0
 * Fix handling rails/rake options in remote exec (@palkan, #60)
 * Add `bundler_phase.gemfiles(*paths)` to allow adding additional gemfiles (@palkan, #61)
