@@ -324,6 +324,7 @@ module Kuby
               if tag
                 image_name = "#{app_name}-#{tag}"
                 df.from("#{base_image.image_url}:#{tag}", as: image_name)
+                df.arg('RAILS_MASTER_KEY')
                 df.copy("--from=#{prev_image_name} #{RAILS_MOUNT_PATH}", RAILS_MOUNT_PATH)
                 df.run("env RAILS_MASTER_KEY=$RAILS_MASTER_KEY bundle exec rake kuby:rails_app:assets:copy")
               end
