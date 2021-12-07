@@ -134,8 +134,10 @@ module Kuby
     private
 
     def perform_docker_login_if_necessary(image)
+      require 'pry-byebug'
+      binding.pry
       auth_uris = image.docker_cli.auths.map do |url|
-        URI(url)
+        Kuby::Docker::Image.parse_uri(url)
       end
 
       logged_in = image.credentials.username && (
