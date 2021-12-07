@@ -50,7 +50,7 @@ kubectl taint nodes --all node-role.kubernetes.io/master-
 gem install prebundler -v '< 1'
 git clone --depth=1 https://github.com/getkuby/kuby_test.git
 cd kuby_test
-printf "\ngem 'kuby-core', github: 'getkuby/kuby-core', branch: '${GITHUB_REF##*/}'\n" >> Gemfile
+printf "\ngem 'kuby-core', github: '$GITHUB_REPOSITORY', branch: '${GITHUB_REF##*/}'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
