@@ -32,6 +32,8 @@ module Kuby
       kubernetes.docker_images.each do |image|
         next if only && image.identifier != only
 
+        return unless perform_docker_login_if_necessary(image)
+
         image = image.new_version
         Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
         image.build(build_args, docker_args)
@@ -49,32 +51,7 @@ module Kuby
     end
 
     def push_image(image)
-      auth_uris = image.docker_cli.auths.map do |url|
-        URI(url)
-      end
-
-      logged_in = image.credentials.username && (
-        auth_uris.any? do |uri|
-          image.image_hostname == uri.host ||
-            image.registry_metadata_hostname == uri.host
-        end
-      )
-
-      if !logged_in
-        Kuby.logger.info("Attempting to log in to registry at #{image.image_hostname}")
-
-        begin
-          image.docker_cli.login(
-            url: image.image_hostname,
-            username: image.credentials.username,
-            password: image.credentials.password
-          )
-        rescue Kuby::Docker::LoginError => e
-          Kuby.logger.fatal("Couldn't log in to the registry at #{image.image_hostname}")
-          Kuby.logger.fatal(e.message)
-          return
-        end
-      end
+      return unless perform_docker_login_if_necessary(image)
 
       begin
         image.tags.each { |tag| image.push(tag) }
@@ -155,6 +132,38 @@ module Kuby
     end
 
     private
+
+    def perform_docker_login_if_necessary(image)
+      auth_uris = image.docker_cli.auths.map do |url|
+        URI(url)
+      end
+
+      logged_in = image.credentials.username && (
+        auth_uris.any? do |uri|
+          image.image_hostname == uri.host ||
+            image.registry_metadata_hostname == uri.host
+        end
+      )
+
+      if !logged_in
+        Kuby.logger.info("Attempting to log in to registry at #{image.image_hostname}")
+
+        begin
+          image.docker_cli.login(
+            url: image.image_hostname,
+            username: image.credentials.username,
+            password: image.credentials.password
+          )
+        rescue Kuby::Docker::LoginError => e
+          Kuby.logger.fatal("Couldn't log in to the registry at #{image.image_hostname}")
+          Kuby.logger.fatal(e.message)
+
+          return false
+        end
+      end
+
+      true
+    end
 
     def get_first_pod
       pods = kubernetes_cli.get_objects(
