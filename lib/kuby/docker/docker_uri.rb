@@ -8,7 +8,9 @@ module Kuby
       DEFAULT_REGISTRY_HOST = T.let('docker.io'.freeze, String)
       DEFAULT_REGISTRY_PORT = T.let(443, Integer)
 
-      sig { params(url: String).returns(DockerURI) }
+      sig {
+        params(url: String, default_host: T.nilable(String), default_port: T.nilable(Integer)).returns(DockerURI)
+      }
       def self.parse(url, default_host: DEFAULT_REGISTRY_HOST, default_port: DEFAULT_REGISTRY_PORT)
         if idx = url.index('://')
           url = url[(idx + 3)..-1] || ''

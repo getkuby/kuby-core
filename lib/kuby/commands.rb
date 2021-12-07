@@ -1,4 +1,4 @@
-# typed: strict
+# typed: false
 
 require 'kuby/version'
 require 'gli'
@@ -170,7 +170,7 @@ module Kuby
       rc.desc 'Runs an arbitrary command inside a running Rails pod.'
       rc.command :exec do |c|
         c.action do |global_options, options, args|
-          tasks.remote_exec([*args, *@rails_options])
+          tasks.remote_exec([*args, *T.unsafe(@rails_options)])
         end
       end
 

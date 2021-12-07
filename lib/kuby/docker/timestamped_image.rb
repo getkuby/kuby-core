@@ -12,6 +12,7 @@ module Kuby
           dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
           image_url: String,
           credentials: Credentials,
+          registry_metadata_url: T.nilable(String),
           main_tag: T.nilable(String),
           alias_tags: T::Array[String]
         ).void

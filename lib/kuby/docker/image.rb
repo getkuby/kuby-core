@@ -14,7 +14,7 @@ module Kuby
       sig { returns(String) }
       attr_reader :image_url
 
-      sig { returns(String) }
+      sig { returns(T.nilable(String)) }
       attr_reader :registry_metadata_url
 
       sig { returns(Credentials) }
@@ -31,6 +31,7 @@ module Kuby
           dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
           image_url: String,
           credentials: Credentials,
+          registry_metadata_url: T.nilable(String),
           main_tag: T.nilable(String),
           alias_tags: T::Array[String]
         ).void
@@ -38,7 +39,7 @@ module Kuby
       def initialize(dockerfile, image_url, credentials, registry_metadata_url = nil, main_tag = nil, alias_tags = [])
         @dockerfile = T.let(dockerfile, T.any(Dockerfile, T.proc.returns(Dockerfile)))
         @image_url = T.let(image_url, String)
-        @registry_metadata_url = T.let(registry_metadata_url, String)
+        @registry_metadata_url = T.let(registry_metadata_url, T.nilable(String))
         @credentials = T.let(credentials, Credentials)
         @main_tag = T.let(main_tag, T.nilable(String))
         @alias_tags = T.let(alias_tags, T::Array[String])
@@ -46,6 +47,9 @@ module Kuby
 
         @image_host = T.let(@image_host, T.nilable(String))
         @image_hostname = T.let(@image_hostname, T.nilable(String))
+        @registry_metadata_host = T.let(@registry_metadata_host, T.nilable(String))
+        @registry_metadata_hostname = T.let(@registry_metadata_hostname, T.nilable(String))
+        @registry_metadata_uri = T.let(@registry_metadata_uri, T.nilable(DockerURI))
         @image_repo = T.let(@image_repo, T.nilable(String))
         @full_image_uri = T.let(@full_image_uri, T.nilable(DockerURI))
         @docker_cli = T.let(@docker_cli, T.nilable(Docker::CLI))
