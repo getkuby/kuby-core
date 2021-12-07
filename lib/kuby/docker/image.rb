@@ -5,11 +5,17 @@ module Kuby
     class Image
       extend T::Sig
 
+      DEFAULT_REGISTRY_METADATA_HOST = T.let('index.docker.io'.freeze, String)
+      DEFAULT_REGISTRY_METADATA_PORT = T.let(443, Integer)
+
       sig { returns(T.nilable(String)) }
       attr_reader :identifier
 
       sig { returns(String) }
       attr_reader :image_url
+
+      sig { returns(String) }
+      attr_reader :registry_metadata_url
 
       sig { returns(Credentials) }
       attr_reader :credentials
@@ -29,9 +35,10 @@ module Kuby
           alias_tags: T::Array[String]
         ).void
       }
-      def initialize(dockerfile, image_url, credentials, main_tag = nil, alias_tags = [])
+      def initialize(dockerfile, image_url, credentials, registry_metadata_url = nil, main_tag = nil, alias_tags = [])
         @dockerfile = T.let(dockerfile, T.any(Dockerfile, T.proc.returns(Dockerfile)))
         @image_url = T.let(image_url, String)
+        @registry_metadata_url = T.let(registry_metadata_url, String)
         @credentials = T.let(credentials, Credentials)
         @main_tag = T.let(main_tag, T.nilable(String))
         @alias_tags = T.let(alias_tags, T::Array[String])
@@ -74,6 +81,16 @@ module Kuby
       end
 
       sig { returns(String) }
+      def registry_metadata_host
+        @registry_metadata_host ||= "#{registry_metadata_uri.host}:#{registry_metadata_uri.port}"
+      end
+
+      sig { returns(String) }
+      def registry_metadata_hostname
+        @registry_metadata_host ||= registry_metadata_uri.host
+      end
+
+      sig { returns(String) }
       def image_hostname
         @image_hostname ||= image_uri.host
       end
@@ -86,6 +103,15 @@ module Kuby
       sig { returns(DockerURI) }
       def image_uri
         @full_image_uri ||= DockerURI.parse(image_url)
+      end
+
+      sig { returns(DockerURI) }
+      def registry_metadata_uri
+        @registry_metadata_uri ||= DockerURI.parse(
+          registry_metadata_url || image_url,
+          default_host: DEFAULT_REGISTRY_METADATA_HOST,
+          default_port: DEFAULT_REGISTRY_METADATA_PORT
+        )
       end
 
       sig { returns(T::Array[String]) }
@@ -112,7 +138,7 @@ module Kuby
 
       sig { params(main_tag: String, alias_tags: T::Array[String]).returns(Image) }
       def duplicate_with_tags(main_tag, alias_tags)
-        self.class.new(dockerfile, image_url, credentials, main_tag, alias_tags)
+        self.class.new(dockerfile, image_url, credentials, registry_metadata_url, main_tag, alias_tags)
       end
     end
   end

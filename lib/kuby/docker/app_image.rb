@@ -15,7 +15,7 @@ module Kuby
           alias_tags: T::Array[String]
         ).void
       }
-      def initialize(dockerfile, image_url, credentials, main_tag = nil, alias_tags = [])
+      def initialize(dockerfile, image_url, credentials, registry_metadata_url = nil, main_tag = nil, alias_tags = [])
         super
         @identifier = "app"
       end

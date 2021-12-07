@@ -13,6 +13,9 @@ module Kuby
       sig { returns(T.nilable(String)) }
       attr_reader :image_url_str
 
+      sig { returns(T.nilable(String)) }
+      attr_reader :registry_metadata_url_str
+
       sig { params(environment: Environment).void }
       def initialize(environment)
         @environment = environment
@@ -31,6 +34,7 @@ module Kuby
         @layer_stack = T.let(@layer_stack, T.nilable(Kuby::Docker::LayerStack))
 
         @image_url_str = T.let(@image_url_str, T.nilable(String))
+        @registry_metadata_url_str = T.let(@registry_metadata_url_str, T.nilable(String))
         @image = T.let(@image, T.nilable(Docker::AppImage))
       end
 
@@ -96,6 +100,11 @@ module Kuby
         @image_url_str = url
       end
 
+      sig { params(url: String).void }
+      def registry_metadata_url(url)
+        @registry_metadata_url_str = url
+      end
+
       sig {
         params(
           name: Symbol,
@@ -148,7 +157,7 @@ module Kuby
           end
 
           Docker::AppImage.new(
-            dockerfile, T.must(image_url_str), credentials
+            dockerfile, T.must(image_url_str), credentials, registry_metadata_url_str
           )
         end
       end

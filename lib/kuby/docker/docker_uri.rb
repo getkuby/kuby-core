@@ -5,11 +5,11 @@ module Kuby
     class DockerURI
       extend T::Sig
 
-      DEFAULT_REGISTRY_HOST = T.let('index.docker.io'.freeze, String)
+      DEFAULT_REGISTRY_HOST = T.let('docker.io'.freeze, String)
       DEFAULT_REGISTRY_PORT = T.let(443, Integer)
 
       sig { params(url: String).returns(DockerURI) }
-      def self.parse(url)
+      def self.parse(url, default_host: DEFAULT_REGISTRY_HOST, default_port: DEFAULT_REGISTRY_PORT)
         if idx = url.index('://')
           url = url[(idx + 3)..-1] || ''
         end
@@ -17,9 +17,9 @@ module Kuby
         host_port, *path = url.split('/')
         host, port, *path = if host_port =~ /[.:]/
           hst, prt = T.must(host_port).split(':')
-          [T.must(hst), prt || DEFAULT_REGISTRY_PORT, *path]
+          [T.must(hst), prt || default_port, *path]
         else
-          [DEFAULT_REGISTRY_HOST, DEFAULT_REGISTRY_PORT, host_port, *path]
+          [default_host, default_port, host_port, *path]
         end
 
         new(host.to_s, port.to_i, (path || []).join('/'))

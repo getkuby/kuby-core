@@ -296,7 +296,7 @@ module Kuby
         end
 
         def image
-          @image ||= RailsApp::AssetsImage.new(docker.image, -> { dockerfile })
+          @image ||= RailsApp::AssetsImage.new(docker.image, -> { dockerfile }, docker.image.registry_metadata_url)
         end
 
         private

@@ -49,17 +49,28 @@ module Kuby
     end
 
     def push_image(image)
-      if image.credentials.username && !image.docker_cli.auths.include?(image.image_host)
-        Kuby.logger.info("Attempting to log in to registry at #{image.image_host}")
+      auth_uris = image.docker_cli.auths.map do |url|
+        URI(url)
+      end
+
+      logged_in = image.credentials.username && (
+        auth_uris.any? do |uri|
+          image.image_hostname == uri.host ||
+            image.registry_metadata_hostname == uri.host
+        end
+      )
+
+      if !logged_in
+        Kuby.logger.info("Attempting to log in to registry at #{image.image_hostname}")
 
         begin
           image.docker_cli.login(
-            url: image.image_host,
+            url: image.image_hostname,
             username: image.credentials.username,
             password: image.credentials.password
           )
         rescue Kuby::Docker::LoginError => e
-          Kuby.logger.fatal("Couldn't log in to the registry at #{image.image_host}")
+          Kuby.logger.fatal("Couldn't log in to the registry at #{image.image_hostname}")
           Kuby.logger.fatal(e.message)
           return
         end
