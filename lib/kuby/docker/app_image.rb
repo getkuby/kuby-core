@@ -11,12 +11,12 @@ module Kuby
           dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
           image_url: String,
           credentials: Credentials,
-          registry_metadata_url: T.nilable(String),
+          registry_index_url: T.nilable(String),
           main_tag: T.nilable(String),
           alias_tags: T::Array[String]
         ).void
       }
-      def initialize(dockerfile, image_url, credentials, registry_metadata_url = nil, main_tag = nil, alias_tags = [])
+      def initialize(dockerfile, image_url, credentials, registry_index_url = nil, main_tag = nil, alias_tags = [])
         super
         @identifier = "app"
       end

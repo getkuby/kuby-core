@@ -141,7 +141,7 @@ module Kuby
       logged_in = image.credentials.username && (
         auth_uris.any? do |uri|
           image.image_hostname == uri.host ||
-            image.registry_metadata_hostname == uri.host
+            image.registry_index_hostname == uri.host
         end
       )
 
