@@ -19,6 +19,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '15'
       - name: Install Bundler
         run: gem install bundler
       - name: Run Tests
