@@ -4,8 +4,8 @@ module Kuby
       class AssetsImage < ::Kuby::Docker::Image
         attr_reader :base_image
 
-        def initialize(base_image, dockerfile, registry_host_url = nil, main_tag = nil, alias_tags = [])
-          super(dockerfile, base_image.image_url, base_image.credentials, registry_host_url, main_tag, alias_tags)
+        def initialize(base_image, dockerfile, registry_index_url = nil, main_tag = nil, alias_tags = [])
+          super(dockerfile, base_image.image_url, base_image.credentials, registry_index_url, main_tag, alias_tags)
           @base_image = base_image
           @identifier = "assets"
         end
@@ -42,7 +42,7 @@ module Kuby
           self.class.new(
             base_image,
             dockerfile,
-            registry_host_url,
+            registry_index_url,
             annotate_tag(image.main_tag),
             image.alias_tags.map { |at| annotate_tag(at) }
           )

@@ -12,12 +12,12 @@ module Kuby
           dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
           image_url: String,
           credentials: Credentials,
-          registry_host_url: T.nilable(String),
+          registry_index_url_str: T.nilable(String),
           main_tag: T.nilable(String),
           alias_tags: T::Array[String]
         ).void
       }
-      def initialize(dockerfile, image_url, credentials, registry_host_url = nil, main_tag = nil, alias_tags = [])
+      def initialize(dockerfile, image_url, credentials, registry_index_url_str = nil, main_tag = nil, alias_tags = [])
         @new_version = T.let(@new_version, T.nilable(Image))
         @current_version = T.let(@current_version, T.nilable(Image))
         @previous_version = T.let(@previous_version, T.nilable(Image))
