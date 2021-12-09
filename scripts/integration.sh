@@ -109,6 +109,12 @@ Kuby.define('Kubyapp') do
     docker do
       image_url 'localhost:5000/kubyapp'
 
+      credentials do
+        username "foobar"
+        password "foobar"
+        email "foo@bar.com"
+      end
+
       insert :prebundler_phase, PrebundlerPhase.new(environment), after: :bundler_phase
       delete :bundler_phase
     end
