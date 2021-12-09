@@ -146,11 +146,11 @@ module Kuby
       )
 
       if !logged_in
-        Kuby.logger.info("Attempting to log in to registry at #{image.image_hostname}")
+        Kuby.logger.info("Attempting to log in to registry at #{image.image_host}")
 
         begin
           image.docker_cli.login(
-            url: image.image_hostname,
+            url: image.image_host,
             username: image.credentials.username,
             password: image.credentials.password
           )
