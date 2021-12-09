@@ -69,9 +69,8 @@ Prebundler.configure do |config|
   )
 end
 EOF
-prebundle install --jobs 2 --retry 3
+prebundle install --jobs 2 --retry 3 --no-binstubs
 yarn install
-bundle exec bin/rails app:update:bin
 bundle exec bin/rails g kuby
 cat <<'EOF' > kuby.rb
 class PrebundlerPhase < Kuby::Docker::BundlerPhase
