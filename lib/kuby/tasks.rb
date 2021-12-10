@@ -135,7 +135,7 @@ module Kuby
 
     def perform_docker_login_if_necessary(image)
       auth_uris = image.docker_cli.auths.map do |url|
-        Kuby::Docker::Image.parse_uri(url)
+        Kuby::Docker::DockerURI.parse_uri(url)
       end
 
       logged_in = image.credentials.username && (
@@ -155,7 +155,7 @@ module Kuby
             password: image.credentials.password
           )
         rescue Kuby::Docker::LoginError => e
-          Kuby.logger.fatal("Couldn't log in to the registry at #{image.image_hostname}")
+          Kuby.logger.fatal("Couldn't log in to the registry at #{image.image_host}")
           Kuby.logger.fatal(e.message)
 
           return false

@@ -5,6 +5,30 @@ module Kuby
     class DockerURI
       extend T::Sig
 
+      DEFAULT_REGISTRY_HOST = T.let('docker.io'.freeze, String)
+      DEFAULT_REGISTRY_PORT = T.let(443, Integer)
+
+      DEFAULT_REGISTRY_INDEX_HOST = T.let('index.docker.io'.freeze, String)
+      DEFAULT_REGISTRY_INDEX_PORT = T.let(443, Integer)
+
+      sig { params(url: String).returns(DockerURI) }
+      def self.parse_uri(url)
+        parse(
+          url,
+          default_host: DEFAULT_REGISTRY_HOST,
+          default_port: DEFAULT_REGISTRY_INDEX_PORT
+        )
+      end
+
+      sig { params(url: String).returns(DockerURI) }
+      def self.parse_index_uri(url)
+        parse(
+          url,
+          default_host: DEFAULT_REGISTRY_INDEX_HOST,
+          default_port: DEFAULT_REGISTRY_PORT
+        )
+      end
+
       sig {
         params(
           url: String,

@@ -5,30 +5,6 @@ module Kuby
     class Image
       extend T::Sig
 
-      DEFAULT_REGISTRY_HOST = T.let('docker.io'.freeze, String)
-      DEFAULT_REGISTRY_PORT = T.let(443, Integer)
-
-      DEFAULT_REGISTRY_INDEX_HOST = T.let('index.docker.io'.freeze, String)
-      DEFAULT_REGISTRY_INDEX_PORT = T.let(443, Integer)
-
-      sig { params(url: String).returns(DockerURI) }
-      def self.parse_uri(url)
-        DockerURI.parse(
-          url,
-          default_host: DEFAULT_REGISTRY_HOST,
-          default_port: DEFAULT_REGISTRY_INDEX_PORT
-        )
-      end
-
-      sig { params(url: String).returns(DockerURI) }
-      def self.parse_index_uri(url)
-        DockerURI.parse(
-          url,
-          default_host: DEFAULT_REGISTRY_INDEX_HOST,
-          default_port: DEFAULT_REGISTRY_PORT
-        )
-      end
-
       sig { returns(T.nilable(String)) }
       attr_reader :identifier
 
@@ -127,12 +103,12 @@ module Kuby
 
       sig { returns(DockerURI) }
       def image_uri
-        @full_image_uri ||= Image.parse_uri(image_url)
+        @full_image_uri ||= DockerURI.parse_uri(image_url)
       end
 
       sig { returns(DockerURI) }
       def registry_host_uri
-        @registry_host_uri ||= Image.parse_index_uri(registry_index_url || image_url)
+        @registry_host_uri ||= DockerURI.parse_index_uri(registry_index_url || image_url)
       end
 
       sig { returns(T::Array[String]) }
