@@ -5,46 +5,46 @@ set -ev
 unset BUNDLE_GEMFILE
 K8S_VERSION='1.19.10-00'
 
-# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-# cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-# deb https://apt.kubernetes.io/ kubernetes-xenial main
-# EOF
-# sudo apt-get update
-# sudo apt-get install -y jq kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION
-# cat <<EOF > kubeadm-config.yaml
-# apiVersion: kubeadm.k8s.io/v1beta2
-# kind: ClusterConfiguration
-# networking:
-#   podSubnet: "192.168.0.0/16"
-# controllerManager:
-#   extraArgs:
-#     enable-hostpath-provisioner: "true"
-# EOF
-# sudo kubeadm init --config ./kubeadm-config.yaml
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+sudo apt-get update
+sudo apt-get install -y jq kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION
+cat <<EOF > kubeadm-config.yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+networking:
+  podSubnet: "192.168.0.0/16"
+controllerManager:
+  extraArgs:
+    enable-hostpath-provisioner: "true"
+EOF
+sudo kubeadm init --config ./kubeadm-config.yaml
 
-# # copy kubeconfig to default location so kubectl works
-# mkdir -p ~/.kube
-# sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
-# sudo chown $(id -u):$(id -g) ~/.kube/config
+# copy kubeconfig to default location so kubectl works
+mkdir -p ~/.kube
+sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
+sudo chown $(id -u):$(id -g) ~/.kube/config
 
-# # start up the calico CNI
-# kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
-# kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
-# # make hostpath storage class available
-# cat <<'EOF' | kubectl apply -f -
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass
-# metadata:
-#   namespace: kube-system
-#   name: hostpath
-#   annotations:
-#     storageclass.beta.kubernetes.io/is-default-class: "true"
-#   labels:
-#     addonmanager.kubernetes.io/mode: EnsureExists
-# provisioner: kubernetes.io/host-path
-# EOF
-# # allow pods to be scheduled on the master node
-# kubectl taint nodes --all node-role.kubernetes.io/master-
+# start up the calico CNI
+kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
+# make hostpath storage class available
+cat <<'EOF' | kubectl apply -f -
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  namespace: kube-system
+  name: hostpath
+  annotations:
+    storageclass.beta.kubernetes.io/is-default-class: "true"
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+provisioner: kubernetes.io/host-path
+EOF
+# allow pods to be scheduled on the master node
+kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # clone rails app
 gem install prebundler -v '< 1'
@@ -170,34 +170,34 @@ docker run -d -p 5000:5000 --name registry registry:2
 GLI_DEBUG=true bundle exec kuby -e production build -a PREBUNDLER_ACCESS_KEY_ID=${PREBUNDLER_ACCESS_KEY_ID} -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e production push
 
-# # setup cluster
-# GLI_DEBUG=true bundle exec kuby -e production setup
-# # force nginx ingress to be a nodeport since we don't have any load balancers
-# kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
+# setup cluster
+GLI_DEBUG=true bundle exec kuby -e production setup
+# force nginx ingress to be a nodeport since we don't have any load balancers
+kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
 
-# # deploy!
-# GLI_DEBUG=true bundle exec kuby -e production deploy || true
+# deploy!
+GLI_DEBUG=true bundle exec kuby -e production deploy || true
 
-# while [[ "$(kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | jq -r .status.phase)" != "Running" ]]; do
-#   echo "Waiting for MySQL pod to start..."
-#   sleep 5
-# done
+while [[ "$(kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | jq -r .status.phase)" != "Running" ]]; do
+  echo "Waiting for MySQL pod to start..."
+  sleep 5
+done
 
-# # Do this three times in case the db doesn't start in time and the deploy fails.
-# # This can happen even after waiting for the pod to start above, not sure why.
-# GLI_DEBUG=true bundle exec kuby -e production deploy ||
-#   GLI_DEBUG=true bundle exec kuby -e production deploy ||
-#   GLI_DEBUG=true bundle exec kuby -e production deploy
+# Do this three times in case the db doesn't start in time and the deploy fails.
+# This can happen even after waiting for the pod to start above, not sure why.
+GLI_DEBUG=true bundle exec kuby -e production deploy ||
+  GLI_DEBUG=true bundle exec kuby -e production deploy ||
+  GLI_DEBUG=true bundle exec kuby -e production deploy
 
-# # get ingress IP from kubectl; attempt to hit the app
-# ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)
-# curl -vvv $ingress_ip:80 \
-#   -H "Host: localhost"\
-#   --fail \
-#   --connect-timeout 5 \
-#   --max-time 10 \
-#   --retry 5 \
-#   --retry-max-time 40 || exit $?
+# get ingress IP from kubectl; attempt to hit the app
+ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)
+curl -vvv $ingress_ip:80 \
+  -H "Host: localhost"\
+  --fail \
+  --connect-timeout 5 \
+  --max-time 10 \
+  --retry 5 \
+  --retry-max-time 40 || exit $?
 
-# # execute remote command
-# GLI_DEBUG=true bundle exec kuby -e production remote exec "bundle exec rails runner 'puts \"Hello from Kuby\"'" | grep "Hello from Kuby"
+# execute remote command
+GLI_DEBUG=true bundle exec kuby -e production remote exec "bundle exec rails runner 'puts \"Hello from Kuby\"'" | grep "Hello from Kuby"
