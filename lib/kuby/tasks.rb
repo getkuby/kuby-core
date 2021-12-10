@@ -149,8 +149,17 @@ module Kuby
         Kuby.logger.info("Attempting to log in to registry at #{image.image_host}")
 
         begin
+          # For some reason, Docker login with a port doesn't work for some
+          # registries (most notably Docker Hub). Since the default is 443 anyway,
+          # it should be fine to omit it.
+          url = if image.image_uri.has_default_port?
+            image.image_hostname  # host without port
+          else
+            image.image_host      # host with port
+          end
+
           image.docker_cli.login(
-            url: image.image_host,
+            url: url,
             username: image.credentials.username,
             password: image.credentials.password
           )

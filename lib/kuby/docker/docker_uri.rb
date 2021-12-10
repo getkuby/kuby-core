@@ -6,17 +6,15 @@ module Kuby
       extend T::Sig
 
       DEFAULT_REGISTRY_HOST = T.let('docker.io'.freeze, String)
-      DEFAULT_REGISTRY_PORT = T.let(443, Integer)
-
       DEFAULT_REGISTRY_INDEX_HOST = T.let('index.docker.io'.freeze, String)
-      DEFAULT_REGISTRY_INDEX_PORT = T.let(443, Integer)
+      DEFAULT_PORT = T.let(443, Integer)
 
       sig { params(url: String).returns(DockerURI) }
       def self.parse_uri(url)
         parse(
           url,
           default_host: DEFAULT_REGISTRY_HOST,
-          default_port: DEFAULT_REGISTRY_PORT
+          default_port: DEFAULT_PORT
         )
       end
 
@@ -25,7 +23,7 @@ module Kuby
         parse(
           url,
           default_host: DEFAULT_REGISTRY_INDEX_HOST,
-          default_port: DEFAULT_REGISTRY_INDEX_PORT
+          default_port: DEFAULT_PORT
         )
       end
 
@@ -66,6 +64,11 @@ module Kuby
         @host = host
         @port = port
         @path = path
+      end
+
+      sig { returns(T::Boolean) }
+      def has_default_port?
+        port == DEFAULT_PORT
       end
     end
   end
