@@ -16,7 +16,7 @@ module Kuby
         parse(
           url,
           default_host: DEFAULT_REGISTRY_HOST,
-          default_port: DEFAULT_REGISTRY_INDEX_PORT
+          default_port: DEFAULT_REGISTRY_PORT
         )
       end
 
@@ -25,7 +25,7 @@ module Kuby
         parse(
           url,
           default_host: DEFAULT_REGISTRY_INDEX_HOST,
-          default_port: DEFAULT_REGISTRY_PORT
+          default_port: DEFAULT_REGISTRY_INDEX_PORT
         )
       end
 

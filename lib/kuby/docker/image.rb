@@ -83,12 +83,12 @@ module Kuby
 
       sig { returns(String) }
       def registry_index_host
-        @registry_index_host ||= "#{registry_host_uri.host}:#{registry_host_uri.port}"
+        @registry_index_host ||= "#{registry_index_uri.host}:#{registry_index_uri.port}"
       end
 
       sig { returns(String) }
       def registry_index_hostname
-        @registry_index_host ||= registry_host_uri.host
+        @registry_index_hostname ||= registry_index_uri.host
       end
 
       sig { returns(String) }
@@ -107,8 +107,8 @@ module Kuby
       end
 
       sig { returns(DockerURI) }
-      def registry_host_uri
-        @registry_host_uri ||= DockerURI.parse_index_uri(registry_index_url || image_url)
+      def registry_index_uri
+        @registry_index_uri ||= DockerURI.parse_index_uri(registry_index_url || image_url)
       end
 
       sig { returns(T::Array[String]) }
