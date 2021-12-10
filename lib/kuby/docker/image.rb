@@ -46,7 +46,7 @@ module Kuby
         @image_hostname = T.let(@image_hostname, T.nilable(String))
         @registry_index_host = T.let(@registry_index_host, T.nilable(String))
         @registry_index_hostname = T.let(@registry_index_hostname, T.nilable(String))
-        @registry_host_uri = T.let(@registry_host_uri, T.nilable(DockerURI))
+        @registry_index_uri = T.let(@registry_index_uri, T.nilable(DockerURI))
         @image_repo = T.let(@image_repo, T.nilable(String))
         @full_image_uri = T.let(@full_image_uri, T.nilable(DockerURI))
         @docker_cli = T.let(@docker_cli, T.nilable(Docker::CLI))
