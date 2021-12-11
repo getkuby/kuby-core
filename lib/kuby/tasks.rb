@@ -137,7 +137,6 @@ module Kuby
 
     def check_platform(docker_args)
       arch, * = RUBY_PLATFORM.split('-')
-      arch = 'i386'
 
       if arch != 'x86_64' && !docker_args.include?('--platform')
         Kuby.logger.fatal(<<~END)

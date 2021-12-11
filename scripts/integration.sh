@@ -169,8 +169,7 @@ docker run -d -p 5000:5000 --name registry registry:2
 # build and push
 GLI_DEBUG=true bundle exec kuby -e production build \
   -a PREBUNDLER_ACCESS_KEY_ID=${PREBUNDLER_ACCESS_KEY_ID} \
-  -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY} \
-  -- --platform linux/i386
+  -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e production push
 
 # setup cluster
