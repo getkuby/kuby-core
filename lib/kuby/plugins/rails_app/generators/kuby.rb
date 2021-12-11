@@ -86,16 +86,38 @@ class KubyGenerator < Rails::Generators::Base
     create_file(
       '.dockerignore',
       <<~END
-        .bundle/
-        vendor/bundle
-        node_modules/
-        .node_modules/
-        **/.git*
-        tmp/
-        log/
-        engines/**/log/
-        engines/**/tmp/
+        .git/
+
+        # Ignore bundler config.
+        .bundle
+
+        # Ignore all logfiles and tempfiles.
+        log/*
+        tmp/*
+        !log/.keep
+        !tmp/.keep
+
+        # Ignore pidfiles, but keep the directory.
+        tmp/pids/*
+        !tmp/pids/
+        !tmp/pids/.keep
+
+        # Ignore uploaded files in development.
+        storage/*
+        !storage/.keep
+
         public/assets
+        **/.byebug_history
+
+        # Ignore master key for decrypting credentials and more.
+        config/master.key
+
+        public/packs
+        public/packs-test
+        node_modules
+        yarn-error.log
+        **/yarn-debug.log*
+        **/.yarn-integrity
       END
     )
   end
