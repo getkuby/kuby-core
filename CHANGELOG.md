@@ -3,6 +3,9 @@
   - In most cases, the registry and registry index URLs will be the same. However Docker Hub, the default registry, uses index.docker.io for API requests (catalog, tags, etc) but only allows pushes to docker.io.
 * Add config/master.key to the .dockerignore created by the Rails generator.
   - This was an unfortunate oversight, but such are the perils of using pre-1.0 software.
+* Print an error message if building images on non-x86 hardware.
+  - People with M1 Macs are running into mismatches between their laptop's arch and the arch of their hosting provider's hardware. The error message asks you to explicitly pass the `--platform` flag to Docker.
+  - We may need to revisit this in the future if ARM processors become more popular.
 
 ## 0.14.0
 * Make RAILS_MASTER_KEY available in the assets image (@palkan, #63)

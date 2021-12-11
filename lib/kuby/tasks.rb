@@ -29,6 +29,8 @@ module Kuby
     end
 
     def build(build_args = {}, docker_args = [], only = nil)
+      check_platform(docker_args)
+
       kubernetes.docker_images.each do |image|
         next if only && image.identifier != only
 
@@ -132,6 +134,31 @@ module Kuby
     end
 
     private
+
+    def check_platform(docker_args)
+      arch, * = RUBY_PLATFORM.split('-')
+      arch = 'i386'
+
+      if arch != 'x86_64' && !docker_args.include?('--platform')
+        Kuby.logger.fatal(<<~END)
+          Hey there! It looks like your processor isn't x86-compatible.
+          By default, Docker will try to build images that match the
+          current architecture, in this case #{arch}. Most hosting
+          providers run x86 hardware, meaning Docker images built using
+          this computer's architecture might fail to run when deployed
+          to production. You can fix this by running the build command
+          with a special --platform flag, eg:
+
+          bundle exec kuby -e production build -- --platform linux/amd64
+
+          If you meant to build for the current architecture, you can
+          prevent this error by passing the --platform argument for the
+          current architecture, eg. --platform linux/arm64 for ARM, etc.
+        END
+
+        exit 1
+      end
+    end
 
     def perform_docker_login_if_necessary(image)
       auth_uris = image.docker_cli.auths.map do |url|
