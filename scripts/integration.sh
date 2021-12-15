@@ -49,8 +49,9 @@ kubectl taint nodes --all node-role.kubernetes.io/master-
 # clone rails app
 gem install prebundler -v '< 1'
 git clone --depth=1 https://github.com/getkuby/kuby_test.git
+cp -r kuby-core/ kuby_test/vendor/
 cd kuby_test
-printf "\ngem 'kuby-core', github: '$GITHUB_REPOSITORY', branch: '${GITHUB_REF##*/}'\n" >> Gemfile
+printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
@@ -79,6 +80,7 @@ class PrebundlerPhase < Kuby::Docker::BundlerPhase
     dockerfile.arg('PREBUNDLER_SECRET_ACCESS_KEY')
 
     dockerfile.copy('.prebundle_config', '.')
+    dockerfile.copy('vendor/kuby-core', 'vendor/kuby-core')
     dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
 
     super
