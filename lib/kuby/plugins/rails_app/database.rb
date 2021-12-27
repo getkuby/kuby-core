@@ -10,7 +10,8 @@ module Kuby
         ADAPTER_MAP = {
           sqlite3: Sqlite,
           mysql2: MySQL,
-          postgresql: Postgres
+          postgresql: Postgres,
+          crdb: CRDB
         }.freeze
 
         def self.get(rails_app)
@@ -39,6 +40,7 @@ module Kuby
         end
 
         def adapter_name
+          return :crdb
           @adapter_name ||= db_config['adapter'].to_sym
         end
 
