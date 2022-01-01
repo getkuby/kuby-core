@@ -9,7 +9,7 @@ module Kuby
       @environment = environment
     end
 
-    def print_dockerfiles(only = nil)
+    def print_dockerfiles(only: nil)
       kubernetes.docker_images.each do |image|
         next if only && image.identifier != only
 
@@ -28,8 +28,9 @@ module Kuby
       environment.kubernetes.setup
     end
 
-    def build(build_args = {}, docker_args = [], only = nil)
+    def build(build_args = {}, docker_args = [], only: nil, ignore_missing_args: false)
       check_platform(docker_args)
+      check_build_args(build_args) unless ignore_missing_args
 
       kubernetes.docker_images.each do |image|
         next if only && image.identifier != only
@@ -42,7 +43,7 @@ module Kuby
       end
     end
 
-    def push(only = nil)
+    def push(only: nil)
       kubernetes.docker_images.each do |image|
         next if only && image.identifier != only
 
@@ -153,6 +154,41 @@ module Kuby
           If you meant to build for the current architecture, you can
           prevent this error by passing the --platform argument for the
           current architecture, eg. --platform linux/arm64 for ARM, etc.
+        END
+
+        exit 1
+      end
+    end
+
+    def check_build_args(build_args)
+      required_args = kubernetes.docker_images.flat_map do |image|
+        image.dockerfile.commands.flat_map do |command|
+          case command
+            when Kuby::Docker::Dockerfile::Arg
+              command.args
+            else
+              []
+          end
+        end
+      end
+
+      required_args.uniq!
+
+      if File.exist?(File.join('config', 'master.key'))
+        required_args.delete('RAILS_MASTER_KEY')
+      end
+
+      missing_args = required_args - build_args.keys
+
+      if missing_args.any?
+        Kuby.logger.fatal(<<~END)
+          The following Docker build arguments are missing: #{missing_args.join(', ')}.
+          Please pass each argument to `kuby build` using the -a or --arg parameter (note
+          that the -a/--arg parameter can be specified multiple times). For example:
+
+          kuby build -a #{missing_args.first}=value ...
+
+          To ignore missing build args, pass the --ignore-missing-args parameter.
         END
 
         exit 1
