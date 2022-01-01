@@ -29,6 +29,12 @@ module Kuby
       sig { params(without: T::Array[String]).void }
       attr_writer :without
 
+      sig { returns(T.nilable(String)) }
+      attr_reader :executable
+
+      sig { params(executable: String).void }
+      attr_writer :executable
+
       sig { params(environment: Environment).void }
       def initialize(environment)
         super
@@ -37,6 +43,7 @@ module Kuby
         @gemfile = T.let(@gemfile, T.nilable(String))
         @gemfiles = T.let([], T::Array[String])
         @without = T.let(@without, T.nilable(T::Array[String]))
+        @executable = T.let(@executable, T.nilable(String))
       end
 
       sig { override.params(dockerfile: Dockerfile).void }
@@ -61,14 +68,14 @@ module Kuby
         end
 
         dockerfile.run(
-          'bundle', 'install',
+          executable || 'bundle', 'install',
           '--jobs', '$(nproc)',
           '--retry', '3',
           '--gemfile', gf
         )
 
         # generate binstubs and add the bin directory to our path
-        dockerfile.run('bundle', 'binstubs', '--all')
+        dockerfile.run(executable || 'bundle', 'binstubs', '--all')
         dockerfile.env("PATH=./bin:$PATH")
       end
 
