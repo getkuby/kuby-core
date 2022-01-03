@@ -65,6 +65,7 @@ module Kuby
     desc 'Builds the Docker image.'
     command :build do |c|
       c.flag [:a, :arg], required: false, multiple: true
+      c.switch [:'ignore-missing-args'], required: false, default: false
       c.flag [:only], required: false
       c.action do |global_options, options, docker_args|
         build_args = {}.tap do |build_args|
@@ -75,7 +76,11 @@ module Kuby
           end
         end
 
-        tasks.build(build_args, docker_args, options[:only])
+        tasks.build(
+          build_args, docker_args,
+          only: options[:only],
+          ignore_missing_args: options[:'ignore-missing-args']
+        )
       end
     end
 
@@ -83,7 +88,7 @@ module Kuby
     command :push do |c|
       c.flag [:only], required: false
       c.action do |global_options, options, args|
-        tasks.push(options[:only])
+        tasks.push(only: options[:only])
       end
     end
 
@@ -98,7 +103,7 @@ module Kuby
     command :dockerfiles do |c|
       c.flag [:only], required: false
       c.action do |global_options, options, args|
-        tasks.print_dockerfiles(options[:only])
+        tasks.print_dockerfiles(only: options[:only])
       end
     end
 

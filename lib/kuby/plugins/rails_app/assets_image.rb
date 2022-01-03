@@ -29,6 +29,10 @@ module Kuby
         end
 
         def build(build_args = {}, docker_args = [])
+          unless ENV.fetch('RAILS_MASTER_KEY', '').empty?
+            build_args['RAILS_MASTER_KEY'] = ENV['RAILS_MASTER_KEY']
+          end
+
           docker_cli.build(current_version, build_args: build_args, docker_args: docker_args)
         end
 
