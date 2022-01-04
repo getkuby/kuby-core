@@ -10,8 +10,8 @@ module Kuby
         ADAPTER_MAP = {
           sqlite3: Sqlite,
           mysql2: MySQL,
-          postgresql: Postgres,
-          crdb: CRDB
+          # postgresql: Postgres,
+          postgresql: CRDB
         }.freeze
 
         def self.get(rails_app)
