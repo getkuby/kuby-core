@@ -19,8 +19,8 @@ describe Kuby::Docker::TimestampedImage do
     subject { image.current_version&.main_tag }
 
     context 'with no local or remote tags' do
-      it 'raises an error' do
-        expect { subject }.to raise_error(Kuby::Docker::MissingTagError)
+      it 'creates a new tag' do
+        expect(subject).to match(/\d{14}/)
       end
     end
 
