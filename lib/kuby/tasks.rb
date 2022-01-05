@@ -28,8 +28,14 @@ module Kuby
       environment.kubernetes.setup
     end
 
-    def build(build_args = {}, docker_args = [], only: nil, ignore_missing_args: false)
+    def build(build_args = {}, docker_args = [], only: nil, ignore_missing_args: false, context: nil)
       check_platform(docker_args)
+
+      build_args['RAILS_MASTER_KEY'] ||= ENV['RAILS_MASTER_KEY'] || begin
+        master_key_file = File.join('config', 'master.key')
+        File.exist?(master_key_file) ? File.read(master_key_file).strip : nil
+      end
+
       check_build_args(build_args) unless ignore_missing_args
 
       kubernetes.docker_images.each do |image|
@@ -39,7 +45,7 @@ module Kuby
 
         image = image.new_version
         Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
-        image.build(build_args, docker_args)
+        image.build(build_args, docker_args, context: context)
       end
     end
 

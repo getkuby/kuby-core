@@ -52,6 +52,7 @@ git clone --depth=1 https://github.com/getkuby/kuby_test.git
 cp -r kuby-core/ kuby_test/vendor/
 cd kuby_test
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
+printf "\ngem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
@@ -74,27 +75,13 @@ prebundle install --jobs 2 --retry 3 --no-binstubs
 yarn install
 bundle exec bin/rails g kuby
 cat <<'EOF' > kuby.rb
-class PrebundlerPhase < Kuby::Docker::BundlerPhase
+class VendorPhase < Kuby::Docker::Layer
   def apply_to(dockerfile)
-    dockerfile.arg('PREBUNDLER_ACCESS_KEY_ID')
-    dockerfile.arg('PREBUNDLER_SECRET_ACCESS_KEY')
-
-    dockerfile.copy('.prebundle_config', '.')
     dockerfile.copy('vendor/kuby-core', 'vendor/kuby-core')
-    dockerfile.run('gem', 'install', 'prebundler', '-v', "'< 1'")
-
-    super
-
-    dockerfile.commands.each do |cmd|
-      next unless cmd.is_a?(Kuby::Docker::Dockerfile::Run)
-
-      if cmd.args[0..1] == ['bundle', 'install']
-        cmd.args[0] = 'prebundle'
-      end
-    end
   end
 end
 
+require 'kuby/prebundler'
 require 'active_support/core_ext'
 require 'active_support/encrypted_configuration'
 
@@ -117,11 +104,13 @@ Kuby.define('Kubyapp') do
         email "foo@bar.com"
       end
 
-      insert :prebundler_phase, PrebundlerPhase.new(environment), after: :bundler_phase
-      delete :bundler_phase
+      # have to insert after setup phase b/c prebundler replaces the existing bundler phase
+      insert :vendor_phase, VendorPhase.new(environment), after: :setup_phase
     end
 
     kubernetes do
+      add_plugin :prebundler
+
       add_plugin :rails_app do
         tls_enabled false
 

@@ -53,8 +53,15 @@ module Kuby
         config.fetch('auths', {}).keys
       end
 
-      sig { params(image: Image, build_args: T::Hash[T.any(Symbol, String), String], docker_args: T::Array[String]).void }
-      def build(image, build_args: {}, docker_args: [])
+      sig {
+        params(
+          image: Image,
+          build_args: T::Hash[T.any(Symbol, String), String],
+          docker_args: T::Array[String],
+          context: T.nilable(String)
+        ).void
+      }
+      def build(image, build_args: {}, docker_args: [], context: nil)
         cmd = [
           executable, 'build',
           *image.tags.flat_map { |tag| ['-t', "#{image.image_url}:#{tag}"] },
@@ -63,7 +70,7 @@ module Kuby
           end,
           '-f-',
           *docker_args,
-          '.'
+          context || '.'
         ]
 
         open3_w(cmd) do |stdin, _wait_threads|

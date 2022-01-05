@@ -116,8 +116,8 @@ module Kuby
         [main_tag, *alias_tags].compact
       end
 
-      sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String]).void }
-      def build(build_args = {}, docker_args = [])
+      sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String], context: T.nilable(String)).void }
+      def build(build_args = {}, docker_args = [], context: nil)
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
 
