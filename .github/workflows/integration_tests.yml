@@ -26,6 +26,8 @@ jobs:
           node-version: '15'
       - name: Install Bundler
         run: gem install bundler
+      - name: Install Kind
+        run: kuby-core/scripts/install-kind.sh
       - name: Run Tests
         run: kuby-core/scripts/integration.sh
         env:

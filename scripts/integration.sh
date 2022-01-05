@@ -1,50 +1,8 @@
 #! /bin/bash
 
-# preflight
-set -ev
-unset BUNDLE_GEMFILE
-K8S_VERSION='1.19.10-00'
+K8S_VERSION='1.19.11'
 
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-deb https://apt.kubernetes.io/ kubernetes-xenial main
-EOF
-sudo apt-get update
-sudo apt-get install -y jq kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION
-cat <<EOF > kubeadm-config.yaml
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: ClusterConfiguration
-networking:
-  podSubnet: "192.168.0.0/16"
-controllerManager:
-  extraArgs:
-    enable-hostpath-provisioner: "true"
-EOF
-sudo kubeadm init --config ./kubeadm-config.yaml
-
-# copy kubeconfig to default location so kubectl works
-mkdir -p ~/.kube
-sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
-sudo chown $(id -u):$(id -g) ~/.kube/config
-
-# start up the calico CNI
-kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
-kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
-# make hostpath storage class available
-cat <<'EOF' | kubectl apply -f -
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  namespace: kube-system
-  name: hostpath
-  annotations:
-    storageclass.beta.kubernetes.io/is-default-class: "true"
-  labels:
-    addonmanager.kubernetes.io/mode: EnsureExists
-provisioner: kubernetes.io/host-path
-EOF
-# allow pods to be scheduled on the master node
-kubectl taint nodes --all node-role.kubernetes.io/master-
+kind create cluster --name kuby-test --image kindest/node:v$K8S_VERSION
 
 # clone rails app
 gem install prebundler -v '< 1'
@@ -120,7 +78,9 @@ Kuby.define('Kubyapp') do
         end
       end
 
-      provider :bare_metal
+      provider :bare_metal do
+        storage_class 'standard'
+      end
     end
   end
 end
@@ -154,7 +114,9 @@ EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
 
-# start docker registry
+kubectl=$(bundle show kubectl-rb)/vendor/kubectl
+
+# start docker registry (helps make sure pushes work)
 docker run -d -p 5000:5000 --name registry registry:2
 
 # build and push
@@ -163,15 +125,19 @@ GLI_DEBUG=true bundle exec kuby -e production build \
   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e production push
 
+docker images | grep kubyapp | grep -v latest | tr -s ' ' | cut -d' ' -f 2 | while read tag; do
+  kind load docker-image localhost:5000/kubyapp:$tag --name kuby-test
+done
+
 # setup cluster
 GLI_DEBUG=true bundle exec kuby -e production setup
 # force nginx ingress to be a nodeport since we don't have any load balancers
-kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
+$kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
 
 # deploy!
 GLI_DEBUG=true bundle exec kuby -e production deploy || true
 
-while [[ "$(kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | jq -r .status.phase)" != "Running" ]]; do
+while [[ "$($kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | jq -r .status.phase)" != "Running" ]]; do
   echo "Waiting for MySQL pod to start..."
   sleep 5
 done
@@ -182,9 +148,15 @@ GLI_DEBUG=true bundle exec kuby -e production deploy ||
   GLI_DEBUG=true bundle exec kuby -e production deploy ||
   GLI_DEBUG=true bundle exec kuby -e production deploy
 
-# get ingress IP from kubectl; attempt to hit the app
-ingress_ip=$(kubectl -n ingress-nginx get svc ingress-nginx -o json | jq -r .spec.clusterIP)
-curl -vvv $ingress_ip:80 \
+# in KIND clusters, configuring ingress-nginx is a huge PITA, so we just port-forward
+# to the ingress service instead
+$kubectl -n ingress-nginx port-forward svc/ingress-nginx 5555:80 &
+
+# wait for port forwarding
+timeout 10 vendor/kuby-core/scripts/wait-for-ingress.sh
+
+# attempt to hit the app
+curl -vvv localhost:5555 \
   -H "Host: localhost"\
   --fail \
   --connect-timeout 5 \

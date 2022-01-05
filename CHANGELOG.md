@@ -1,3 +1,6 @@
+## Next
+* Allow storage class to be customized when using the built-in bare metal provider.
+
 ## 0.16.1
 * Fix a few bugs caused by leaving `continue-on-error: true` in the GitHub actions config 🤦
   - Docker builds would fail if no previous images existed in the registry.

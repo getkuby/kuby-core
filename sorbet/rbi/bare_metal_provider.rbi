@@ -7,6 +7,9 @@ module Kuby
         sig { returns(String) }
         def kubeconfig; end
 
+        sig { returns(String) }
+        def storage_class; end
+
         # For some reason, sorbet doesn't see the `extend ValueFields`
         # call in the Config class. Might be because ValueFields
         # hasn't been annotated?
@@ -14,11 +17,14 @@ module Kuby
         def self.value_fields(*fields); end
       end
 
-      # This method actually exists on the Config class, but
-      # sorbet doesn't know that because it's instance_evaled.
-      # Added this stub to make sorbet shut up.
+      # These methods actually exist on the Config class, but
+      # sorbet doesn't know that because they're instance_evaled.
+      # Added these stub to make sorbet shut up.
       sig { params(path: T.nilable(String)).returns(String) }
       def kubeconfig(path = nil); end
+
+      sig { params(class_name: T.nilable(String)).returns(String) }
+      def storage_class(class_name = nil); end
     end
   end
 end
