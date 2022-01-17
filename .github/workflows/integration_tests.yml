@@ -20,15 +20,16 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: '3.0'
       - uses: actions/setup-node@v2
         with:
           node-version: '15'
       - name: Install Bundler
         run: gem install bundler
+      - name: Install Kind
+        run: kuby-core/scripts/install-kind.sh
       - name: Run Tests
         run: kuby-core/scripts/integration.sh
-        continue-on-error: true
         env:
           PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
           PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"

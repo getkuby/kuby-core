@@ -31,16 +31,18 @@ module Kuby
 
       sig { returns(Image) }
       def new_version
-        @new_version ||= duplicate_with_tags(
-          TimestampTag.new(Time.now).to_s, [Kuby::Docker::LATEST_TAG]
-        )
+        @new_version ||= create_new_version
       end
 
       sig { returns(Image) }
       def current_version
-        @current_version ||= duplicate_with_tags(
-          latest_timestamp_tag.to_s, [Kuby::Docker::LATEST_TAG]
-        )
+        @current_version ||= begin
+          duplicate_with_tags(
+            latest_timestamp_tag.to_s, [Kuby::Docker::LATEST_TAG]
+          )
+        rescue MissingTagError
+          create_new_version
+        end
       end
 
       sig { params(current_tag: T.nilable(String)).returns(Image) }
@@ -74,11 +76,9 @@ module Kuby
         tag
       end
 
-      sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String]).void }
-      def build(build_args = {}, docker_args = [])
-        docker_cli.build(new_version, build_args: build_args, docker_args: docker_args)
-        @current_version = new_version
-        @new_version = nil
+      sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String], context: T.nilable(String)).void }
+      def build(build_args = {}, docker_args = [], context: nil)
+        docker_cli.build(new_version, build_args: build_args, docker_args: docker_args, context: context)
       end
 
       sig { params(tag: String).void }
@@ -87,6 +87,13 @@ module Kuby
       end
 
       private
+
+      sig { returns(Image) }
+      def create_new_version
+        duplicate_with_tags(
+          TimestampTag.new(Time.now).to_s, [Kuby::Docker::LATEST_TAG]
+        )
+      end
 
       sig { returns(::Docker::Remote::Client) }
       def remote_client

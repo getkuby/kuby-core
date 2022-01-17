@@ -7,12 +7,13 @@ module Kuby
     class BareMetalProvider < Provider
       extend T::Sig
 
-      STORAGE_CLASS_NAME = T.let('hostpath'.freeze, String)
+      DEFAULT_STORAGE_CLASS = T.let('hostpath'.freeze, String)
 
       class Config
         extend ::KubeDSL::ValueFields
 
         value_fields :kubeconfig
+        value_fields :storage_class
       end
 
       sig { returns(Config) }
@@ -36,7 +37,7 @@ module Kuby
 
       sig { returns(String) }
       def storage_class_name
-        STORAGE_CLASS_NAME
+        config.storage_class
       end
 
       private
@@ -46,6 +47,7 @@ module Kuby
         configure do
           # default kubeconfig path
           kubeconfig File.join(ENV['HOME'], '.kube', 'config')
+          storage_class DEFAULT_STORAGE_CLASS
         end
       end
     end

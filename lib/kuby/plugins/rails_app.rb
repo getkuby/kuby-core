@@ -5,6 +5,7 @@ module Kuby
       autoload :AssetCopyTask,   'kuby/plugins/rails_app/asset_copy_task'
       autoload :AssetsImage,     'kuby/plugins/rails_app/assets_image'
       autoload :Assets,          'kuby/plugins/rails_app/assets'
+      autoload :CRDB,            'kuby/plugins/rails_app/crdb'
       autoload :Database,        'kuby/plugins/rails_app/database'
       autoload :MySQL,           'kuby/plugins/rails_app/mysql'
       autoload :Plugin,          'kuby/plugins/rails_app/plugin'

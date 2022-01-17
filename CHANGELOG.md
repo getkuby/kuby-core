@@ -1,3 +1,12 @@
+## Next
+* Allow storage class to be customized when using the built-in bare metal provider.
+
+## 0.16.1
+* Fix a few bugs caused by leaving `continue-on-error: true` in the GitHub actions config 🤦
+  - Docker builds would fail if no previous images existed in the registry.
+  - The assets image would fail to build because `RAILS_MASTER_KEY` was not propagated correctly.
+* Use the kuby-prebundler gem in the integration tests instead of a custom layer.
+
 ## 0.16.0
 * Allow Bundler executable to be customized.
   - Main use-case is to allow adding in the Prebundler plugin, https://github.com/getkuby/kuby-prebundler.

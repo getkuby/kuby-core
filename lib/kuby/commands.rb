@@ -67,6 +67,7 @@ module Kuby
       c.flag [:a, :arg], required: false, multiple: true
       c.switch [:'ignore-missing-args'], required: false, default: false
       c.flag [:only], required: false
+      c.flag [:c, :context], required: false
       c.action do |global_options, options, docker_args|
         build_args = {}.tap do |build_args|
           (options[:arg] || []).each do |a|
@@ -79,7 +80,8 @@ module Kuby
         tasks.build(
           build_args, docker_args,
           only: options[:only],
-          ignore_missing_args: options[:'ignore-missing-args']
+          ignore_missing_args: options[:'ignore-missing-args'],
+          context: options[:context]
         )
       end
     end
@@ -94,8 +96,9 @@ module Kuby
 
     desc 'Gets your Kubernetes cluster ready to run your Rails app.'
     command :setup do |c|
+      c.flag [:only], required: false
       c.action do |global_options, options, args|
-        tasks.setup
+        tasks.setup(only: options[:only])
       end
     end
 
@@ -136,6 +139,13 @@ module Kuby
     command :kubeconfig do |c|
       c.action do |global_options, options, args|
         tasks.print_kubeconfig
+      end
+    end
+
+    desc 'Prints out the URLs to the latest Docker images in the Docker registry.'
+    command :images do |c|
+      c.action do |global_options, options, args|
+        tasks.print_images
       end
     end
 

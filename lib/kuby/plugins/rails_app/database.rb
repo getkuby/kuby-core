@@ -10,8 +10,8 @@ module Kuby
         ADAPTER_MAP = {
           sqlite3: Sqlite,
           mysql2: MySQL,
-          # postgresql: Postgres,
-          postgresql: CRDB
+          postgresql: Postgres,
+          cockroachdb: CRDB::Plugin
         }.freeze
 
         def self.get(rails_app)
@@ -22,7 +22,7 @@ module Kuby
 
         def self.get_adapter(adapter_name)
           ADAPTER_MAP.fetch(adapter_name) do
-            raise UnsupportedDatabaseError, "Kuby does not support the '#{adapter}' "\
+            raise UnsupportedDatabaseError, "Kuby does not support the '#{adapter_name}' "\
               'database adapter'
           end
         end
@@ -40,7 +40,6 @@ module Kuby
         end
 
         def adapter_name
-          return :crdb
           @adapter_name ||= db_config['adapter'].to_sym
         end
 

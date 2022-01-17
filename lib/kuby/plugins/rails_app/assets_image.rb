@@ -11,9 +11,11 @@ module Kuby
         end
 
         def new_version
-          # Asset images track the base image, so return the current version
+          # Asset images track the base image, so return the new version
           # here. There can be no asset image without a base image.
-          current_version
+          @new_version ||= duplicate_with_annotated_tags(
+            base_image.new_version
+          )
         end
 
         def current_version
@@ -28,12 +30,8 @@ module Kuby
           )
         end
 
-        def build(build_args = {}, docker_args = [])
-          unless ENV.fetch('RAILS_MASTER_KEY', '').empty?
-            build_args['RAILS_MASTER_KEY'] = ENV['RAILS_MASTER_KEY']
-          end
-
-          docker_cli.build(current_version, build_args: build_args, docker_args: docker_args)
+        def build(build_args = {}, docker_args = [], context: nil)
+          docker_cli.build(new_version, build_args: build_args, docker_args: docker_args, context: context)
         end
 
         def push(tag)

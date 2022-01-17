@@ -45,7 +45,7 @@ module Kuby
           if manage_database? && @database = Database.get(self)
             @database.plugin.instance_eval(&@database_block) if @database_block
             environment.kubernetes.plugins[@database.plugin_name] = @database.plugin
-            environment.kubernetes.add_plugin(:kube_db)
+            # environment.kubernetes.add_plugin(:kube_db)
 
             environment.docker do
               insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase
@@ -209,15 +209,7 @@ module Kuby
             type 'Opaque'
 
             data do
-              if master_key = ENV[MASTER_KEY_VAR]
-                add MASTER_KEY_VAR.to_sym, master_key
-              else
-                master_key_path = File.join(spec.root, 'config', 'master.key')
-
-                if File.exist?(master_key_path)
-                  add MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip
-                end
-              end
+              add MASTER_KEY_VAR.to_sym, spec.master_key
             end
           end
 
@@ -313,7 +305,7 @@ module Kuby
 
                   init_container(:create_db) do
                     name "#{kube_spec.selector_app}-create-db"
-                    command %w(bundle exec rake kuby:rails_app:db:create_unless_exists)
+                    command %w(bundle exec rake kuby:rails_app:db:bootstrap)
 
                     env_from do
                       config_map_ref do
@@ -433,6 +425,13 @@ module Kuby
 
         def namespace
           environment.kubernetes.namespace
+        end
+
+        def master_key
+          @master_key ||= ENV[MASTER_KEY_VAR] || begin
+            master_key_path = File.join(root, 'config', 'master.key')
+            File.read(master_key_path).strip if File.exist?(master_key_path)
+          end
         end
       end
     end

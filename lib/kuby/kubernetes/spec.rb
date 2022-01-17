@@ -89,7 +89,19 @@ module Kuby
         @tag = nil
       end
 
-      def setup
+      def setup(only: nil)
+        if only
+          @plugins.each do |name, plg|
+            if only == name
+              plg.before_setup
+              plg.setup
+              plg.after_setup
+            end
+          end
+
+          return
+        end
+
         provider.before_setup
         provider.setup
 

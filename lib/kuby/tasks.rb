@@ -24,12 +24,15 @@ module Kuby
       end
     end
 
-    def setup
-      environment.kubernetes.setup
+    def setup(only: nil)
+      environment.kubernetes.setup(only: only ? only.to_sym : nil)
     end
 
-    def build(build_args = {}, docker_args = [], only: nil, ignore_missing_args: false)
+    def build(build_args = {}, docker_args = [], only: nil, ignore_missing_args: false, context: nil)
       check_platform(docker_args)
+
+      build_args['RAILS_MASTER_KEY'] ||= rails_app.master_key
+
       check_build_args(build_args) unless ignore_missing_args
 
       kubernetes.docker_images.each do |image|
@@ -39,7 +42,7 @@ module Kuby
 
         image = image.new_version
         Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
-        image.build(build_args, docker_args)
+        image.build(build_args, docker_args, context: context)
       end
     end
 
@@ -93,6 +96,16 @@ module Kuby
       path = kubernetes.provider.kubeconfig_path
       Kuby.logger.info("Printing contents of #{path}")
       puts File.read(path)
+    end
+
+    def print_images
+      kubernetes.docker_images.each do |image|
+        image = image.current_version
+
+        image.tags.each do |tag|
+          puts "#{image.image_url}:#{tag}"
+        end
+      end
     end
 
     def kubectl(*cmd)
