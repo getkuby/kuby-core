@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'kube-dsl', '~> 0.4'
   s.add_dependency 'kuby-kube-db', '>= 0.6'
   s.add_dependency 'kubernetes-cli', '~> 0.3'
+  s.add_dependency 'ptools', '~> 1.4'
   s.add_dependency 'railties', '>= 5.1'
   s.add_dependency 'rouge', '~> 3.0'
   s.add_dependency 'sorbet-runtime-stub', '~> 0.2'

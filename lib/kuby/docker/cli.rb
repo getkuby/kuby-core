@@ -2,6 +2,7 @@
 
 require 'json'
 require 'open3'
+require 'ptools'
 require 'shellwords'
 
 module Kuby
@@ -14,7 +15,7 @@ module Kuby
 
       sig { params(executable: T.nilable(String)).void }
       def initialize(executable = nil)
-        @executable = T.let(executable || `which docker`.strip, String)
+        @executable = T.let(executable || File.which('docker'), String)
       end
 
       sig { returns(T.nilable(String)) }
