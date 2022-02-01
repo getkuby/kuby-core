@@ -3,6 +3,9 @@
 require 'kuby/version'
 require 'gli'
 
+# run the pre hook for the help command
+GLI::Commands::Help.skips_pre = false
+
 module Kuby
   class Commands
     extend T::Sig
@@ -39,6 +42,19 @@ module Kuby
       Kuby::Tasks.new(Kuby.environment)
     end
 
+    sig {
+      params(
+        global_options: T::Hash[T.any(String, Symbol), T.any(String, Integer)]
+      ).void
+    }
+    def self.load_kuby_config!(global_options)
+      return if @kuby_config_loaded
+
+      Kuby.env = global_options[:environment] if global_options[:environment]
+      Kuby.load!(global_options[:config])
+      @kuby_config_loaded = true
+    end
+
     program_desc 'Kuby command-line interface. Kuby is a convention '\
       'over configuration approach for running Rails apps in Kubernetes.'
 
@@ -54,20 +70,56 @@ module Kuby
     default_value './kuby.rb'
     flag [:c, :config]
 
+    command_missing do |command_name, global_options|
+      load_kuby_config!(global_options)
+      cmd = nil
+
+      # command_name is also the name of the plugin
+      if plugin_klass = Kuby.plugins.find(command_name)
+        if plugin_klass.respond_to?(:install_commands)
+          desc "Run commands for the #{command_name} plugin."
+          cmd = command(command_name) do |c|
+            # the plugin now defines its own commands on c
+            plugin_klass.install_commands(c)
+          end
+        end
+      end
+
+      cmd
+    end
+
     pre do |global_options, options, args|
-      Kuby.env = global_options[:environment] if global_options[:environment]
-      Kuby.load!(global_options[:config])
+      load_kuby_config!(global_options)
+
+      Kuby.plugins.each do |plugin_name, plugin_klass|
+        if plugin_klass.respond_to?(:commands) && !@commands[plugin_name]
+          desc "Run commands for the #{plugin_name} plugin."
+          command plugin_name.to_sym do |c|
+            plugin_klass.commands(c)
+          end
+        end
+      end
 
       # GLI will abort unless this block returns a truthy value
       true
     end
 
-    desc 'Builds the Docker image.'
+    desc 'Builds Docker images.'
     command :build do |c|
+      c.desc 'Docker build argument.'
       c.flag [:a, :arg], required: false, multiple: true
+
+      c.desc 'When enabled, ignores missing build arguments.'
       c.switch [:'ignore-missing-args'], required: false, default: false
-      c.flag [:only], required: false
+
+      c.desc 'Build only the images associated with the specified identifier(s). '\
+             'Run `kuby images` for a list of all valid identifiers (note that '\
+             'identifiers can be associated with more than one image).'
+      c.flag [:only], required: false, multiple: true
+
+      c.desc 'The directory to use as the Docker build context.'
       c.flag [:c, :context], required: false
+
       c.action do |global_options, options, docker_args|
         build_args = {}.tap do |build_args|
           (options[:arg] || []).each do |a|
@@ -86,9 +138,12 @@ module Kuby
       end
     end
 
-    desc 'Pushes the Docker image to the configured registry.'
+    desc 'Pushes Docker images to their associated registries.'
     command :push do |c|
-      c.flag [:only], required: false
+      c.desc 'Push only the images associated with the specified identifier(s). '\
+             'Run `kuby images` for a list of all valid identifiers (note that '\
+             'identifiers can be associated with more than one image).'
+      c.flag [:only], required: false, multiple: true
       c.action do |global_options, options, args|
         tasks.push(only: options[:only])
       end
@@ -96,7 +151,8 @@ module Kuby
 
     desc 'Gets your Kubernetes cluster ready to run your Rails app.'
     command :setup do |c|
-      c.flag [:only], required: false
+      c.desc 'Run the setup routines for only the specified plugin identifier(s).'
+      c.flag [:only], required: false, multiple: true
       c.action do |global_options, options, args|
         tasks.setup(only: options[:only])
       end
@@ -104,7 +160,9 @@ module Kuby
 
     desc 'Prints the effective Dockerfiles used to build Docker images.'
     command :dockerfiles do |c|
-      c.flag [:only], required: false
+      c.desc 'Print Dockerfiles for only the images associated with the specified '\
+             'identifier(s).'
+      c.flag [:only], required: false, multiple: true
       c.action do |global_options, options, args|
         tasks.print_dockerfiles(only: options[:only])
       end
@@ -119,7 +177,7 @@ module Kuby
       end
     end
 
-    desc 'Rolls back to the previous Docker tag.'
+    desc 'Rolls back to the previous release.'
     command :rollback do |c|
       c.action do |global_options, options, args|
         tasks.rollback
@@ -128,14 +186,19 @@ module Kuby
 
     desc 'Prints the effective Kubernetes resources that will be applied on deploy.'
     command :resources do |c|
+      c.desc 'Only print resources of the given kind.'
       c.flag [:K, :kind], required: false
+
+      c.desc 'Only print resources that match the given name.'
       c.flag [:N, :name], required: false
+
       c.action do |global_options, options, args|
         tasks.print_resources(options[:kind], options[:name])
       end
     end
 
-    desc 'Prints out the contents of the kubeconfig Kuby is using to communicate with your cluster.'
+    desc 'Prints out the contents of the kubeconfig file Kuby is using to communicate '\
+         'with your cluster.'
     command :kubeconfig do |c|
       c.action do |global_options, options, args|
         tasks.print_kubeconfig
@@ -152,8 +215,8 @@ module Kuby
     desc 'Runs an arbitrary kubectl command.'
     command :kubectl do |c|
       c.desc 'Prefixes the kubectl command with the namespace associated with '\
-        'the current environment. For example, if the Kuby env is "production", '\
-        'this option will prefix the kubectl command with "-n myapp-production".'
+             'the current environment. For example, if the Kuby env is "production", '\
+             'this option will prefix the kubectl command with "-n myapp-production".'
       c.switch [:N, :namespaced], default: false
       c.action do |global_options, options, args|
         if options[:namespaced]
@@ -163,6 +226,43 @@ module Kuby
         end
 
         tasks.kubectl(*args)
+      end
+    end
+
+    desc 'Provides information about plugins.'
+    command :plugin do |rc|
+      rc.desc "Run a plugin's remove routine, i.e. uninstall it's resources from your cluster."
+      rc.command :remove do |c|
+        c.desc 'The plugin to remove. Run `kuby plugin list` for a list of valid plugin '\
+               'identifiers.'
+        c.flag [:p, :plugin], required: true
+        c.action do |global_options, options, args|
+          tasks.remove_plugin(options[:plugin])
+        end
+      end
+
+      rc.desc 'List plugins.'
+      rc.command :list do |c|
+        c.desc 'Show all available plugins, not just the ones in use.'
+        c.switch [:a, :all], default: false
+        c.action do |global_options, options, args|
+          tasks.list_plugins(all: options[:all])
+        end
+      end
+
+      rc.desc "Run one of a plugin's rake tasks. Omit task names to print all tasks."
+      rc.arg_name 'task_name', [:multiple, :optional]
+      rc.command :rake do |c|
+        c.action do |global_options, options, args|
+          # Args come through as @rails_options here because of the monkeypatch
+          # at the top of this file. Should revisit the patch at some point because
+          # I think GLI's arg concept can replace it.
+          if @rails_options.empty?
+            tasks.list_rake_tasks
+          else
+            tasks.run_rake_tasks(@rails_options)
+          end
+        end
       end
     end
 

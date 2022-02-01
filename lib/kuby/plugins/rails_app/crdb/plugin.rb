@@ -2,7 +2,6 @@
 
 require 'fileutils'
 require 'kube-dsl'
-require 'kuby/kube-db'
 
 module Kuby
   module Plugins
@@ -15,7 +14,7 @@ module Kuby
           BOOTSTRAP_TIMEOUT_TOTAL = 60
           CLIENT_PERMISSIONS = %w(create drop select insert delete update).freeze
 
-          attr_reader :environment, :configs, :client_set, :node_client
+          attr_reader :environment, :configs, :client_set
 
           def initialize(environment, configs)
             @environment = environment
@@ -31,12 +30,16 @@ module Kuby
               master_key: rails_app.master_key
             )
 
-            client_set.add('root')
-            client_set.add(client_username, CLIENT_PERMISSIONS)
+            add_client_user('root')
+            add_client_user(client_username, CLIENT_PERMISSIONS)
+          end
+
+          def add_client_user(username, permissions = CLIENT_PERMISSIONS)
+            client_set.add(username, permissions)
           end
 
           def name
-            :crdb
+            :cockroachdb
           end
 
           def resources

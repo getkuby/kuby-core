@@ -1,4 +1,5 @@
 # typed: false
+require 'rake'
 require 'rouge'
 
 module Kuby
@@ -24,11 +25,62 @@ module Kuby
       end
     end
 
-    def setup(only: nil)
-      environment.kubernetes.setup(only: only ? only.to_sym : nil)
+    def setup(only: [])
+      environment.kubernetes.setup(only: only.map(&:to_sym))
     end
 
-    def build(build_args = {}, docker_args = [], only: nil, ignore_missing_args: false, context: nil)
+    def remove_plugin(name)
+      plugin = environment.kubernetes.plugin(name)
+
+      # Allow running uninstallation procedures for plugins that are no longer part
+      # of the environment. This is especially useful for plugins Kuby adds by default
+      # in one version and removes in another, like KubeDB.
+      plugin ||= if plugin_class = Kuby.plugins.find(name.to_sym)
+        plugin_class.new(environment)
+      end
+
+      unless plugin
+        Kuby.logger.fatal(
+          "No plugin found named '#{name}'. Run `kuby plugin list -a` to show a list of all available plugins."
+        )
+
+        exit 1
+      end
+
+      plugin.remove
+    end
+
+    def list_plugins(all: false)
+      Kuby.plugins.each do |name, _|
+        if environment.kubernetes.plugins.include?(name)
+          Kuby.logger.info("* #{name}")
+        elsif all
+          Kuby.logger.info("  #{name}")
+        end
+      end
+    end
+
+    def run_rake_tasks(tasks)
+      if tasks.empty?
+        Kuby.logger.fatal('Please specify at least one task to run.')
+        exit 1
+      end
+
+      Kuby.load_rake_tasks!
+      Rake::Task[tasks.join(' ')].invoke
+    end
+
+    def list_rake_tasks
+      Kuby.load_rake_tasks!
+
+      rows = Rake::Task.tasks.map do |task|
+        [task.name, task.full_comment || '']
+      end
+
+      puts Kuby::Utils::Table.new(%w(NAME DESCRIPTION), rows).to_s
+    end
+
+    def build(build_args = {}, docker_args = [], only: [], ignore_missing_args: false, context: nil)
       check_platform(docker_args)
 
       build_args['RAILS_MASTER_KEY'] ||= rails_app.master_key
@@ -36,8 +88,7 @@ module Kuby
       check_build_args(build_args) unless ignore_missing_args
 
       kubernetes.docker_images.each do |image|
-        next if only && image.identifier != only
-
+        next unless only.empty? || only.include?(image.identifier)
         return unless perform_docker_login_if_necessary(image)
 
         image = image.new_version
@@ -46,9 +97,9 @@ module Kuby
       end
     end
 
-    def push(only: nil)
+    def push(only: [])
       kubernetes.docker_images.each do |image|
-        next if only && image.identifier != only
+        next unless only.empty? || only.include?(image.identifier)
 
         image = image.current_version
         Kuby.logger.info("Pushing image #{image.image_url} with tags #{image.tags.join(', ')}")
@@ -99,13 +150,15 @@ module Kuby
     end
 
     def print_images
-      kubernetes.docker_images.each do |image|
+      rows = kubernetes.docker_images.flat_map do |image|
         image = image.current_version
 
-        image.tags.each do |tag|
-          puts "#{image.image_url}:#{tag}"
+        image.tags.map do |tag|
+          [image.identifier, "#{image.image_url}:#{tag}"]
         end
       end
+
+      puts Kuby::Utils::Table.new(%w(IDENTIFIER URL), rows).to_s
     end
 
     def kubectl(*cmd)

@@ -8,11 +8,24 @@ module Kuby
       after_initialize
     end
 
+    class << self
+      # returns an array of directories containing .rake files
+      def task_dirs
+        []
+      end
+    end
+
     def configure(&block)
       # do nothing by default
     end
 
+    # install any global resources like operators, etc
     def setup
+      # do nothing by default
+    end
+
+    # remove all global resources installed by #setup
+    def remove
       # do nothing by default
     end
 

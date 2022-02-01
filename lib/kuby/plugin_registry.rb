@@ -1,6 +1,8 @@
 # typed: false
 module Kuby
   class PluginRegistry
+    include Enumerable
+
     ANY = 'any'.freeze
 
     def register(plugin_name, plugin_klass, environment: ANY)
@@ -17,6 +19,19 @@ module Kuby
       end
 
       plugins_by_env[environment] || plugins_by_env[ANY]
+    end
+
+    def each(&block)
+      return to_enum(__method__) unless block
+
+      @plugins.each_pair do |plugin_name, plugins_by_env|
+        plugins_by_env.each_pair do |env, plugin_klass|
+          case env
+            when ANY, Kuby.env
+              yield plugin_name, plugin_klass
+          end
+        end
+      end
     end
 
     private

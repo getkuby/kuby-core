@@ -1,5 +1,6 @@
 # typed: false
 require 'kube-dsl'
+require 'rake'
 
 module Kuby
   module Kubernetes
@@ -89,25 +90,23 @@ module Kuby
         @tag = nil
       end
 
-      def setup(only: nil)
-        if only
-          @plugins.each do |name, plg|
-            if only == name
-              plg.before_setup
-              plg.setup
-              plg.after_setup
-            end
+      def setup(only: [])
+        plugins = if only.empty?
+          @plugins
+        else
+          @plugins.each_with_object({}) do |(name, plg), memo|
+            memo[name] = plg if only.include?(name)
           end
-
-          return
         end
 
-        provider.before_setup
-        provider.setup
+        if only.empty?
+          provider.before_setup
+          provider.setup
+        end
 
-        @plugins.each { |_, plg| plg.before_setup }
-        @plugins.each { |_, plg| plg.setup }
-        @plugins.each { |_, plg| plg.after_setup }
+        plugins.each { |_, plg| plg.before_setup }
+        plugins.each { |_, plg| plg.setup }
+        plugins.each { |_, plg| plg.after_setup }
 
         provider.after_setup
       end

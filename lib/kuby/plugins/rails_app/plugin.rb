@@ -402,8 +402,7 @@ module Kuby
             config_map,
             app_secrets,
             deployment,
-            ingress,
-            *database&.plugin&.resources
+            ingress
           ]
         end
 

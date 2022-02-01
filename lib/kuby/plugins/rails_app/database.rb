@@ -9,8 +9,8 @@ module Kuby
       class Database
         ADAPTER_MAP = {
           sqlite3: Sqlite,
-          mysql2: MySQL,
-          postgresql: Postgres,
+          mysql2: MySQL,  # removed
+          postgresql: Postgres,  # removed
           cockroachdb: CRDB::Plugin
         }.freeze
 

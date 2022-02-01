@@ -22,6 +22,7 @@ module Kuby
   autoload :Plugins,        'kuby/plugins'
   autoload :Tasks,          'kuby/tasks'
   autoload :TrailingHash,   'kuby/trailing_hash'
+  autoload :Utils,          'kuby/utils'
 
   DEFAULT_ENV = 'development'.freeze
   DEFAULT_DB_USER = 'root'.freeze
@@ -126,6 +127,18 @@ module Kuby
     def env
       ENV.fetch('KUBY_ENV') do
         (@env || Rails.env rescue nil || DEFAULT_ENV).to_s
+      end
+    end
+
+    def load_rake_tasks!
+      Rake::TaskManager.record_task_metadata = true
+
+      Kuby.plugins.each do |_, plugin_klass|
+        plugin_klass.task_dirs.each do |task_dir|
+          Dir.glob(File.join(task_dir, '*.rake')).each do |path|
+            Rake.load_rakefile(path)
+          end
+        end
       end
     end
   end
