@@ -209,15 +209,7 @@ module Kuby
             type 'Opaque'
 
             data do
-              if master_key = ENV[MASTER_KEY_VAR]
-                add MASTER_KEY_VAR.to_sym, master_key
-              else
-                master_key_path = File.join(spec.root, 'config', 'master.key')
-
-                if File.exist?(master_key_path)
-                  add MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip
-                end
-              end
+              add MASTER_KEY_VAR.to_sym, spec.master_key
             end
           end
 
@@ -433,6 +425,13 @@ module Kuby
 
         def namespace
           environment.kubernetes.namespace
+        end
+
+        def master_key
+          @master_key ||= ENV[MASTER_KEY_VAR] || begin
+            master_key_path = File.join(root, 'config', 'master.key')
+            File.read(master_key_path).strip if File.exist?(master_key_path)
+          end
         end
       end
     end
