@@ -1,5 +1,10 @@
-## Next
+## 0.17.1
 * Allow storage class to be customized when using the built-in bare metal provider.
+* Fix a bug where the assets image would be built using the previous app image instead of the current one.
+* Centralize the lookup of the Rails master key (not user-facing).
+* Add descriptions to numerous CLI commands and their arguments.
+* CLI now accepts multiple `--only` flags passed to subcommands like `build`, `push`, etc.
+* Allow running setup steps for individual plugins.
 
 ## 0.16.1
 * Fix a few bugs caused by leaving `continue-on-error: true` in the GitHub actions config 🤦
