@@ -24,23 +24,19 @@ module Kuby
       end
     end
 
-    def setup
-      environment.kubernetes.setup
+    def setup(only: [])
+      environment.kubernetes.setup(only: only.map(&:to_sym))
     end
 
-    def build(build_args = {}, docker_args = [], only: nil, ignore_missing_args: false, context: nil)
+    def build(build_args = {}, docker_args = [], only: [], ignore_missing_args: false, context: nil)
       check_platform(docker_args)
 
-      build_args['RAILS_MASTER_KEY'] ||= ENV['RAILS_MASTER_KEY'] || begin
-        master_key_file = File.join('config', 'master.key')
-        File.exist?(master_key_file) ? File.read(master_key_file).strip : nil
-      end
+      build_args['RAILS_MASTER_KEY'] ||= rails_app.master_key
 
       check_build_args(build_args) unless ignore_missing_args
 
       kubernetes.docker_images.each do |image|
-        next if only && image.identifier != only
-
+        next unless only.empty? || only.include?(image.identifier)
         return unless perform_docker_login_if_necessary(image)
 
         image = image.new_version
@@ -49,9 +45,9 @@ module Kuby
       end
     end
 
-    def push(only: nil)
+    def push(only: [])
       kubernetes.docker_images.each do |image|
-        next if only && image.identifier != only
+        next unless only.empty? || only.include?(image.identifier)
 
         image = image.current_version
         Kuby.logger.info("Pushing image #{image.image_url} with tags #{image.tags.join(', ')}")
@@ -99,6 +95,18 @@ module Kuby
       path = kubernetes.provider.kubeconfig_path
       Kuby.logger.info("Printing contents of #{path}")
       puts File.read(path)
+    end
+
+    def print_images
+      rows = kubernetes.docker_images.flat_map do |image|
+        image = image.current_version
+
+        image.tags.map do |tag|
+          [image.identifier, "#{image.image_url}:#{tag}"]
+        end
+      end
+
+      puts Kuby::Utils::Table.new(%w(IDENTIFIER URL), rows).to_s
     end
 
     def kubectl(*cmd)

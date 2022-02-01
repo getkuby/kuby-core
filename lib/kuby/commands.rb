@@ -62,12 +62,22 @@ module Kuby
       true
     end
 
-    desc 'Builds the Docker image.'
+    desc 'Builds Docker images.'
     command :build do |c|
+      c.desc 'Docker build argument.'
       c.flag [:a, :arg], required: false, multiple: true
+
+      c.desc 'When enabled, ignores missing build arguments.'
       c.switch [:'ignore-missing-args'], required: false, default: false
-      c.flag [:only], required: false
+
+      c.desc 'Build only the images associated with the specified identifier(s). '\
+             'Run `kuby images` for a list of all valid identifiers (note that '\
+             'identifiers can be associated with more than one image).'
+      c.flag [:only], required: false, multiple: true
+
+      c.desc 'The directory to use as the Docker build context.'
       c.flag [:c, :context], required: false
+
       c.action do |global_options, options, docker_args|
         build_args = {}.tap do |build_args|
           (options[:arg] || []).each do |a|
@@ -86,9 +96,12 @@ module Kuby
       end
     end
 
-    desc 'Pushes the Docker image to the configured registry.'
+    desc 'Pushes Docker images to their associated registries.'
     command :push do |c|
-      c.flag [:only], required: false
+      c.desc 'Push only the images associated with the specified identifier(s). '\
+             'Run `kuby images` for a list of all valid identifiers (note that '\
+             'identifiers can be associated with more than one image).'
+      c.flag [:only], required: false, multiple: true
       c.action do |global_options, options, args|
         tasks.push(only: options[:only])
       end
@@ -96,14 +109,18 @@ module Kuby
 
     desc 'Gets your Kubernetes cluster ready to run your Rails app.'
     command :setup do |c|
+      c.desc 'Run the setup routines for only the specified plugin identifier(s).'
+      c.flag [:only], required: false, multiple: true
       c.action do |global_options, options, args|
-        tasks.setup
+        tasks.setup(only: options[:only])
       end
     end
 
     desc 'Prints the effective Dockerfiles used to build Docker images.'
     command :dockerfiles do |c|
-      c.flag [:only], required: false
+      c.desc 'Print Dockerfiles for only the images associated with the specified '\
+             'identifier(s).'
+      c.flag [:only], required: false, multiple: true
       c.action do |global_options, options, args|
         tasks.print_dockerfiles(only: options[:only])
       end
@@ -118,7 +135,7 @@ module Kuby
       end
     end
 
-    desc 'Rolls back to the previous Docker tag.'
+    desc 'Rolls back to the previous release.'
     command :rollback do |c|
       c.action do |global_options, options, args|
         tasks.rollback
@@ -127,25 +144,37 @@ module Kuby
 
     desc 'Prints the effective Kubernetes resources that will be applied on deploy.'
     command :resources do |c|
+      c.desc 'Only print resources of the given kind.'
       c.flag [:K, :kind], required: false
+
+      c.desc 'Only print resources that match the given name.'
       c.flag [:N, :name], required: false
+
       c.action do |global_options, options, args|
         tasks.print_resources(options[:kind], options[:name])
       end
     end
 
-    desc 'Prints out the contents of the kubeconfig Kuby is using to communicate with your cluster.'
+    desc 'Prints out the contents of the kubeconfig file Kuby is using to communicate '\
+         'with your cluster.'
     command :kubeconfig do |c|
       c.action do |global_options, options, args|
         tasks.print_kubeconfig
       end
     end
 
+    desc 'Prints out the URLs to the latest Docker images in the Docker registry.'
+    command :images do |c|
+      c.action do |global_options, options, args|
+        tasks.print_images
+      end
+    end
+
     desc 'Runs an arbitrary kubectl command.'
     command :kubectl do |c|
       c.desc 'Prefixes the kubectl command with the namespace associated with '\
-        'the current environment. For example, if the Kuby env is "production", '\
-        'this option will prefix the kubectl command with "-n myapp-production".'
+             'the current environment. For example, if the Kuby env is "production", '\
+             'this option will prefix the kubectl command with "-n myapp-production".'
       c.switch [:N, :namespaced], default: false
       c.action do |global_options, options, args|
         if options[:namespaced]

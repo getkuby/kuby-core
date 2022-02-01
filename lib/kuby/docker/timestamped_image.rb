@@ -79,8 +79,6 @@ module Kuby
       sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String], context: T.nilable(String)).void }
       def build(build_args = {}, docker_args = [], context: nil)
         docker_cli.build(new_version, build_args: build_args, docker_args: docker_args, context: context)
-        @current_version = new_version
-        @new_version = nil
       end
 
       sig { params(tag: String).void }

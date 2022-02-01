@@ -12,6 +12,7 @@ module Kuby
       # do nothing by default
     end
 
+    # install any global resources like operators, etc
     def setup
       # do nothing by default
     end

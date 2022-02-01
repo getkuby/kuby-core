@@ -89,13 +89,23 @@ module Kuby
         @tag = nil
       end
 
-      def setup
-        provider.before_setup
-        provider.setup
+      def setup(only: [])
+        plugins = if only.empty?
+          @plugins
+        else
+          @plugins.each_with_object({}) do |(name, plg), memo|
+            memo[name] = plg if only.include?(name)
+          end
+        end
 
-        @plugins.each { |_, plg| plg.before_setup }
-        @plugins.each { |_, plg| plg.setup }
-        @plugins.each { |_, plg| plg.after_setup }
+        if only.empty?
+          provider.before_setup
+          provider.setup
+        end
+
+        plugins.each { |_, plg| plg.before_setup }
+        plugins.each { |_, plg| plg.setup }
+        plugins.each { |_, plg| plg.after_setup }
 
         provider.after_setup
       end
