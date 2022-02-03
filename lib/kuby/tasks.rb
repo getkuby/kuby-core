@@ -9,9 +9,9 @@ module Kuby
       @environment = environment
     end
 
-    def print_dockerfiles(only: nil)
+    def print_dockerfiles(only: [])
       kubernetes.docker_images.each do |image|
-        next if only && image.identifier != only
+        next unless only.empty? || only.include?(image.identifier)
 
         image = image.current_version
         identifier = image.identifier ? " ##{image.identifier}" : ""

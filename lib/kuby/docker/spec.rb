@@ -5,7 +5,8 @@ module Kuby
     class Spec
       extend T::Sig
 
-      DEFAULT_DISTRO = :debian
+      DEFAULT_DISTRO = T.let(:debian, Symbol)
+      DEFAULT_APP_ROOT_PATH = T.let('.'.freeze, String)
 
       sig { returns(Environment) }
       attr_reader :environment
@@ -15,6 +16,9 @@ module Kuby
 
       sig { returns(T.nilable(String)) }
       attr_reader :registry_index_url_str
+
+      sig { returns(T.nilable(String)) }
+      attr_reader :app_root_path
 
       sig { params(environment: Environment).void }
       def initialize(environment)
@@ -26,6 +30,7 @@ module Kuby
         @bundler_phase = T.let(@bundler_phase, T.nilable(BundlerPhase))
         @yarn_phase = T.let(@yarn_phase, T.nilable(YarnPhase))
         @copy_phase = T.let(@copy_phase, T.nilable(CopyPhase))
+        @app_phase = T.let(@app_phase, T.nilable(AppPhase))
         @assets_phase = T.let(@assets_phase, T.nilable(AssetsPhase))
         @webserver_phase = T.let(@webserver_phase, T.nilable(WebserverPhase))
 
@@ -36,6 +41,8 @@ module Kuby
         @image_url_str = T.let(@image_url_str, T.nilable(String))
         @registry_index_url_str = T.let(@registry_index_url_str, T.nilable(String))
         @image = T.let(@image, T.nilable(Docker::AppImage))
+
+        @app_root_path = T.let(DEFAULT_APP_ROOT_PATH, String)
       end
 
       sig { returns(Symbol) }
@@ -66,6 +73,11 @@ module Kuby
       sig { params(path: String).void }
       def gemfile(path)
         bundler_phase.gemfile = path
+      end
+
+      sig { params(path: String).void }
+      def app_root(path)
+        @app_root_path = path
       end
 
       sig {
@@ -187,6 +199,11 @@ module Kuby
         @copy_phase ||= CopyPhase.new(environment)
       end
 
+      sig { returns(AppPhase) }
+      def app_phase
+        @app_phase ||= AppPhase.new(environment)
+      end
+
       sig { returns(AssetsPhase) }
       def assets_phase
         @assets_phase ||= AssetsPhase.new(environment)
@@ -216,6 +233,7 @@ module Kuby
           stack.use(:bundler_phase, bundler_phase)
           stack.use(:yarn_phase, yarn_phase)
           stack.use(:copy_phase, copy_phase)
+          stack.use(:app_phase, app_phase)
           stack.use(:assets_phase, assets_phase)
           stack.use(:webserver_phase, webserver_phase)
         end
