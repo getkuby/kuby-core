@@ -22,6 +22,7 @@ module Kuby
   autoload :Plugins,        'kuby/plugins'
   autoload :Tasks,          'kuby/tasks'
   autoload :TrailingHash,   'kuby/trailing_hash'
+  autoload :Utils,          'kuby/utils'
 
   DEFAULT_ENV = 'development'.freeze
   DEFAULT_DB_USER = 'root'.freeze
