@@ -59,19 +59,21 @@ module Kuby
 
         dockerfile.run('gem', 'install', 'bundler', '-v', v)
 
-        # bundle install
         dockerfile.copy(host_path.join(gf), container_path.join(gf))
         dockerfile.copy(host_path.join(lf), container_path.join(lf))
-
-        dockerfile.env("BUNDLE_GEMFILE=#{container_path.join(gf)}")
-
         @gemfiles.each do |file|
           dockerfile.copy(host_path.join(file), container_path.join(file))
         end
 
+        dockerfile.env("BUNDLE_GEMFILE=#{container_path.join(gf)}")
+
         unless wo.empty?
           dockerfile.env("BUNDLE_WITHOUT='#{wo.join(' ')}'")
         end
+
+        dockerfile.run(
+          executable || 'bundle', 'lock', '--lockfile', container_path.join(lf)
+        )
 
         dockerfile.run(
           executable || 'bundle', 'install',
