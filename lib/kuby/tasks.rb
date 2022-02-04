@@ -31,7 +31,9 @@ module Kuby
     def build(build_args = {}, docker_args = [], only: [], ignore_missing_args: false, context: nil)
       check_platform(docker_args)
 
-      build_args['RAILS_MASTER_KEY'] ||= rails_app.master_key
+      if master_key = rails_app.master_key
+        build_args['RAILS_MASTER_KEY'] = master_key
+      end
 
       check_build_args(build_args) unless ignore_missing_args
 
@@ -185,6 +187,9 @@ module Kuby
           end
         end
       end
+
+      require 'pry-byebug'
+      binding.pry
 
       required_args.uniq!
 
