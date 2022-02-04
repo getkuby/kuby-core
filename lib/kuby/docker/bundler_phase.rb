@@ -63,6 +63,11 @@ module Kuby
         dockerfile.copy(host_path.join(lf), container_path.join(lf))
         @gemfiles.each do |file|
           dockerfile.copy(host_path.join(file), container_path.join(file))
+          extra_lf = host_path.join("#{file}.lock")
+
+          if extra_lf.exist?
+            dockerfile.copy(extra_lf, container_path.join("#{file}.lock"))
+          end
         end
 
         dockerfile.env("BUNDLE_GEMFILE=#{container_path.join(gf)}")
