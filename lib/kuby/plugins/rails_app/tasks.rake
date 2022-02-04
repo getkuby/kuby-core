@@ -16,12 +16,21 @@ namespace :kuby do
       end
 
       task :create_unless_exists do
+        next unless Kernel.const_defined?('::ActiveRecord')
+
         begin
           Rake::Task['environment'].invoke
           ActiveRecord::Base.connection
         rescue ActiveRecord::NoDatabaseError => e
           Rake::Task['db:create'].invoke
         end
+      end
+
+      task :migrate do
+        next unless Kernel.const_defined?('::ActiveRecord')
+
+        Rake::Task['environment'].invoke
+        Rake::Task['db:migrate'].invoke
       end
     end
 
