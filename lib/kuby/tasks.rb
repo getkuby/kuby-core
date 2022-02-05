@@ -188,9 +188,6 @@ module Kuby
         end
       end
 
-      require 'pry-byebug'
-      binding.pry
-
       required_args.uniq!
 
       if File.exist?(File.join('config', 'master.key'))
