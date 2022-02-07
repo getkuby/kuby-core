@@ -10,14 +10,13 @@ module Kuby
         value_fields :provider
       end
 
-      VERSION = '0.27.1'.freeze
-      DEFAULT_PROVIDER = 'cloud-generic'.freeze
+      VERSION = '1.1.1'.freeze
+      DEFAULT_PROVIDER = 'cloud'.freeze
       NAMESPACE = 'ingress-nginx'.freeze
       SERVICE_NAME = 'ingress-nginx'.freeze
 
       SETUP_RESOURCES = [
-        "https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-#{VERSION}/deploy/static/mandatory.yaml",
-        "https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-#{VERSION}/deploy/static/provider/%{provider}.yaml"
+        "https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v#{VERSION}/deploy/static/provider/%{provider}/deploy.yaml"
       ].freeze
 
       def configure(&block)
