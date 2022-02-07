@@ -1,3 +1,21 @@
+## Next
+* Add the ability to specify your app's root directory.
+  - Call `app_root <path>` inside the `docker` section of your Kuby config file.
+  - Necessary for use-cases like apps living inside gem repos, etc.
+* Add `:app_phase` to set of Docker build phases.
+  - Allows easily setting environment variables.
+  - Sets the working directory to the app root if the app's root directory has been set via the `app_root` feature described above.
+* Upgrade to Nginx ingress controller v1.1.1.
+  - Necessary to support Kind, the local Kubernetes cluster tool (see the kuby-kind gem).
+* Run `bundle lock` before installing gem dependencies.
+* Fix bug causing errors when certain container registries return a 401 if the repo doesn't exist yet.
+  - I'm looking at you, Azure.
+* Don't fail to deploy if the app doesn't use Active Record.
+* Fix git merge issue causing no output when running `kuby dockerfiles`.
+* Upgrade integration tests to Kubernetes 1.22.
+  - This upgrade is incompatible with the version of KubeDB we're currently using.
+  - I'm working on replacing KubeDB with the CockroachDB operator. Kuby will no longer support KubeDB after this release.
+
 ## 0.17.1
 * Allow storage class to be customized when using the built-in bare metal provider.
 * Fix a bug where the assets image would be built using the previous app image instead of the current one.
