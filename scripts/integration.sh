@@ -1,6 +1,6 @@
 #! /bin/bash
 
-K8S_VERSION='1.22.6'
+K8S_VERSION='1.22.5'
 
 kind create cluster --name kuby-test --image kindest/node:v$K8S_VERSION
 
