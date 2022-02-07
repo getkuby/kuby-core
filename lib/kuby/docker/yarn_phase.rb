@@ -29,6 +29,7 @@ module Kuby
 
       private
 
+      sig { params(path: String).returns(String) }
       def ensure_trailing_delimiter(path)
         path.end_with?(File::SEPARATOR) ? path : File.join(path, '')
       end
