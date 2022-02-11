@@ -31,7 +31,9 @@ module Kuby
 
       sig { returns(Image) }
       def new_version
-        @new_version ||= create_new_version
+        @new_version ||= duplicate_with_tags(
+          TimestampTag.now.to_s, [Kuby::Docker::LATEST_TAG]
+        )
       end
 
       sig { returns(Image) }
@@ -93,13 +95,6 @@ module Kuby
       end
 
       private
-
-      sig { returns(Image) }
-      def create_new_version
-        duplicate_with_tags(
-          TimestampTag.now.to_s, [Kuby::Docker::LATEST_TAG]
-        )
-      end
 
       sig { returns(::Docker::Remote::Client) }
       def remote_client
