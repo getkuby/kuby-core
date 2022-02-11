@@ -11,21 +11,19 @@ module Kuby
         end
 
         def new_version
-          # Asset images track the base image, so return the new version
+          # Asset images track the base image, so return the current version
           # here. There can be no asset image without a base image.
-          @new_version ||= duplicate_with_annotated_tags(
-            base_image.new_version
-          )
+          current_version
         end
 
         def current_version
-          @current_version ||= duplicate_with_annotated_tags(
+          duplicate_with_annotated_tags(
             base_image.current_version
           )
         end
 
         def previous_version
-          @previous_version ||= duplicate_with_annotated_tags(
+          duplicate_with_annotated_tags(
             base_image.previous_version
           )
         end
