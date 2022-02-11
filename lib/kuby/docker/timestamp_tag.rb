@@ -27,6 +27,7 @@ module Kuby
         new(time)
       end
 
+      sig { returns(TimestampTag) }
       def self.now
         new(Time.now.utc)
       end

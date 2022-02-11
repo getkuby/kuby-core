@@ -86,6 +86,7 @@ module Kuby
         docker_cli.push(image_url, tag)
       end
 
+      sig { returns(T::Boolean) }
       def exists?
         return false unless main_tag
         timestamp_tags.include?(TimestampTag.try_parse(main_tag))
