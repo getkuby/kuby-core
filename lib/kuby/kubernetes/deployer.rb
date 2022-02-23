@@ -36,7 +36,10 @@ module Kuby
               deploy_namespaced_resources(resources, ns)
             rescue => e
               puts e.message
-              puts e.backtrace.join("\n")
+
+              if bt = e.backtrace
+                puts bt.join("\n")
+              end
             end
           end
         end
