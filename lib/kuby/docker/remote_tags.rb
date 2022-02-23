@@ -28,7 +28,7 @@ module Kuby
       sig { returns(T::Array[String]) }
       def tags
         remote_client.tags
-      rescue ::Docker::Remote::UnknownRepoError, ::Docker::Remote::UnauthorizedError
+      rescue ::Docker::Remote::UnknownRepoError, ::Docker::Remote::UnauthorizedError, ::Docker::Remote::TooManyRetriesError
         # these can happen if we've never pushed to the repo before
         []
       end
