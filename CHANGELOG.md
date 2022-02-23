@@ -15,6 +15,7 @@
 * Upgrade integration tests to Kubernetes 1.22.
   - This upgrade is incompatible with the version of KubeDB we're currently using.
   - I'm working on replacing KubeDB with the CockroachDB operator. Kuby will no longer support KubeDB after this release.
+* Add ability to deploy resources into more than one namespace.
 
 ## 0.17.1
 * Allow storage class to be customized when using the built-in bare metal provider.

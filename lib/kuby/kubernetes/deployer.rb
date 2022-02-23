@@ -19,7 +19,7 @@ module Kuby
 
       def deploy
         restart_rails_deployment_if_necessary do
-          namespaced, global = all_resources.partition do |resource|
+          resource_groups = all_resources.group_by do |resource|
             # Unfortunately we can't use respond_to here because all KubeDSL
             # objects use ObjectMeta, which has a namespace field. Not sure
             # why, since it makes no sense for a namespace to have a namespace.
@@ -27,8 +27,18 @@ module Kuby
             resource.metadata.namespace
           end
 
-          deploy_global_resources(global)
-          deploy_namespaced_resources(namespaced)
+          deploy_global_resources(resource_groups[nil])
+
+          resource_groups.each_pair do |ns, resources|
+            next if !ns
+
+            begin
+              deploy_namespaced_resources(resources, ns)
+            rescue => e
+              puts e.message
+              puts e.backtrace.join("\n")
+            end
+          end
         end
       end
 
@@ -72,7 +82,7 @@ module Kuby
         Kuby.logger.fatal(e.resource.to_resource.to_yaml)
       end
 
-      def deploy_namespaced_resources(resources)
+      def deploy_namespaced_resources(resources, ns)
         old_kubeconfig = ENV['KUBECONFIG']
         ENV['KUBECONFIG'] = provider.kubeconfig_path
 
@@ -87,7 +97,7 @@ module Kuby
         end
 
         task = ::Kuby::Kubernetes::DeployTask.new(
-          namespace: namespace.metadata.name,
+          namespace: ns,
           context: cli.current_context,
           filenames: [tmpdir]
         )
