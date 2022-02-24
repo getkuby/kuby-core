@@ -1,4 +1,4 @@
-# typed: false
+# typed: ignore
 $:.push(File.expand_path('.', __dir__))
 
 require 'kuby'

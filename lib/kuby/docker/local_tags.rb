@@ -1,4 +1,4 @@
-# typed: strict
+# typed: ignore
 
 module Kuby
   module Docker

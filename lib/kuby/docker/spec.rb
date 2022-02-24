@@ -7,6 +7,7 @@ module Kuby
 
       DEFAULT_DISTRO = T.let(:debian, Symbol)
       DEFAULT_APP_ROOT_PATH = T.let('.'.freeze, String)
+      DEFAULT_VERSION_STRATEGY = T.let(:timestamps, Symbol)
 
       sig { returns(Environment) }
       attr_reader :environment
@@ -19,6 +20,9 @@ module Kuby
 
       sig { returns(T.nilable(String)) }
       attr_reader :app_root_path
+
+      sig { returns(Symbol) }
+      attr_reader :version_strategy_sym
 
       sig { params(environment: Environment).void }
       def initialize(environment)
@@ -43,6 +47,7 @@ module Kuby
         @image = T.let(@image, T.nilable(Docker::AppImage))
 
         @app_root_path = T.let(DEFAULT_APP_ROOT_PATH, String)
+        @version_strategy_sym = T.let(DEFAULT_VERSION_STRATEGY, Symbol)
       end
 
       sig { returns(Symbol) }
@@ -78,6 +83,11 @@ module Kuby
       sig { params(path: String).void }
       def app_root(path)
         @app_root_path = path
+      end
+
+      sig { params(strategy_sym: Symbol).void }
+      def version_strategy(strategy_sym)
+        @version_strategy_sym = strategy_sym
       end
 
       sig {
@@ -169,7 +179,11 @@ module Kuby
           end
 
           Docker::AppImage.new(
-            dockerfile, T.must(image_url_str), credentials, registry_index_url_str
+            dockerfile,
+            T.must(image_url_str),
+            credentials,
+            version_strategy_sym,
+            registry_index_url_str
           )
         end
       end

@@ -55,16 +55,16 @@ module Kuby
 
       sig {
         params(
-          image: Image,
+          image_version: ImageVersion,
           build_args: T::Hash[T.any(Symbol, String), String],
           docker_args: T::Array[String],
           context: T.nilable(String)
         ).void
       }
-      def build(image, build_args: {}, docker_args: [], context: nil)
+      def build(image_version, build_args: {}, docker_args: [], context: nil)
         cmd = [
           executable, 'build',
-          *image.tags.flat_map { |tag| ['-t', "#{image.image_url}:#{tag}"] },
+          *image_version.tags.flat_map { |tag| ['-t', "#{image_version.image.image_url}:#{tag}"] },
           *build_args.flat_map do |arg, val|
             ['--build-arg', Shellwords.shellescape("#{arg}=#{val}")]
           end,
@@ -74,7 +74,7 @@ module Kuby
         ]
 
         open3_w(cmd) do |stdin, _wait_threads|
-          stdin.puts(image.dockerfile.to_s)
+          stdin.puts(image_version.image.dockerfile.to_s)
         end
 
         unless T.must(last_status).success?

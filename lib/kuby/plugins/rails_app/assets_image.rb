@@ -1,54 +1,67 @@
+# typed: strict
+
 module Kuby
   module Plugins
     module RailsApp
-      class AssetsImage < ::Kuby::Docker::Image
-        attr_reader :base_image
+      class AssetsImage < Kuby::Docker::Image
+        extend T::Sig
 
-        def initialize(base_image, dockerfile, registry_index_url = nil, main_tag = nil, alias_tags = [])
-          super(dockerfile, base_image.image_url, base_image.credentials, registry_index_url, main_tag, alias_tags)
-          @base_image = base_image
-          @identifier = "assets"
+        sig { returns(Docker::Image) }
+        attr_reader :app_image
+
+        sig { params(app_image: Docker::Image).void }
+        def initialize(app_image)
+          super(app_image.dockerfile, app_image.image_url, app_image.credentials, app_image.registry_index_url)
+
+          @app_image = T.let(app_image, Docker::Image)
+          @new_version = T.let(@new_version, T.nilable(Docker::ImageVersion))
+          @current_version = T.let(@current_version, T.nilable(Docker::ImageVersion))
+          @previous_version = T.let(@previous_version, T.nilable(Docker::ImageVersion))
         end
 
+        sig { returns(String) }
+        def identifier
+          'assets'.freeze
+        end
+
+        sig { returns(Docker::ImageVersion) }
         def new_version
           # asset images track the app image
-          duplicate_with_annotated_tags(
-            base_image.new_version.exists? ? base_image.new_version : base_image.current_version
+          @new_version ||= image_with_annotated_tags(
+            app_image.new_version.exists? ? app_image.new_version : app_image.current_version
           )
         end
 
+        sig { returns(Docker::ImageVersion) }
         def current_version
-          duplicate_with_annotated_tags(
-            base_image.current_version
+          @current_version ||= image_with_annotated_tags(
+            app_image.current_version
           )
         end
 
+        sig { returns(Docker::ImageVersion) }
         def previous_version
-          duplicate_with_annotated_tags(
-            base_image.previous_version
+          @previous_version ||= image_with_annotated_tags(
+            app_image.previous_version
           )
-        end
-
-        def build(build_args = {}, docker_args = [], context: nil)
-          docker_cli.build(self, build_args: build_args, docker_args: docker_args, context: context)
-        end
-
-        def push(tag)
-          docker_cli.push(image_url, tag)
         end
 
         private
 
-        def duplicate_with_annotated_tags(image)
-          self.class.new(
-            base_image,
-            dockerfile,
-            registry_index_url,
+        sig { params(image: Docker::ImageVersion).returns(Docker::ImageVersion) }
+        def image_with_annotated_tags(image)
+          image.with_tags(
             annotate_tag(image.main_tag),
-            image.alias_tags.map { |at| annotate_tag(at) }
+            annotate_tags(image.alias_tags)
           )
         end
 
+        sig { params(tags: T::Array[String]).returns(T::Array[String]) }
+        def annotate_tags(tags)
+          tags.map { |t| annotate_tag(t) }
+        end
+
+        sig { params(tag: String).returns(String) }
         def annotate_tag(tag)
           "#{tag}-assets"
         end

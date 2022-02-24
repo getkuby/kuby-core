@@ -1,4 +1,4 @@
-# typed: false
+# typed: ignore
 require 'kube-dsl'
 require 'kuby/cert-manager'
 

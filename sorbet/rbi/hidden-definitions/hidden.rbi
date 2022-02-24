@@ -10154,16 +10154,6 @@ module KubeDSL::Validations
 end
 
 class KubeDSL::Validations::ArrayValidator
-  def field_name(); end
-
-  def initialize(field_name, opts); end
-
-  def kind_of(); end
-
-  def validate(obj, errors); end
-end
-
-class KubeDSL::Validations::ArrayValidator
 end
 
 module KubeDSL::Validations::ClassMethods
@@ -10176,22 +10166,6 @@ module KubeDSL::Validations::ClassMethods
 end
 
 module KubeDSL::Validations::InstanceMethods
-  def valid?(); end
-
-  def validate(); end
-
-  def validate!(); end
-end
-
-module KubeDSL::Validations::InstanceMethods
-end
-
-class KubeDSL::Validations::PresenceValidator
-  def field_name(); end
-
-  def initialize(field_name, presence); end
-
-  def validate(obj, errors); end
 end
 
 class KubeDSL::Validations::PresenceValidator

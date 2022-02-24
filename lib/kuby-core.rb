@@ -1,1 +1,2 @@
+# typed: strict
 require 'kuby'
