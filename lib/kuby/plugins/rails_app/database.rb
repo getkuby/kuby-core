@@ -1,5 +1,6 @@
 # typed: false
 require 'yaml'
+require 'pry'
 
 module Kuby
   module Plugins
@@ -52,9 +53,11 @@ module Kuby
 
         def db_configs
           @db_configs ||= begin
-            YAML.load(File.read(db_config_path), aliases: true)
-          rescue ArgumentError
-            YAML.load(File.read(db_config_path))
+            if Psych::VERSION > '4'
+              YAML.load(File.read(db_config_path), aliases: true)
+            else ArgumentError
+              YAML.load(File.read(db_config_path))
+            end
           end
         end
 
