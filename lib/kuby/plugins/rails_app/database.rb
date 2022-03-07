@@ -1,6 +1,5 @@
 # typed: false
 require 'yaml'
-require 'pry'
 
 module Kuby
   module Plugins
