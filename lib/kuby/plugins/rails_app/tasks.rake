@@ -27,6 +27,13 @@ namespace :kuby do
           end
         end
       end
+
+      task :migrate do
+        next unless Kernel.const_defined?('::ActiveRecord')
+
+        Rake::Task['environment'].invoke
+        Rake::Task['db:migrate'].invoke
+      end
     end
 
     namespace :assets do

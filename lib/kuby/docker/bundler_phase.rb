@@ -7,6 +7,7 @@ module Kuby
     class BundlerPhase < Layer
       extend T::Sig
 
+      DEFAULT_GEMFILE = T.let('Gemfile'.freeze, String)
       DEFAULT_WITHOUT = T.let(
         ['development', 'test', 'deploy'].freeze, T::Array[String]
       )
@@ -48,35 +49,46 @@ module Kuby
 
       sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
-        gf = gemfile || default_gemfile
+        gf = gemfile || DEFAULT_GEMFILE
         lf = "#{gf}.lock"
         v = version || default_version
         wo = without || DEFAULT_WITHOUT
 
+        host_path = Pathname(environment.docker.app_root_path)
+        container_path = Pathname(dockerfile.current_workdir).join(environment.docker.app_root_path)
+
         dockerfile.run('gem', 'install', 'bundler', '-v', v)
 
-        # bundle install
-        dockerfile.copy(gf, '.')
-        dockerfile.copy(lf, '.')
-
+        dockerfile.copy(host_path.join(gf), container_path.join(gf))
+        dockerfile.copy(host_path.join(lf), container_path.join(lf))
         @gemfiles.each do |file|
-          dockerfile.copy(file, file)
+          dockerfile.copy(host_path.join(file), container_path.join(file))
+          extra_lf = host_path.join("#{file}.lock")
+
+          if extra_lf.exist?
+            dockerfile.copy(extra_lf, container_path.join("#{file}.lock"))
+          end
         end
+
+        dockerfile.env("BUNDLE_GEMFILE=#{container_path.join(gf)}")
 
         unless wo.empty?
           dockerfile.env("BUNDLE_WITHOUT='#{wo.join(' ')}'")
         end
 
         dockerfile.run(
+          executable || 'bundle', 'lock', '--lockfile', container_path.join(lf)
+        )
+
+        dockerfile.run(
           executable || 'bundle', 'install',
           '--jobs', '$(nproc)',
-          '--retry', '3',
-          '--gemfile', gf
+          '--retry', '3'
         )
 
         # generate binstubs and add the bin directory to our path
         dockerfile.run(executable || 'bundle', 'binstubs', '--all')
-        dockerfile.env("PATH=./bin:$PATH")
+        dockerfile.env("PATH=#{container_path.join('bin')}:$PATH")
       end
 
       sig { params(paths: String).void }
@@ -89,16 +101,6 @@ module Kuby
       sig { returns(String) }
       def default_version
         Bundler::VERSION
-      end
-
-      sig { returns(String) }
-      def default_gemfile
-        Bundler
-          .definition
-          .gemfiles
-          .first
-          .relative_path_from(Pathname(Dir.getwd))
-          .to_s
       end
     end
   end

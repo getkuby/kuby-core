@@ -7,9 +7,31 @@ module Kuby
 
       sig { params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
-        # use character classes as a hack to only copy the files if they exist
-        dockerfile.copy('package.json yarn.loc[k] .npmr[c] .yarnr[c]', './')
-        dockerfile.run('yarn', 'install')
+        host_path = environment.docker.app_root_path
+
+        # if more than one file is passed to the COPY directive, the destination must be
+        # a directory and must end with a slash
+        container_path = ensure_trailing_delimiter(
+          File.join(
+            dockerfile.current_workdir,
+            environment.docker.app_root_path
+          )
+        )
+
+        # use brackets as a hack to only copy the files if they exist
+        dockerfile.copy(
+          "#{host_path}/package.json #{host_path}/yarn.loc[k] #{host_path}/.npmr[c] #{host_path}/.yarnr[c]",
+          container_path
+        )
+
+        dockerfile.run('yarn', 'install', '--cwd', container_path)
+      end
+
+      private
+
+      sig { params(path: String).returns(String) }
+      def ensure_trailing_delimiter(path)
+        path.end_with?(File::SEPARATOR) ? path : File.join(path, '')
       end
     end
   end

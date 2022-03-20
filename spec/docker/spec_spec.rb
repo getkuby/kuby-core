@@ -93,18 +93,18 @@ describe Kuby::Docker::Spec do
     subject { spec.image.dockerfile.to_s }
 
     it 'uses the default Gemfile' do
-      expect(subject).to include("COPY Gemfile .\n")
-      expect(subject).to include("COPY Gemfile.lock .\n")
-      expect(subject).to match(/RUN bundle install .* --gemfile Gemfile/)
+      expect(subject).to include("COPY Gemfile /usr/src/app/Gemfile\n")
+      expect(subject).to include("COPY Gemfile.lock /usr/src/app/Gemfile.lock\n")
+      expect(subject).to include("ENV BUNDLE_GEMFILE=/usr/src/app/Gemfile")
     end
 
     context 'when the gemfile path is set to something custom' do
       before { spec.gemfile('foo/bar/Gemfile') }
 
       it 'uses the given gemfile' do
-        expect(subject).to include("COPY foo/bar/Gemfile .\n")
-        expect(subject).to include("COPY foo/bar/Gemfile.lock .\n")
-        expect(subject).to match(/RUN bundle install .* --gemfile foo\/bar\/Gemfile/)
+        expect(subject).to include("COPY foo/bar/Gemfile /usr/src/app/foo/bar/Gemfile\n")
+        expect(subject).to include("COPY foo/bar/Gemfile.lock /usr/src/app/foo/bar/Gemfile.lock\n")
+        expect(subject).to include("ENV BUNDLE_GEMFILE=/usr/src/app/foo/bar/Gemfile")
       end
     end
 
@@ -112,11 +112,11 @@ describe Kuby::Docker::Spec do
       before { spec.bundler_phase.gemfiles('gemfiles/a.gemfile', 'gemfiles/b.gemfile') }
 
       it 'uses all gemfiles including the default one' do
-        expect(subject).to include("COPY Gemfile .\n")
-        expect(subject).to include("COPY Gemfile.lock .\n")
-        expect(subject).to include("COPY gemfiles/a.gemfile gemfiles/a.gemfile\n")
-        expect(subject).to include("COPY gemfiles/b.gemfile gemfiles/b.gemfile\n")
-        expect(subject).to match(/RUN bundle install .* --gemfile Gemfile/)
+        expect(subject).to include("COPY Gemfile /usr/src/app/Gemfile\n")
+        expect(subject).to include("COPY Gemfile.lock /usr/src/app/Gemfile.lock\n")
+        expect(subject).to include("COPY gemfiles/a.gemfile /usr/src/app/gemfiles/a.gemfile\n")
+        expect(subject).to include("COPY gemfiles/b.gemfile /usr/src/app/gemfiles/b.gemfile\n")
+        expect(subject).to include("ENV BUNDLE_GEMFILE=/usr/src/app/Gemfile")
       end
     end
   end

@@ -171,6 +171,15 @@ module Kuby
           .map { |c| T.cast(c.args.first, Integer) }
       end
 
+      sig { returns(T.nilable(String)) }
+      def current_workdir
+        found = commands.reverse_each.find do |command|
+          command.is_a?(Kuby::Docker::Dockerfile::Workdir)
+        end
+
+        T.cast(found.args.first, String) if found
+      end
+
       sig { params(pos: Integer, block: T.proc.void).void }
       def insert_at(pos, &block)
         @cursor = pos

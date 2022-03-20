@@ -52,7 +52,13 @@ module Kuby
         end
 
         def db_configs
-          @db_configs ||= YAML.load(File.read(db_config_path))
+          @db_configs ||= begin
+            if Psych::VERSION > '4'
+              YAML.load(File.read(db_config_path), aliases: true)
+            else ArgumentError
+              YAML.load(File.read(db_config_path))
+            end
+          end
         end
 
         def db_config_path

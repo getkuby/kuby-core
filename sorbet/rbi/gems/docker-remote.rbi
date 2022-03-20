@@ -18,4 +18,5 @@ module Docker::Remote
   class NotFoundError < ClientError; end
   class UnknownRepoError < ClientError; end
   class UnsupportedAuthTypeError < StandardError; end
+  class TooManyRetriesError < StandardError; end
 end

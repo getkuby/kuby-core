@@ -8,6 +8,7 @@ module Kuby
 
     autoload :Alpine,           'kuby/docker/alpine'
     autoload :AppImage,         'kuby/docker/app_image'
+    autoload :AppPhase,         'kuby/docker/app_phase'
     autoload :AssetsPhase,      'kuby/docker/assets_phase'
     autoload :BundlerPhase,     'kuby/docker/bundler_phase'
     autoload :CLI,              'kuby/docker/cli'

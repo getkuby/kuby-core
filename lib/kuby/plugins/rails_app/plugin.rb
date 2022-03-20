@@ -322,7 +322,7 @@ module Kuby
 
                   init_container(:migrate_db) do
                     name "#{kube_spec.selector_app}-migrate-db"
-                    command %w(bundle exec rake db:migrate)
+                    command %w(bundle exec rake kuby:rails_app:db:migrate)
 
                     env_from do
                       config_map_ref do
