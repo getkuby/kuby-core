@@ -2,8 +2,6 @@
 
 K8S_VERSION='1.22.5'
 
-kind create cluster --name kuby-test --image kindest/node:v$K8S_VERSION
-
 # clone rails app
 gem install prebundler -v '< 1'
 git clone https://github.com/getkuby/kuby_test.git
@@ -12,8 +10,9 @@ cd kuby_test
 git fetch origin crdb
 git checkout crdb
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
-printf "\ngem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
-printf "\ngem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
+printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
+printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
+printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
@@ -35,13 +34,14 @@ EOF
 prebundle install --jobs 2 --retry 3 --no-binstubs
 yarn install
 bundle exec bin/rails g kuby
-cat <<'EOF' > kuby.rb
+cat <<EOF > kuby.rb
 class VendorPhase < Kuby::Docker::Layer
   def apply_to(dockerfile)
     dockerfile.copy('vendor/kuby-core', 'vendor/kuby-core')
   end
 end
 
+require 'kuby/kind'
 require 'kuby/prebundler'
 require 'active_support/core_ext'
 require 'active_support/encrypted_configuration'
@@ -76,8 +76,8 @@ Kuby.define('Kubyapp') do
         tls_enabled false
       end
 
-      provider :bare_metal do
-        storage_class 'standard'
+      provider :kind do
+        use_kubernetes_version '${K8S_VERSION}'
       end
     end
   end

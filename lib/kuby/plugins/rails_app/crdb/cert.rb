@@ -24,16 +24,23 @@ module Kuby
           end
 
           def keypair
-            @keypair ||= if File.exist?(cert_path)
+            return @keypair if @keypair
+
+            if File.exist?(cert_path)
               cert = File.read(cert_path)
               key = decrypt(File.read(key_path))
-              Keypair.new(cert, key)
+              @keypair = Keypair.new(cert, key)
             else
-              creator_block.call.tap do |keypair|
-                File.write(cert_path, keypair.cert)
-                File.write(key_path, encrypt(keypair.key))
-              end
+              @keypair = creator_block.call
+              persist!
             end
+
+            @keypair
+          end
+
+          def persist!
+            File.write(cert_path, keypair.cert)
+            File.write(key_path, encrypt(keypair.key))
           end
 
           def cert

@@ -145,11 +145,12 @@ class KubyGenerator < Rails::Generators::Base
       client_set.add(client_username, permissions)
 
       client_set.each_cert do |cert|
-        cert_path = File.join(base_path, cert.cert_path[tmp_dir.length..-1])
-        create_file(cert_path, cert.keypair.cert) unless File.exist?(cert_path)
+        cert.persist!
 
-        key_path = File.join(base_path, cert.key_path[tmp_dir.length..-1])
-        create_file(key_path, cert.keypair.key) unless File.exist?(key_path)
+        [cert.cert_path, cert.key_path].each do |tmp_path|
+          path = File.join(base_path, tmp_path[tmp_dir.length..-1])
+          create_file(path, File.read(tmp_path)) unless File.exist?(path)
+        end
       end
     end
   end
