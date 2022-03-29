@@ -45,7 +45,6 @@ module Kuby
           if manage_database? && @database = Database.get(self)
             @database.plugin.instance_eval(&@database_block) if @database_block
             environment.kubernetes.plugins[@database.plugin_name] = @database.plugin
-            # environment.kubernetes.add_plugin(:kube_db)
 
             environment.docker do
               insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase

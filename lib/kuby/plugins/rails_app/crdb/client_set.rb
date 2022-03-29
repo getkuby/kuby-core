@@ -55,6 +55,17 @@ module Kuby
             @clients.each(&block)
           end
 
+          def each_cert
+            return to_enum(__method__) unless block_given?
+
+            yield ca_cert
+            yield node_cert
+
+            each do |_, client|
+              yield client.cert
+            end
+          end
+
           def make_client_secret(username)
             CertSecret.new(
               @clients[username].cert, ca_cert, base_name, namespace

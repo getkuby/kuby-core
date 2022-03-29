@@ -1,6 +1,7 @@
 # typed: false
 
 require 'fileutils'
+require 'kuby/crdb'
 require 'kube-dsl'
 
 module Kuby
@@ -31,7 +32,7 @@ module Kuby
             )
 
             add_client_user('root')
-            add_client_user(client_username, CLIENT_PERMISSIONS)
+            add_client_user(client_username)
           end
 
           def add_client_user(username, permissions = CLIENT_PERMISSIONS)
@@ -49,6 +50,7 @@ module Kuby
           def after_configuration
             environment.docker.package_phase.add(:postgres_dev)
             environment.docker.package_phase.add(:postgres_client)
+            environment.kubernetes.add_plugin(:crdb)
 
             configure_pod_spec(rails_app.deployment.spec.template.spec)
           end

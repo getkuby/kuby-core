@@ -7,12 +7,8 @@ module Kuby
       class UnsupportedDatabaseError < StandardError; end
 
       class Database
-        ADAPTER_MAP = {
-          sqlite3: Sqlite,
-          mysql2: MySQL,  # removed
-          postgresql: Postgres,  # removed
-          cockroachdb: CRDB::Plugin
-        }.freeze
+        # only support cockroach for now
+        ADAPTER_MAP = { cockroachdb: CRDB::Plugin }.freeze
 
         def self.get(rails_app)
           if rails_app.manage_database?

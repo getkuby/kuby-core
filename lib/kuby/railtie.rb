@@ -1,4 +1,5 @@
 # typed: strict
+
 require 'logger'
 require 'rails/railtie'
 require 'rails/command'
@@ -12,6 +13,8 @@ module Kuby
       else
         config_hash = db_config.configuration_hash.stringify_keys
       end
+
+      return super unless config_hash['adapter'] == 'cockroachdb'
 
       ENV['PGUSER']         = config_hash['username'] if config_hash['username']
       ENV['PGHOST']         = config_hash['host'] if config_hash['host']
@@ -27,9 +30,11 @@ module Kuby
   end
 
   class Railtie < ::Rails::Railtie
-    initializer 'kuby' do |app|
+    initializer 'kuby.health_check_middleware' do |app|
       app.middleware.use Kuby::Middleware::HealthCheck
+    end
 
+    initializer 'kuby.cockroachdb_console_support' do
       Rails::DBConsole.prepend(CockroachConsoleMonkeypatch)
     end
   end

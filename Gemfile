@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'kuby-crdb', github: 'getkuby/kuby-crdb'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'rake'
