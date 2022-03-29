@@ -11,6 +11,7 @@ cp -r kuby-core/ kuby_test/vendor/
 cd kuby_test
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 printf "\ngem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
+printf "\ngem 'kuby-crdb', github: 'getkuby/kuby-core'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
@@ -135,28 +136,10 @@ GLI_DEBUG=true bundle exec kuby -e production setup
 $kubectl -n ingress-nginx patch svc ingress-nginx -p '{"spec":{"type":"NodePort"}}'
 
 # deploy!
-GLI_DEBUG=true bundle exec kuby -e production deploy || true
-
-while [[ "$($kubectl -n kubyapp-production get po kubyapp-web-mysql-0 -o json | jq -r .status.phase)" != "Running" ]]; do
-  echo "Waiting for MySQL pod to start..."
-  sleep 5
-done
-
-# Do this three times in case the db doesn't start in time and the deploy fails.
-# This can happen even after waiting for the pod to start above, not sure why.
-GLI_DEBUG=true bundle exec kuby -e production deploy ||
-  GLI_DEBUG=true bundle exec kuby -e production deploy ||
-  GLI_DEBUG=true bundle exec kuby -e production deploy
-
-# in KIND clusters, configuring ingress-nginx is a huge PITA, so we just port-forward
-# to the ingress service instead
-$kubectl -n ingress-nginx port-forward svc/ingress-nginx 5555:80 &
-
-# wait for port forwarding
-timeout 10 vendor/kuby-core/scripts/wait-for-ingress.sh
+GLI_DEBUG=true bundle exec kuby -e production deploy
 
 # attempt to hit the app
-curl -vvv localhost:5555 \
+curl -vvv localhost \
   -H "Host: localhost"\
   --fail \
   --connect-timeout 5 \
