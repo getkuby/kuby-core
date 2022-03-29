@@ -372,6 +372,7 @@ module Kuby
                 http do
                   path do
                     path '/'
+                    path_type 'Prefix'
 
                     backend do
                       service do
