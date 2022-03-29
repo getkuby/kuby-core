@@ -2,13 +2,12 @@ name: Integration Tests
 on:
   pull_request:
     branches:
-      - '*'
+      - 'crdb'
   push:
     branches:
       - 'crdb'
 jobs:
   build:
-    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Disable Swap
