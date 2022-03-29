@@ -13,6 +13,7 @@ printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
 printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
+printf "gem 'kube-dsl', github: 'getkuby/kube-dsl'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
