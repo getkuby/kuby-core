@@ -74,11 +74,6 @@ Kuby.define('Kubyapp') do
 
       add_plugin :rails_app do
         tls_enabled false
-
-        database do
-          user 'kubyapp'
-          password 'password'
-        end
       end
 
       provider :bare_metal do
