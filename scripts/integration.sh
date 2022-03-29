@@ -6,9 +6,11 @@ kind create cluster --name kuby-test --image kindest/node:v$K8S_VERSION
 
 # clone rails app
 gem install prebundler -v '< 1'
-git clone --single-branch --branch crdb https://github.com/getkuby/kuby_test.git
+git clone https://github.com/getkuby/kuby_test.git
 cp -r kuby-core/ kuby_test/vendor/
 cd kuby_test
+git fetch origin crdb
+git checkout crdb
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 printf "\ngem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "\ngem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
