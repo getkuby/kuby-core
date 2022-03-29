@@ -90,11 +90,8 @@ end
 EOF
 cat <<'EOF' > config/database.yml
 default: &default
-  adapter: mysql2
-  encoding: utf8mb4
+  adapter: cockroachdb
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password: password
   host: localhost
 development:
   <<: *default
