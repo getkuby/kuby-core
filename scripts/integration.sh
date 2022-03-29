@@ -11,7 +11,7 @@ cp -r kuby-core/ kuby_test/vendor/
 cd kuby_test
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 printf "\ngem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
-printf "\ngem 'kuby-crdb', github: 'getkuby/kuby-core'\n" >> Gemfile
+printf "\ngem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
