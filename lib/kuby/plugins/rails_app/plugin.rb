@@ -355,7 +355,7 @@ module Kuby
           spec = self
           tls_enabled = @tls_enabled
 
-          @ingress ||= KubeDSL::DSL::Extensions::V1beta1::Ingress.new do
+          @ingress ||= KubeDSL::DSL::Networking::V1::Ingress.new do
             metadata do
               name "#{spec.selector_app}-ingress"
               namespace spec.namespace.metadata.name
@@ -374,8 +374,10 @@ module Kuby
                     path '/'
 
                     backend do
-                      service_name spec.service.metadata.name
-                      service_port spec.service.spec.ports.first.port
+                      service do
+                        name spec.service.metadata.name
+                        port spec.service.spec.ports.first.port
+                      end
                     end
                   end
                 end

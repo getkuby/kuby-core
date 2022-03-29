@@ -120,10 +120,6 @@ GLI_DEBUG=true bundle exec kuby -e production build \
   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e production push
 
-docker images | grep kubyapp | grep -v latest | tr -s ' ' | cut -d' ' -f 2 | while read tag; do
-  kind load docker-image localhost:5000/kubyapp:$tag --name kuby-test
-done
-
 # setup cluster
 GLI_DEBUG=true bundle exec kuby -e production setup
 # force nginx ingress to be a nodeport since we don't have any load balancers

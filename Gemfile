@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'kuby-crdb', github: 'getkuby/kuby-crdb'
+gem 'kube-dsl', github: 'getkuby/kube-dsl'
 
 group :development, :test do
   gem 'pry-byebug'
