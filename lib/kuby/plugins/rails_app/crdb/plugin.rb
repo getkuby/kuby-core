@@ -264,8 +264,8 @@ module Kuby
                   end
 
                   limits do
-                    add :cpu, 2
-                    add :memory, '2Gi'
+                    add :cpu, '500m'
+                    add :memory, '1Gi'
                   end
                 end
 
