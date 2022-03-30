@@ -55,10 +55,10 @@ app_creds = ActiveSupport::EncryptedConfiguration.new(
   raise_if_missing_key: true
 )
 
-Kuby.define('Kubyapp') do
+Kuby.define('Kubytest') do
   environment(:production) do
     docker do
-      image_url 'localhost:5000/kubyapp'
+      image_url 'localhost:5000/kubytest'
 
       credentials do
         username "foobar"
@@ -91,10 +91,10 @@ default: &default
   host: localhost
 development:
   <<: *default
-  database: kubyapp_development
+  database: kubytest_development
 production:
   <<: *default
-  database: kubyapp_production
+  database: kubytest_production
 EOF
 cat <<'EOF' > config/routes.rb
 Rails.application.routes.draw do
