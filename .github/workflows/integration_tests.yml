@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # NOTE: these need to be valid kindest/node image versions
+        k8s_version: ['1.21.2', '1.22.7', '1.23.5']
     steps:
       - name: Disable Swap
         run: |
@@ -31,6 +35,7 @@ jobs:
       - name: Run Tests
         run: kuby-core/scripts/integration.sh
         env:
+          K8S_VERSION: ${{ matrix.k8s_version }}
           PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
           PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"
           RAILS_MASTER_KEY: "${{ secrets.RAILS_MASTER_KEY }}"
