@@ -1,7 +1,5 @@
 #! /bin/bash
 
-K8S_VERSION='1.22.5'
-
 # clone rails app
 gem install prebundler -v '< 1'
 git clone https://github.com/getkuby/kuby_test.git
