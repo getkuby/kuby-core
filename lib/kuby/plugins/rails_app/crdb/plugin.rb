@@ -259,12 +259,12 @@ module Kuby
 
                 resources do
                   requests do
-                    add :cpu, '500m'
+                    add :cpu, '200m'
                     add :memory, '1Gi'
                   end
 
                   limits do
-                    add :cpu, '500m'
+                    add :cpu, '200m'
                     add :memory, '1Gi'
                   end
                 end

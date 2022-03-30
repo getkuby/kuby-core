@@ -125,16 +125,16 @@ GLI_DEBUG=true bundle exec kuby -e production push
 GLI_DEBUG=true bundle exec kuby -e production setup
 
 # deploy!
-GLI_DEBUG=true bundle exec kuby -e production deploy || true
+GLI_DEBUG=true bundle exec kuby -e production deploy
 
 # attempt to hit the app
-# curl -vvv localhost \
-#   -H "Host: localhost"\
-#   --fail \
-#   --connect-timeout 5 \
-#   --max-time 10 \
-#   --retry 5 \
-#   --retry-max-time 40 || exit $?
+curl -vvv localhost \
+  -H "Host: localhost"\
+  --fail \
+  --connect-timeout 5 \
+  --max-time 10 \
+  --retry 5 \
+  --retry-max-time 40 || exit $?
 
-# # execute remote command
-# GLI_DEBUG=true bundle exec kuby -e production remote exec "bundle exec rails runner 'puts \"Hello from Kuby\"'" | grep "Hello from Kuby"
+# execute remote command
+GLI_DEBUG=true bundle exec kuby -e production remote exec "bundle exec rails runner 'puts \"Hello from Kuby\"'" | grep "Hello from Kuby"

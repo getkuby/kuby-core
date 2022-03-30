@@ -377,7 +377,10 @@ module Kuby
                     backend do
                       service do
                         name spec.service.metadata.name
-                        port spec.service.spec.ports.first.port
+
+                        port do
+                          name spec.service.spec.ports.first.name
+                        end
                       end
                     end
                   end
