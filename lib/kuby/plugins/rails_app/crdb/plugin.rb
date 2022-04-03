@@ -1,4 +1,4 @@
-# typed: false
+# typed: ignore
 
 require 'fileutils'
 require 'kuby/crdb'

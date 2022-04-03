@@ -1,4 +1,5 @@
-# typed: false
+# typed: ignore
+
 require 'yaml'
 
 module Kuby
