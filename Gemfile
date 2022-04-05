@@ -4,6 +4,7 @@ gemspec
 
 gem 'kuby-crdb', github: 'getkuby/kuby-crdb'
 gem 'kube-dsl', github: 'getkuby/kube-dsl'
+gem 'kuby-cert-manager', github: 'getkuby/kuby-cert-manager'
 
 group :development, :test do
   gem 'pry-byebug'

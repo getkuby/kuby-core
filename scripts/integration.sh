@@ -12,6 +12,7 @@ printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
 printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
 printf "gem 'kube-dsl', github: 'getkuby/kube-dsl'\n" >> Gemfile
+printf "gem 'kuby-cert-manager', github: 'getkuby/kuby-cert-manager'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
@@ -72,7 +73,13 @@ Kuby.define('Kubytest') do
       add_plugin :prebundler
 
       add_plugin :rails_app do
-        tls_enabled false
+        tls_enabled true
+        hostname 'kubytest.io'
+      end
+
+      configure_plugin(:cert_manager) do
+        skip_tls_verify true
+        server_url 'https://pebble.pebble:14000/dir'
       end
 
       provider :kind do
@@ -119,6 +126,12 @@ GLI_DEBUG=true bundle exec kuby -e production build \
   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e production push
 
+# create pebble server (issues fake TLS certs) and get intermediate cert
+$kubectl apply -f scripts/pebble.yaml
+$kubectl exec -n pebble deploy/pebble -- \
+  sh -c "apk add curl > /dev/null; curl -ksS https://localhost:15000/intermediates/0"\
+  > pebble.intermediate.pem.crt
+
 # setup cluster
 GLI_DEBUG=true bundle exec kuby -e production setup
 
@@ -126,13 +139,14 @@ GLI_DEBUG=true bundle exec kuby -e production setup
 GLI_DEBUG=true bundle exec kuby -e production deploy
 
 # attempt to hit the app
-curl -vvv localhost \
-  -H "Host: localhost"\
-  --fail \
-  --connect-timeout 5 \
-  --max-time 10 \
-  --retry 5 \
-  --retry-max-time 40 || exit $?
+# curl -vvv https://localhost \
+#   -H "Host: kubytest.io"\
+#   --cacert pebble.intermediate.pem.crt \
+#   --fail \
+#   --connect-timeout 5 \
+#   --max-time 10 \
+#   --retry 5 \
+#   --retry-max-time 40 || exit $?
 
-# execute remote command
-GLI_DEBUG=true bundle exec kuby -e production remote exec "bundle exec rails runner 'puts \"Hello from Kuby\"'" | grep "Hello from Kuby"
+# # execute remote command
+# GLI_DEBUG=true bundle exec kuby -e production remote exec "bundle exec rails runner 'puts \"Hello from Kuby\"'" | grep "Hello from Kuby"
