@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pebble
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: pebble
+  labels:
+    app.kubernetes.io/name: pebble
+  name: pebble
+spec:
+  ports:
+    - name: "14000"
+      port: 14000
+      targetPort: 14000
+    - name: "15000"
+      port: 15000
+      targetPort: 15000
+  selector:
+    app.kubernetes.io/name: pebble
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: pebble
+  labels:
+    app.kubernetes.io/name: pebble
+  name: pebble
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pebble
+  template:
+    metadata:
+      labels:
+        acmenet: "true"
+        app.kubernetes.io/name: pebble
+    spec:
+      containers:
+        - args:
+            - pebble
+            - -config
+            - /test/config/pebble-config.json
+            - -strict
+            - -dnsserver
+            - challtestsrv.pebble.svc.cluster.local:8053
+          image: letsencrypt/pebble:latest
+          name: pebble
+          ports:
+            - containerPort: 14000
+            - containerPort: 15000
+          volumeMounts:
+          - name: pebble-config
+            mountPath: /test/config/pebble-config.json
+            subPath: pebble-config.json
+            readOnly: true
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: pebble
+  name: pebble-config
+data:
+  pebble-config.json: |
+    {
+      "pebble": {
+        "listenAddress": "0.0.0.0:14000",
+        "managementListenAddress": "0.0.0.0:15000",
+        "certificate": "test/certs/localhost/cert.pem",
+        "privateKey": "test/certs/localhost/key.pem",
+        "httpPort": 5002,
+        "tlsPort": 5001,
+        "ocspResponderURL": "",
+        "externalAccountBindingRequired": false
+      }
+    }

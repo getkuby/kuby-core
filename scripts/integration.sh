@@ -115,8 +115,6 @@ EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
 
-kubectl=$(bundle show kubectl-rb)/vendor/kubectl
-
 # start docker registry (helps make sure pushes work)
 docker run -d -p 5000:5000 --name registry registry:2
 
@@ -126,9 +124,14 @@ GLI_DEBUG=true bundle exec kuby -e production build \
   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e production push
 
+# find kubectl executable
+kubectl=$(bundle show kubectl-rb)/vendor/kubectl
+
 # create pebble server (issues fake TLS certs) and get intermediate cert
-$kubectl apply -f scripts/pebble.yaml
-$kubectl exec -n pebble deploy/pebble -- \
+kind get kubeconfig --name kubytest > .kubeconfig
+$kubectl --kubeconfig .kubeconfig apply -f vendor/kuby-core/scripts/pebble/pebble.yaml
+$kubectl --kubeconfig .kubeconfig apply -f vendor/kuby-core/scripts/pebble/challtestsrv.yaml
+$kubectl --kubeconfig .kubeconfig exec -n pebble deploy/pebble -- \
   sh -c "apk add curl > /dev/null; curl -ksS https://localhost:15000/intermediates/0"\
   > pebble.intermediate.pem.crt
 
