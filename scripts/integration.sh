@@ -124,6 +124,9 @@ GLI_DEBUG=true bundle exec kuby -e production build \
   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e production push
 
+# setup cluster
+GLI_DEBUG=true bundle exec kuby -e production setup
+
 # find kubectl executable
 kubectl=$(bundle show kubectl-rb)/vendor/kubectl
 
@@ -135,8 +138,8 @@ $kubectl --kubeconfig .kubeconfig exec -n pebble deploy/pebble -- \
   sh -c "apk add curl > /dev/null; curl -ksS https://localhost:15000/intermediates/0"\
   > pebble.intermediate.pem.crt
 
-# setup cluster
-GLI_DEBUG=true bundle exec kuby -e production setup
+# do this in the challtestsrv pod
+# curl -vvvv -d '{"host":"kubytest.io", "addresses":["10.96.34.43"]}' http://localhost:8055/add-a
 
 # deploy!
 GLI_DEBUG=true bundle exec kuby -e production deploy

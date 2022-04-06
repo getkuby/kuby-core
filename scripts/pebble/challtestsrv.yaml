@@ -11,6 +11,9 @@ spec:
     - name: "8055"
       port: 8055
       targetPort: 8055
+    - name: "8053"
+      port: 8053
+      targetPort: 8053
   selector:
     app.kubernetes.io/name: challtestsrv
 ---
@@ -43,6 +46,7 @@ spec:
           name: challtestsrv
           ports:
             - containerPort: 8055
+            - containerPort: 8053
       restartPolicy: Always
 ---
 apiVersion: networking.k8s.io/v1

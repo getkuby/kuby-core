@@ -40,6 +40,13 @@ spec:
         acmenet: "true"
         app.kubernetes.io/name: pebble
     spec:
+      volumes:
+      - name: pebble-config
+        configMap:
+          name: pebble-config
+          items:
+          - key: pebble-config.json
+            path: pebble-config.json
       containers:
         - args:
             - pebble
