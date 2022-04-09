@@ -37,7 +37,6 @@ spec:
   template:
     metadata:
       labels:
-        acmenet: "true"
         app.kubernetes.io/name: pebble
     spec:
       volumes:
@@ -53,10 +52,13 @@ spec:
             - -config
             - /test/config/pebble-config.json
             - -strict
-            - -dnsserver
-            - challtestsrv.pebble.svc.cluster.local:8053
           image: letsencrypt/pebble:latest
           name: pebble
+          env:
+            - name: PEBBLE_VA_NOSLEEP
+              value: "1"
+            - name: PEBBLE_VA_ALWAYS_VALID
+              value: "1"
           ports:
             - containerPort: 14000
             - containerPort: 15000
@@ -80,8 +82,8 @@ data:
         "managementListenAddress": "0.0.0.0:15000",
         "certificate": "test/certs/localhost/cert.pem",
         "privateKey": "test/certs/localhost/key.pem",
-        "httpPort": 5002,
-        "tlsPort": 5001,
+        "httpPort": 80,
+        "tlsPort": 443,
         "ocspResponderURL": "",
         "externalAccountBindingRequired": false
       }

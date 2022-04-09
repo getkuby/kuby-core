@@ -130,29 +130,54 @@ GLI_DEBUG=true bundle exec kuby -e production setup
 # find kubectl executable
 kubectl=$(bundle show kubectl-rb)/vendor/kubectl
 
-# create pebble server (issues fake TLS certs) and get intermediate cert
+# export kubeconfig
 kind get kubeconfig --name kubytest > .kubeconfig
-$kubectl --kubeconfig .kubeconfig apply -f vendor/kuby-core/scripts/pebble/pebble.yaml
-$kubectl --kubeconfig .kubeconfig apply -f vendor/kuby-core/scripts/pebble/challtestsrv.yaml
-$kubectl --kubeconfig .kubeconfig exec -n pebble deploy/pebble -- \
-  sh -c "apk add curl > /dev/null; curl -ksS https://localhost:15000/intermediates/0"\
-  > pebble.intermediate.pem.crt
+export KUBECONFIG=.kubeconfig
 
-# do this in the challtestsrv pod
-# curl -vvvv -d '{"host":"kubytest.io", "addresses":["10.96.34.43"]}' http://localhost:8055/add-a
+# find ingress IP
+ingress_ip=$($kubectl -n ingress-nginx get svc ingress-nginx-controller -o json | jq -r .spec.clusterIP)
+
+# modification to the coredns config that resolves kubytest.io to the ingress IP
+corefile_mod=$(cat <<END
+kubytest.io {
+  hosts {
+    $ingress_ip kubytest.io
+    fallthrough
+  }
+  whoami
+}
+END
+)
+
+# modify the coredns config (lives in Corefile) and restart the deployment
+$kubectl -n kube-system get configmap coredns -o json \
+  | jq -r ".data.Corefile |= . + \"$corefile_mod\"" \
+  | $kubectl apply -f -
+$kubectl -n kube-system rollout restart deployment coredns
+$kubectl -n kube-system wait --for=condition=available --timeout=30s deployment/coredns
+
+# create pebble server (issues fake TLS certs) and get the root and intermediate certs
+$kubectl apply -f vendor/kuby-core/scripts/pebble/pebble.yaml
+$kubectl -n pebble wait --for=condition=available --timeout=30s deployment/pebble
+$kubectl -n pebble port-forward deployment/pebble 15000:15000 &
+sleep 2
+curl -f -vvv -ksS https://localhost:15000/intermediates/0 > pebble.intermediate.crt
+curl -f -vvv -ksS https://localhost:15000/roots/0 > pebble.root.crt
 
 # deploy!
 GLI_DEBUG=true bundle exec kuby -e production deploy
 
 # attempt to hit the app
-# curl -vvv https://localhost \
-#   -H "Host: kubytest.io"\
-#   --cacert pebble.intermediate.pem.crt \
-#   --fail \
-#   --connect-timeout 5 \
-#   --max-time 10 \
-#   --retry 5 \
-#   --retry-max-time 40 || exit $?
+curl -vvv https://kubytest.io \
+  --resolve kubytest.io:443:127.0.0.1 \
+  --cacert pebble.root.crt \
+  --fail \
+  --connect-timeout 5 \
+  --max-time 10 \
+  --retry 5 \
+  --retry-max-time 40
 
-# # execute remote command
-# GLI_DEBUG=true bundle exec kuby -e production remote exec "bundle exec rails runner 'puts \"Hello from Kuby\"'" | grep "Hello from Kuby"
+# execute remote command
+GLI_DEBUG=true bundle exec kuby -e production remote exec \
+  "bundle exec rails runner 'puts \"Hello from Kuby\"'" \
+  | grep "Hello from Kuby"
