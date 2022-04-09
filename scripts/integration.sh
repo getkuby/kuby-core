@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 # clone rails app
 gem install prebundler -v '< 1'
 git clone https://github.com/getkuby/kuby_test.git
@@ -166,6 +168,18 @@ curl -f -vvv -ksS https://localhost:15000/roots/0 > pebble.root.crt
 
 # deploy!
 GLI_DEBUG=true bundle exec kuby -e production deploy
+
+# wait for pebble to issue the certificate
+while [[ "$($kubectl -n kubytest-production get order -o json | jq -r '.items[0].status.state')" != "valid" ]]; do
+  echo "Waiting for certificate to be issued..."
+  sleep 5
+done
+
+# verify certificate chain
+$kubectl -n kubytest-production get secret kubytest-tls -o json \
+  | jq -r '.data["tls.crt"]' \
+  | base64 -d - \
+  | openssl verify -CAfile pebble.root.crt -untrusted pebble.intermediate.crt
 
 # attempt to hit the app
 curl -vvv https://kubytest.io \
