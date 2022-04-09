@@ -157,7 +157,7 @@ $kubectl -n kube-system rollout restart deployment coredns
 $kubectl -n kube-system wait --for=condition=available --timeout=30s deployment/coredns
 
 # create pebble server (issues fake TLS certs) and get the root and intermediate certs
-$kubectl apply -f vendor/kuby-core/scripts/pebble/pebble.yaml
+$kubectl apply -f vendor/kuby-core/scripts/pebble.yaml
 $kubectl -n pebble wait --for=condition=available --timeout=30s deployment/pebble
 $kubectl -n pebble port-forward deployment/pebble 15000:15000 &
 sleep 2
