@@ -105,12 +105,32 @@ module Kuby
         execc(cmd)
       end
 
-      sig { params(image_url: String).returns(T::Array[T::Hash[Symbol, String]]) }
-      def images(image_url)
+      sig { params(container: String, command: String, tty: T::Boolean).returns(String) }
+      def exec_capture(container:, command:, tty: true)
+        cmd = [executable, 'exec']
+        cmd << '-it' if tty
+        cmd += [container, command]
+
+        backticks(cmd)
+      end
+
+      sig { params(image_url: String, tag: String, format: T.nilable(String)).returns(String) }
+      def inspect(image_url:, tag: 'latest', format: nil)
+        cmd = [executable, 'inspect']
+        cmd += ['--format', "'#{format}'"]
+        cmd << "#{image_url}:#{tag}"
+
+        backticks(cmd)
+      end
+
+      sig { params(image_url: String, digests: T::Boolean).returns(T::Array[T::Hash[Symbol, String]]) }
+      def images(image_url, digests: true)
         cmd = [
           executable, 'images', image_url,
           '--format', '"{{json . }}"'
         ]
+
+        cmd << '--digests' if digests
 
         backticks(cmd).split("\n").map do |image_data|
           JSON.parse(image_data).each_with_object({}) do |(k, v), ret|
