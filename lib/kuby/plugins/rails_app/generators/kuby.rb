@@ -4,8 +4,6 @@ require 'rails/generators'
 require 'rails/generators/base'
 
 class KubyGenerator < Rails::Generators::Base
-  class_option :database, type: :string, default: 'cockroachdb'
-
   def create_initializer_file
     create_file(
       File.join(*%w(config initializers kuby.rb)),
@@ -109,50 +107,6 @@ class KubyGenerator < Rails::Generators::Base
         **/.yarn-integrity
       END
     )
-  end
-
-  def create_database_certs
-    return unless options['database'] == 'cockroachdb'
-
-    master_key ||= ENV['RAILS_MASTER_KEY'] || begin
-      master_key_path = File.join(Rails.root, 'config', 'master.key')
-      File.read(master_key_path).strip if File.exist?(master_key_path)
-    end
-
-    unless master_key
-      raise "Couldn't find your Rails master key. Please either create it at "\
-        "config/master.key or prefix this command with RAILS_MASTER_KEY=."
-    end
-
-    permissions = Kuby::Plugins::RailsApp::CRDB::Plugin::CLIENT_PERMISSIONS
-    role = Kuby::Plugins::RailsApp::CRDB::Plugin::ROLE
-    selector_app = app_name.downcase
-
-    base_path = File.join(Rails.root, 'config', 'certs', 'production')
-    base_name = "#{selector_app}-#{role}"
-    namespace = "#{selector_app}-production"
-    client_username = selector_app.gsub(/\W/, '_')
-
-    Dir.mktmpdir do |tmp_dir|
-      client_set = Kuby::Plugins::RailsApp::CRDB::ClientSet.new(
-        base_path: tmp_dir,
-        base_name: base_name,
-        namespace: namespace,
-        master_key: master_key
-      )
-
-      client_set.add('root', permissions)
-      client_set.add(client_username, permissions)
-
-      client_set.each_cert do |cert|
-        cert.persist!
-
-        [cert.cert_path, cert.key_path].each do |tmp_path|
-          path = File.join(base_path, tmp_path[tmp_dir.length..-1])
-          create_file(path, File.read(tmp_path)) unless File.exist?(path)
-        end
-      end
-    end
   end
 
   private

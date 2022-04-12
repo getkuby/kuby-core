@@ -21,22 +21,54 @@ module Kuby
             @environment = environment
             @configs = configs
 
-            base_path = File.join(rails_app.root, 'config', 'certs', environment.name)
-            FileUtils.mkdir_p(base_path)
-
-            @client_set = ClientSet.new(
-              base_path: base_path,
-              base_name: base_name,
-              namespace: kubernetes.namespace.metadata.name,
-              master_key: rails_app.master_key
-            )
-
             add_client_user('root')
             add_client_user(client_username)
           end
 
-          def add_client_user(username, permissions = CLIENT_PERMISSIONS)
-            client_set.add(username, permissions)
+          def add_client_user(username, permissions = CLIENT_PERMISSIONS, &block)
+            crdb = self
+            safe_username = slugify(username)
+
+            client_certs[username] ||= Kuby::CertManager.certificate do
+              api_version 'cert-manager.io/v1'
+
+              metadata do
+                name "#{crdb.base_name}-crdb-#{safe_username}-cert"
+                namespace crdb.kubernetes.namespace.metadata.name
+              end
+
+              spec do
+                common_name username
+                secret_name "#{crdb.base_name}-crdb-client-#{safe_username}-cert"
+
+                subject do
+                  organizations ['Kuby']
+                end
+
+                usages ['client auth']
+                duration "#{5 * 365 * 24}h"  # 5 years validity (in hours)
+
+                private_key do
+                  algorithm 'RSA'
+                  size 2048
+                end
+
+                issuer_ref do
+                  name crdb.issuer.metadata.name
+                  kind 'Issuer'
+                  group 'cert-manager.io'
+                end
+              end
+            end
+
+            client_certs[username].instance_eval(&block) if block
+            client_certs[username]
+          end
+
+          alias_method :configure_client_user, :add_client_user
+
+          def client_certs
+            @client_certs ||= {}
           end
 
           def name
@@ -44,25 +76,21 @@ module Kuby
           end
 
           def resources
-            @resources ||= [database, node_secret, *client_secrets.values]
+            @resources ||= [
+              database,
+              cluster_issuer, issuer,
+              ca_cert, node_cert, *client_certs.values
+            ]
           end
 
           def after_configuration
             environment.docker.package_phase.add(:postgres_dev)
             environment.docker.package_phase.add(:postgres_client)
+
             environment.kubernetes.add_plugin(:crdb)
+            environment.kubernetes.add_plugin(:cert_manager)
 
             configure_pod_spec(rails_app.deployment.spec.template.spec)
-          end
-
-          def node_secret
-            @node_secret ||= client_set.make_node_secret
-          end
-
-          def client_secrets
-            @client_secrets ||= client_set.each_with_object({}) do |(username, _), memo|
-              memo[username] = client_set.make_client_secret(username)
-            end
           end
 
           def bootstrap
@@ -148,7 +176,7 @@ module Kuby
               projected do
                 source do
                   secret do
-                    name crdb.node_secret.metadata.name
+                    name crdb.node_cert.spec.secret_name
 
                     item do
                       key 'ca.crt'
@@ -157,10 +185,10 @@ module Kuby
                   end
                 end
 
-                crdb.client_set.each do |username, client|
+                crdb.client_certs.each do |username, cert|
                   source do
                     secret do
-                      name crdb.client_secrets[username].metadata.name
+                      name cert.spec.secret_name
 
                       item do
                         key 'tls.crt'
@@ -232,13 +260,13 @@ module Kuby
           end
 
           def database(&block)
-            context = self
+            crdb = self
 
             @database ||= Kuby::CRDB.crdb_cluster do
               metadata do
                 # this translates to the name of the statefulset that is created
-                name "#{context.base_name}-crdb"
-                namespace context.kubernetes.namespace.metadata.name
+                name "#{crdb.base_name}-crdb"
+                namespace crdb.kubernetes.namespace.metadata.name
               end
 
               spec do
@@ -270,21 +298,149 @@ module Kuby
                 end
 
                 tls_enabled true
-                client_tls_secret context.client_secrets['root'].metadata.name
-                node_tls_secret context.node_secret.metadata.name
+                client_tls_secret crdb.client_certs['root'].spec.secret_name
+                node_tls_secret crdb.node_cert.spec.secret_name
 
                 image do
                   name "cockroachdb/cockroach:v#{VERSION}"
                 end
 
+                # this is unfortunately the minimum
                 nodes 3
               end
             end
           end
 
+          def cluster_issuer
+            crdb = self
+
+            @cluster_issuer ||= Kuby::CertManager.cluster_issuer do
+              api_version 'cert-manager.io/v1'
+
+              metadata do
+                name "#{crdb.base_name}-crdb-ca-issuer"
+              end
+
+              spec do
+                self_signed
+              end
+            end
+          end
+
+          def issuer
+            crdb = self
+
+            @issuer ||= Kuby::CertManager.issuer do
+              api_version 'cert-manager.io/v1'
+
+              metadata do
+                name "#{crdb.base_name}-crdb-issuer"
+                namespace crdb.kubernetes.namespace.metadata.name
+              end
+
+              spec do
+                ca do
+                  secret_name crdb.ca_cert.spec.secret_name
+                end
+              end
+            end
+          end
+
+          def ca_cert
+            crdb = self
+
+            @ca_cert ||= Kuby::CertManager.certificate do
+              api_version 'cert-manager.io/v1'
+
+              metadata do
+                name "#{crdb.base_name}-crdb-ca-cert"
+                namespace crdb.kubernetes.namespace.metadata.name
+              end
+
+              spec do
+                is_ca true
+                common_name 'ca'
+                secret_name "#{crdb.base_name}-crdb-ca-cert"
+
+                subject do
+                  organizations ['Kuby']
+                end
+
+                usages ['digital signature', 'key encipherment', 'cert sign', 'crl sign']
+                duration "#{5 * 365 * 24}h"  # 5 years validity (in hours)
+
+                private_key do
+                  algorithm 'RSA'
+                  size 2048
+                end
+
+                issuer_ref do
+                  name crdb.cluster_issuer.metadata.name
+                  kind 'ClusterIssuer'
+                  group 'cert-manager.io'
+                end
+              end
+            end
+          end
+
+          def node_cert
+            crdb = self
+            ns = kubernetes.namespace.metadata.name
+
+            @node_cert ||= Kuby::CertManager.certificate do
+              api_version 'cert-manager.io/v1'
+
+              metadata do
+                name "#{crdb.base_name}-crdb-node-cert"
+                namespace ns
+              end
+
+              spec do
+                common_name 'node'
+                secret_name "#{crdb.base_name}-crdb-node-cert"
+
+                subject do
+                  organizations ['Kuby']
+                end
+
+                usages ['client auth', 'server auth']
+                duration "#{5 * 365 * 24}h"  # 5 years validity (in hours)
+
+                svc_name = "#{crdb.base_name}-crdb"
+
+                dns_names [
+                  'localhost',
+                  "#{svc_name}-public",
+                  "#{svc_name}-public.#{ns}",
+                  "#{svc_name}-public.#{ns}.svc.cluster.local",
+                  "*.#{svc_name}",
+                  "*.#{svc_name}.#{ns}",
+                  "*.#{svc_name}.#{ns}.svc.cluster.local",
+                ]
+
+                ip_addresses ['127.0.0.1']
+
+                private_key do
+                  algorithm 'RSA'
+                  size 2048
+                end
+
+                issuer_ref do
+                  name crdb.issuer.metadata.name
+                  kind 'Issuer'
+                  group 'cert-manager.io'
+                end
+              end
+            end
+          end
+
           def client_username
-            # replace illegal characters
-            @client_username ||= kubernetes.selector_app.gsub(/\W/, '_')
+            @client_username ||= slugify(kubernetes.selector_app)
+          end
+
+          # replaces all non-ascii characters with an underscore
+          def slugify(str)
+            str.gsub(/\W/, '_')
           end
 
           def base_name
