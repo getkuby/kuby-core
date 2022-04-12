@@ -136,18 +136,16 @@ module Kuby
 
             existing_users = conn.exec('show users').to_a.map { |u| u['username'] }
 
-            client_certs.each do |username, cert|
+            client_certs.each do |username, _cert|
               unless existing_users.include?(username)
                 conn.exec("create user #{username}")
               end
 
-              unless client.permissions.empty?
-                conn.exec(
-                  "grant #{CLIENT_PERMISSIONS.join(',')} "\
-                    "on database #{database_name} "\
-                    "to #{username}"
-                )
-              end
+              conn.exec(
+                "grant #{CLIENT_PERMISSIONS.join(',')} "\
+                  "on database #{database_name} "\
+                  "to #{username}"
+              )
             end
           end
 
