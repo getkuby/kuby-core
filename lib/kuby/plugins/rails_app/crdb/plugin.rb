@@ -15,7 +15,7 @@ module Kuby
           BOOTSTRAP_TIMEOUT_TOTAL = 60
           CLIENT_PERMISSIONS = %w(create drop select insert delete update).freeze
 
-          attr_reader :environment, :configs, :client_set
+          attr_reader :environment, :configs
 
           def initialize(environment, configs)
             @environment = environment
@@ -25,7 +25,7 @@ module Kuby
             add_client_user(client_username)
           end
 
-          def add_client_user(username, permissions = CLIENT_PERMISSIONS, &block)
+          def add_client_user(username, &block)
             crdb = self
             safe_username = slugify(username)
 
@@ -136,14 +136,14 @@ module Kuby
 
             existing_users = conn.exec('show users').to_a.map { |u| u['username'] }
 
-            client_set.each do |username, client|
+            client_certs.each do |username, cert|
               unless existing_users.include?(username)
                 conn.exec("create user #{username}")
               end
 
               unless client.permissions.empty?
                 conn.exec(
-                  "grant #{client.permissions.join(',')} "\
+                  "grant #{CLIENT_PERMISSIONS.join(',')} "\
                     "on database #{database_name} "\
                     "to #{username}"
                 )
