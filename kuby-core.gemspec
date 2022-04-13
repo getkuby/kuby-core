@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'colorize', '~> 0.8'
   s.add_dependency 'docker-remote', '~> 0.8'
-  s.add_dependency 'gli', '~> 2.0'
+  s.add_dependency 'gli', '~> 2.21'
   s.add_dependency 'helm-cli', '~> 0.3'
   # See: https://github.com/Shopify/krane/pull/720
   # See: https://github.com/Shopify/krane/blob/master/CHANGELOG.md#114

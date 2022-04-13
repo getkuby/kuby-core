@@ -15,8 +15,8 @@ module Kuby
           environment.docker.package_phase.add(:sqlite_client)
         end
 
-        def requires_credentials?
-          false
+        def bootstrap
+          # no boostrap steps necessary
         end
 
         def user(_user)

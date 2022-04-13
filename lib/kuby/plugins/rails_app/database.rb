@@ -9,7 +9,7 @@ module Kuby
 
       class Database
         # only support cockroach for now
-        ADAPTER_MAP = { cockroachdb: CRDB::Plugin }.freeze
+        ADAPTER_MAP = { cockroachdb: CRDB::Plugin, sqlite3: Sqlite }.freeze
 
         def self.get(rails_app)
           if rails_app.manage_database?
