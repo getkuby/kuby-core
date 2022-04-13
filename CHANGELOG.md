@@ -12,10 +12,27 @@
   - I'm looking at you, Azure.
 * Don't fail to deploy if the app doesn't use Active Record.
 * Fix git merge issue causing no output when running `kuby dockerfiles`.
-* Upgrade integration tests to Kubernetes 1.22.
+* Upgrade integration tests to Kubernetes 1.23.
   - This upgrade is incompatible with the version of KubeDB we're currently using.
-  - I'm working on replacing KubeDB with the CockroachDB operator. Kuby will no longer support KubeDB after this release.
+  - KubeDB has been replaced with the CockroachDB operator. Kuby will no longer support KubeDB after this release.
 * Add ability to deploy resources into more than one namespace.
+* Remove support for MySQL and Postgres in favor of CockroachDB.
+  - KubeDB has moved to an incompatible licensing model and Kuby can no longer use it.
+  - CockroachDB is now the only managed database offering (aside from SQLite) for the following reasons:
+    - CRDB is cloud-native, i.e. is designed to be run on cloud platforms like Kubernetes.
+    - CRDB can be easily upgraded in-place while both MySQL and Postgres demand a much more manual, error-prone upgrade process that proved very difficult to automate.
+    - CRDB is Postgres wire-compatible, meaning those who use Postgres (and I believe that accounts for the majority of Rails devs) will hardly be impacted by this change at all. While CRDB is not feature-by-feature compatible with Postgres, the differences are unlikely to be important to the average Rails app.
+* Use SSL certificates instead of usernames and passwords for database authentication.
+  - This is the preferred way to communicate with instances of CockroachDB (also supported by Postgres).
+  - Kuby uses cert-manager to establish a custom PKI for database interactions.
+  - The Rails generator now entirely omits the database configuration section, making config simpler.
+* Avoid failing on first deploy.
+  - Previous versions of Kuby did not wait for the database to spin up before attempting to start the Rails app, which resulted in what appeared to be a failed deploy. Kubernetes would eventually sort everything out, but it made for a less than ideal developer experience.
+  - The `create_unless_exists` rake task has been superceded by the `bootstrap` rake task, which is run as an init container whenever the app boots. It is responsible for ensuring the database server is reachable and creating any users defined in the Kuby config.
+* Add the ability for plugins to define their own set of rake tasks.
+  - These are runnable via the CLI.
+* Add the ability for plugins to define a `#remove` routine, which is meant to do the opposite of whatever `#setup` does.
+  - It is now also possible to run a plugin's remove routine from the CLI.
 
 ## 0.17.1
 * Allow storage class to be customized when using the built-in bare metal provider.

@@ -2,10 +2,10 @@ name: Integration Tests
 on:
   pull_request:
     branches:
-      - 'crdb'
+      - '*'
   push:
     branches:
-      - 'crdb'
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
