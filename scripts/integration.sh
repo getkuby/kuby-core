@@ -15,6 +15,7 @@ printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
 printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
 printf "gem 'kube-dsl', github: 'getkuby/kube-dsl'\n" >> Gemfile
 printf "gem 'kuby-cert-manager', github: 'getkuby/kuby-cert-manager'\n" >> Gemfile
+printf "gem 'kubernetes-cli', github: 'getkuby/kubernetes-cli'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
