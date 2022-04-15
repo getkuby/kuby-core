@@ -1,9 +1,12 @@
 # typed: true
+
 require 'kube-dsl'
 
 module Kuby
   module Plugins
     class NginxIngress < ::Kuby::Plugin
+      depends_on :kubernetes, '>= 1.20'
+
       class Config
         extend ::KubeDSL::ValueFields
 

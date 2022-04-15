@@ -2,6 +2,9 @@
 
 require 'sorbet-runtime-stub'
 require 'kuby/railtie'
+require 'kubectl-rb/version'
+require 'helm-rb/version'
+require 'yaml'
 
 begin
   require 'kuby/plugins/rails_app/generators/kuby'
@@ -13,6 +16,8 @@ module Kuby
   autoload :CLIBase,        'kuby/cli_base'
   autoload :Commands,       'kuby/commands'
   autoload :Definition,     'kuby/definition'
+  autoload :Dependable,     'kuby/dependable'
+  autoload :Dependency,     'kuby/dependency'
   autoload :Docker,         'kuby/docker'
   autoload :Environment,    'kuby/environment'
   autoload :Kubernetes,     'kuby/kubernetes'
@@ -120,6 +125,14 @@ module Kuby
       @packages ||= {}
     end
 
+    def register_dependable(name, version_or_callable)
+      dependables[name] = Dependable.new(name, version_or_callable)
+    end
+
+    def dependables
+      @dependables ||= {}
+    end
+
     def env=(env_name)
       @env = env_name.to_s
     end
@@ -149,6 +162,7 @@ Kuby.register_provider(:docker_desktop, Kuby::Kubernetes::DockerDesktopProvider)
 Kuby.register_provider(:bare_metal, Kuby::Kubernetes::BareMetalProvider)
 
 # plugins
+Kuby.register_plugin(:system, Kuby::Plugins::System)
 Kuby.register_plugin(:rails_app, Kuby::Plugins::RailsApp::Plugin)
 Kuby.register_plugin(:nginx_ingress, Kuby::Plugins::NginxIngress)
 
@@ -169,3 +183,12 @@ Kuby.register_package(:c_toolchain,
 )
 
 Kuby.register_package(:git, 'git')
+
+# dependables
+Kuby.register_dependable(:kubectl, KubectlRb::KUBECTL_VERSION)
+Kuby.register_dependable(:helm, HelmRb::HELM_VERSION)
+Kuby.register_dependable(:kubernetes, -> {
+  version_info = Kuby.environment.kubernetes.provider.kubernetes_cli.version
+  version = version_info.dig('serverVersion', 'gitVersion')
+  version.sub(/\Av/, '')
+})

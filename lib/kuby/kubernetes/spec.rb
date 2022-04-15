@@ -14,6 +14,7 @@ module Kuby
         @plugins = TrailingHash.new
 
         # default plugins
+        add_plugin(:system)
         add_plugin(:rails_app)
       end
 
@@ -75,10 +76,39 @@ module Kuby
       def before_deploy
         @tag ||= docker.image.current_version.main_tag
 
+        check_dependencies!
+
         provider.before_deploy(resources)
         @plugins.each { |_, plg| plg.before_deploy(resources) }
       ensure
         @tag = nil
+      end
+
+      def check_dependencies!(plugins = @plugins)
+        error_messages = []
+
+        plugins.each do |plg_name, plg|
+          plg.class.dependencies.each do |dependency|
+            dependable = Kuby.dependables[dependency.name]
+
+            unless dependable
+              error_messages << "The #{plg_name} plugin depends on #{dependency.name}, "\
+                "but that dependency has not been registered."
+
+              next
+            end
+
+            unless dependency.satisfied_by?(dependable)
+              error_messages << "The #{plg_name} plugin depends on #{dependency.name} "\
+                "#{dependency.constraints}, but the available version is #{dependable.version}."
+            end
+          end
+        end
+
+        unless error_messages.empty?
+          error_messages.each { |msg| Kuby.logger.fatal(msg) }
+          exit 1
+        end
       end
 
       def after_deploy
@@ -98,6 +128,8 @@ module Kuby
             memo[name] = plg if only.include?(name)
           end
         end
+
+        check_dependencies!(plugins)
 
         if only.empty?
           provider.before_setup

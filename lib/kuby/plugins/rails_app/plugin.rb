@@ -7,6 +7,8 @@ module Kuby
   module Plugins
     module RailsApp
       class Plugin < ::Kuby::Plugin
+        depends_on :kubernetes, '>= 1.20'
+
         extend ::KubeDSL::ValueFields
 
         WEB_ROLE = 'web'.freeze

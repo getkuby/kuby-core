@@ -13,6 +13,14 @@ module Kuby
       def task_dirs
         []
       end
+
+      def depends_on(dependable_name, *constraints)
+        dependencies << Kuby::Dependency.new(dependable_name, *constraints)
+      end
+
+      def dependencies
+        @dependencies ||= []
+      end
     end
 
     def configure(&block)

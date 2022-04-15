@@ -33,6 +33,7 @@
   - These are runnable via the CLI.
 * Add the ability for plugins to define a `#remove` routine, which is meant to do the opposite of whatever `#setup` does.
   - It is now also possible to run a plugin's remove routine from the CLI.
+* Add the ability for plugins to depend on things like Kubernetes and Helm.
 
 ## 0.17.1
 * Allow storage class to be customized when using the built-in bare metal provider.
