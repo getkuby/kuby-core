@@ -31,5 +31,5 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.executables << 'kuby'
 
-  s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'LICENSE', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby-core.gemspec']
+  s.files = Dir['{bin,lib,spec}/**/*', 'Gemfile', 'LICENSE', 'CHANGELOG.md', 'README.md', 'Rakefile', 'kuby-core.gemspec']
 end
