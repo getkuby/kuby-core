@@ -4,16 +4,16 @@ module Kuby
   class Definition
     extend T::Sig
 
-    sig { returns(String) }
+    T::Sig::WithoutRuntime.sig { returns(String) }
     attr_reader :app_name
 
-    sig { params(app_name: String, block: T.nilable(T.proc.void)).void }
+    T::Sig::WithoutRuntime.sig { params(app_name: String, block: T.nilable(T.proc.void)).void }
     def initialize(app_name, &block)
       @app_name = app_name
       @environments = T.let(@environments, T.nilable(T::Hash[Symbol, Environment]))
     end
 
-    sig {
+    T::Sig::WithoutRuntime.sig {
       params(
         name: Symbol,
         block: T.nilable(T.proc.void)
@@ -31,7 +31,7 @@ module Kuby
       T.must(environments[name])
     end
 
-    sig { returns(T::Hash[Symbol, Environment]) }
+    T::Sig::WithoutRuntime.sig { returns(T::Hash[Symbol, Environment]) }
     def environments
       @environments ||= {}
     end

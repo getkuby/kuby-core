@@ -7,25 +7,25 @@ module Kuby
 
       DEFAULT_WORKING_DIR = T.let('/usr/src/app'.freeze, String)
 
-      sig { params(base_image: String).void }
+      T::Sig::WithoutRuntime.sig { params(base_image: String).returns(String) }
       attr_writer :base_image
 
-      sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :working_dir
 
-      sig { params(working_dir: String).void }
+      T::Sig::WithoutRuntime.sig { params(working_dir: String).returns(String) }
       attr_writer :working_dir
 
-      sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :rails_env
 
-      sig { params(rails_env: String).void }
+      T::Sig::WithoutRuntime.sig { params(rails_env: String).returns(String) }
       attr_writer :rails_env
 
-      sig { returns(Docker::Spec) }
+      T::Sig::WithoutRuntime.sig { returns(Docker::Spec) }
       attr_reader :docker_spec
 
-      sig { params(environment: Environment, docker_spec: Docker::Spec).void }
+      T::Sig::WithoutRuntime.sig { params(environment: Environment, docker_spec: Docker::Spec).void }
       def initialize(environment, docker_spec)
         super(environment)
 
@@ -35,7 +35,7 @@ module Kuby
         @docker_spec = T.let(docker_spec, Docker::Spec)
       end
 
-      sig { override.params(dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
         dockerfile.from(base_image)
         dockerfile.workdir(working_dir || DEFAULT_WORKING_DIR)
@@ -44,14 +44,14 @@ module Kuby
         dockerfile.arg('RAILS_MASTER_KEY')
       end
 
-      sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       def base_image
         @base_image || default_base_image
       end
 
       private
 
-      sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       def default_base_image
         case docker_spec.distro_name
           when :debian

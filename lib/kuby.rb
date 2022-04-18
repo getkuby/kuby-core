@@ -1,4 +1,4 @@
-# typed: false
+# typed: ignore
 
 require 'sorbet-runtime-stub'
 require 'kuby/railtie'

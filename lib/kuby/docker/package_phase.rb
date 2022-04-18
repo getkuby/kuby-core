@@ -7,27 +7,27 @@ module Kuby
 
       Operation = T.type_alias { [Symbol, Symbol, T.nilable(String)] }
 
-      sig { returns(T::Array[Operation]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[Operation]) }
       attr_reader :operations
 
-      sig { params(environment: Environment).void }
+      T::Sig::WithoutRuntime.sig { params(environment: Environment).void }
       def initialize(environment)
         super
 
         @operations = T.let([], T::Array[Operation])
       end
 
-      sig { params(package_name: Symbol, version: T.nilable(String)).void }
+      T::Sig::WithoutRuntime.sig { params(package_name: Symbol, version: T.nilable(String)).void }
       def add(package_name, version = nil)
         operations << [:add, package_name, version]
       end
 
-      sig { params(package_name: Symbol).void }
+      T::Sig::WithoutRuntime.sig { params(package_name: Symbol).void }
       def remove(package_name)
         operations << [:remove, package_name, nil]
       end
 
-      sig { override.params(dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
         packages = distro_spec.default_packages.dup
 
@@ -50,12 +50,12 @@ module Kuby
 
       private
 
-      sig { returns(Distro) }
+      T::Sig::WithoutRuntime.sig { returns(Distro) }
       def distro_spec
         environment.docker.distro_spec
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           package_name: Symbol,
           version: T.nilable(String)

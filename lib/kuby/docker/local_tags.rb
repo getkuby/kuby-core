@@ -5,13 +5,13 @@ module Kuby
     class LocalTags
       extend T::Sig
 
-      sig { returns CLI }
+      T::Sig::WithoutRuntime.sig { returns CLI }
       attr_reader :cli
 
-      sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       attr_reader :image_url
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           cli: CLI,
           image_url: String
@@ -24,13 +24,13 @@ module Kuby
         @latest_timestamp_tag = T.let(@latest_timestamp_tag, T.nilable(TimestampTag))
       end
 
-      sig { returns(T::Array[String]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
       def tags
         images = cli.images(image_url)
         images.map { |image| T.must(image[:tag]) }
       end
 
-      sig { returns(T::Array[String]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
       def latest_tags
         # find "latest" tag
         images = cli.images(image_url)
@@ -48,12 +48,12 @@ module Kuby
         end
       end
 
-      sig { returns(T::Array[TimestampTag]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[TimestampTag]) }
       def timestamp_tags
         tags.map { |t| TimestampTag.try_parse(t) }.compact
       end
 
-      sig { returns(T.nilable(TimestampTag)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(TimestampTag)) }
       def latest_timestamp_tag
         @latest_timestamp_tag ||= timestamp_tags.sort.last
       end

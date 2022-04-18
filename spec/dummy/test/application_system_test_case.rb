@@ -1,4 +1,5 @@
-# typed: false
+# typed: ignore
+
 require "test_helper"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase

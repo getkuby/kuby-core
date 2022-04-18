@@ -12,31 +12,31 @@ module Kuby
         ['development', 'test', 'deploy'].freeze, T::Array[String]
       )
 
-      sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :version
 
-      sig { params(version: String).void }
+      T::Sig::WithoutRuntime.sig { params(version: String).returns(String) }
       attr_writer :version
 
-      sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :gemfile
 
-      sig { params(gemfile: String).void }
+      T::Sig::WithoutRuntime.sig { params(gemfile: String).returns(String) }
       attr_writer :gemfile
 
-      sig { returns(T.nilable(T::Array[String])) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(T::Array[String])) }
       attr_reader :without
 
-      sig { params(without: T::Array[String]).void }
+      T::Sig::WithoutRuntime.sig { params(without: T::Array[String]).returns(String) }
       attr_writer :without
 
-      sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :executable
 
-      sig { params(executable: String).void }
+      T::Sig::WithoutRuntime.sig { params(executable: String).returns(String) }
       attr_writer :executable
 
-      sig { params(environment: Environment).void }
+      T::Sig::WithoutRuntime.sig { params(environment: Environment).void }
       def initialize(environment)
         super
 
@@ -47,7 +47,7 @@ module Kuby
         @executable = T.let(@executable, T.nilable(String))
       end
 
-      sig { override.params(dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
         gf = gemfile || DEFAULT_GEMFILE
         lf = "#{gf}.lock"
@@ -91,14 +91,14 @@ module Kuby
         dockerfile.env("PATH=#{container_path.join('bin')}:$PATH")
       end
 
-      sig { params(paths: String).void }
+      T::Sig::WithoutRuntime.sig { params(paths: String).void }
       def gemfiles(*paths)
         @gemfiles.concat(paths)
       end
 
       private
 
-      sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       def default_version
         Bundler::VERSION
       end

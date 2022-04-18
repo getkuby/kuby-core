@@ -9,7 +9,7 @@ module Kuby
 
       FORMAT = T.let('%Y%m%d%H%M%S'.freeze, String)
 
-      sig { params(str: T.nilable(String)).returns(T.nilable(TimestampTag)) }
+      T::Sig::WithoutRuntime.sig { params(str: T.nilable(String)).returns(T.nilable(TimestampTag)) }
       def self.try_parse(str)
         return nil unless str
 
@@ -27,40 +27,40 @@ module Kuby
         new(time)
       end
 
-      sig { returns(TimestampTag) }
+      T::Sig::WithoutRuntime.sig { returns(TimestampTag) }
       def self.now
         new(Time.now.utc)
       end
 
-      sig { returns(Time) }
+      T::Sig::WithoutRuntime.sig { returns(Time) }
       attr_reader :time
 
-      sig { params(time: Time).void }
+      T::Sig::WithoutRuntime.sig { params(time: Time).void }
       def initialize(time)
         @time = T.let(time, Time)
       end
 
-      sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       def to_s
         time.strftime(FORMAT)
       end
 
-      sig { params(other: TimestampTag).returns(T.nilable(Integer)) }
+      T::Sig::WithoutRuntime.sig { params(other: TimestampTag).returns(T.nilable(Integer)) }
       def <=>(other)
         time <=> other.time
       end
 
-      sig { params(other: TimestampTag).returns(T::Boolean) }
+      T::Sig::WithoutRuntime.sig { params(other: TimestampTag).returns(T::Boolean) }
       def ==(other)
         time == other.time
       end
 
-      sig { returns(Integer) }
+      T::Sig::WithoutRuntime.sig { returns(Integer) }
       def hash
         time.hash
       end
 
-      sig { params(other: TimestampTag).returns(T::Boolean) }
+      T::Sig::WithoutRuntime.sig { params(other: TimestampTag).returns(T::Boolean) }
       def eql?(other)
         time == other.time
       end

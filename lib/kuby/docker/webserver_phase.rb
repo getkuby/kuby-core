@@ -11,20 +11,20 @@ module Kuby
 
         abstract!
 
-        sig { returns(WebserverPhase) }
+        T::Sig::WithoutRuntime.sig { returns(WebserverPhase) }
         attr_reader :phase
 
-        sig { params(phase: WebserverPhase).void }
+        T::Sig::WithoutRuntime.sig { params(phase: WebserverPhase).void }
         def initialize(phase)
           @phase = phase
         end
 
-        sig { abstract.params(dockerfile: Dockerfile).void }
+        T::Sig::WithoutRuntime.sig { abstract.params(dockerfile: Dockerfile).void }
         def apply_to(dockerfile); end
       end
 
       class Puma < Webserver
-        sig { override.params(dockerfile: Dockerfile).void }
+        T::Sig::WithoutRuntime.sig { override.params(dockerfile: Dockerfile).void }
         def apply_to(dockerfile)
           dockerfile.cmd(
             'puma',
@@ -42,16 +42,16 @@ module Kuby
       DEFAULT_PORT = T.let(8080, Integer)
       WEBSERVER_MAP = T.let({ puma: Puma }.freeze, T::Hash[Symbol, T.class_of(Webserver)])
 
-      sig { params(port: Integer).void }
+      T::Sig::WithoutRuntime.sig { params(port: Integer).returns(String) }
       attr_writer :port
 
-      sig { returns(T.nilable(Symbol)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(Symbol)) }
       attr_reader :webserver
 
-      sig { params(webserver: Symbol).void }
+      T::Sig::WithoutRuntime.sig { params(webserver: Symbol).returns(String) }
       attr_writer :webserver
 
-      sig { override.params(environment: Environment).void }
+      T::Sig::WithoutRuntime.sig { override.params(environment: Environment).void }
       def initialize(environment)
         super
 
@@ -59,7 +59,7 @@ module Kuby
         @webserver = T.let(@webserver, T.nilable(Symbol))
       end
 
-      sig { override.params(dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { override.params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
         ws = webserver || default_webserver
         ws_class = WEBSERVER_MAP[T.must(ws)]
@@ -68,14 +68,14 @@ module Kuby
         ws_class.new(self).apply_to(dockerfile)
       end
 
-      sig { returns(Integer) }
+      T::Sig::WithoutRuntime.sig { returns(Integer) }
       def port
         @port || DEFAULT_PORT
       end
 
       private
 
-      sig { returns(T.nilable(Symbol)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(Symbol)) }
       def default_webserver
         if Gem.loaded_specs.include?('puma')
           :puma

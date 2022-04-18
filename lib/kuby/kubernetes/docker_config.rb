@@ -1,4 +1,5 @@
 # typed: true
+
 require 'base64'
 require 'kube-dsl'
 

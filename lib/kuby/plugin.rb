@@ -1,4 +1,5 @@
-# typed: true
+# typed: false
+
 module Kuby
   class Plugin
     attr_reader :environment

@@ -7,7 +7,7 @@ module Kuby
     class TimestampedImage < Image
       extend T::Sig
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
           image_url: String,
@@ -29,14 +29,14 @@ module Kuby
         super
       end
 
-      sig { returns(Image) }
+      T::Sig::WithoutRuntime.sig { returns(Image) }
       def new_version
         @new_version ||= duplicate_with_tags(
           TimestampTag.now.to_s, [Kuby::Docker::LATEST_TAG]
         )
       end
 
-      sig { returns(Image) }
+      T::Sig::WithoutRuntime.sig { returns(Image) }
       def current_version
         @current_version ||= begin
           duplicate_with_tags(
@@ -47,14 +47,14 @@ module Kuby
         end
       end
 
-      sig { params(current_tag: T.nilable(String)).returns(Image) }
+      T::Sig::WithoutRuntime.sig { params(current_tag: T.nilable(String)).returns(Image) }
       def previous_version(current_tag = nil)
         @previous_version ||= duplicate_with_tags(
           previous_timestamp_tag(current_tag).to_s, []
         )
       end
 
-      sig { params(current_tag: T.nilable(String)).returns(TimestampTag) }
+      T::Sig::WithoutRuntime.sig { params(current_tag: T.nilable(String)).returns(TimestampTag) }
       def previous_timestamp_tag(current_tag = nil)
         current_tag = TimestampTag.try_parse(current_tag || latest_timestamp_tag.to_s)
         raise MissingTagError, 'could not find current timestamp tag' unless current_tag
@@ -71,24 +71,24 @@ module Kuby
         T.must(all_tags[idx - 1])
       end
 
-      sig { returns(TimestampTag) }
+      T::Sig::WithoutRuntime.sig { returns(TimestampTag) }
       def latest_timestamp_tag
         tag = timestamp_tags.sort.last
         raise MissingTagError, 'could not find latest timestamp tag' unless tag
         tag
       end
 
-      sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String], context: T.nilable(String)).void }
+      T::Sig::WithoutRuntime.sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String], context: T.nilable(String)).void }
       def build(build_args = {}, docker_args = [], context: nil)
         docker_cli.build(self, build_args: build_args, docker_args: docker_args, context: context)
       end
 
-      sig { params(tag: String).void }
+      T::Sig::WithoutRuntime.sig { params(tag: String).void }
       def push(tag)
         docker_cli.push(image_url, tag)
       end
 
-      sig { returns(T::Boolean) }
+      T::Sig::WithoutRuntime.sig { returns(T::Boolean) }
       def exists?
         return false unless main_tag
         timestamp_tags.include?(TimestampTag.try_parse(main_tag))
@@ -96,24 +96,24 @@ module Kuby
 
       private
 
-      sig { returns(::Docker::Remote::Client) }
+      T::Sig::WithoutRuntime.sig { returns(::Docker::Remote::Client) }
       def remote_client
         @remote_client ||= ::Docker::Remote::Client.new(
           registry_index_host, image_repo, credentials.username, credentials.password,
         )
       end
 
-      sig { returns(T::Array[TimestampTag]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[TimestampTag]) }
       def timestamp_tags
         (local.timestamp_tags + remote.timestamp_tags).uniq
       end
 
-      sig { returns(LocalTags) }
+      T::Sig::WithoutRuntime.sig { returns(LocalTags) }
       def local
         @local ||= LocalTags.new(docker_cli, image_url)
       end
 
-      sig { returns(RemoteTags) }
+      T::Sig::WithoutRuntime.sig { returns(RemoteTags) }
       def remote
         @remote ||= RemoteTags.new(remote_client, registry_index_host)
       end

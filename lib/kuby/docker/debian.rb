@@ -11,29 +11,29 @@ module Kuby
         [:yarn, '1.21.1']
       ].freeze, T::Array[[Symbol, T.nilable(String)]])
 
-      sig { returns(Layer) }
+      T::Sig::WithoutRuntime.sig { returns(Layer) }
       attr_reader :phase
 
-      sig { override.params(packages: T::Array[Distro::PackageImpl], into: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { override.params(packages: T::Array[Distro::PackageImpl], into: Dockerfile).void }
       def install(packages, into:)
         dockerfile = into
         install_managed(packages, dockerfile)
         install_unmanaged(packages, dockerfile)
       end
 
-      sig { override.returns(T::Array[[Symbol, T.nilable(String)]]) }
+      T::Sig::WithoutRuntime.sig { override.returns(T::Array[[Symbol, T.nilable(String)]]) }
       def default_packages
         DEFAULT_PACKAGES
       end
 
-      sig { override.returns(String) }
+      T::Sig::WithoutRuntime.sig { override.returns(String) }
       def shell_exe
         SHELL_EXE
       end
 
       private
 
-      sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
       def install_managed(packages, dockerfile)
         pkgs = T.cast(packages.select(&:managed?), T::Array[Distro::ManagedPackageImpl])
 
@@ -52,7 +52,7 @@ module Kuby
         dockerfile.run(pkg_cmd)
       end
 
-      sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
       def install_unmanaged(packages, dockerfile)
         packages
           .reject(&:managed?)

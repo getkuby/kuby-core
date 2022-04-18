@@ -8,19 +8,19 @@ module Kuby
       DEFAULT_DISTRO = T.let(:debian, Symbol)
       DEFAULT_APP_ROOT_PATH = T.let('.'.freeze, String)
 
-      sig { returns(Environment) }
+      T::Sig::WithoutRuntime.sig { returns(Environment) }
       attr_reader :environment
 
-      sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :image_url_str
 
-      sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :registry_index_url_str
 
-      sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :app_root_path
 
-      sig { params(environment: Environment).void }
+      T::Sig::WithoutRuntime.sig { params(environment: Environment).void }
       def initialize(environment)
         @environment = environment
 
@@ -45,42 +45,42 @@ module Kuby
         @app_root_path = T.let(DEFAULT_APP_ROOT_PATH, String)
       end
 
-      sig { returns(Symbol) }
+      T::Sig::WithoutRuntime.sig { returns(Symbol) }
       def distro_name
         @distro_name || DEFAULT_DISTRO
       end
 
-      sig { params(image_url: String).void }
+      T::Sig::WithoutRuntime.sig { params(image_url: String).void }
       def base_image(image_url)
         setup_phase.base_image = image_url
       end
 
-      sig { params(dir: String).void }
+      T::Sig::WithoutRuntime.sig { params(dir: String).void }
       def working_dir(dir)
         setup_phase.working_dir = dir
       end
 
-      sig { params(env: String).void }
+      T::Sig::WithoutRuntime.sig { params(env: String).void }
       def rails_env(env)
         setup_phase.rails_env = env
       end
 
-      sig { params(version: String).void }
+      T::Sig::WithoutRuntime.sig { params(version: String).void }
       def bundler_version(version)
         bundler_phase.version = version
       end
 
-      sig { params(path: String).void }
+      T::Sig::WithoutRuntime.sig { params(path: String).void }
       def gemfile(path)
         bundler_phase.gemfile = path
       end
 
-      sig { params(path: String).void }
+      T::Sig::WithoutRuntime.sig { params(path: String).void }
       def app_root(path)
         @app_root_path = path
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           package_name: Symbol,
           version: T.nilable(String)
@@ -91,33 +91,33 @@ module Kuby
         package_phase.add(package_name, version)
       end
 
-      sig { params(distro_name: Symbol).void }
+      T::Sig::WithoutRuntime.sig { params(distro_name: Symbol).void }
       def distro(distro_name)
         @distro_name = distro_name
         @distro_spec = nil
       end
 
-      sig { params(path: String).void }
+      T::Sig::WithoutRuntime.sig { params(path: String).void }
       def files(path)
         copy_phase << path
       end
 
-      sig { params(port: Integer).void }
+      T::Sig::WithoutRuntime.sig { params(port: Integer).void }
       def port(port)
         webserver_phase.port = port
       end
 
-      sig { params(url: String).void }
+      T::Sig::WithoutRuntime.sig { params(url: String).void }
       def image_url(url)
         @image_url_str = url
       end
 
-      sig { params(url: String).void }
+      T::Sig::WithoutRuntime.sig { params(url: String).void }
       def registry_index_url(url)
         @registry_index_url_str = url
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           name: Symbol,
           layer: T.nilable(Layer),
@@ -129,7 +129,7 @@ module Kuby
         layer_stack.use(name, layer, &block)
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           name: Symbol,
           layer: T.nilable(T.any(Layer, T::Hash[Symbol, T.untyped])),
@@ -142,17 +142,17 @@ module Kuby
         layer_stack.insert(name, layer, options, &block)
       end
 
-      sig { params(name: Symbol).void }
+      T::Sig::WithoutRuntime.sig { params(name: Symbol).void }
       def delete(name)
         layer_stack.delete(name)
       end
 
-      sig { params(name: Symbol).returns(T::Boolean) }
+      T::Sig::WithoutRuntime.sig { params(name: Symbol).returns(T::Boolean) }
       def exists?(name)
         layer_stack.includes?(name)
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(block: T.nilable(T.proc.void)).returns(Credentials)
       }
       def credentials(&block)
@@ -161,7 +161,7 @@ module Kuby
         @credentials
       end
 
-      sig { returns(Docker::AppImage) }
+      T::Sig::WithoutRuntime.sig { returns(Docker::AppImage) }
       def image
         @image ||= begin
           dockerfile = Dockerfile.new.tap do |df|
@@ -174,47 +174,47 @@ module Kuby
         end
       end
 
-      sig { returns(SetupPhase) }
+      T::Sig::WithoutRuntime.sig { returns(SetupPhase) }
       def setup_phase
         @setup_phase ||= SetupPhase.new(environment, self)
       end
 
-      sig { returns(PackagePhase) }
+      T::Sig::WithoutRuntime.sig { returns(PackagePhase) }
       def package_phase
         @package_phase ||= PackagePhase.new(environment)
       end
 
-      sig { returns(BundlerPhase) }
+      T::Sig::WithoutRuntime.sig { returns(BundlerPhase) }
       def bundler_phase
         @bundler_phase ||= BundlerPhase.new(environment)
       end
 
-      sig { returns(YarnPhase) }
+      T::Sig::WithoutRuntime.sig { returns(YarnPhase) }
       def yarn_phase
         @yarn_phase ||= YarnPhase.new(environment)
       end
 
-      sig { returns(CopyPhase) }
+      T::Sig::WithoutRuntime.sig { returns(CopyPhase) }
       def copy_phase
         @copy_phase ||= CopyPhase.new(environment)
       end
 
-      sig { returns(AppPhase) }
+      T::Sig::WithoutRuntime.sig { returns(AppPhase) }
       def app_phase
         @app_phase ||= AppPhase.new(environment)
       end
 
-      sig { returns(AssetsPhase) }
+      T::Sig::WithoutRuntime.sig { returns(AssetsPhase) }
       def assets_phase
         @assets_phase ||= AssetsPhase.new(environment)
       end
 
-      sig { returns(WebserverPhase) }
+      T::Sig::WithoutRuntime.sig { returns(WebserverPhase) }
       def webserver_phase
         @webserver_phase ||= WebserverPhase.new(environment)
       end
 
-      sig { returns(Distro) }
+      T::Sig::WithoutRuntime.sig { returns(Distro) }
       def distro_spec
         @distro_spec ||= if distro_klass = Kuby.distros[distro_name]
           distro_klass.new(self)
@@ -225,7 +225,7 @@ module Kuby
 
       private
 
-      sig { returns(Kuby::Docker::LayerStack) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::LayerStack) }
       def layer_stack
         @layer_stack ||= Kuby::Docker::LayerStack.new.tap do |stack|
           stack.use(:setup_phase, setup_phase)

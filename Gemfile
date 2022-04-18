@@ -10,9 +10,9 @@ gem 'kubernetes-cli', github: 'getkuby/kubernetes-cli'
 group :development, :test do
   gem 'pry-byebug'
   gem 'rake'
-  # lock to a specific version to prevent breaking CI when new versions come out
-  gem 'sorbet', '= 0.5.6433'
-  gem 'curdle', path: '~/workspace/camertron/curdle'
+  gem 'curdle', '~> 1.0'
+  gem 'parlour', '~> 6.0'
+  gem 'tapioca', '~> 0.7'
 end
 
 group :test do

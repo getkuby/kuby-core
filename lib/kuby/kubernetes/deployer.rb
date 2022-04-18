@@ -82,7 +82,8 @@ module Kuby
         end
       rescue KubernetesCLI::InvalidResourceError => e
         Kuby.logger.fatal(e.message)
-        Kuby.logger.fatal(e.resource.to_resource.to_yaml)
+        resource = e.resource&.to_resource
+        Kuby.logger.fatal(resource) if resource
       end
 
       def deploy_namespaced_resources(resources, ns)

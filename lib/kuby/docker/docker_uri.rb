@@ -9,7 +9,7 @@ module Kuby
       DEFAULT_REGISTRY_INDEX_HOST = T.let('index.docker.io'.freeze, String)
       DEFAULT_PORT = T.let(443, Integer)
 
-      sig { params(url: String).returns(DockerURI) }
+      T::Sig::WithoutRuntime.sig { params(url: String).returns(DockerURI) }
       def self.parse_uri(url)
         parse(
           url,
@@ -18,7 +18,7 @@ module Kuby
         )
       end
 
-      sig { params(url: String).returns(DockerURI) }
+      T::Sig::WithoutRuntime.sig { params(url: String).returns(DockerURI) }
       def self.parse_index_uri(url)
         parse(
           url,
@@ -27,7 +27,7 @@ module Kuby
         )
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           url: String,
           default_host: T.nilable(String),
@@ -50,23 +50,23 @@ module Kuby
         new(host.to_s, port.to_i, (path || []).join('/'))
       end
 
-      sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       attr_reader :host
 
-      sig { returns(Integer) }
+      T::Sig::WithoutRuntime.sig { returns(Integer) }
       attr_reader :port
 
-      sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       attr_reader :path
 
-      sig { params(host: String, port: Integer, path: String).void }
+      T::Sig::WithoutRuntime.sig { params(host: String, port: Integer, path: String).void }
       def initialize(host, port, path)
         @host = host
         @port = port
         @path = path
       end
 
-      sig { returns(T::Boolean) }
+      T::Sig::WithoutRuntime.sig { returns(T::Boolean) }
       def has_default_port?
         port == DEFAULT_PORT
       end

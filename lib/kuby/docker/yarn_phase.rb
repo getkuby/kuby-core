@@ -5,7 +5,7 @@ module Kuby
     class YarnPhase < Layer
       extend T::Sig
 
-      sig { params(dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { params(dockerfile: Dockerfile).void }
       def apply_to(dockerfile)
         host_path = environment.docker.app_root_path
 
@@ -29,7 +29,7 @@ module Kuby
 
       private
 
-      sig { params(path: String).returns(String) }
+      T::Sig::WithoutRuntime.sig { params(path: String).returns(String) }
       def ensure_trailing_delimiter(path)
         path.end_with?(File::SEPARATOR) ? path : File.join(path, '')
       end

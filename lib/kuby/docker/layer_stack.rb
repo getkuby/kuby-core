@@ -6,23 +6,23 @@ module Kuby
       extend T::Sig
       extend T::Generic
 
-      Elem = type_member(fixed: Layer)
+      Elem = type_member { { fixed: Layer } }
 
       include Enumerable
 
-      sig { returns(T::Array[Symbol]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[Symbol]) }
       attr_reader :stack
 
-      sig { returns(T::Hash[Symbol, Layer]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Hash[Symbol, Layer]) }
       attr_reader :layers
 
-      sig { void }
+      T::Sig::WithoutRuntime.sig { void }
       def initialize
         @stack = T.let([], T::Array[Symbol])
         @layers = T.let({}, T::Hash[Symbol, Layer])
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         override.params(
           block: T.nilable(T.proc.params(layer: Layer).void)
         )
@@ -33,7 +33,7 @@ module Kuby
         @stack.each { |name| yield T.must(layers[name]) }
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           name: Symbol,
           layer: T.nilable(Layer),
@@ -53,7 +53,7 @@ module Kuby
         end
       end
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           name: Symbol,
           layer: T.nilable(T.any(Layer, T::Hash[Symbol, T.untyped])),
@@ -94,13 +94,13 @@ module Kuby
         end
       end
 
-      sig { params(name: Symbol).void }
+      T::Sig::WithoutRuntime.sig { params(name: Symbol).void }
       def delete(name)
         stack.delete(name)
         layers.delete(name)
       end
 
-      sig { params(name: Symbol).returns(T::Boolean) }
+      T::Sig::WithoutRuntime.sig { params(name: Symbol).returns(T::Boolean) }
       def includes?(name)
         layers.include?(name)
       end

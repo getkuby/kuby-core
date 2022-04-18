@@ -6,7 +6,7 @@ module Kuby
     class AppImage < ::Kuby::Docker::TimestampedImage
       extend T::Sig
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
           image_url: String,

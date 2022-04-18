@@ -1,4 +1,5 @@
 # typed: strict
+
 require 'kube-dsl'
 
 module Kuby

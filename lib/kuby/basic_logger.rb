@@ -7,7 +7,7 @@ module Kuby
   class BasicLogger < Logger
     extend T::Sig
 
-    sig {
+    T::Sig::WithoutRuntime.sig {
       override.params(
         logdev: T.any(String, IO, StringIO, NilClass),
         shift_age: Integer,
@@ -32,7 +32,7 @@ module Kuby
       end
     end
 
-    sig {
+    T::Sig::WithoutRuntime.sig {
       override.params(
         progname_or_msg: T.untyped,
         block: T.nilable(T.proc.returns(T.untyped))
@@ -46,7 +46,7 @@ module Kuby
       end
     end
 
-    sig {
+    T::Sig::WithoutRuntime.sig {
       override.params(
         progname_or_msg: T.untyped,
         block: T.nilable(T.proc.returns(T.untyped))
@@ -61,7 +61,7 @@ module Kuby
     end
 
     # adhere to the "CLI" interface
-    sig {
+    T::Sig::WithoutRuntime.sig {
       params(
         out: T.any(IO, StringIO),
         err: T.any(IO, StringIO),
@@ -76,7 +76,7 @@ module Kuby
       reopen(previous_logdev)
     end
 
-    sig { returns(T.nilable(Process::Status)) }
+    T::Sig::WithoutRuntime.sig { returns(T.nilable(Process::Status)) }
     def last_status
       nil
     end

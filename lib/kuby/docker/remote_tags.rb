@@ -7,13 +7,13 @@ module Kuby
     class RemoteTags
       extend T::Sig
 
-      sig { returns(::Docker::Remote::Client) }
+      T::Sig::WithoutRuntime.sig { returns(::Docker::Remote::Client) }
       attr_reader :remote_client
 
-      sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       attr_reader :image_url
 
-      sig {
+      T::Sig::WithoutRuntime.sig {
         params(
           remote_client: ::Docker::Remote::Client,
           image_url: String
@@ -25,7 +25,7 @@ module Kuby
         @image_url = image_url
       end
 
-      sig { returns(T::Array[String]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
       def tags
         remote_client.tags
       rescue ::Docker::Remote::UnknownRepoError, ::Docker::Remote::UnauthorizedError, ::Docker::Remote::TooManyRetriesError
@@ -33,13 +33,13 @@ module Kuby
         []
       end
 
-      sig { returns(T::Array[String]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
       def latest_tags
         # not available for remote repos
         []
       end
 
-      sig { returns(T::Array[TimestampTag]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[TimestampTag]) }
       def timestamp_tags
         tags.map { |t| TimestampTag.try_parse(t) }.compact
       end

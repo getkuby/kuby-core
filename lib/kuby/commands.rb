@@ -24,7 +24,7 @@ module Kuby
     singleton_class.send(:prepend, Module.new do
       extend T::Sig
 
-      sig { params(args: T::Array[String]).void }
+      T::Sig::WithoutRuntime.sig { params(args: T::Array[String]).void }
       def run(args)
         if idx = args.index('rails') || idx = args.index('rake')
           @rails_options = T.let(@rails_options, T.nilable(T::Array[String]))
@@ -37,12 +37,12 @@ module Kuby
       end
     end)
 
-    sig { returns(Kuby::Tasks) }
+    T::Sig::WithoutRuntime.sig { returns(Kuby::Tasks) }
     def self.tasks
       Kuby::Tasks.new(Kuby.environment)
     end
 
-    sig {
+    T::Sig::WithoutRuntime.sig {
       params(
         global_options: T::Hash[T.any(String, Symbol), T.any(String, Integer)]
       ).void

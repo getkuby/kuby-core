@@ -1,4 +1,4 @@
-# typed: true
+# typed: false
 
 require 'rails/generators'
 require 'rails/generators/base'
