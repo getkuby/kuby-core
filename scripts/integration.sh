@@ -165,7 +165,7 @@ $kubectl -n kube-system get configmap coredns -o json \
   | jq -r ".data.Corefile |= . + \"$corefile_mod\"" \
   | $kubectl apply -f -
 $kubectl -n kube-system rollout restart deployment coredns
-$kubectl -n kube-system wait --for=condition=available --timeout=30s deployment/coredns
+$kubectl -n kube-system wait --for=condition=available --timeout=120s deployment/coredns
 
 # create pebble server (issues fake TLS certs) and get the root and intermediate certs
 $kubectl apply -f vendor/kuby-core/scripts/pebble.yaml
