@@ -7,8 +7,12 @@ gem install prebundler -v '< 1'
 git clone https://github.com/getkuby/kuby_test.git
 cp -r kuby-core/ kuby_test/vendor/
 cd kuby_test
-git fetch origin crdb
-git checkout crdb
+
+# remove sorbet annotations
+gem install curdle
+curdle $(find vendor/kuby-core/lib -name '*.rb')
+
+# gems
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
@@ -35,7 +39,11 @@ Prebundler.configure do |config|
 end
 EOF
 prebundle install --jobs 2 --retry 3 --no-binstubs
+
+# javascript deps
 yarn install
+
+# bootstrap app for use with kuby
 bundle exec bin/rails g kuby
 cat <<EOF > kuby.rb
 class VendorPhase < Kuby::Docker::Layer
