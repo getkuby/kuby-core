@@ -16,6 +16,9 @@ curdle $(find vendor/kuby-core/lib -name '*.rb')
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
+printf "gem 'activerecord-cockroachdb-adapter', '~> 6.0'\n" >> Gemfile
+
+# for testing
 printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
 printf "gem 'kube-dsl', github: 'getkuby/kube-dsl'\n" >> Gemfile
 printf "gem 'kuby-cert-manager', github: 'getkuby/kuby-cert-manager'\n" >> Gemfile
