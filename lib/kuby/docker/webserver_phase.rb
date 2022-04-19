@@ -42,13 +42,13 @@ module Kuby
       DEFAULT_PORT = T.let(8080, Integer)
       WEBSERVER_MAP = T.let({ puma: Puma }.freeze, T::Hash[Symbol, T.class_of(Webserver)])
 
-      T::Sig::WithoutRuntime.sig { params(port: Integer).returns(String) }
+      T::Sig::WithoutRuntime.sig { params(port: Integer).returns(Integer) }
       attr_writer :port
 
       T::Sig::WithoutRuntime.sig { returns(T.nilable(Symbol)) }
       attr_reader :webserver
 
-      T::Sig::WithoutRuntime.sig { params(webserver: Symbol).returns(String) }
+      T::Sig::WithoutRuntime.sig { params(webserver: Symbol).returns(Symbol) }
       attr_writer :webserver
 
       T::Sig::WithoutRuntime.sig { override.params(environment: Environment).void }

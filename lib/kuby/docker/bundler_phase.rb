@@ -27,7 +27,7 @@ module Kuby
       T::Sig::WithoutRuntime.sig { returns(T.nilable(T::Array[String])) }
       attr_reader :without
 
-      T::Sig::WithoutRuntime.sig { params(without: T::Array[String]).returns(String) }
+      T::Sig::WithoutRuntime.sig { params(without: T::Array[String]).returns(T::Array[String]) }
       attr_writer :without
 
       T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
