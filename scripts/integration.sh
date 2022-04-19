@@ -137,6 +137,7 @@ GLI_DEBUG=true bundle exec kuby -e production push
 
 # setup cluster
 GLI_DEBUG=true bundle exec kuby -e production setup
+GLI_DEBUG=true bundle exec kuby -e production setup
 
 # find kubectl executable
 kubectl=$(bundle show kubectl-rb)/vendor/kubectl
