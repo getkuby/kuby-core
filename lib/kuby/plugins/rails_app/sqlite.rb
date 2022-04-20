@@ -6,7 +6,7 @@ module Kuby
       class Sqlite < ::Kuby::Plugin
         attr_reader :environment
 
-        def initialize(environment, *)
+        def initialize(environment, *_)
           @environment = environment
         end
 

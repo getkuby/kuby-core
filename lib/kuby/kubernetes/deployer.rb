@@ -8,10 +8,8 @@ require 'yaml'
 module Kuby
   module Kubernetes
     class Deployer
-      extend T::Sig
-
       attr_reader :environment
-      attr_accessor :logdev
+      attr_writer :logdev
 
       def initialize(environment)
         @environment = environment

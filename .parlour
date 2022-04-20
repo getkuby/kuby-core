@@ -1,0 +1,3 @@
+parser:
+  # Don't exclude the `sorbet` directory, overriding the default
+  excluded_paths: []
