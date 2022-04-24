@@ -18,13 +18,20 @@ printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
 printf "gem 'activerecord-cockroachdb-adapter', '~> 6.0'\n" >> Gemfile
 
-# for testing, remove when these are published
+# for testing, remove all this crap when gems are published
 printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
 printf "gem 'kube-dsl', github: 'getkuby/kube-dsl'\n" >> Gemfile
 printf "gem 'kuby-cert-manager', github: 'getkuby/kuby-cert-manager'\n" >> Gemfile
 printf "gem 'kubernetes-cli', github: 'getkuby/kubernetes-cli'\n" >> Gemfile
 printf "gem 'kuby-redis', github: 'getkuby/kuby-redis'\n" >> Gemfile
 printf "gem 'kuby-sidekiq', github: 'getkuby/kuby-sidekiq'\n" >> Gemfile
+curdle_gems=("kube-dsl" "kubernetes-cli")
+for i in "${curdle_gems[@]}"; do
+  gem_path=$(bundle info kube-dsl)
+  curdle $(find $gem_path/lib -name '*.rb')
+done
+
+# install ruby deps
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
