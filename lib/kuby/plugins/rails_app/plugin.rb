@@ -53,7 +53,7 @@ module Kuby
               insert :rewrite_db_config, RewriteDbConfig.new, after: :copy_phase
             end
 
-            @database.configure_pod_spec(deployment.spec.template.spec)
+            @database.plugin.configure_pod_spec(deployment.spec.template.spec)
           end
 
           environment.kubernetes.add_plugin(:nginx_ingress)
