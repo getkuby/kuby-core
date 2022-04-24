@@ -25,11 +25,6 @@ printf "gem 'kuby-cert-manager', github: 'getkuby/kuby-cert-manager'\n" >> Gemfi
 printf "gem 'kubernetes-cli', github: 'getkuby/kubernetes-cli'\n" >> Gemfile
 printf "gem 'kuby-redis', github: 'getkuby/kuby-redis'\n" >> Gemfile
 printf "gem 'kuby-sidekiq', github: 'getkuby/kuby-sidekiq'\n" >> Gemfile
-curdle_gems=("kube-dsl" "kubernetes-cli")
-for i in "${curdle_gems[@]}"; do
-  gem_path=$(bundle info kube-dsl)
-  curdle $(find $gem_path/lib -name '*.rb')
-done
 
 # install ruby deps
 bundle lock
@@ -51,6 +46,13 @@ Prebundler.configure do |config|
 end
 EOF
 prebundle install --jobs 2 --retry 3 --no-binstubs
+
+# for testing, remove when gems have been published
+curdle_gems=("kube-dsl" "kubernetes-cli")
+for i in "${curdle_gems[@]}"; do
+  gem_path=$(bundle info kube-dsl)
+  curdle $(find $gem_path/lib -name '*.rb')
+done
 
 # javascript deps
 yarn install
