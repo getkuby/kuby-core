@@ -58,7 +58,7 @@ class VendorPhase < Kuby::Docker::Layer
 end
 
 require 'kuby/kind'
-require 'kuby-sidekiq'
+require 'kuby/sidekiq'
 require 'kuby/prebundler'
 require 'active_support/core_ext'
 require 'active_support/encrypted_configuration'
