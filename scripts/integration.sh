@@ -26,6 +26,7 @@ printf "gem 'kubernetes-cli', github: 'getkuby/kubernetes-cli'\n" >> Gemfile
 printf "gem 'kuby-redis', github: 'getkuby/kuby-redis'\n" >> Gemfile
 printf "gem 'kuby-sidekiq', github: 'getkuby/kuby-sidekiq'\n" >> Gemfile
 printf "gem 'sorbet-runtime'\n" >> Gemfile
+printf "gem 'sidekiq'\n" >> Gemfile
 
 # install ruby deps
 bundle lock
