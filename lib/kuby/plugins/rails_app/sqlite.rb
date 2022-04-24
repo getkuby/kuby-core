@@ -15,6 +15,10 @@ module Kuby
           environment.docker.package_phase.add(:sqlite_client)
         end
 
+        def configure_pod_spec(_pod_spec)
+          # no configuration steps necessary
+        end
+
         def bootstrap
           # no boostrap steps necessary
         end

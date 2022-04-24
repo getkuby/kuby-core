@@ -18,11 +18,13 @@ printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
 printf "gem 'activerecord-cockroachdb-adapter', '~> 6.0'\n" >> Gemfile
 
-# for testing
+# for testing, remove when these are published
 printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
 printf "gem 'kube-dsl', github: 'getkuby/kube-dsl'\n" >> Gemfile
 printf "gem 'kuby-cert-manager', github: 'getkuby/kuby-cert-manager'\n" >> Gemfile
 printf "gem 'kubernetes-cli', github: 'getkuby/kubernetes-cli'\n" >> Gemfile
+printf "gem 'kuby-redis', github: 'getkuby/kuby-redis'\n" >> Gemfile
+printf "gem 'kuby-sidekiq', github: 'getkuby/kuby-sidekiq'\n" >> Gemfile
 bundle lock
 cat <<'EOF' > .prebundle_config
 Prebundler.configure do |config|
@@ -56,6 +58,7 @@ class VendorPhase < Kuby::Docker::Layer
 end
 
 require 'kuby/kind'
+require 'kuby-sidekiq'
 require 'kuby/prebundler'
 require 'active_support/core_ext'
 require 'active_support/encrypted_configuration'
@@ -96,6 +99,10 @@ Kuby.define('Kubytest') do
         server_url 'https://pebble.pebble:14000/dir'
       end
 
+      add_plugin :sidekiq do
+        replicas 2
+      end
+
       provider :kind do
         use_kubernetes_version '${K8S_VERSION}'
       end
@@ -123,6 +130,46 @@ EOF
 cat <<'EOF' > app/controllers/home_controller.rb
 class HomeController < ApplicationController
   def index
+  end
+end
+EOF
+cat <<'EOF' > app/models/widget.rb
+class Widget < ApplicationRecord
+end
+EOF
+mkdir -p app/sidekiq
+cat <<'EOF' > app/sidekiq/widgets_job.rb
+class WidgetsJob
+  include Sidekiq::Job
+
+  def perform(id)
+    widget = Widget.find(id)
+    widget.update(status: 'processed')
+  end
+end
+EOF
+cat <<'EOF' > config/initializers/sidekiq.rb
+if Rails.env.production?
+  require 'kuby'
+
+  Kuby.load!
+
+  Sidekiq.configure_server do |config|
+    config.redis = Kuby.environment.kubernetes.plugin(:sidekiq).connection_params
+  end
+
+  Sidekiq.configure_client do |config|
+    config.redis = Kuby.environment.kubernetes.plugin(:sidekiq).connection_params
+  end
+end
+EOF
+cat <<'EOF' > db/migrate/20220423211801_create_widgets.rb
+class CreateWidgets < ActiveRecord::Migration[6.0]
+  def change
+    create_table :widgets do |t|
+      t.string :status, default: 'pending'
+      t.timestamps
+    end
   end
 end
 EOF
@@ -204,7 +251,10 @@ curl -vvv https://kubytest.io \
   --retry 5 \
   --retry-max-time 40
 
-# execute remote command
+# insert job
 GLI_DEBUG=true bundle exec kuby -e production remote exec \
-  "bundle exec rails runner 'puts \"Hello from Kuby\"'" \
-  | grep "Hello from Kuby"
+  "bundle exec rails runner 'w = Widget.create(status: \"pending\"); WidgetsJob.perform_async(w.id)'"
+
+GLI_DEBUG=true bundle exec kuby -e production remote exec \
+  "bundle exec rails runner 'w = Widget.first; puts w.status'" \
+  | grep 'processed'

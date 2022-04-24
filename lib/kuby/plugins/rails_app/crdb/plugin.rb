@@ -89,8 +89,6 @@ module Kuby
 
             environment.kubernetes.add_plugin(:crdb)
             environment.kubernetes.add_plugin(:cert_manager)
-
-            configure_pod_spec(rails_app.deployment.spec.template.spec)
           end
 
           def bootstrap
