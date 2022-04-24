@@ -163,6 +163,7 @@ if Rails.env.production?
   end
 end
 EOF
+mkdir -p db/migrate
 cat <<'EOF' > db/migrate/20220423211801_create_widgets.rb
 class CreateWidgets < ActiveRecord::Migration[6.0]
   def change
