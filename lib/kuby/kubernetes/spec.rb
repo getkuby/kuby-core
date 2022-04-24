@@ -71,6 +71,19 @@ module Kuby
       def after_configuration
         @plugins.each { |_, plg| plg.after_configuration }
         provider.after_configuration
+        environment.docker.after_configuration
+
+        spec = self
+
+        # this must be done _after_ docker has been configured
+        registry_secret do
+          docker_config do
+            registry_host spec.docker.image.image_hostname
+            username spec.docker.image.credentials.username
+            password spec.docker.image.credentials.password
+            email spec.docker.image.credentials.email
+          end
+        end
       end
 
       def before_deploy
@@ -191,13 +204,6 @@ module Kuby
           metadata do
             name "#{spec.selector_app}-registry-secret"
             namespace spec.namespace.metadata.name
-          end
-
-          docker_config do
-            registry_host spec.docker.image.image_hostname
-            username spec.docker.image.credentials.username
-            password spec.docker.image.credentials.password
-            email spec.docker.image.credentials.email
           end
         end
 

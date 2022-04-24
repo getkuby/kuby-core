@@ -44,11 +44,17 @@ module SpecHelpers
     )
   end
 
+  let(:on_define_blocks) { [] }
+
+  def on_define(&block)
+    on_define_blocks << block
+  end
+
   let(:definition) do
     context = self
 
     definition = Kuby.define('dummy') do
-      environment(:production) do
+      env = environment(:production) do
         docker do
           credentials do
             username context.docker_username
@@ -71,6 +77,10 @@ module SpecHelpers
             root File.expand_path(File.join(*%w(. dummy)), __dir__)
           end
         end
+      end
+
+      context.on_define_blocks.each do |blk|
+        blk.call(env)
       end
     end
 

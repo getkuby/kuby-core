@@ -91,6 +91,15 @@ module Kuby
           spec = self
 
           deployment do
+            metadata do
+              annotations do
+                add(
+                  'getkuby.io/dockerfile-checksum',
+                  spec.environment.docker.image.dockerfile.checksum
+                )
+              end
+            end
+
             spec do
               template do
                 spec do
@@ -232,13 +241,6 @@ module Kuby
               labels do
                 add :app, kube_spec.selector_app
                 add :role, kube_spec.role
-              end
-
-              annotations do
-                add(
-                  'getkuby.io/dockerfile-checksum',
-                  kube_spec.environment.docker.image.dockerfile.checksum
-                )
               end
             end
 

@@ -12,7 +12,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when the distro is set to Alpine' do
-      before { spec.distro(:alpine) }
+      before do
+        on_define { |env| env.docker.distro(:alpine) }
+      end
 
       it 'uses the Alpine base image' do
         expect(subject).to include("FROM ruby:#{RUBY_VERSION}-alpine\n")
@@ -20,7 +22,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when the base image is set to something custom' do
-      before { spec.base_image('foo/bar') }
+      before do
+        on_define { |env| env.docker.base_image('foo/bar') }
+      end
 
       it 'uses the base image as given' do
         expect(subject).to include("FROM foo/bar\n")
@@ -42,7 +46,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when the working dir is set to something custom' do
-      before { spec.working_dir('/foo/bar') }
+      before do
+        on_define { |env| env.docker.working_dir('/foo/bar') }
+      end
 
       it 'uses the working dir as given' do
         expect(subject).to include("WORKDIR /foo/bar\n")
@@ -59,7 +65,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when the environment is set to something custom' do
-      before { spec.rails_env('foobar') }
+      before do
+        on_define { |env| env.docker.rails_env('foobar') }
+      end
 
       it 'uses the environment as given' do
         expect(subject).to include("ENV RAILS_ENV=foobar\n")
@@ -81,7 +89,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when the bundler version is set to something custom' do
-      before { spec.bundler_version('1.17.3') }
+      before do
+        on_define { |env| env.docker.bundler_version('1.17.3') }
+      end
 
       it 'installs the given version' do
         expect(subject).to include("RUN gem install bundler -v 1.17.3\n")
@@ -99,7 +109,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when the gemfile path is set to something custom' do
-      before { spec.gemfile('foo/bar/Gemfile') }
+      before do
+        on_define { |env| env.docker.gemfile('foo/bar/Gemfile') }
+      end
 
       it 'uses the given gemfile' do
         expect(subject).to include("COPY foo/bar/Gemfile /usr/src/app/foo/bar/Gemfile\n")
@@ -109,7 +121,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when multiple gemfiles are specified' do
-      before { spec.bundler_phase.gemfiles('gemfiles/a.gemfile', 'gemfiles/b.gemfile') }
+      before do
+        on_define { |env| env.docker.bundler_phase.gemfiles('gemfiles/a.gemfile', 'gemfiles/b.gemfile') }
+      end
 
       it 'uses all gemfiles including the default one' do
         expect(subject).to include("COPY Gemfile /usr/src/app/Gemfile\n")
@@ -125,8 +139,10 @@ describe Kuby::Docker::Spec do
     subject { spec.image.dockerfile.to_s }
 
     it 'installs the given package' do
-      # configured in spec_helper.rb
-      spec.package(:fake_package)
+      on_define do |env|
+        # configured in spec_helper.rb
+        env.docker.package(:fake_package)
+      end
 
       expect(subject).to match(/apt-get install .* fake_package/m)
     end
@@ -140,7 +156,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when given a custom path to copy' do
-      before { spec.files('./foo/bar') }
+      before do
+        on_define { |env| env.docker.files('./foo/bar') }
+      end
 
       it 'copies the given paths only' do
         expect(subject).to include("COPY ./foo/bar .\n")
@@ -160,7 +178,9 @@ describe Kuby::Docker::Spec do
     end
 
     context 'when given a custom port' do
-      before { spec.port(5555) }
+      before do
+        on_define { |env| env.docker.port(5555) }
+      end
 
       it 'exposes the given port' do
         expect(subject).to include("EXPOSE 5555\n")
@@ -181,7 +201,9 @@ describe Kuby::Docker::Spec do
           end
         end
 
-        spec.insert :foo_phase, foo_phase.new, after: :webserver_phase
+        on_define do |env|
+          env.docker.insert :foo_phase, foo_phase.new, after: :webserver_phase
+        end
       end
 
       it 'inserts the commands' do
@@ -191,9 +213,11 @@ describe Kuby::Docker::Spec do
 
     context 'with a custom inline build phase' do
       before do
-        spec.insert :hello, after: :webserver_phase do |dockerfile|
-          dockerfile.insert_at(0) do
-            dockerfile.run('echo "foo"')
+        on_define do |env|
+          env.docker.insert :hello, after: :webserver_phase do |dockerfile|
+            dockerfile.insert_at(0) do
+              dockerfile.run('echo "foo"')
+            end
           end
         end
       end

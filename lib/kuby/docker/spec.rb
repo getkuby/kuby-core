@@ -20,6 +20,9 @@ module Kuby
       T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :app_root_path
 
+      T::Sig::WithoutRuntime.sig { returns T.nilable(Docker::AppImage) }
+      attr_reader :image
+
       T::Sig::WithoutRuntime.sig { params(environment: Environment).void }
       def initialize(environment)
         @environment = environment
@@ -161,9 +164,9 @@ module Kuby
         @credentials
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Docker::AppImage) }
-      def image
-        @image ||= begin
+      T::Sig::WithoutRuntime.sig { void }
+      def after_configuration
+        @image = begin
           dockerfile = Dockerfile.new.tap do |df|
             layer_stack.each { |layer| layer.apply_to(df) }
           end
