@@ -17,6 +17,8 @@ printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
 printf "gem 'activerecord-cockroachdb-adapter', '~> 6.0'\n" >> Gemfile
+# printf "gem 'kuby-sidekiq'\n" >> Gemfile
+printf "gem 'sidekiq'\n" >> Gemfile
 
 # for testing, remove all this crap when gems are published
 printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb'\n" >> Gemfile
@@ -26,7 +28,6 @@ printf "gem 'kubernetes-cli', github: 'getkuby/kubernetes-cli'\n" >> Gemfile
 printf "gem 'kuby-redis', github: 'getkuby/kuby-redis'\n" >> Gemfile
 printf "gem 'kuby-sidekiq', github: 'getkuby/kuby-sidekiq'\n" >> Gemfile
 printf "gem 'sorbet-runtime'\n" >> Gemfile
-printf "gem 'sidekiq'\n" >> Gemfile
 
 # install ruby deps
 bundle lock
