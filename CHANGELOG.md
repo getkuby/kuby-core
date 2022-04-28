@@ -34,6 +34,12 @@
 * Add the ability for plugins to define a `#remove` routine, which is meant to do the opposite of whatever `#setup` does.
   - It is now also possible to run a plugin's remove routine from the CLI.
 * Add the ability for plugins to depend on things like Kubernetes and Helm.
+  - Uses semantic versioning and compares required versions to current versions.
+* Avoid using the `which` command to find executables on the current PATH.
+  - `which` has been deprecated in at least one Linux distro (Debian), perhaps others.
+  - Use `Kuby::Utils.which` instead.
+* Support Rails 7.
+  - Don't run `yarn install` if there's no package.json.
 
 ## 0.17.1
 * Allow storage class to be customized when using the built-in bare metal provider.

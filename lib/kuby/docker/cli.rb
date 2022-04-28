@@ -14,7 +14,7 @@ module Kuby
 
       T::Sig::WithoutRuntime.sig { params(executable: T.nilable(String)).void }
       def initialize(executable = nil)
-        @executable = T.let(executable || `which docker`.strip, String)
+        @executable = T.let(executable || Kuby::Utils.which('docker'), String)
       end
 
       T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }

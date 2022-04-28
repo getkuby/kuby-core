@@ -18,13 +18,15 @@ module Kuby
           )
         )
 
-        # use brackets as a hack to only copy the files if they exist
-        dockerfile.copy(
-          "#{host_path}/package.json #{host_path}/yarn.loc[k] #{host_path}/.npmr[c] #{host_path}/.yarnr[c]",
-          container_path
-        )
+        if File.exist?(File.join(host_path, 'package.json'))
+          # use brackets as a hack to only copy the files if they exist
+          dockerfile.copy(
+            "#{host_path}/package.json #{host_path}/yarn.loc[k] #{host_path}/.npmr[c] #{host_path}/.yarnr[c]",
+            container_path
+          )
 
-        dockerfile.run('yarn', 'install', '--cwd', container_path)
+          dockerfile.run('yarn', 'install', '--cwd', container_path)
+        end
       end
 
       private
