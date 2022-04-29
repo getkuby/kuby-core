@@ -29,12 +29,22 @@ module Kuby
           )
         end
 
-        def build(build_args = {}, docker_args = [], context: nil)
-          docker_cli.build(self, build_args: build_args, docker_args: docker_args, context: context)
+        def build(build_args = {}, docker_args = [], context: nil, cache_from: nil)
+          docker_cli.build(
+            self,
+            build_args: build_args,
+            docker_args: docker_args,
+            context: context,
+            cache_from: cache_from
+          )
         end
 
         def push(tag)
           docker_cli.push(image_url, tag)
+        end
+
+        def pull(tag)
+          docker_cli.pull(image_url, tag)
         end
 
         private
