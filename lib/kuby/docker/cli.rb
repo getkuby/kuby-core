@@ -58,16 +58,24 @@ module Kuby
           image: Image,
           build_args: T::Hash[T.any(Symbol, String), String],
           docker_args: T::Array[String],
-          context: T.nilable(String)
+          context: T.nilable(String),
+          cache_from: T.nilable(String)
         ).void
       }
-      def build(image, build_args: {}, docker_args: [], context: nil)
+      def build(image, build_args: {}, docker_args: [], context: nil, cache_from: nil)
         cmd = [
           executable, 'build',
           *image.tags.flat_map { |tag| ['-t', "#{image.image_url}:#{tag}"] },
           *build_args.flat_map do |arg, val|
             ['--build-arg', Shellwords.shellescape("#{arg}=#{val}")]
-          end,
+          end
+        ]
+
+        if cache_from
+          cmd += ['--cache-from', cache_from]
+        end
+
+        cmd += [
           '-f-',
           *docker_args,
           context || '.'

@@ -80,7 +80,7 @@ module Kuby
       puts Kuby::Utils::Table.new(%w(NAME DESCRIPTION), rows).to_s
     end
 
-    def build(build_args = {}, docker_args = [], only: [], ignore_missing_args: false, context: nil)
+    def build(build_args = {}, docker_args = [], only: [], ignore_missing_args: false, context: nil, cache_from_latest: true)
       check_platform(docker_args)
 
       if master_key = rails_app.master_key
@@ -93,9 +93,22 @@ module Kuby
         next unless only.empty? || only.include?(image.identifier)
         return unless perform_docker_login_if_necessary(image)
 
+        build_kwargs = {}
+
+        if cache_from_latest
+          latest_image_url = "#{image.image_url}:#{Kuby::Docker::LATEST_TAG}"
+          Kuby.logger.info("Pulling image #{latest_image_url}")
+
+          begin
+            image.pull(Kuby::Docker::LATEST_TAG)
+            build_kwargs[:cache_from] = latest_image_url
+          rescue Kuby::Docker::PullError
+          end
+        end
+
         image = image.new_version
         Kuby.logger.info("Building image #{image.image_url} with tags #{image.tags.join(', ')}")
-        image.build(build_args, docker_args, context: context)
+        image.build(build_args, docker_args, context: context, **build_kwargs)
       end
     end
 

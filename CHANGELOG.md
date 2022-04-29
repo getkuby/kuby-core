@@ -40,6 +40,7 @@
   - Use `Kuby::Utils.which` instead.
 * Support Rails 7.
   - Don't run `yarn install` if there's no package.json.
+* Automatically cache Docker builds from the latest image, should it exist.
 
 ## 0.17.1
 * Allow storage class to be customized when using the built-in bare metal provider.

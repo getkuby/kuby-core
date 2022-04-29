@@ -116,13 +116,25 @@ module Kuby
         [main_tag, *alias_tags].compact
       end
 
-      T::Sig::WithoutRuntime.sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String], context: T.nilable(String)).void }
-      def build(build_args = {}, docker_args = [], context: nil)
+      T::Sig::WithoutRuntime.sig {
+        params(
+          build_args: T::Hash[String, String],
+          docker_args: T::Array[String],
+          context: T.nilable(String),
+          cache_from: T.nilable(String)
+        ).void
+      }
+      def build(build_args = {}, docker_args = [], context: nil, cache_from: nil)
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
 
       T::Sig::WithoutRuntime.sig { params(tag: String).void }
       def push(tag)
+        raise NotImplementedError, 'please use a Docker::Image subclass'
+      end
+
+      T::Sig::WithoutRuntime.sig { params(tag: String).void }
+      def pull(tag)
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
 

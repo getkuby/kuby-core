@@ -110,7 +110,7 @@ module Kuby
       c.flag [:a, :arg], required: false, multiple: true
 
       c.desc 'When enabled, ignores missing build arguments.'
-      c.switch [:'ignore-missing-args'], required: false, default: false
+      c.switch [:'ignore-missing-args'], required: false, default_value: false
 
       c.desc 'Build only the images associated with the specified identifier(s). '\
              'Run `kuby images` for a list of all valid identifiers (note that '\
@@ -119,6 +119,9 @@ module Kuby
 
       c.desc 'The directory to use as the Docker build context.'
       c.flag [:c, :context], required: false
+
+      c.desc 'Pull the latest images from the registry and reuse any previously built layers.'
+      c.switch [:l, :'cache-from-latest'], required: false, default_value: true
 
       c.action do |global_options, options, docker_args|
         build_args = {}.tap do |build_args|
@@ -133,7 +136,8 @@ module Kuby
           build_args, docker_args,
           only: options[:only],
           ignore_missing_args: options[:'ignore-missing-args'],
-          context: options[:context]
+          context: options[:context],
+          cache_from_latest: options[:'cache-from-latest']
         )
       end
     end
@@ -217,7 +221,7 @@ module Kuby
       c.desc 'Prefixes the kubectl command with the namespace associated with '\
              'the current environment. For example, if the Kuby env is "production", '\
              'this option will prefix the kubectl command with "-n myapp-production".'
-      c.switch [:N, :namespaced], default: false
+      c.switch [:N, :namespaced], default_value: false
       c.action do |global_options, options, args|
         if options[:namespaced]
           # sorry Demeter
@@ -244,7 +248,7 @@ module Kuby
       rc.desc 'List plugins.'
       rc.command :list do |c|
         c.desc 'Show all available plugins, not just the ones in use.'
-        c.switch [:a, :all], default: false
+        c.switch [:a, :all], default_value: false
         c.action do |global_options, options, args|
           tasks.list_plugins(all: options[:all])
         end
