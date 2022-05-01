@@ -7,6 +7,10 @@ slug: /customizing-docker-build
 
 We've already seen the standard way to configure Kuby's Docker component (i.e. the `docker do ... end` section), but there's a lot more you can do.
 
+* `app_root String`: Set your application's root directory. This is useful if the app lives in a separate folder, eg. is a demo app for a gem, etc.
+
+All the other Docker build options are described in the sections below.
+
 ## Installing Additional Packages
 
 Kuby officially supports the Debian and Alpine distros of Linux for Docker images.
@@ -72,17 +76,63 @@ Kuby.define('my-app') do
 end
 ```
 
-## Custom Build Phases
+## Build Phases
 
-Kuby builds Docker images in 7 build phases:
+Kuby builds Docker images in 8 build phases. The options available in the various phases are documented below.
 
-1. **Setup phase**: Defines the Docker base image (eg. ruby:2.6.3, ruby:2.6.3-alpine, etc), sets the working directory, and defines the `KUBY_ENV` and `RAILS_ENV` environment variables.
-1. **Package phase**: Installs packages via the operating system's package manager, eg. `apt-get`, `apk`, `yum`, etc. Popular packages include things like database drivers (eg. libmysqldev, sqlite3-dev), and image processing libraries (eg. imagemagick, graphicsmagick).
-1. **Bundler phase**: Runs `bundle install`, which installs all the Ruby dependencies listed in your app's Gemfile.
-1. **Yarn phase**: Runs `yarn install`, which installs all the JavaScript dependencies listed in your app's package.json.
-1. **Copy phase**: Copies your app's source code into the image.
-1. **Assets phase**: Compiles assets managed by both the asset pipeline and webpacker.
-1. **Webserver phase**: Instructs the Docker image to use a webserver to run your app. Currently only the Rails default, [Puma](https://github.com/puma/puma), is supported (including puma in your Gemfile is all you need to do - no other configuration is necessary).
+### Setup Phase
+
+The setup phase defines the Docker base image (eg. ruby:2.6.3, ruby:2.6.3-alpine, etc), sets the working directory, and defines the `KUBY_ENV` and `RAILS_ENV` environment variables.
+
+* `setup_phase.base_image = String`: Sets the Docker base image on top of which your application's image will be built. Defaults to the official Ruby image for the version of Ruby currently running the `kuby` command.
+* `setup_phase.working_dir = String`: Sets the working directory for the Docker image's filesystem. Application code will be copied into this directory and commands like `bundle install` executed within it. Defaults to /usr/src/app.
+* `setup_phase.rails_env = String`: Sets `RAILS_ENV`. Defaults to the current Kuby env, which is either the value passed to the Kuby CLI tool via the `-e` flag (eg. `kuby -e production ...`), or the value of the `KUBY_ENV` environment variable.
+
+### Package Phase
+
+The package phase installs packages via the operating system's package manager, eg. `apt-get`, `apk`, `yum`, etc. Popular packages include things like database drivers (eg. postgresql-client, sqlite3-dev), and image processing libraries (eg. imagemagick, graphicsmagick).
+
+* `package_phase.add(package_name: Symbol)`: Adds a package by its name. Packages must be registered ahead of time (see above).
+* `package_phase.remove(package_name: Symbol)`: Removes a package by its name.
+
+### Bundler Phase
+
+The Bundler phase installs all the Ruby dependencies listed in your app's Gemfile via Bundler.
+
+* `bundler_phase.version = String`: Sets the version of Bundler to use. Defaults to the current version of Bundler being used to run the `kuby` command.
+* `bundler_phase.gemfile = String`: Sets the path to the Gemfile.
+* `bundler_phase.without = Array[String]`: Sets the array of Bundler groups to be ignored during installation.
+* `bundler_phase.executable = String`: Sets the path to the Bundler executable. Defaults to `bundle`.
+* `bundler_phase.gemfiles(gemfiles: Array[String])`: Specifies additional Gemfiles to be copied into the Docker image before installation. Useful if your main Gemfile references other Gemfiles, eg. via the [`eval_gemfile` method](https://medium.com/alliants-blog/modular-composable-gemfiles-5545c83b5319).
+
+### Yarn Phase
+
+The Yarn phase installs all the JavaScript dependencies listed in your app's package.json via Yarn.
+
+### Copy Phase
+
+The copy phase copies your app's source code into the Docker image.
+
+* `copy_phase << String`: Adds an additional path to copy into the image. Defaults to the current directory (eg: ./)
+
+### App Phase
+
+The app phase allows setting environment variables. These variables will be available to any commands run afterwards in the `docker build` process, but will also be accessible to your application via Ruby's `ENV` hash.
+
+### Assets Phase
+
+The assets phase compiles static assets managed by both the asset pipeline and Webpacker.
+
+* `app_phase.env(key: String, value: String)`: Adds an environment variable.
+
+### Webserver Phase
+
+The webserver phase instructs the Docker image to use a webserver to run your app. Currently only the Rails default, [Puma](https://github.com/puma/puma), is supported (including puma in your Gemfile is all you need to do - no other configuration is necessary).
+
+* `webserver_phase.port = Integer`: Sets the port the webserver should listen on.
+* `webserver_phase.webserver = Symbol`: Sets the webserver to use. Must be `:puma`. Additional webservers may be supported in the future if there is demand. The only reason to set this field manually is if Kuby can't detect Puma in your Gemfile for some reason.
+
+## Creating A Custom Build Phase
 
 Phases are just Ruby classes that respond to the `apply_to(dockerfile)` method. It's possible to define your own custom phases and insert them into the build process. To do so, create a Ruby class and define the appropriate method. Then, insert your new phase. For example, let's define a phase that writes a file into the image that contains the current git commit ID (it can be handy to know which version of your code your image contains). We assume the current git commit is passed as a Docker build argument, since it won't be available to Docker otherwise (in other words, the .git folder won't and shouldn't be copied into the image).
 
@@ -107,46 +157,81 @@ end
 1. `from(image_url, as: nil)`
 1. `workdir(path)`
 1. `env(key, value)`
+1. `arg(arg)` (`arg` is a string of the form `"KEY='value'"`)
 1. `run(command)`
 1. `copy(source, dest, from: nil)`
 1. `expose(port)`
 1. `cmd(command)`
 
-## Docker build options
+Custom build phases can also be inserted inline, without the need to define a class:
 
-You can pass additional build args via the `-a` (`--arg`) flag. For example, you can add a current Git commit info to a container:
-
-```bash
-bundle exec kuby build -a SOURCE_COMMIT=$COMMIT_SHA
+```ruby
+Kuby.define('my-app') do
+  environment(:production) do
+    docker do
+      insert :git_commit_phase, after: :copy_phase do |dockerfile|
+        dockerfile.run('echo $GIT_COMMIT > GIT_COMMIT')
+      end
+    end
+  end
+end
 ```
 
-**NOTE:** You will need to add `ARG SOURCE_COMMIT` and `ENV SOURCE_COMMIT=$SOURCE_COMMIT` to the Dockerfile yourself (see above).
+## Removing Build Phases
 
-By default, `kuby build` builds all the registered Docker images. Sometimes it could be useful to build a particular one. For that, you can use the `--only` option:
+Build phases can be removed entirely. For example, if your app is API-only and doesn't have any static assets, then you may want to remove the asset compilation phase entirely:
 
-```bash
-bundle exec kuby build --only app
+```ruby
+Kuby.define('my-app') do
+  environment(:production) do
+    docker do
+      delete :assets_phase
+    end
+  end
+end
 ```
 
-The value for the `--only` option is an image identifier. You can see it in the output of the `kuby dockerfiles` command:
+## Build Options
+
+It is possible to pass additional build args to `kuby build` via the `-a` (`--arg`) flag. For example, here's how to pass a build arg containing the current Git commit SHA:
 
 ```bash
-$ bundle exec kuby dockerfiles
-
-Dockerfile for #app image my.registry/my/app with tags 20211119151614, latest
-...
+bundle exec kuby build -a SOURCE_COMMIT=$(git rev-parse HEAD)
 ```
+
+**NOTE:** The example above assumes the `SOURCE_COMMIT` build arg has been added via a custom build phase. To be able to access the value of the arg from the Rails app, it must also be exposed as an environment variable. To accomplish both goals, try something like this:
+
+```ruby
+insert :git_commit_arg, after: :setup_phase do |dockerfile|
+  dockerfile.arg('SOURCE_COMMIT')
+  dockerfile.env('SOURCE_COMMIT', '$SOURCE_COMMIT')
+end
+```
+
+### Building Specific Images
+
+By default, `kuby build` builds all the registered Docker images. Sometimes it's useful to build a specific one instead. To do so, pass the `--only` option:
+
+```bash
+bundle exec kuby build --only app  # only build the app image
+```
+
+The value for the `--only` option is an image identifier. A list of all registered images and their identifiers can be obtained via the `kuby images` command.
 
 A similar option is available for the `push` and `dockerfiles` commands, e.g., `kuby push --only app`.
 
-You can also provide arbitrary options to the `docker build` command:
+### Arbitrary `docker build` Options
+
+It is also possible to pass arbitrary options to the `docker build` command:
 
 ```bash
 bundle exec kuby build -- [options]
 ```
 
-For example, you can specify a [custom build target](https://docs.docker.com/engine/reference/commandline/build/#custom-build-outputs):
+For example, to specify a [custom build target](https://docs.docker.com/engine/reference/commandline/build/#custom-build-outputs), try this:
 
 ```bash
 bundle exec kuby build -- --output type=tar,dest=out.tar
 ```
+
+The options given after the `--` will be appended verbatim to the `docker build` command.

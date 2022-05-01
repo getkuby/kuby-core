@@ -13,12 +13,13 @@ module.exports = {
 
     'Customizing Kuby': [
       'customizing-docker-build',
-      'customizing-kubernetes-resources',
+      'understanding-kubernetes',
+      'customizing-deployments',
+      'creating-plugins',
       'environment-variables',
       'managing-secrets',
       'data-stores',
-      'tls-certificates',
-      'creating-plugins'
+      'tls-certificates'
     ]
   },
 };

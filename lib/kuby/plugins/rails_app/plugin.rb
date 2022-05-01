@@ -21,8 +21,7 @@ module Kuby
         DEFAULT_ASSET_PATH = './public'.freeze
 
         value_field :root, default: '.'
-        value_fields :hostname, :tls_enabled
-        value_fields :manage_database, :database, :replicas
+        value_fields :hostname, :tls_enabled, :manage_database, :replicas
         value_fields :asset_url, :packs_url, :asset_path
 
         alias_method :manage_database?, :manage_database

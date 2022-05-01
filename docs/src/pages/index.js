@@ -101,11 +101,6 @@ Kuby.define('my-app') do
 
       add_plugin :rails_app do
         hostname 'mywebsite.com'
-
-        database do
-          user ENV[:DB_USER]
-          password ENV[:DB_PASSWORD]
-        end
       end
     end
   end
@@ -120,11 +115,11 @@ end
                 </p>
                 <h3>Powerful Plugin System</h3>
                 <p>
-                  Kuby features a plugin system that can make adding features like background jobs really easy. For example, add <a href="https://github.com/mperham/sidekiq">Sidekiq</a> integration with a single <code>add_plugin :sidekiq</code> statement. Kuby comes with a bunch of plugins out-of-the-box, with others installable as ruby gems.
+                  Kuby features a plugin system that can make adding features like background jobs really easy. For example, add <a href="https://github.com/getkuby/kuby-sidekiq">Sidekiq</a> integration with a single <code>add_plugin :sidekiq</code> statement. Kuby comes with a bunch of plugins out-of-the-box, with others installable as ruby gems.
                 </p>
                 <h3>Database Support</h3>
                 <p>
-                  Kuby automatically stands up a database for your app based on the contents of your database.yml. Just provide the database credentials and Kuby will do the rest, including automatically connecting to the right host.
+                  Kuby automatically stands up a CockroachDB instance for your app, a cloud-native, Postgres-compatible database engine.
                 </p>
               </div>
             </div>

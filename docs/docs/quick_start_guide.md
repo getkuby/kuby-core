@@ -44,7 +44,7 @@ registry.gitlab.com/<username>/<repo>
 
 **NOTE**: Gitlab's Docker registry requires you to authenticate using a personal or deploy access token instead of your Gitlab password. See their [documentation](https://docs.gitlab.com/ee/user/packages/container_registry/#authenticate-with-the-container-registry) for more information.
 
-## Github
+## GitHub
 
 Github runs a docker registry, available at docker.pkg.github.com. As with Gitlab, you'll need to refer to the registry using the full URL; Github also requires that the image is tagged with the format `:username/:repo/:image_name`, so your URL will look something like
 
@@ -116,11 +116,6 @@ Kuby.define('my-app') do
 
       add_plugin :rails_app do
         hostname 'mywebsite.com'
-
-        database do
-          user app_creds[:DB_USER]
-          password app_creds[:DB_PASSWORD]
-        end
       end
     end
   end
@@ -172,7 +167,7 @@ docker do
 end
 ```
 
-The username, password, and email fields are used to authenticate with the Docker registry that hosts your images. For Gitlab, you'll need to create a [personal access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) instead of your password. The `image_url` field is the full URL to your image, including the registry's domain.
+The username, password, and email fields are used to authenticate with the Docker registry that hosts your images. For GitHub and Gitlab, you'll need to create a personal access token instead of using your password. Here are the docs for [Gitlab](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) and here are the docs for [GitHub](https://docs.github.com/articles/configuring-docker-for-use-with-github-package-registry/). The `image_url` field is the full URL to your Docker image, including the registry's domain.
 
 In the example above, the username, password, and email are all provided by Rails' [encrypted credentials](https://guides.rubyonrails.org/v5.2/security.html#custom-credentials) feature. It's important to remember to **NEVER** hard-code sensitive information (like passwords) in your Kuby config or check it into source control (i.e. git). If you'd rather not use encrypted credentials, consider using a tool like [dotenv](https://github.com/bkeepers/dotenv) to automatically load your secrets into environment variables when your app starts (NOTE: don't check the .env file into git either!)
 
@@ -213,18 +208,9 @@ end
 
 Configuring DNS to point to your Kubernetes cluster is outside the scope of this guide, but all the hosting providers should have tutorials readily available. For example, [here's the one](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars) from DigitalOcean.
 
-Finally, specify your database credentials:
+#### Database Credentials
 
-```ruby
-add_plugin(:rails_app) do
-  hostname 'mywebsite.com'
-
-  database do
-    user app_creds[:DB_USER]
-    password app_creds[:DB_PASSWORD]
-  end
-end
-```
+You may have noticed our Kuby config doesn't contain any mention of database credentials. That's because Kuby automatically creates a set of TLS certificates for communicating with the database instance. Not only is this technique more secure, it's less configuration to worry about. Win win!
 
 ## Deploying
 

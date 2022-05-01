@@ -62,11 +62,13 @@ module.exports = {
     },
     colorMode: {
       defaultMode: 'light',
-      disableSwitch: true
+      disableSwitch: false,
+      respectPrefersColorScheme: true
     },
     prism: {
       additionalLanguages: ['ruby'],
-      theme: require('prism-react-renderer/themes/nightOwl'),
+      theme: require('prism-react-renderer/themes/nightOwlLight'),
+      darkTheme: require('prism-react-renderer/themes/nightOwl'),
     }
   },
   presets: [
