@@ -65,6 +65,10 @@ Kuby.define('my-app') do
       provider :linode do
         # ...
       end
+
+      add_plugin :rails_app do
+        hostname 'myapp.com'
+      end
     end
   end
 
@@ -74,9 +78,25 @@ Kuby.define('my-app') do
     kubernetes do
       # development provider
       provider :kind
+
+      add_plugin :rails_app do
+        # make the app available via localhost
+        hostname 'localhost'
+        tls_enabled false
+      end
     end
   end
 end
 ```
 
 All the Docker config is defined in one place and applied to each environment.
+
+:::tip
+Given the example code above, the Rails app should be available on localhost after being deployed to the local Kind cluster. If you'd rather use the production hostname instead (myapp.com in the example), you'll need to add an entry in your /etc/hosts file. It is also possible to use a tool like `curl` by passing the `Host` header, eg:
+
+```bash
+curl -H 'Host: myapp.com' http://localhost
+```
+
+TLS certificates are not supported by kuby-kind.
+:::
