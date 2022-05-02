@@ -23,8 +23,8 @@ Plugins are just Ruby classes that inherit from `Kuby::Plugin`. The plugin inter
       end
     end
     ```
-1. `setup()`: Called during setup, i.e. whenever the `kuby setup` command is executed.
-1. `remove()`: Should do the opposite of whatever `setup()` does.
+1. `setup()`: Called during setup, i.e. whenever the `kuby setup` command is executed. Since `kuby setup` can be executed multiple times during the lifetime of an application (eg. when new plugins are added, etc), `#setup` routines should be idempotent.
+1. `remove()`: Should do the opposite of whatever `setup()` does. A plugin's `#remove` routine is only invoked when the special `kuby plugin remove [plugin name]` command is executed.
 1. `resources()`: Returns an array of `KubeDSL::DSLObject` objects. See below for additional information regarding creating Kubernetes resource objects.
 1. `docker_images()`: Returns an array of `Kuby::Docker::Image` objects. These images will be built on `kuby build` and pushed on `kuby push`. See below for additional information regarding creating Docker images.
 1. `after_initialize()`: Called by the base `Kuby::Plugin#initialize` method. Designed to avoid forcing the plugin author call `super` in `#initialize`.

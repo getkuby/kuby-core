@@ -122,6 +122,20 @@ Running `kuby deploy` again will result in two worker pods.
 
 To create your own plugins, see the [Creating Plugins](./creating-plugins) page in this guide.
 
+### Setup and Remove Routines
+
+Plugins can define setup and remove routines that are generally used to install and remove cluster-wide resources like Kubernetes operators. As we've seen elsewhere in this guide, setup routines are executed whenever the `kuby setup` command is executed, eg:
+
+```bash
+bundle exec kuby -e production setup
+```
+
+Remove routines are executed much more selectively via the `kuby plugin remove` command:
+
+```bash
+bundle exec kuby -e production plugin remove [plugin name]
+```
+
 ### Rake Tasks
 
 As of kuby-core v0.18, plugins can define [Rake](https://github.com/ruby/rake) tasks.

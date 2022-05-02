@@ -5,13 +5,13 @@ sidebar_label: Managing Secrets
 slug: /managing-secrets
 ---
 
-Secrets are defined as any sensitive configuration data your app needs to run. Secrets include things like 3rd-party API keys, usernames, and passwords. Kubernetes provides a special kind of object, appropriately called a `Secret`, to store secrets.
+Secrets are any sensitive configuration data your app needs to run. Secrets include things like 3rd-party API keys, usernames, and passwords. Kubernetes provides a special kind of object, appropriately called a "secret", to store sensitive data.
 
 ## Rails' Encrypted Credentials
 
 Rails natively provides a way to manage secrets known as the [encrypted credentials](https://edgeguides.rubyonrails.org/security.html#custom-credentials) store. Credentials are encrypted with a master key and stored in config/credentials.yml.enc. Rather than convert this file into a Kubernetes secret, Kuby instead creates a secret that contains only the master key. When your app boots, Kubernetes makes the `RAILS_MASTER_KEY` environment variable available inside the container. Your app can use `Rails.application.credentials` as it normally would without any additional configuration.
 
-During the deploy, Kuby will first attempt to read your master key from the `RAILS_MASTER_KEY` environment variable and fall back to reading the contents of config/master.key. If neither exists, your secrets won't be accessible inside the container. As you'd expect, config/master.key is ignored by git, meaning config/master.key won't exist inside a fresh clone of your codebase. For that reason, make sure you store the master key in a secure location immediately after creating your app with `rails new`. To pass it in during the deploy, try something like this:
+During the deploy, Kuby will first attempt to read your master key from the `RAILS_MASTER_KEY` environment variable and fall back to reading the contents of config/master.key. If neither exists, your secrets won't be accessible inside the container. As you'd expect, config/master.key is ignored by git, meaning config/master.key won't exist inside a fresh clone of your codebase. For that reason, make sure you store the master key in a secure location immediately after creating your app with `rails new`. To make it available during deploys, prepend it to the `kuby deploy` command:
 
 ```bash
 RAILS_MASTER_KEY='abc123' bundle exec kuby -e production deploy

@@ -28,7 +28,7 @@
   - The Rails generator now entirely omits the database configuration section, making config simpler.
 * Avoid failing on first deploy.
   - Previous versions of Kuby did not wait for the database to spin up before attempting to start the Rails app, which resulted in what appeared to be a failed deploy. Kubernetes would eventually sort everything out, but it made for a less than ideal developer experience.
-  - The `create_unless_exists` rake task has been superceded by the `bootstrap` rake task, which is run as an init container whenever the app boots. It is responsible for ensuring the database server is reachable and creating any users defined in the Kuby config.
+  - The `create_unless_exists` rake task has been superceded by the `bootstrap` rake task, which is run in an init container whenever the app boots. It is responsible for ensuring the database server is reachable and creating any users defined in the Kuby config.
 * Add the ability for plugins to define their own set of rake tasks.
   - These are runnable via the CLI.
 * Add the ability for plugins to define a `#remove` routine, which is meant to do the opposite of whatever `#setup` does.
