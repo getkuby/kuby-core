@@ -13,7 +13,59 @@ However, Kuby is also designed to be highly flexible and configurable should the
 
 A **provider** allows Kuby to communicate with a Kubernetes cluster. Cloud service providers like DigitalOcean, AWS, and Azure, offer hosted Kubernetes solutions that make it very easy to create and manage clusters. There are Kuby provider gems for each of these platforms (and more) that facilitate deploying your application. They handle wrangling the necessary configuration parameters and other trivia.
 
+Providers are configured inside the `kubernetes do ... end` block of your Kuby config:
+
+```ruby
+Kuby.define('my-app') do
+  environment(:production) do
+    kubernetes do
+      provider :linode do
+        # Linode-specific configuration options go here.
+        # See the README in getkuby/kuby-linode for details.
+      end
+    end
+  end
+end
+```
+
 Interested in contributing a provider? See the [provider base class](https://github.com/getkuby/kuby-core/blob/ab58f7cc308348ae492a2d37dcf88686d2292917/lib/kuby/kubernetes/provider.rb) for the provider interface.
+
+### Available Provider Gems
+
+Kuby currently offers the following providers, distributed as Rubygems:
+
+* DigitalOcean: [getkuby/kuby-digitalocean](https://github.com/getkuby/kuby-digitalocean)
+* Linode: [getkuby/kuby-linode](https://github.com/getkuby/kuby-linode)
+* Amazon EKS: [getkuby/kuby-eks](https://github.com/getkuby/kuby-eks)
+* Azure AKS: [getkuby/kuby-azure](https://github.com/getkuby/kuby-azure)
+* Kind: [getkuby/kuby-kind](https://github.com/getkuby/kuby-kind)
+
+### The Bare Metal Provider
+
+Kuby comes with a provider out of the box for connecting to arbitrary Kubernetes clusters called the "bare metal" provider. Use this provider if the cloud services company you're using isn't supported by Kuby (i.e. there is no provider gem available), or if you're managing your cluster manually in-house. The bare metal provider requires that you already have a kubeconfig file.
+
+:::info
+The kubeconfig file (so-called because it's usually stored at ~/.kube/config) is a configuration file used by `kubectl` and other tools to communicate securely with a Kubernetes cluster. For more information, see the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
+:::
+
+The bare metal provider supports the following configuration options:
+
+* `kubeconfig(String)`: The path to the kubeconfig file.
+* `storage_class(String)`: The Kubernetes storage class to use for requesting persistent volume storage. Defaults to "hostpath".
+
+Configure the bare metal provider like so:
+
+```ruby
+Kuby.define('my-app') do
+  environment(:production) do
+    kubernetes do
+      provider :bare_metal do
+        kubeconfig '/Users/me/.kube/config'
+      end
+    end
+  end
+end
+```
 
 ## Plugins
 
@@ -69,6 +121,22 @@ end
 Running `kuby deploy` again will result in two worker pods.
 
 To create your own plugins, see the [Creating Plugins](./creating-plugins) page in this guide.
+
+### Rake Tasks
+
+As of kuby-core v0.18, plugins can define [Rake](https://github.com/ruby/rake) tasks.
+
+To see a list of all available tasks, run:
+
+```bash
+bundle exec kuby -e production plugin rake
+```
+
+To run a Rake task, append its name to the command:
+
+```bash
+bundle exec kuby -e production plugin rake <task name>
+```
 
 ## Built-in Plugins
 

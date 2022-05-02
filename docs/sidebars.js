@@ -17,9 +17,7 @@ module.exports = {
       'customizing-deployments',
       'creating-plugins',
       'environment-variables',
-      'managing-secrets',
-      'data-stores',
-      'tls-certificates'
+      'managing-secrets'
     ]
   },
 };
