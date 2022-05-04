@@ -5,8 +5,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { vs, ocean } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import CodeBlock from '@theme/CodeBlock';
 
 function Home() {
   const context = useDocusaurusContext();
@@ -79,9 +78,8 @@ function Home() {
           <div className="container">
             <div className="row">
               <div className={clsx('col col--6')}>
-                <SyntaxHighlighter language="ruby" style={vs} customStyle={{background: undefined}}>
-                  {`
-Kuby.define('my-app') do
+                <CodeBlock language="ruby" customStyle={{background: undefined}}>
+                  {`Kuby.define('my-app') do
   environment(:production) do
     docker do
       credentials do
@@ -104,9 +102,8 @@ Kuby.define('my-app') do
       end
     end
   end
-end
-                  `}
-                </SyntaxHighlighter>
+end`}
+                </CodeBlock>
               </div>
               <div className={clsx('col col--6')}>
                 <h3>Minimal Configuration</h3>
@@ -174,6 +171,10 @@ end
                 </p>
                 <p>
                   Asset compilation and static asset server setup happens transparently during the Docker build and Kubernetes deploy without any additional configuration.
+                </p>
+                <h3>Rails 7 Ready</h3>
+                <p>
+                  Kuby supports all the ways Rails 7 offers for handling static assets, including ES modules, import maps, and of course Sprockets and Webpacker.
                 </p>
               </div>
               <div className={clsx('col col--6', styles.featureImage)}>

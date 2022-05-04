@@ -10,6 +10,7 @@
   text-align: left;
   position: relative;
   overflow: hidden;
+  color: white;
 }
 
 .heroSubBanner {
@@ -73,6 +74,15 @@
 .featureWrapperEven {
   background-color: var(--ifm-color-secondary-lightest);
   padding: 2rem 0;
+}
+
+[data-theme="dark"] .featureWrapperEven {
+  background-color: #404040;
+  color: rgb(246, 247, 248);
+}
+
+[data-theme="dark"] .featureWrapperEven code {
+  background-color: var(--ifm-code-background)
 }
 
 .featureImage img {
