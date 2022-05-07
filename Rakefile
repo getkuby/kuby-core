@@ -4,6 +4,8 @@ require 'curdle'
 
 Curdle::Tasks.install
 
+require 'pry-byebug'
+require 'sorbet-runtime'
 require 'kuby'
 
 task default: :spec

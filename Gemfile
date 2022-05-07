@@ -6,7 +6,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rake'
 
-  gem 'curdle', '~> 1.0'
+  gem 'curdle', '~> 1.2'
   gem 'parlour', github: 'camertron/parlour', branch: 'initialize_void' # '~> 7.0'
   gem 'tapioca', '~> 0.7'
   gem 'sorbet-runtime', '= 0.5.9897'
