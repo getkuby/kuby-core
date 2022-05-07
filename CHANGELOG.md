@@ -1,4 +1,4 @@
-## Next
+## 0.18.0
 * Add the ability to specify your app's root directory.
   - Call `app_root <path>` inside the `docker` section of your Kuby config file.
   - Necessary for use-cases like apps living inside gem repos, etc.
