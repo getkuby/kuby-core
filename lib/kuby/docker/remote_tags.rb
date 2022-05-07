@@ -39,7 +39,7 @@ module Kuby
         []
       end
 
-      T::Sig::WithoutRuntime.sig { returns(T::Array[TimestampTag]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[Kuby::Docker::TimestampTag]) }
       def timestamp_tags
         tags.map { |t| TimestampTag.try_parse(t) }.compact
       end

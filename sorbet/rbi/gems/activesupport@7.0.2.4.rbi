@@ -3202,6 +3202,7 @@ module ERB::Util
   def html_escape_once(s); end
   def json_escape(s); end
   def unwrapped_html_escape(s); end
+  def xml_name_escape(name); end
 
   class << self
     def h(s); end
@@ -3209,6 +3210,7 @@ module ERB::Util
     def html_escape_once(s); end
     def json_escape(s); end
     def unwrapped_html_escape(s); end
+    def xml_name_escape(name); end
   end
 end
 
@@ -3216,6 +3218,10 @@ ERB::Util::HTML_ESCAPE = T.let(T.unsafe(nil), Hash)
 ERB::Util::HTML_ESCAPE_ONCE_REGEXP = T.let(T.unsafe(nil), Regexp)
 ERB::Util::JSON_ESCAPE = T.let(T.unsafe(nil), Hash)
 ERB::Util::JSON_ESCAPE_REGEXP = T.let(T.unsafe(nil), Regexp)
+ERB::Util::TAG_NAME_FOLLOWING_REGEXP = T.let(T.unsafe(nil), Regexp)
+ERB::Util::TAG_NAME_REPLACEMENT_CHAR = T.let(T.unsafe(nil), String)
+ERB::Util::TAG_NAME_START_REGEXP = T.let(T.unsafe(nil), Regexp)
+ERB::Util::TAG_NAME_START_REGEXP_SET = T.let(T.unsafe(nil), String)
 
 module Enumerable
   def as_json(options = T.unsafe(nil)); end
@@ -3274,6 +3280,7 @@ class Hash
   def deep_symbolize_keys!; end
   def deep_transform_keys(&block); end
   def deep_transform_keys!(&block); end
+  def except(*keys); end
   def except!(*keys); end
   def extract!(*keys); end
   def extractable_options?; end
@@ -3339,9 +3346,6 @@ end
 
 IO::EWOULDBLOCKWaitReadable = IO::EAGAINWaitReadable
 IO::EWOULDBLOCKWaitWritable = IO::EAGAINWaitWritable
-IO::PRIORITY = T.let(T.unsafe(nil), Integer)
-IO::READABLE = T.let(T.unsafe(nil), Integer)
-IO::WRITABLE = T.let(T.unsafe(nil), Integer)
 
 class IPAddr
   include ::Comparable
@@ -3372,10 +3376,6 @@ module Kernel
     def suppress(*exception_classes); end
     def with_warnings(flag); end
   end
-end
-
-class LoadError < ::ScriptError
-  include ::DidYouMean::Correctable
 end
 
 class Method
@@ -3471,9 +3471,9 @@ Numeric::TERABYTE = T.let(T.unsafe(nil), Integer)
 class Object < ::BasicObject
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
   include ::ActiveSupport::Dependencies::RequireDependency
-  include ::Kernel
   include ::ActiveSupport::ForkTracker::CoreExt
   include ::ActiveSupport::ForkTracker::CoreExtPrivate
+  include ::Kernel
   include ::JSON::Ext::Generator::GeneratorMethods::Object
   include ::ActiveSupport::Tryable
   include ::PP::ObjectMixin
@@ -3519,8 +3519,6 @@ module Singleton
 
   def duplicable?; end
 end
-
-Singleton::VERSION = T.let(T.unsafe(nil), String)
 
 class String
   include ::Comparable
@@ -3586,6 +3584,7 @@ Struct::Group = Etc::Group
 Struct::Key = Struct
 Struct::MenuInfo = Struct
 Struct::Passwd = Etc::Passwd
+Struct::Tms = Process::Tms
 
 class Symbol
   include ::Comparable
@@ -3620,6 +3619,7 @@ class Time
   def beginning_of_hour; end
   def beginning_of_minute; end
   def blank?; end
+  def ceil(precision = T.unsafe(nil)); end
   def change(options); end
   def compare_with_coercion(other); end
   def end_of_day; end

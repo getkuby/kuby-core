@@ -14,7 +14,7 @@ module Kuby
       T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :registry_index_url
 
-      T::Sig::WithoutRuntime.sig { returns(Credentials) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::Credentials) }
       attr_reader :credentials
 
       T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
@@ -25,9 +25,9 @@ module Kuby
 
       T::Sig::WithoutRuntime.sig {
         params(
-          dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
+          dockerfile: T.any(Dockerfile, T.proc.returns(Kuby::Docker::Dockerfile)),
           image_url: String,
-          credentials: Credentials,
+          credentials: Kuby::Docker::Credentials,
           registry_index_url: T.nilable(String),
           main_tag: T.nilable(String),
           alias_tags: T::Array[String]
@@ -52,12 +52,12 @@ module Kuby
         @docker_cli = T.let(@docker_cli, T.nilable(Docker::CLI))
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Image) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::Image) }
       def new_version
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Image) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::Image) }
       def current_version
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
@@ -67,7 +67,7 @@ module Kuby
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Dockerfile) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::Dockerfile) }
       def dockerfile
         if @dockerfile.respond_to?(:call)
           T.cast(@dockerfile, T.proc.returns(Dockerfile)).call
@@ -101,12 +101,12 @@ module Kuby
         @image_repo ||= image_uri.path
       end
 
-      T::Sig::WithoutRuntime.sig { returns(DockerURI) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::DockerURI) }
       def image_uri
         @full_image_uri ||= DockerURI.parse_uri(image_url)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(DockerURI) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::DockerURI) }
       def registry_index_uri
         @registry_index_uri ||= DockerURI.parse_index_uri(registry_index_url || image_url)
       end
@@ -138,7 +138,7 @@ module Kuby
         raise NotImplementedError, 'please use a Docker::Image subclass'
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Docker::CLI) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::CLI) }
       def docker_cli
         @docker_cli ||= Docker::CLI.new
       end

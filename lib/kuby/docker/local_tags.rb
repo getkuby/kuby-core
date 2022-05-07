@@ -5,7 +5,7 @@ module Kuby
     class LocalTags
       extend T::Sig
 
-      T::Sig::WithoutRuntime.sig { returns CLI }
+      T::Sig::WithoutRuntime.sig { returns Kuby::Docker::CLI }
       attr_reader :cli
 
       T::Sig::WithoutRuntime.sig { returns(String) }
@@ -13,7 +13,7 @@ module Kuby
 
       T::Sig::WithoutRuntime.sig {
         params(
-          cli: CLI,
+          cli: Kuby::Docker::CLI,
           image_url: String
         )
         .void
@@ -48,12 +48,12 @@ module Kuby
         end
       end
 
-      T::Sig::WithoutRuntime.sig { returns(T::Array[TimestampTag]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[Kuby::Docker::TimestampTag]) }
       def timestamp_tags
         tags.map { |t| TimestampTag.try_parse(t) }.compact
       end
 
-      T::Sig::WithoutRuntime.sig { returns(T.nilable(TimestampTag)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(Kuby::Docker::TimestampTag)) }
       def latest_timestamp_tag
         @latest_timestamp_tag ||= timestamp_tags.sort.last
       end

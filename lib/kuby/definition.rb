@@ -17,7 +17,7 @@ module Kuby
       params(
         name: Symbol,
         block: T.nilable(T.proc.void)
-      ).returns(Environment)
+      ).returns(Kuby::Environment)
     }
     def environment(name = Kuby.env, &block)
       name = name.to_s
@@ -31,7 +31,7 @@ module Kuby
       T.must(environments[name])
     end
 
-    T::Sig::WithoutRuntime.sig { returns(T::Hash[Symbol, Environment]) }
+    T::Sig::WithoutRuntime.sig { returns(T::Hash[Symbol, Kuby::Environment]) }
     def environments
       @environments ||= {}
     end

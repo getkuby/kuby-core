@@ -6,14 +6,14 @@ module Kuby
       extend T::Sig
       extend T::Generic
 
-      Elem = type_member { { fixed: Layer } }
+      Elem = type_member { { fixed: Kuby::Docker::Layer } }
 
       include Enumerable
 
       T::Sig::WithoutRuntime.sig { returns(T::Array[Symbol]) }
       attr_reader :stack
 
-      T::Sig::WithoutRuntime.sig { returns(T::Hash[Symbol, Layer]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Hash[Symbol, Kuby::Docker::Layer]) }
       attr_reader :layers
 
       T::Sig::WithoutRuntime.sig { void }
@@ -24,7 +24,7 @@ module Kuby
 
       T::Sig::WithoutRuntime.sig {
         override.params(
-          block: T.nilable(T.proc.params(layer: Layer).void)
+          block: T.nilable(T.proc.params(layer: Kuby::Docker::Layer).void)
         )
         .void
       }
@@ -37,7 +37,7 @@ module Kuby
         params(
           name: Symbol,
           layer: T.nilable(Layer),
-          block: T.nilable(T.proc.params(df: Dockerfile).void)
+          block: T.nilable(T.proc.params(df: Kuby::Docker::Dockerfile).void)
         )
         .void
       }
@@ -58,7 +58,7 @@ module Kuby
           name: Symbol,
           layer: T.nilable(T.any(Layer, T::Hash[Symbol, T.untyped])),
           options: T::Hash[Symbol, T.untyped],
-          block: T.nilable(T.proc.params(df: Dockerfile).void)
+          block: T.nilable(T.proc.params(df: Kuby::Docker::Dockerfile).void)
         )
         .void
       }

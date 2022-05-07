@@ -1,6 +1,5 @@
 # typed: ignore
 
-require 'sorbet-runtime-stub'
 require 'kuby/railtie'
 require 'kubectl-rb/version'
 require 'helm-rb/version'

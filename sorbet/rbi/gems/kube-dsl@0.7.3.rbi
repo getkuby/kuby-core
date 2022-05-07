@@ -74,9 +74,16 @@ module KubeDSL::DSL::Admissionregistration; end
 module KubeDSL::DSL::Admissionregistration::V1; end
 
 class KubeDSL::DSL::Admissionregistration::V1::MutatingWebhook < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def admission_review_versions(*args); end
   def client_config(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def client_config_present?; end
+
   def failure_policy(*args); end
 
   sig { returns(Symbol) }
@@ -85,9 +92,15 @@ class KubeDSL::DSL::Admissionregistration::V1::MutatingWebhook < ::KubeDSL::DSLO
   def match_policy(*args); end
   def name(*args); end
   def namespace_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def namespace_selector_present?; end
+
   def object_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def object_selector_present?; end
+
   def reinvocation_policy(*args); end
   def rule(elem_name = T.unsafe(nil), &block); end
   def rules; end
@@ -102,10 +115,16 @@ class KubeDSL::DSL::Admissionregistration::V1::MutatingWebhook < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Admissionregistration::V1::MutatingWebhookConfiguration < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -118,6 +137,10 @@ class KubeDSL::DSL::Admissionregistration::V1::MutatingWebhookConfiguration < ::
 end
 
 class KubeDSL::DSL::Admissionregistration::V1::MutatingWebhookConfigurationList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -125,6 +148,8 @@ class KubeDSL::DSL::Admissionregistration::V1::MutatingWebhookConfigurationList 
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -134,6 +159,10 @@ class KubeDSL::DSL::Admissionregistration::V1::MutatingWebhookConfigurationList 
 end
 
 class KubeDSL::DSL::Admissionregistration::V1::RuleWithOperations < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_groups(*args); end
   def api_versions(*args); end
 
@@ -151,6 +180,10 @@ class KubeDSL::DSL::Admissionregistration::V1::RuleWithOperations < ::KubeDSL::D
 end
 
 class KubeDSL::DSL::Admissionregistration::V1::ServiceReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -166,9 +199,16 @@ class KubeDSL::DSL::Admissionregistration::V1::ServiceReference < ::KubeDSL::DSL
 end
 
 class KubeDSL::DSL::Admissionregistration::V1::ValidatingWebhook < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def admission_review_versions(*args); end
   def client_config(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def client_config_present?; end
+
   def failure_policy(*args); end
 
   sig { returns(Symbol) }
@@ -177,9 +217,15 @@ class KubeDSL::DSL::Admissionregistration::V1::ValidatingWebhook < ::KubeDSL::DS
   def match_policy(*args); end
   def name(*args); end
   def namespace_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def namespace_selector_present?; end
+
   def object_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def object_selector_present?; end
+
   def rule(elem_name = T.unsafe(nil), &block); end
   def rules; end
 
@@ -193,10 +239,16 @@ class KubeDSL::DSL::Admissionregistration::V1::ValidatingWebhook < ::KubeDSL::DS
 end
 
 class KubeDSL::DSL::Admissionregistration::V1::ValidatingWebhookConfiguration < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -209,6 +261,10 @@ class KubeDSL::DSL::Admissionregistration::V1::ValidatingWebhookConfiguration < 
 end
 
 class KubeDSL::DSL::Admissionregistration::V1::ValidatingWebhookConfigurationList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -216,6 +272,8 @@ class KubeDSL::DSL::Admissionregistration::V1::ValidatingWebhookConfigurationLis
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -225,6 +283,10 @@ class KubeDSL::DSL::Admissionregistration::V1::ValidatingWebhookConfigurationLis
 end
 
 class KubeDSL::DSL::Admissionregistration::V1::WebhookClientConfig < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def ca_bundle(*args); end
 
   sig { returns(Symbol) }
@@ -236,7 +298,10 @@ class KubeDSL::DSL::Admissionregistration::V1::WebhookClientConfig < ::KubeDSL::
   def serialize; end
 
   def service(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def service_present?; end
+
   def url(*args); end
 end
 
@@ -244,6 +309,10 @@ module KubeDSL::DSL::Apiextensions; end
 module KubeDSL::DSL::Apiextensions::V1; end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceColumnDefinition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def description(*args); end
   def format(*args); end
   def json_path(*args); end
@@ -263,6 +332,10 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceColumnDefinition < ::KubeDS
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceConversion < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -273,14 +346,22 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceConversion < ::KubeDSL::DSL
 
   def strategy(*args); end
   def webhook(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def webhook_present?; end
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -289,12 +370,21 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinition < ::KubeDSL::DSL
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -312,6 +402,10 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionCondition < ::Kub
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -319,6 +413,8 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionList < ::KubeDSL:
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -328,6 +424,10 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionList < ::KubeDSL:
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionNames < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def categories(*args); end
   def kind(*args); end
 
@@ -347,15 +447,25 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionNames < ::KubeDSL
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def conversion(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def conversion_present?; end
+
   def group(*args); end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def names(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def names_present?; end
+
   def preserve_unknown_fields(*args); end
   def scope(*args); end
 
@@ -369,8 +479,15 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionSpec < ::KubeDSL:
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def accepted_names(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def accepted_names_present?; end
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
 
@@ -386,6 +503,10 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionStatus < ::KubeDS
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionVersion < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def additional_printer_column(elem_name = T.unsafe(nil), &block); end
   def additional_printer_columns; end
   def deprecated(*args); end
@@ -396,6 +517,8 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionVersion < ::KubeD
 
   def name(*args); end
   def schema(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def schema_present?; end
 
   sig do
@@ -406,10 +529,16 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceDefinitionVersion < ::KubeD
   def served(*args); end
   def storage(*args); end
   def subresources(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def subresources_present?; end
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceSubresourceScale < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -425,10 +554,16 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceSubresourceScale < ::KubeDS
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceSubresources < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def scale(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scale_present?; end
 
   sig do
@@ -440,10 +575,16 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceSubresources < ::KubeDSL::D
 end
 
 class KubeDSL::DSL::Apiextensions::V1::CustomResourceValidation < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def open_apiv3_schema(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def open_apiv3_schema_present?; end
 
   sig do
@@ -453,6 +594,10 @@ class KubeDSL::DSL::Apiextensions::V1::CustomResourceValidation < ::KubeDSL::DSL
 end
 
 class KubeDSL::DSL::Apiextensions::V1::ExternalDocumentation < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def description(*args); end
 
   sig { returns(Symbol) }
@@ -484,6 +629,10 @@ class KubeDSL::DSL::Apiextensions::V1::JSON < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apiextensions::V1::JSONSchemaProps < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def additional_items(*args); end
   def additional_properties(*args); end
   def all_of(elem_name = T.unsafe(nil), &block); end
@@ -532,7 +681,10 @@ class KubeDSL::DSL::Apiextensions::V1::JSONSchemaProps < ::KubeDSL::DSLObject
   def exclusive_maximum(*args); end
   def exclusive_minimum(*args); end
   def external_docs(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def external_docs_present?; end
+
   def format(*args); end
   def id(*args); end
   def items(*args); end
@@ -550,7 +702,10 @@ class KubeDSL::DSL::Apiextensions::V1::JSONSchemaProps < ::KubeDSL::DSLObject
   def minimum(*args); end
   def multiple_of(*args); end
   def not_field(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def not_field_present?; end
+
   def nullable(*args); end
   def one_of(elem_name = T.unsafe(nil), &block); end
 
@@ -590,6 +745,10 @@ class KubeDSL::DSL::Apiextensions::V1::JSONSchemaProps < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apiextensions::V1::ServiceReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -605,6 +764,10 @@ class KubeDSL::DSL::Apiextensions::V1::ServiceReference < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apiextensions::V1::WebhookClientConfig < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def ca_bundle(*args); end
 
   sig { returns(Symbol) }
@@ -616,13 +779,23 @@ class KubeDSL::DSL::Apiextensions::V1::WebhookClientConfig < ::KubeDSL::DSLObjec
   def serialize; end
 
   def service(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def service_present?; end
+
   def url(*args); end
 end
 
 class KubeDSL::DSL::Apiextensions::V1::WebhookConversion < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def client_config(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def client_config_present?; end
+
   def conversion_review_versions(*args); end
 
   sig { returns(Symbol) }
@@ -638,10 +811,16 @@ module KubeDSL::DSL::Apiregistration; end
 module KubeDSL::DSL::Apiregistration::V1; end
 
 class KubeDSL::DSL::Apiregistration::V1::APIService < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -650,12 +829,21 @@ class KubeDSL::DSL::Apiregistration::V1::APIService < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Apiregistration::V1::APIServiceCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -673,6 +861,10 @@ class KubeDSL::DSL::Apiregistration::V1::APIServiceCondition < ::KubeDSL::DSLObj
 end
 
 class KubeDSL::DSL::Apiregistration::V1::APIServiceList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -680,6 +872,8 @@ class KubeDSL::DSL::Apiregistration::V1::APIServiceList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -689,6 +883,10 @@ class KubeDSL::DSL::Apiregistration::V1::APIServiceList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apiregistration::V1::APIServiceSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def ca_bundle(*args); end
   def group(*args); end
   def group_priority_minimum(*args); end
@@ -703,12 +901,19 @@ class KubeDSL::DSL::Apiregistration::V1::APIServiceSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def service(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def service_present?; end
+
   def version(*args); end
   def version_priority(*args); end
 end
 
 class KubeDSL::DSL::Apiregistration::V1::APIServiceStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
 
@@ -722,6 +927,10 @@ class KubeDSL::DSL::Apiregistration::V1::APIServiceStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apiregistration::V1::ServiceReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -739,6 +948,10 @@ module KubeDSL::DSL::Apiserverinternal; end
 module KubeDSL::DSL::Apiserverinternal::V1alpha1; end
 
 class KubeDSL::DSL::Apiserverinternal::V1alpha1::ServerStorageVersion < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_server_id(*args); end
   def decodable_versions(*args); end
   def encoding_version(*args); end
@@ -753,10 +966,16 @@ class KubeDSL::DSL::Apiserverinternal::V1alpha1::ServerStorageVersion < ::KubeDS
 end
 
 class KubeDSL::DSL::Apiserverinternal::V1alpha1::StorageVersion < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -766,10 +985,16 @@ class KubeDSL::DSL::Apiserverinternal::V1alpha1::StorageVersion < ::KubeDSL::DSL
 
   def spec(*args); end
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Apiserverinternal::V1alpha1::StorageVersionCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -788,6 +1013,10 @@ class KubeDSL::DSL::Apiserverinternal::V1alpha1::StorageVersionCondition < ::Kub
 end
 
 class KubeDSL::DSL::Apiserverinternal::V1alpha1::StorageVersionList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -795,6 +1024,8 @@ class KubeDSL::DSL::Apiserverinternal::V1alpha1::StorageVersionList < ::KubeDSL:
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -804,6 +1035,10 @@ class KubeDSL::DSL::Apiserverinternal::V1alpha1::StorageVersionList < ::KubeDSL:
 end
 
 class KubeDSL::DSL::Apiserverinternal::V1alpha1::StorageVersionStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def common_encoding_version(*args); end
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
@@ -824,13 +1059,20 @@ module KubeDSL::DSL::Apps; end
 module KubeDSL::DSL::Apps::V1; end
 
 class KubeDSL::DSL::Apps::V1::ControllerRevision < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def data(*args); end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def revision(*args); end
 
   sig do
@@ -840,6 +1082,10 @@ class KubeDSL::DSL::Apps::V1::ControllerRevision < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::ControllerRevisionList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -847,6 +1093,8 @@ class KubeDSL::DSL::Apps::V1::ControllerRevisionList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -856,10 +1104,16 @@ class KubeDSL::DSL::Apps::V1::ControllerRevisionList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::DaemonSet < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -868,12 +1122,21 @@ class KubeDSL::DSL::Apps::V1::DaemonSet < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Apps::V1::DaemonSetCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -891,6 +1154,10 @@ class KubeDSL::DSL::Apps::V1::DaemonSetCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::DaemonSetList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -898,6 +1165,8 @@ class KubeDSL::DSL::Apps::V1::DaemonSetList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -907,12 +1176,18 @@ class KubeDSL::DSL::Apps::V1::DaemonSetList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::DaemonSetSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def min_ready_seconds(*args); end
   def revision_history_limit(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -921,12 +1196,21 @@ class KubeDSL::DSL::Apps::V1::DaemonSetSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def template_present?; end
+
   def update_strategy(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def update_strategy_present?; end
 end
 
 class KubeDSL::DSL::Apps::V1::DaemonSetStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def collision_count(*args); end
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
@@ -951,10 +1235,16 @@ class KubeDSL::DSL::Apps::V1::DaemonSetStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::DaemonSetUpdateStrategy < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def rolling_update(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def rolling_update_present?; end
 
   sig do
@@ -966,10 +1256,16 @@ class KubeDSL::DSL::Apps::V1::DaemonSetUpdateStrategy < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::Deployment < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -978,12 +1274,21 @@ class KubeDSL::DSL::Apps::V1::Deployment < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Apps::V1::DeploymentCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1002,6 +1307,10 @@ class KubeDSL::DSL::Apps::V1::DeploymentCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::DeploymentList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -1009,6 +1318,8 @@ class KubeDSL::DSL::Apps::V1::DeploymentList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1018,6 +1329,10 @@ class KubeDSL::DSL::Apps::V1::DeploymentList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::DeploymentSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1027,6 +1342,8 @@ class KubeDSL::DSL::Apps::V1::DeploymentSpec < ::KubeDSL::DSLObject
   def replicas(*args); end
   def revision_history_limit(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -1035,12 +1352,21 @@ class KubeDSL::DSL::Apps::V1::DeploymentSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def strategy(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def strategy_present?; end
+
   def template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def template_present?; end
 end
 
 class KubeDSL::DSL::Apps::V1::DeploymentStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def available_replicas(*args); end
   def collision_count(*args); end
   def condition(elem_name = T.unsafe(nil), &block); end
@@ -1063,10 +1389,16 @@ class KubeDSL::DSL::Apps::V1::DeploymentStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::DeploymentStrategy < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def rolling_update(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def rolling_update_present?; end
 
   sig do
@@ -1078,10 +1410,16 @@ class KubeDSL::DSL::Apps::V1::DeploymentStrategy < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::ReplicaSet < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1090,12 +1428,21 @@ class KubeDSL::DSL::Apps::V1::ReplicaSet < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Apps::V1::ReplicaSetCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1113,6 +1460,10 @@ class KubeDSL::DSL::Apps::V1::ReplicaSetCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::ReplicaSetList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -1120,6 +1471,8 @@ class KubeDSL::DSL::Apps::V1::ReplicaSetList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1129,12 +1482,18 @@ class KubeDSL::DSL::Apps::V1::ReplicaSetList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::ReplicaSetSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def min_ready_seconds(*args); end
   def replicas(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -1143,10 +1502,16 @@ class KubeDSL::DSL::Apps::V1::ReplicaSetSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def template_present?; end
 end
 
 class KubeDSL::DSL::Apps::V1::ReplicaSetStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def available_replicas(*args); end
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
@@ -1166,6 +1531,10 @@ class KubeDSL::DSL::Apps::V1::ReplicaSetStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::RollingUpdateDaemonSet < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1179,6 +1548,10 @@ class KubeDSL::DSL::Apps::V1::RollingUpdateDaemonSet < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::RollingUpdateDeployment < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1192,6 +1565,10 @@ class KubeDSL::DSL::Apps::V1::RollingUpdateDeployment < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::RollingUpdateStatefulSetStrategy < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1204,10 +1581,16 @@ class KubeDSL::DSL::Apps::V1::RollingUpdateStatefulSetStrategy < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Apps::V1::StatefulSet < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1216,12 +1599,21 @@ class KubeDSL::DSL::Apps::V1::StatefulSet < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Apps::V1::StatefulSetCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1239,6 +1631,10 @@ class KubeDSL::DSL::Apps::V1::StatefulSetCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::StatefulSetList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -1246,6 +1642,8 @@ class KubeDSL::DSL::Apps::V1::StatefulSetList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1255,6 +1653,10 @@ class KubeDSL::DSL::Apps::V1::StatefulSetList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::StatefulSetSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1263,6 +1665,8 @@ class KubeDSL::DSL::Apps::V1::StatefulSetSpec < ::KubeDSL::DSLObject
   def replicas(*args); end
   def revision_history_limit(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -1272,14 +1676,24 @@ class KubeDSL::DSL::Apps::V1::StatefulSetSpec < ::KubeDSL::DSLObject
 
   def service_name(*args); end
   def template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def template_present?; end
+
   def update_strategy(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def update_strategy_present?; end
+
   def volume_claim_template(elem_name = T.unsafe(nil), &block); end
   def volume_claim_templates; end
 end
 
 class KubeDSL::DSL::Apps::V1::StatefulSetStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def available_replicas(*args); end
   def collision_count(*args); end
   def condition(elem_name = T.unsafe(nil), &block); end
@@ -1304,10 +1718,16 @@ class KubeDSL::DSL::Apps::V1::StatefulSetStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Apps::V1::StatefulSetUpdateStrategy < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def rolling_update(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def rolling_update_present?; end
 
   sig do
@@ -1322,6 +1742,10 @@ module KubeDSL::DSL::Authentication; end
 module KubeDSL::DSL::Authentication::V1; end
 
 class KubeDSL::DSL::Authentication::V1::BoundObjectReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def kind(*args); end
 
@@ -1339,10 +1763,16 @@ class KubeDSL::DSL::Authentication::V1::BoundObjectReference < ::KubeDSL::DSLObj
 end
 
 class KubeDSL::DSL::Authentication::V1::TokenRequest < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1351,15 +1781,27 @@ class KubeDSL::DSL::Authentication::V1::TokenRequest < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Authentication::V1::TokenRequestSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def audiences(*args); end
   def bound_object_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def bound_object_ref_present?; end
+
   def expiration_seconds(*args); end
 
   sig { returns(Symbol) }
@@ -1372,6 +1814,10 @@ class KubeDSL::DSL::Authentication::V1::TokenRequestSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Authentication::V1::TokenRequestStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def expiration_timestamp(*args); end
 
   sig { returns(Symbol) }
@@ -1386,10 +1832,16 @@ class KubeDSL::DSL::Authentication::V1::TokenRequestStatus < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Authentication::V1::TokenReview < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1398,12 +1850,21 @@ class KubeDSL::DSL::Authentication::V1::TokenReview < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Authentication::V1::TokenReviewSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def audiences(*args); end
 
   sig { returns(Symbol) }
@@ -1418,6 +1879,10 @@ class KubeDSL::DSL::Authentication::V1::TokenReviewSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Authentication::V1::TokenReviewStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def audiences(*args); end
   def authenticated(*args); end
   def error(*args); end
@@ -1431,10 +1896,16 @@ class KubeDSL::DSL::Authentication::V1::TokenReviewStatus < ::KubeDSL::DSLObject
   def serialize; end
 
   def user(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def user_present?; end
 end
 
 class KubeDSL::DSL::Authentication::V1::UserInfo < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def extra(&block); end
 
@@ -1456,10 +1927,16 @@ module KubeDSL::DSL::Authorization; end
 module KubeDSL::DSL::Authorization::V1; end
 
 class KubeDSL::DSL::Authorization::V1::LocalSubjectAccessReview < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1468,12 +1945,21 @@ class KubeDSL::DSL::Authorization::V1::LocalSubjectAccessReview < ::KubeDSL::DSL
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Authorization::V1::NonResourceAttributes < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1488,6 +1974,10 @@ class KubeDSL::DSL::Authorization::V1::NonResourceAttributes < ::KubeDSL::DSLObj
 end
 
 class KubeDSL::DSL::Authorization::V1::NonResourceRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1502,6 +1992,10 @@ class KubeDSL::DSL::Authorization::V1::NonResourceRule < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Authorization::V1::ResourceAttributes < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def group(*args); end
 
   sig { returns(Symbol) }
@@ -1522,6 +2016,10 @@ class KubeDSL::DSL::Authorization::V1::ResourceAttributes < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Authorization::V1::ResourceRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_groups(*args); end
 
   sig { returns(Symbol) }
@@ -1539,10 +2037,16 @@ class KubeDSL::DSL::Authorization::V1::ResourceRule < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Authorization::V1::SelfSubjectAccessReview < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1551,18 +2055,32 @@ class KubeDSL::DSL::Authorization::V1::SelfSubjectAccessReview < ::KubeDSL::DSLO
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Authorization::V1::SelfSubjectAccessReviewSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def non_resource_attributes(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def non_resource_attributes_present?; end
+
   def resource_attributes(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_attributes_present?; end
 
   sig do
@@ -1572,10 +2090,16 @@ class KubeDSL::DSL::Authorization::V1::SelfSubjectAccessReviewSpec < ::KubeDSL::
 end
 
 class KubeDSL::DSL::Authorization::V1::SelfSubjectRulesReview < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1584,12 +2108,21 @@ class KubeDSL::DSL::Authorization::V1::SelfSubjectRulesReview < ::KubeDSL::DSLOb
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Authorization::V1::SelfSubjectRulesReviewSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1602,10 +2135,16 @@ class KubeDSL::DSL::Authorization::V1::SelfSubjectRulesReviewSpec < ::KubeDSL::D
 end
 
 class KubeDSL::DSL::Authorization::V1::SubjectAccessReview < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1614,12 +2153,21 @@ class KubeDSL::DSL::Authorization::V1::SubjectAccessReview < ::KubeDSL::DSLObjec
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Authorization::V1::SubjectAccessReviewSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def extra(&block); end
 
@@ -1629,8 +2177,13 @@ class KubeDSL::DSL::Authorization::V1::SubjectAccessReviewSpec < ::KubeDSL::DSLO
   def kind_sym; end
 
   def non_resource_attributes(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def non_resource_attributes_present?; end
+
   def resource_attributes(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_attributes_present?; end
 
   sig do
@@ -1643,6 +2196,10 @@ class KubeDSL::DSL::Authorization::V1::SubjectAccessReviewSpec < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Authorization::V1::SubjectAccessReviewStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def allowed(*args); end
   def denied(*args); end
   def evaluation_error(*args); end
@@ -1659,6 +2216,10 @@ class KubeDSL::DSL::Authorization::V1::SubjectAccessReviewStatus < ::KubeDSL::DS
 end
 
 class KubeDSL::DSL::Authorization::V1::SubjectRulesReviewStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def evaluation_error(*args); end
   def incomplete(*args); end
 
@@ -1680,6 +2241,10 @@ module KubeDSL::DSL::Autoscaling; end
 module KubeDSL::DSL::Autoscaling::V1; end
 
 class KubeDSL::DSL::Autoscaling::V1::CrossVersionObjectReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def kind(*args); end
 
@@ -1695,10 +2260,16 @@ class KubeDSL::DSL::Autoscaling::V1::CrossVersionObjectReference < ::KubeDSL::DS
 end
 
 class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscaler < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1707,12 +2278,21 @@ class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscaler < ::KubeDSL::DSLObj
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscalerList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -1720,6 +2300,8 @@ class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscalerList < ::KubeDSL::DS
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1729,12 +2311,18 @@ class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscalerList < ::KubeDSL::DS
 end
 
 class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscalerSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def max_replicas(*args); end
   def min_replicas(*args); end
   def scale_target_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scale_target_ref_present?; end
 
   sig do
@@ -1746,6 +2334,10 @@ class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscalerSpec < ::KubeDSL::DS
 end
 
 class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscalerStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def current_cpu_utilization_percentage(*args); end
   def current_replicas(*args); end
   def desired_replicas(*args); end
@@ -1763,10 +2355,16 @@ class KubeDSL::DSL::Autoscaling::V1::HorizontalPodAutoscalerStatus < ::KubeDSL::
 end
 
 class KubeDSL::DSL::Autoscaling::V1::Scale < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1775,12 +2373,21 @@ class KubeDSL::DSL::Autoscaling::V1::Scale < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V1::ScaleSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1793,6 +2400,10 @@ class KubeDSL::DSL::Autoscaling::V1::ScaleSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Autoscaling::V1::ScaleStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1808,6 +2419,10 @@ end
 module KubeDSL::DSL::Autoscaling::V2beta1; end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::ContainerResourceMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container(*args); end
 
   sig { returns(Symbol) }
@@ -1825,6 +2440,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ContainerResourceMetricSource < ::Kube
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::ContainerResourceMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container(*args); end
   def current_average_utilization(*args); end
   def current_average_value(*args); end
@@ -1841,6 +2460,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ContainerResourceMetricStatus < ::Kube
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::CrossVersionObjectReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def kind(*args); end
 
@@ -1856,11 +2479,17 @@ class KubeDSL::DSL::Autoscaling::V2beta1::CrossVersionObjectReference < ::KubeDS
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::ExternalMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metric_name(*args); end
   def metric_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metric_selector_present?; end
 
   sig do
@@ -1873,6 +2502,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ExternalMetricSource < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::ExternalMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def current_average_value(*args); end
   def current_value(*args); end
 
@@ -1881,6 +2514,8 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ExternalMetricStatus < ::KubeDSL::DSLO
 
   def metric_name(*args); end
   def metric_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metric_selector_present?; end
 
   sig do
@@ -1890,10 +2525,16 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ExternalMetricStatus < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscaler < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1902,12 +2543,21 @@ class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscaler < ::KubeDSL::D
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1925,6 +2575,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerCondition < ::K
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -1932,6 +2586,8 @@ class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerList < ::KubeDS
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -1941,6 +2597,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerList < ::KubeDS
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -1949,6 +2609,8 @@ class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerSpec < ::KubeDS
   def metrics; end
   def min_replicas(*args); end
   def scale_target_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scale_target_ref_present?; end
 
   sig do
@@ -1958,6 +2620,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerSpec < ::KubeDS
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
   def current_metric(elem_name = T.unsafe(nil), &block); end
@@ -1978,19 +2644,36 @@ class KubeDSL::DSL::Autoscaling::V2beta1::HorizontalPodAutoscalerStatus < ::Kube
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::MetricSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container_resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def container_resource_present?; end
+
   def external(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def external_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def object(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def object_present?; end
+
   def pods(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pods_present?; end
+
   def resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_present?; end
 
   sig do
@@ -2002,19 +2685,36 @@ class KubeDSL::DSL::Autoscaling::V2beta1::MetricSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::MetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container_resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def container_resource_present?; end
+
   def external(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def external_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def object(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def object_present?; end
+
   def pods(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pods_present?; end
+
   def resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_present?; end
 
   sig do
@@ -2026,6 +2726,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::MetricStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::ObjectMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def average_value(*args); end
 
   sig { returns(Symbol) }
@@ -2033,6 +2737,8 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ObjectMetricSource < ::KubeDSL::DSLObj
 
   def metric_name(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -2041,11 +2747,18 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ObjectMetricSource < ::KubeDSL::DSLObj
   def serialize; end
 
   def target(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_present?; end
+
   def target_value(*args); end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::ObjectMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def average_value(*args); end
   def current_value(*args); end
 
@@ -2054,6 +2767,8 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ObjectMetricStatus < ::KubeDSL::DSLObj
 
   def metric_name(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -2062,15 +2777,23 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ObjectMetricStatus < ::KubeDSL::DSLObj
   def serialize; end
 
   def target(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::PodsMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metric_name(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -2082,6 +2805,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::PodsMetricSource < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::PodsMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def current_average_value(*args); end
 
   sig { returns(Symbol) }
@@ -2089,6 +2816,8 @@ class KubeDSL::DSL::Autoscaling::V2beta1::PodsMetricStatus < ::KubeDSL::DSLObjec
 
   def metric_name(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -2098,6 +2827,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::PodsMetricStatus < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::ResourceMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -2113,6 +2846,10 @@ class KubeDSL::DSL::Autoscaling::V2beta1::ResourceMetricSource < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta1::ResourceMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def current_average_utilization(*args); end
   def current_average_value(*args); end
 
@@ -2130,6 +2867,10 @@ end
 module KubeDSL::DSL::Autoscaling::V2beta2; end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::ContainerResourceMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container(*args); end
 
   sig { returns(Symbol) }
@@ -2143,12 +2884,20 @@ class KubeDSL::DSL::Autoscaling::V2beta2::ContainerResourceMetricSource < ::Kube
   def serialize; end
 
   def target(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::ContainerResourceMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container(*args); end
   def current(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def current_present?; end
 
   sig { returns(Symbol) }
@@ -2163,6 +2912,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::ContainerResourceMetricStatus < ::Kube
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::CrossVersionObjectReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def kind(*args); end
 
@@ -2178,10 +2931,16 @@ class KubeDSL::DSL::Autoscaling::V2beta2::CrossVersionObjectReference < ::KubeDS
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::ExternalMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metric(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metric_present?; end
 
   sig do
@@ -2190,17 +2949,27 @@ class KubeDSL::DSL::Autoscaling::V2beta2::ExternalMetricSource < ::KubeDSL::DSLO
   def serialize; end
 
   def target(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::ExternalMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def current(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def current_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metric(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metric_present?; end
 
   sig do
@@ -2210,6 +2979,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::ExternalMetricStatus < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::HPAScalingPolicy < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -2225,6 +2998,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HPAScalingPolicy < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::HPAScalingRules < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -2241,10 +3018,16 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HPAScalingRules < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscaler < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2253,18 +3036,32 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscaler < ::KubeDSL::D
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerBehavior < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def scale_down(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scale_down_present?; end
+
   def scale_up(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scale_up_present?; end
 
   sig do
@@ -2274,6 +3071,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerBehavior < ::Ku
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -2291,6 +3092,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerCondition < ::K
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -2298,6 +3103,8 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerList < ::KubeDS
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2307,7 +3114,13 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerList < ::KubeDS
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def behavior(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def behavior_present?; end
 
   sig { returns(Symbol) }
@@ -2318,6 +3131,8 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerSpec < ::KubeDS
   def metrics; end
   def min_replicas(*args); end
   def scale_target_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scale_target_ref_present?; end
 
   sig do
@@ -2327,6 +3142,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerSpec < ::KubeDS
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
   def current_metric(elem_name = T.unsafe(nil), &block); end
@@ -2347,11 +3166,17 @@ class KubeDSL::DSL::Autoscaling::V2beta2::HorizontalPodAutoscalerStatus < ::Kube
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::MetricIdentifier < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def name(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -2361,19 +3186,36 @@ class KubeDSL::DSL::Autoscaling::V2beta2::MetricIdentifier < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::MetricSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container_resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def container_resource_present?; end
+
   def external(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def external_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def object(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def object_present?; end
+
   def pods(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pods_present?; end
+
   def resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_present?; end
 
   sig do
@@ -2385,19 +3227,36 @@ class KubeDSL::DSL::Autoscaling::V2beta2::MetricSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::MetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container_resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def container_resource_present?; end
+
   def external(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def external_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def object(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def object_present?; end
+
   def pods(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pods_present?; end
+
   def resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_present?; end
 
   sig do
@@ -2409,6 +3268,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::MetricStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::MetricTarget < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def average_utilization(*args); end
   def average_value(*args); end
 
@@ -2425,6 +3288,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::MetricTarget < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::MetricValueStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def average_utilization(*args); end
   def average_value(*args); end
 
@@ -2440,13 +3307,21 @@ class KubeDSL::DSL::Autoscaling::V2beta2::MetricValueStatus < ::KubeDSL::DSLObje
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::ObjectMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def described_object(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def described_object_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metric(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metric_present?; end
 
   sig do
@@ -2455,19 +3330,32 @@ class KubeDSL::DSL::Autoscaling::V2beta2::ObjectMetricSource < ::KubeDSL::DSLObj
   def serialize; end
 
   def target(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::ObjectMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def current(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def current_present?; end
+
   def described_object(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def described_object_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metric(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metric_present?; end
 
   sig do
@@ -2477,10 +3365,16 @@ class KubeDSL::DSL::Autoscaling::V2beta2::ObjectMetricStatus < ::KubeDSL::DSLObj
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::PodsMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metric(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metric_present?; end
 
   sig do
@@ -2489,17 +3383,27 @@ class KubeDSL::DSL::Autoscaling::V2beta2::PodsMetricSource < ::KubeDSL::DSLObjec
   def serialize; end
 
   def target(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::PodsMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def current(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def current_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metric(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metric_present?; end
 
   sig do
@@ -2509,6 +3413,10 @@ class KubeDSL::DSL::Autoscaling::V2beta2::PodsMetricStatus < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::ResourceMetricSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -2520,11 +3428,19 @@ class KubeDSL::DSL::Autoscaling::V2beta2::ResourceMetricSource < ::KubeDSL::DSLO
   def serialize; end
 
   def target(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_present?; end
 end
 
 class KubeDSL::DSL::Autoscaling::V2beta2::ResourceMetricStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def current(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def current_present?; end
 
   sig { returns(Symbol) }
@@ -2542,10 +3458,16 @@ module KubeDSL::DSL::Batch; end
 module KubeDSL::DSL::Batch::V1; end
 
 class KubeDSL::DSL::Batch::V1::CronJob < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2554,12 +3476,21 @@ class KubeDSL::DSL::Batch::V1::CronJob < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Batch::V1::CronJobList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -2567,6 +3498,8 @@ class KubeDSL::DSL::Batch::V1::CronJobList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2576,9 +3509,15 @@ class KubeDSL::DSL::Batch::V1::CronJobList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Batch::V1::CronJobSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def concurrency_policy(*args); end
   def failed_jobs_history_limit(*args); end
   def job_template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def job_template_present?; end
 
   sig { returns(Symbol) }
@@ -2597,6 +3536,10 @@ class KubeDSL::DSL::Batch::V1::CronJobSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Batch::V1::CronJobStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def active(elem_name = T.unsafe(nil), &block); end
   def actives; end
 
@@ -2613,10 +3556,16 @@ class KubeDSL::DSL::Batch::V1::CronJobStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Batch::V1::Job < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2625,12 +3574,21 @@ class KubeDSL::DSL::Batch::V1::Job < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Batch::V1::JobCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -2649,6 +3607,10 @@ class KubeDSL::DSL::Batch::V1::JobCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Batch::V1::JobList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -2656,6 +3618,8 @@ class KubeDSL::DSL::Batch::V1::JobList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2665,6 +3629,10 @@ class KubeDSL::DSL::Batch::V1::JobList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Batch::V1::JobSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def active_deadline_seconds(*args); end
   def backoff_limit(*args); end
   def completion_mode(*args); end
@@ -2676,6 +3644,8 @@ class KubeDSL::DSL::Batch::V1::JobSpec < ::KubeDSL::DSLObject
   def manual_selector(*args); end
   def parallelism(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -2685,11 +3655,18 @@ class KubeDSL::DSL::Batch::V1::JobSpec < ::KubeDSL::DSLObject
 
   def suspend(*args); end
   def template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def template_present?; end
+
   def ttl_seconds_after_finished(*args); end
 end
 
 class KubeDSL::DSL::Batch::V1::JobStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def active(*args); end
   def completed_indexes(*args); end
   def completion_time(*args); end
@@ -2708,14 +3685,22 @@ class KubeDSL::DSL::Batch::V1::JobStatus < ::KubeDSL::DSLObject
   def start_time(*args); end
   def succeeded(*args); end
   def uncounted_terminated_pods(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def uncounted_terminated_pods_present?; end
 end
 
 class KubeDSL::DSL::Batch::V1::JobTemplateSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2724,10 +3709,16 @@ class KubeDSL::DSL::Batch::V1::JobTemplateSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::Batch::V1::UncountedTerminatedPods < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def failed(*args); end
 
   sig { returns(Symbol) }
@@ -2744,10 +3735,16 @@ end
 module KubeDSL::DSL::Batch::V1beta1; end
 
 class KubeDSL::DSL::Batch::V1beta1::CronJob < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2756,12 +3753,21 @@ class KubeDSL::DSL::Batch::V1beta1::CronJob < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Batch::V1beta1::CronJobList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -2769,6 +3775,8 @@ class KubeDSL::DSL::Batch::V1beta1::CronJobList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2778,9 +3786,15 @@ class KubeDSL::DSL::Batch::V1beta1::CronJobList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Batch::V1beta1::CronJobSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def concurrency_policy(*args); end
   def failed_jobs_history_limit(*args); end
   def job_template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def job_template_present?; end
 
   sig { returns(Symbol) }
@@ -2799,6 +3813,10 @@ class KubeDSL::DSL::Batch::V1beta1::CronJobSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Batch::V1beta1::CronJobStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def active(elem_name = T.unsafe(nil), &block); end
   def actives; end
 
@@ -2815,10 +3833,16 @@ class KubeDSL::DSL::Batch::V1beta1::CronJobStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Batch::V1beta1::JobTemplateSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2827,6 +3851,8 @@ class KubeDSL::DSL::Batch::V1beta1::JobTemplateSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
@@ -2834,10 +3860,16 @@ module KubeDSL::DSL::Certificates; end
 module KubeDSL::DSL::Certificates::V1; end
 
 class KubeDSL::DSL::Certificates::V1::CertificateSigningRequest < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2846,12 +3878,21 @@ class KubeDSL::DSL::Certificates::V1::CertificateSigningRequest < ::KubeDSL::DSL
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Certificates::V1::CertificateSigningRequestCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -2870,6 +3911,10 @@ class KubeDSL::DSL::Certificates::V1::CertificateSigningRequestCondition < ::Kub
 end
 
 class KubeDSL::DSL::Certificates::V1::CertificateSigningRequestList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -2877,6 +3922,8 @@ class KubeDSL::DSL::Certificates::V1::CertificateSigningRequestList < ::KubeDSL:
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2886,6 +3933,10 @@ class KubeDSL::DSL::Certificates::V1::CertificateSigningRequestList < ::KubeDSL:
 end
 
 class KubeDSL::DSL::Certificates::V1::CertificateSigningRequestSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def expiration_seconds(*args); end
 
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
@@ -2910,6 +3961,10 @@ class KubeDSL::DSL::Certificates::V1::CertificateSigningRequestSpec < ::KubeDSL:
 end
 
 class KubeDSL::DSL::Certificates::V1::CertificateSigningRequestStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def certificate(*args); end
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
@@ -2927,10 +3982,16 @@ module KubeDSL::DSL::Coordination; end
 module KubeDSL::DSL::Coordination::V1; end
 
 class KubeDSL::DSL::Coordination::V1::Lease < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2939,10 +4000,16 @@ class KubeDSL::DSL::Coordination::V1::Lease < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::Coordination::V1::LeaseList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -2950,6 +4017,8 @@ class KubeDSL::DSL::Coordination::V1::LeaseList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -2959,6 +4028,10 @@ class KubeDSL::DSL::Coordination::V1::LeaseList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Coordination::V1::LeaseSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def acquire_time(*args); end
   def holder_identity(*args); end
 
@@ -2979,15 +4052,24 @@ module KubeDSL::DSL::Discovery; end
 module KubeDSL::DSL::Discovery::V1; end
 
 class KubeDSL::DSL::Discovery::V1::Endpoint < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def addresses(*args); end
   def conditions(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def conditions_present?; end
 
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def deprecated_topology(&block); end
 
   def hints(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def hints_present?; end
+
   def hostname(*args); end
 
   sig { returns(Symbol) }
@@ -3001,11 +4083,18 @@ class KubeDSL::DSL::Discovery::V1::Endpoint < ::KubeDSL::DSLObject
   def serialize; end
 
   def target_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_ref_present?; end
+
   def zone(*args); end
 end
 
 class KubeDSL::DSL::Discovery::V1::EndpointConditions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3021,6 +4110,10 @@ class KubeDSL::DSL::Discovery::V1::EndpointConditions < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1::EndpointHints < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def for_zone(elem_name = T.unsafe(nil), &block); end
   def for_zones; end
 
@@ -3034,6 +4127,10 @@ class KubeDSL::DSL::Discovery::V1::EndpointHints < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1::EndpointPort < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def app_protocol(*args); end
 
   sig { returns(Symbol) }
@@ -3050,6 +4147,10 @@ class KubeDSL::DSL::Discovery::V1::EndpointPort < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1::EndpointSlice < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def address_type(*args); end
   def endpoint(elem_name = T.unsafe(nil), &block); end
   def endpoints; end
@@ -3058,7 +4159,10 @@ class KubeDSL::DSL::Discovery::V1::EndpointSlice < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def port(elem_name = T.unsafe(nil), &block); end
   def ports; end
 
@@ -3069,6 +4173,10 @@ class KubeDSL::DSL::Discovery::V1::EndpointSlice < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1::EndpointSliceList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -3076,6 +4184,8 @@ class KubeDSL::DSL::Discovery::V1::EndpointSliceList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -3085,6 +4195,10 @@ class KubeDSL::DSL::Discovery::V1::EndpointSliceList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1::ForZone < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3099,11 +4213,21 @@ end
 module KubeDSL::DSL::Discovery::V1beta1; end
 
 class KubeDSL::DSL::Discovery::V1beta1::Endpoint < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def addresses(*args); end
   def conditions(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def conditions_present?; end
+
   def hints(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def hints_present?; end
+
   def hostname(*args); end
 
   sig { returns(Symbol) }
@@ -3117,6 +4241,8 @@ class KubeDSL::DSL::Discovery::V1beta1::Endpoint < ::KubeDSL::DSLObject
   def serialize; end
 
   def target_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_ref_present?; end
 
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
@@ -3124,6 +4250,10 @@ class KubeDSL::DSL::Discovery::V1beta1::Endpoint < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1beta1::EndpointConditions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3139,6 +4269,10 @@ class KubeDSL::DSL::Discovery::V1beta1::EndpointConditions < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Discovery::V1beta1::EndpointHints < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def for_zone(elem_name = T.unsafe(nil), &block); end
   def for_zones; end
 
@@ -3152,6 +4286,10 @@ class KubeDSL::DSL::Discovery::V1beta1::EndpointHints < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1beta1::EndpointPort < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def app_protocol(*args); end
 
   sig { returns(Symbol) }
@@ -3168,6 +4306,10 @@ class KubeDSL::DSL::Discovery::V1beta1::EndpointPort < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1beta1::EndpointSlice < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def address_type(*args); end
   def endpoint(elem_name = T.unsafe(nil), &block); end
   def endpoints; end
@@ -3176,7 +4318,10 @@ class KubeDSL::DSL::Discovery::V1beta1::EndpointSlice < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def port(elem_name = T.unsafe(nil), &block); end
   def ports; end
 
@@ -3187,6 +4332,10 @@ class KubeDSL::DSL::Discovery::V1beta1::EndpointSlice < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1beta1::EndpointSliceList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -3194,6 +4343,8 @@ class KubeDSL::DSL::Discovery::V1beta1::EndpointSliceList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -3203,6 +4354,10 @@ class KubeDSL::DSL::Discovery::V1beta1::EndpointSliceList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Discovery::V1beta1::ForZone < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3218,25 +4373,41 @@ module KubeDSL::DSL::Events; end
 module KubeDSL::DSL::Events::V1; end
 
 class KubeDSL::DSL::Events::V1::Event < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def action(*args); end
   def deprecated_count(*args); end
   def deprecated_first_timestamp(*args); end
   def deprecated_last_timestamp(*args); end
   def deprecated_source(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def deprecated_source_present?; end
+
   def event_time(*args); end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def note(*args); end
   def reason(*args); end
   def regarding(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def regarding_present?; end
+
   def related(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def related_present?; end
+
   def reporting_controller(*args); end
   def reporting_instance(*args); end
 
@@ -3246,11 +4417,18 @@ class KubeDSL::DSL::Events::V1::Event < ::KubeDSL::DSLObject
   def serialize; end
 
   def series(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def series_present?; end
+
   def type(*args); end
 end
 
 class KubeDSL::DSL::Events::V1::EventList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -3258,6 +4436,8 @@ class KubeDSL::DSL::Events::V1::EventList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -3267,6 +4447,10 @@ class KubeDSL::DSL::Events::V1::EventList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Events::V1::EventSeries < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def count(*args); end
 
   sig { returns(Symbol) }
@@ -3283,25 +4467,41 @@ end
 module KubeDSL::DSL::Events::V1beta1; end
 
 class KubeDSL::DSL::Events::V1beta1::Event < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def action(*args); end
   def deprecated_count(*args); end
   def deprecated_first_timestamp(*args); end
   def deprecated_last_timestamp(*args); end
   def deprecated_source(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def deprecated_source_present?; end
+
   def event_time(*args); end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def note(*args); end
   def reason(*args); end
   def regarding(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def regarding_present?; end
+
   def related(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def related_present?; end
+
   def reporting_controller(*args); end
   def reporting_instance(*args); end
 
@@ -3311,11 +4511,18 @@ class KubeDSL::DSL::Events::V1beta1::Event < ::KubeDSL::DSLObject
   def serialize; end
 
   def series(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def series_present?; end
+
   def type(*args); end
 end
 
 class KubeDSL::DSL::Events::V1beta1::EventList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -3323,6 +4530,8 @@ class KubeDSL::DSL::Events::V1beta1::EventList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -3332,6 +4541,10 @@ class KubeDSL::DSL::Events::V1beta1::EventList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Events::V1beta1::EventSeries < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def count(*args); end
 
   sig { returns(Symbol) }
@@ -3349,6 +4562,10 @@ module KubeDSL::DSL::Flowcontrol; end
 module KubeDSL::DSL::Flowcontrol::V1beta1; end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::FlowDistinguisherMethod < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3361,10 +4578,16 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::FlowDistinguisherMethod < ::KubeDSL::D
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchema < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -3373,12 +4596,21 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchema < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3396,6 +4628,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaCondition < ::KubeDSL::DSLOb
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -3403,6 +4639,8 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -3412,7 +4650,13 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def distinguisher_method(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def distinguisher_method_present?; end
 
   sig { returns(Symbol) }
@@ -3420,7 +4664,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaSpec < ::KubeDSL::DSLObject
 
   def matching_precedence(*args); end
   def priority_level_configuration(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def priority_level_configuration_present?; end
+
   def rule(elem_name = T.unsafe(nil), &block); end
   def rules; end
 
@@ -3431,6 +4678,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
 
@@ -3444,6 +4695,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::FlowSchemaStatus < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::GroupSubject < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3456,10 +4711,16 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::GroupSubject < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::LimitResponse < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def queuing(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def queuing_present?; end
 
   sig do
@@ -3471,12 +4732,18 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::LimitResponse < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::LimitedPriorityLevelConfiguration < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def assured_concurrency_shares(*args); end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def limit_response(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def limit_response_present?; end
 
   sig do
@@ -3486,6 +4753,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::LimitedPriorityLevelConfiguration < ::
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::NonResourcePolicyRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3500,6 +4771,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::NonResourcePolicyRule < ::KubeDSL::DSL
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::PolicyRulesWithSubjects < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3518,10 +4793,16 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::PolicyRulesWithSubjects < ::KubeDSL::D
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfiguration < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -3530,12 +4811,21 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfiguration < ::KubeDSL
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3553,6 +4843,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationCondition < 
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -3560,6 +4854,8 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationList < ::Kub
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -3569,6 +4865,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationList < ::Kub
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3581,10 +4881,16 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationReference < 
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def limited(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def limited_present?; end
 
   sig do
@@ -3596,6 +4902,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationSpec < ::Kub
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
 
@@ -3609,6 +4919,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::PriorityLevelConfigurationStatus < ::K
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::QueuingConfiguration < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def hand_size(*args); end
 
   sig { returns(Symbol) }
@@ -3624,6 +4938,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::QueuingConfiguration < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::ResourcePolicyRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_groups(*args); end
   def cluster_scope(*args); end
 
@@ -3642,6 +4960,10 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::ResourcePolicyRule < ::KubeDSL::DSLObj
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::ServiceAccountSubject < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3655,8 +4977,15 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::ServiceAccountSubject < ::KubeDSL::DSL
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::Subject < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def group(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def group_present?; end
+
   def kind(*args); end
 
   sig { returns(Symbol) }
@@ -3668,12 +4997,21 @@ class KubeDSL::DSL::Flowcontrol::V1beta1::Subject < ::KubeDSL::DSLObject
   def serialize; end
 
   def service_account(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def service_account_present?; end
+
   def user(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def user_present?; end
 end
 
 class KubeDSL::DSL::Flowcontrol::V1beta1::UserSubject < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3689,11 +5027,17 @@ module KubeDSL::DSL::Meta; end
 module KubeDSL::DSL::Meta::V1; end
 
 class KubeDSL::DSL::Meta::V1::APIGroup < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def name(*args); end
   def preferred_version(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def preferred_version_present?; end
 
   sig do
@@ -3708,6 +5052,10 @@ class KubeDSL::DSL::Meta::V1::APIGroup < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::APIGroupList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def group(elem_name = T.unsafe(nil), &block); end
   def groups; end
 
@@ -3721,6 +5069,10 @@ class KubeDSL::DSL::Meta::V1::APIGroupList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::APIResource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def categories(*args); end
   def group(*args); end
   def kind(*args); end
@@ -3744,6 +5096,10 @@ class KubeDSL::DSL::Meta::V1::APIResource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::APIResourceList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def group_version(*args); end
 
   sig { returns(Symbol) }
@@ -3759,6 +5115,10 @@ class KubeDSL::DSL::Meta::V1::APIResourceList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::APIVersions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3773,6 +5133,10 @@ class KubeDSL::DSL::Meta::V1::APIVersions < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::Condition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3791,6 +5155,10 @@ class KubeDSL::DSL::Meta::V1::Condition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::DeleteOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def dry_run(*args); end
   def grace_period_seconds(*args); end
@@ -3800,7 +5168,10 @@ class KubeDSL::DSL::Meta::V1::DeleteOptions < ::KubeDSL::DSLObject
 
   def orphan_dependents(*args); end
   def preconditions(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def preconditions_present?; end
+
   def propagation_policy(*args); end
 
   sig do
@@ -3810,6 +5181,10 @@ class KubeDSL::DSL::Meta::V1::DeleteOptions < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::GroupVersionForDiscovery < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def group_version(*args); end
 
   sig { returns(Symbol) }
@@ -3824,6 +5199,10 @@ class KubeDSL::DSL::Meta::V1::GroupVersionForDiscovery < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::LabelSelector < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3840,6 +5219,10 @@ class KubeDSL::DSL::Meta::V1::LabelSelector < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::LabelSelectorRequirement < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def key(*args); end
 
   sig { returns(Symbol) }
@@ -3856,6 +5239,10 @@ class KubeDSL::DSL::Meta::V1::LabelSelectorRequirement < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::ListMeta < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def continue(*args); end
 
   sig { returns(Symbol) }
@@ -3872,6 +5259,10 @@ class KubeDSL::DSL::Meta::V1::ListMeta < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::ManagedFieldsEntry < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def fields_type(*args); end
   def fields_v1(*args); end
@@ -3892,6 +5283,10 @@ class KubeDSL::DSL::Meta::V1::ManagedFieldsEntry < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::ObjectMeta < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def annotations(&block); end
 
@@ -3927,6 +5322,10 @@ class KubeDSL::DSL::Meta::V1::ObjectMeta < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::OwnerReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def block_owner_deletion(*args); end
   def controller(*args); end
@@ -3946,6 +5345,10 @@ class KubeDSL::DSL::Meta::V1::OwnerReference < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::Preconditions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -3960,6 +5363,10 @@ class KubeDSL::DSL::Meta::V1::Preconditions < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::ServerAddressByClientCIDR < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def client_cidr(*args); end
 
   sig { returns(Symbol) }
@@ -3974,8 +5381,14 @@ class KubeDSL::DSL::Meta::V1::ServerAddressByClientCIDR < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::Status < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def code(*args); end
   def details(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def details_present?; end
 
   sig { returns(Symbol) }
@@ -3983,7 +5396,10 @@ class KubeDSL::DSL::Meta::V1::Status < ::KubeDSL::DSLObject
 
   def message(*args); end
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def reason(*args); end
 
   sig do
@@ -3995,6 +5411,10 @@ class KubeDSL::DSL::Meta::V1::Status < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::StatusCause < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def field(*args); end
 
   sig { returns(Symbol) }
@@ -4010,6 +5430,10 @@ class KubeDSL::DSL::Meta::V1::StatusCause < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::StatusDetails < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def cause(elem_name = T.unsafe(nil), &block); end
   def causes; end
   def group(*args); end
@@ -4030,6 +5454,10 @@ class KubeDSL::DSL::Meta::V1::StatusDetails < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Meta::V1::WatchEvent < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4047,7 +5475,13 @@ module KubeDSL::DSL::Networking; end
 module KubeDSL::DSL::Networking::V1; end
 
 class KubeDSL::DSL::Networking::V1::HTTPIngressPath < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def backend(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def backend_present?; end
 
   sig { returns(Symbol) }
@@ -4063,6 +5497,10 @@ class KubeDSL::DSL::Networking::V1::HTTPIngressPath < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::HTTPIngressRuleValue < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4076,6 +5514,10 @@ class KubeDSL::DSL::Networking::V1::HTTPIngressRuleValue < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::IPBlock < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def cidr(*args); end
   def except(*args); end
 
@@ -4089,10 +5531,16 @@ class KubeDSL::DSL::Networking::V1::IPBlock < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::Ingress < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4101,16 +5549,27 @@ class KubeDSL::DSL::Networking::V1::Ingress < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Networking::V1::IngressBackend < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def resource(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_present?; end
 
   sig do
@@ -4119,14 +5578,22 @@ class KubeDSL::DSL::Networking::V1::IngressBackend < ::KubeDSL::DSLObject
   def serialize; end
 
   def service(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def service_present?; end
 end
 
 class KubeDSL::DSL::Networking::V1::IngressClass < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4135,10 +5602,16 @@ class KubeDSL::DSL::Networking::V1::IngressClass < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::Networking::V1::IngressClassList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -4146,6 +5619,8 @@ class KubeDSL::DSL::Networking::V1::IngressClassList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4155,6 +5630,10 @@ class KubeDSL::DSL::Networking::V1::IngressClassList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::IngressClassParametersReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_group(*args); end
   def kind(*args); end
 
@@ -4172,12 +5651,18 @@ class KubeDSL::DSL::Networking::V1::IngressClassParametersReference < ::KubeDSL:
 end
 
 class KubeDSL::DSL::Networking::V1::IngressClassSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def controller(*args); end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def parameters(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def parameters_present?; end
 
   sig do
@@ -4187,6 +5672,10 @@ class KubeDSL::DSL::Networking::V1::IngressClassSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::IngressList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -4194,6 +5683,8 @@ class KubeDSL::DSL::Networking::V1::IngressList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4203,8 +5694,14 @@ class KubeDSL::DSL::Networking::V1::IngressList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::IngressRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def host(*args); end
   def http(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def http_present?; end
 
   sig { returns(Symbol) }
@@ -4217,11 +5714,17 @@ class KubeDSL::DSL::Networking::V1::IngressRule < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::IngressServiceBackend < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def name(*args); end
   def port(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def port_present?; end
 
   sig do
@@ -4231,8 +5734,15 @@ class KubeDSL::DSL::Networking::V1::IngressServiceBackend < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::IngressSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def default_backend(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def default_backend_present?; end
+
   def ingress_class_name(*args); end
 
   sig { returns(Symbol) }
@@ -4251,10 +5761,16 @@ class KubeDSL::DSL::Networking::V1::IngressSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::IngressStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def load_balancer(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def load_balancer_present?; end
 
   sig do
@@ -4264,6 +5780,10 @@ class KubeDSL::DSL::Networking::V1::IngressStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::IngressTLS < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def hosts(*args); end
 
   sig { returns(Symbol) }
@@ -4278,10 +5798,16 @@ class KubeDSL::DSL::Networking::V1::IngressTLS < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::NetworkPolicy < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4290,10 +5816,16 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicy < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::Networking::V1::NetworkPolicyEgressRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4310,6 +5842,10 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicyEgressRule < ::KubeDSL::DSLObje
 end
 
 class KubeDSL::DSL::Networking::V1::NetworkPolicyIngressRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def from(elem_name = T.unsafe(nil), &block); end
   def froms; end
 
@@ -4326,6 +5862,10 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicyIngressRule < ::KubeDSL::DSLObj
 end
 
 class KubeDSL::DSL::Networking::V1::NetworkPolicyList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -4333,6 +5873,8 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicyList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4342,15 +5884,26 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicyList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::NetworkPolicyPeer < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def ip_block(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def ip_block_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def namespace_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def namespace_selector_present?; end
+
   def pod_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pod_selector_present?; end
 
   sig do
@@ -4360,6 +5913,10 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicyPeer < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::NetworkPolicyPort < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def end_port(*args); end
 
   sig { returns(Symbol) }
@@ -4375,6 +5932,10 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicyPort < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::NetworkPolicySpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def egress(elem_name = T.unsafe(nil), &block); end
   def egresses; end
   def ingress(elem_name = T.unsafe(nil), &block); end
@@ -4384,7 +5945,10 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicySpec < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def pod_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pod_selector_present?; end
+
   def policy_types(*args); end
 
   sig do
@@ -4394,6 +5958,10 @@ class KubeDSL::DSL::Networking::V1::NetworkPolicySpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Networking::V1::ServiceBackendPort < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4410,10 +5978,16 @@ module KubeDSL::DSL::Node; end
 module KubeDSL::DSL::Node::V1; end
 
 class KubeDSL::DSL::Node::V1::Overhead < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4422,16 +5996,27 @@ class KubeDSL::DSL::Node::V1::Overhead < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Node::V1::RuntimeClass < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4440,16 +6025,27 @@ class KubeDSL::DSL::Node::V1::RuntimeClass < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Node::V1::RuntimeClassList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4458,16 +6054,27 @@ class KubeDSL::DSL::Node::V1::RuntimeClassList < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Node::V1::Scheduling < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4476,14 +6083,23 @@ class KubeDSL::DSL::Node::V1::Scheduling < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 module KubeDSL::DSL::Node::V1alpha1; end
 
 class KubeDSL::DSL::Node::V1alpha1::Overhead < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4497,10 +6113,16 @@ class KubeDSL::DSL::Node::V1alpha1::Overhead < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Node::V1alpha1::RuntimeClass < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4509,10 +6131,16 @@ class KubeDSL::DSL::Node::V1alpha1::RuntimeClass < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::Node::V1alpha1::RuntimeClassList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -4520,6 +6148,8 @@ class KubeDSL::DSL::Node::V1alpha1::RuntimeClassList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4529,13 +6159,22 @@ class KubeDSL::DSL::Node::V1alpha1::RuntimeClassList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Node::V1alpha1::RuntimeClassSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def overhead(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def overhead_present?; end
+
   def runtime_handler(*args); end
   def scheduling(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scheduling_present?; end
 
   sig do
@@ -4545,6 +6184,10 @@ class KubeDSL::DSL::Node::V1alpha1::RuntimeClassSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Node::V1alpha1::Scheduling < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4563,6 +6206,10 @@ end
 module KubeDSL::DSL::Node::V1beta1; end
 
 class KubeDSL::DSL::Node::V1beta1::Overhead < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4576,16 +6223,28 @@ class KubeDSL::DSL::Node::V1beta1::Overhead < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Node::V1beta1::RuntimeClass < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def handler(*args); end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def overhead(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def overhead_present?; end
+
   def scheduling(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scheduling_present?; end
 
   sig do
@@ -4595,6 +6254,10 @@ class KubeDSL::DSL::Node::V1beta1::RuntimeClass < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Node::V1beta1::RuntimeClassList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -4602,6 +6265,8 @@ class KubeDSL::DSL::Node::V1beta1::RuntimeClassList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4611,6 +6276,10 @@ class KubeDSL::DSL::Node::V1beta1::RuntimeClassList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Node::V1beta1::Scheduling < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4626,58 +6295,53 @@ class KubeDSL::DSL::Node::V1beta1::Scheduling < ::KubeDSL::DSLObject
   def tolerations; end
 end
 
-module KubeDSL::DSL::Pkg
-  module Version
-    class Info < ::KubeDSL::DSLObject
-      sig { params(val: T.nilable(String)).returns(String) }
-      def build_date(val = nil); end
+module KubeDSL::DSL::Pkg; end
+module KubeDSL::DSL::Pkg::Version; end
 
-      sig { params(val: T.nilable(String)).returns(String) }
-      def compiler(val = nil); end
+class KubeDSL::DSL::Pkg::Version::Info < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
 
-      sig { params(val: T.nilable(String)).returns(String) }
-      def git_commit(val = nil); end
+  def build_date(*args); end
+  def compiler(*args); end
+  def git_commit(*args); end
+  def git_tree_state(*args); end
+  def git_version(*args); end
+  def go_version(*args); end
 
-      sig { params(val: T.nilable(String)).returns(String) }
-      def git_tree_state(val = nil); end
+  sig { returns(Symbol) }
+  def kind_sym; end
 
-      sig { params(val: T.nilable(String)).returns(String) }
-      def git_version(val = nil); end
+  def major(*args); end
+  def minor(*args); end
+  def platform(*args); end
 
-      sig { params(val: T.nilable(String)).returns(String) }
-      def go_version(val = nil); end
-
-      sig { returns(Symbol) }
-      def kind_sym; end
-
-      sig { params(val: T.nilable(String)).returns(String) }
-      def major(val = nil); end
-
-      sig { params(val: T.nilable(String)).returns(String) }
-      def minor(val = nil); end
-
-      sig { params(val: T.nilable(String)).returns(String) }
-      def platform(val = nil); end
-
-      sig do
-        returns(T::Hash[Symbol, T.any(String, Integer, Float, T::Boolean, T::Array[T.untyped], T::Hash[Symbol, T.untyped])])
-      end
-      def serialize; end
-    end
+  sig do
+    returns(T::Hash[Symbol, T.any(String, Integer, Float, T::Boolean, T::Array[T.untyped], T::Hash[Symbol, T.untyped])])
   end
+  def serialize; end
 end
 
 module KubeDSL::DSL::Policy; end
 module KubeDSL::DSL::Policy::V1; end
 
 class KubeDSL::DSL::Policy::V1::Eviction < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def delete_options(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def delete_options_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4687,10 +6351,16 @@ class KubeDSL::DSL::Policy::V1::Eviction < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Policy::V1::PodDisruptionBudget < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4699,12 +6369,21 @@ class KubeDSL::DSL::Policy::V1::PodDisruptionBudget < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Policy::V1::PodDisruptionBudgetList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -4712,6 +6391,8 @@ class KubeDSL::DSL::Policy::V1::PodDisruptionBudgetList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4721,12 +6402,18 @@ class KubeDSL::DSL::Policy::V1::PodDisruptionBudgetList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Policy::V1::PodDisruptionBudgetSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def max_unavailable(*args); end
   def min_available(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -4736,6 +6423,10 @@ class KubeDSL::DSL::Policy::V1::PodDisruptionBudgetSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Policy::V1::PodDisruptionBudgetStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
   def current_healthy(*args); end
@@ -4761,6 +6452,10 @@ end
 module KubeDSL::DSL::Policy::V1beta1; end
 
 class KubeDSL::DSL::Policy::V1beta1::AllowedCSIDriver < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4773,6 +6468,10 @@ class KubeDSL::DSL::Policy::V1beta1::AllowedCSIDriver < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Policy::V1beta1::AllowedFlexVolume < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def driver(*args); end
 
   sig { returns(Symbol) }
@@ -4785,6 +6484,10 @@ class KubeDSL::DSL::Policy::V1beta1::AllowedFlexVolume < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Policy::V1beta1::AllowedHostPath < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4798,6 +6501,10 @@ class KubeDSL::DSL::Policy::V1beta1::AllowedHostPath < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Policy::V1beta1::FSGroupStrategyOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4812,6 +6519,10 @@ class KubeDSL::DSL::Policy::V1beta1::FSGroupStrategyOptions < ::KubeDSL::DSLObje
 end
 
 class KubeDSL::DSL::Policy::V1beta1::HostPortRange < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4825,6 +6536,10 @@ class KubeDSL::DSL::Policy::V1beta1::HostPortRange < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Policy::V1beta1::IDRange < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -4838,10 +6553,16 @@ class KubeDSL::DSL::Policy::V1beta1::IDRange < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudget < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4850,12 +6571,21 @@ class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudget < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudgetList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -4863,6 +6593,8 @@ class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudgetList < ::KubeDSL::DSLObj
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4872,12 +6604,18 @@ class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudgetList < ::KubeDSL::DSLObj
 end
 
 class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudgetSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def max_unavailable(*args); end
   def min_available(*args); end
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -4887,6 +6625,10 @@ class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudgetSpec < ::KubeDSL::DSLObj
 end
 
 class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudgetStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
   def current_healthy(*args); end
@@ -4910,10 +6652,16 @@ class KubeDSL::DSL::Policy::V1beta1::PodDisruptionBudgetStatus < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicy < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4922,10 +6670,16 @@ class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicy < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicyList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -4933,6 +6687,8 @@ class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicyList < ::KubeDSL::DSLObjec
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -4942,6 +6698,10 @@ class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicyList < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicySpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def allow_privilege_escalation(*args); end
   def allowed_capabilities(*args); end
   def allowed_csi_driver(elem_name = T.unsafe(nil), &block); end
@@ -4956,7 +6716,10 @@ class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicySpec < ::KubeDSL::DSLObjec
   def default_allow_privilege_escalation(*args); end
   def forbidden_sysctls(*args); end
   def fs_group(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def fs_group_present?; end
+
   def host_ipc(*args); end
   def host_network(*args); end
   def host_pid(*args); end
@@ -4970,12 +6733,23 @@ class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicySpec < ::KubeDSL::DSLObjec
   def read_only_root_filesystem(*args); end
   def required_drop_capabilities(*args); end
   def run_as_group(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def run_as_group_present?; end
+
   def run_as_user(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def run_as_user_present?; end
+
   def runtime_class(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def runtime_class_present?; end
+
   def se_linux(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def se_linux_present?; end
 
   sig do
@@ -4984,11 +6758,18 @@ class KubeDSL::DSL::Policy::V1beta1::PodSecurityPolicySpec < ::KubeDSL::DSLObjec
   def serialize; end
 
   def supplemental_groups(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def supplemental_groups_present?; end
+
   def volumes(*args); end
 end
 
 class KubeDSL::DSL::Policy::V1beta1::RunAsGroupStrategyOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -5003,6 +6784,10 @@ class KubeDSL::DSL::Policy::V1beta1::RunAsGroupStrategyOptions < ::KubeDSL::DSLO
 end
 
 class KubeDSL::DSL::Policy::V1beta1::RunAsUserStrategyOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -5017,6 +6802,10 @@ class KubeDSL::DSL::Policy::V1beta1::RunAsUserStrategyOptions < ::KubeDSL::DSLOb
 end
 
 class KubeDSL::DSL::Policy::V1beta1::RuntimeClassStrategyOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def allowed_runtime_class_names(*args); end
   def default_runtime_class_name(*args); end
 
@@ -5030,11 +6819,17 @@ class KubeDSL::DSL::Policy::V1beta1::RuntimeClassStrategyOptions < ::KubeDSL::DS
 end
 
 class KubeDSL::DSL::Policy::V1beta1::SELinuxStrategyOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def rule(*args); end
   def se_linux_options(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def se_linux_options_present?; end
 
   sig do
@@ -5044,6 +6839,10 @@ class KubeDSL::DSL::Policy::V1beta1::SELinuxStrategyOptions < ::KubeDSL::DSLObje
 end
 
 class KubeDSL::DSL::Policy::V1beta1::SupplementalGroupsStrategyOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -5061,6 +6860,10 @@ module KubeDSL::DSL::Rbac; end
 module KubeDSL::DSL::Rbac::V1; end
 
 class KubeDSL::DSL::Rbac::V1::AggregationRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def cluster_role_selector(elem_name = T.unsafe(nil), &block); end
   def cluster_role_selectors; end
 
@@ -5074,14 +6877,23 @@ class KubeDSL::DSL::Rbac::V1::AggregationRule < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::ClusterRole < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def aggregation_rule(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def aggregation_rule_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def rule(elem_name = T.unsafe(nil), &block); end
   def rules; end
 
@@ -5092,12 +6904,21 @@ class KubeDSL::DSL::Rbac::V1::ClusterRole < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::ClusterRoleBinding < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def role_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def role_ref_present?; end
 
   sig do
@@ -5110,6 +6931,10 @@ class KubeDSL::DSL::Rbac::V1::ClusterRoleBinding < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::ClusterRoleBindingList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5117,6 +6942,8 @@ class KubeDSL::DSL::Rbac::V1::ClusterRoleBindingList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5126,6 +6953,10 @@ class KubeDSL::DSL::Rbac::V1::ClusterRoleBindingList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::ClusterRoleList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5133,6 +6964,8 @@ class KubeDSL::DSL::Rbac::V1::ClusterRoleList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5142,6 +6975,10 @@ class KubeDSL::DSL::Rbac::V1::ClusterRoleList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::PolicyRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_groups(*args); end
 
   sig { returns(Symbol) }
@@ -5160,11 +6997,18 @@ class KubeDSL::DSL::Rbac::V1::PolicyRule < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::Role < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def rule(elem_name = T.unsafe(nil), &block); end
   def rules; end
 
@@ -5175,12 +7019,21 @@ class KubeDSL::DSL::Rbac::V1::Role < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::RoleBinding < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def role_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def role_ref_present?; end
 
   sig do
@@ -5193,6 +7046,10 @@ class KubeDSL::DSL::Rbac::V1::RoleBinding < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::RoleBindingList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5200,6 +7057,8 @@ class KubeDSL::DSL::Rbac::V1::RoleBindingList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5209,6 +7068,10 @@ class KubeDSL::DSL::Rbac::V1::RoleBindingList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::RoleList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5216,6 +7079,8 @@ class KubeDSL::DSL::Rbac::V1::RoleList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5225,6 +7090,10 @@ class KubeDSL::DSL::Rbac::V1::RoleList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::RoleRef < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_group(*args); end
   def kind(*args); end
 
@@ -5240,6 +7109,10 @@ class KubeDSL::DSL::Rbac::V1::RoleRef < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1::Subject < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_group(*args); end
   def kind(*args); end
 
@@ -5258,6 +7131,10 @@ end
 module KubeDSL::DSL::Rbac::V1alpha1; end
 
 class KubeDSL::DSL::Rbac::V1alpha1::AggregationRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def cluster_role_selector(elem_name = T.unsafe(nil), &block); end
   def cluster_role_selectors; end
 
@@ -5271,14 +7148,23 @@ class KubeDSL::DSL::Rbac::V1alpha1::AggregationRule < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::ClusterRole < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def aggregation_rule(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def aggregation_rule_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def rule(elem_name = T.unsafe(nil), &block); end
   def rules; end
 
@@ -5289,12 +7175,21 @@ class KubeDSL::DSL::Rbac::V1alpha1::ClusterRole < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::ClusterRoleBinding < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def role_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def role_ref_present?; end
 
   sig do
@@ -5307,6 +7202,10 @@ class KubeDSL::DSL::Rbac::V1alpha1::ClusterRoleBinding < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::ClusterRoleBindingList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5314,6 +7213,8 @@ class KubeDSL::DSL::Rbac::V1alpha1::ClusterRoleBindingList < ::KubeDSL::DSLObjec
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5323,6 +7224,10 @@ class KubeDSL::DSL::Rbac::V1alpha1::ClusterRoleBindingList < ::KubeDSL::DSLObjec
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::ClusterRoleList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5330,6 +7235,8 @@ class KubeDSL::DSL::Rbac::V1alpha1::ClusterRoleList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5339,6 +7246,10 @@ class KubeDSL::DSL::Rbac::V1alpha1::ClusterRoleList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::PolicyRule < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_groups(*args); end
 
   sig { returns(Symbol) }
@@ -5357,11 +7268,18 @@ class KubeDSL::DSL::Rbac::V1alpha1::PolicyRule < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::Role < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def rule(elem_name = T.unsafe(nil), &block); end
   def rules; end
 
@@ -5372,12 +7290,21 @@ class KubeDSL::DSL::Rbac::V1alpha1::Role < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::RoleBinding < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def role_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def role_ref_present?; end
 
   sig do
@@ -5390,6 +7317,10 @@ class KubeDSL::DSL::Rbac::V1alpha1::RoleBinding < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::RoleBindingList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5397,6 +7328,8 @@ class KubeDSL::DSL::Rbac::V1alpha1::RoleBindingList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5406,6 +7339,10 @@ class KubeDSL::DSL::Rbac::V1alpha1::RoleBindingList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::RoleList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5413,6 +7350,8 @@ class KubeDSL::DSL::Rbac::V1alpha1::RoleList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5422,6 +7361,10 @@ class KubeDSL::DSL::Rbac::V1alpha1::RoleList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::RoleRef < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_group(*args); end
   def kind(*args); end
 
@@ -5437,6 +7380,10 @@ class KubeDSL::DSL::Rbac::V1alpha1::RoleRef < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Rbac::V1alpha1::Subject < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def kind(*args); end
 
@@ -5456,6 +7403,10 @@ module KubeDSL::DSL::Scheduling; end
 module KubeDSL::DSL::Scheduling::V1; end
 
 class KubeDSL::DSL::Scheduling::V1::PriorityClass < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def description(*args); end
   def global_default(*args); end
 
@@ -5463,7 +7414,10 @@ class KubeDSL::DSL::Scheduling::V1::PriorityClass < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def preemption_policy(*args); end
 
   sig do
@@ -5475,6 +7429,10 @@ class KubeDSL::DSL::Scheduling::V1::PriorityClass < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Scheduling::V1::PriorityClassList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5482,6 +7440,8 @@ class KubeDSL::DSL::Scheduling::V1::PriorityClassList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5493,6 +7453,10 @@ end
 module KubeDSL::DSL::Scheduling::V1alpha1; end
 
 class KubeDSL::DSL::Scheduling::V1alpha1::PriorityClass < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def description(*args); end
   def global_default(*args); end
 
@@ -5500,7 +7464,10 @@ class KubeDSL::DSL::Scheduling::V1alpha1::PriorityClass < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def preemption_policy(*args); end
 
   sig do
@@ -5512,6 +7479,10 @@ class KubeDSL::DSL::Scheduling::V1alpha1::PriorityClass < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Scheduling::V1alpha1::PriorityClassList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5519,6 +7490,8 @@ class KubeDSL::DSL::Scheduling::V1alpha1::PriorityClassList < ::KubeDSL::DSLObje
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5531,10 +7504,16 @@ module KubeDSL::DSL::Storage; end
 module KubeDSL::DSL::Storage::V1; end
 
 class KubeDSL::DSL::Storage::V1::CSIDriver < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5543,10 +7522,16 @@ class KubeDSL::DSL::Storage::V1::CSIDriver < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::Storage::V1::CSIDriverList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5554,6 +7539,8 @@ class KubeDSL::DSL::Storage::V1::CSIDriverList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5563,6 +7550,10 @@ class KubeDSL::DSL::Storage::V1::CSIDriverList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::CSIDriverSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def attach_required(*args); end
   def fs_group_policy(*args); end
 
@@ -5584,10 +7575,16 @@ class KubeDSL::DSL::Storage::V1::CSIDriverSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::CSINode < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5596,11 +7593,19 @@ class KubeDSL::DSL::Storage::V1::CSINode < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::Storage::V1::CSINodeDriver < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def allocatable(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def allocatable_present?; end
 
   sig { returns(Symbol) }
@@ -5618,6 +7623,10 @@ class KubeDSL::DSL::Storage::V1::CSINodeDriver < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::CSINodeList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5625,6 +7634,8 @@ class KubeDSL::DSL::Storage::V1::CSINodeList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5634,6 +7645,10 @@ class KubeDSL::DSL::Storage::V1::CSINodeList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::CSINodeSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def driver(elem_name = T.unsafe(nil), &block); end
   def drivers; end
 
@@ -5647,6 +7662,10 @@ class KubeDSL::DSL::Storage::V1::CSINodeSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::StorageClass < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def allow_volume_expansion(*args); end
   def allowed_topologies; end
   def allowed_topology(elem_name = T.unsafe(nil), &block); end
@@ -5655,7 +7674,10 @@ class KubeDSL::DSL::Storage::V1::StorageClass < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def mount_options(*args); end
 
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
@@ -5673,6 +7695,10 @@ class KubeDSL::DSL::Storage::V1::StorageClass < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::StorageClassList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5680,6 +7706,8 @@ class KubeDSL::DSL::Storage::V1::StorageClassList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5689,6 +7717,10 @@ class KubeDSL::DSL::Storage::V1::StorageClassList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::TokenRequest < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def audience(*args); end
   def expiration_seconds(*args); end
 
@@ -5702,10 +7734,16 @@ class KubeDSL::DSL::Storage::V1::TokenRequest < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::VolumeAttachment < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5714,12 +7752,21 @@ class KubeDSL::DSL::Storage::V1::VolumeAttachment < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Storage::V1::VolumeAttachmentList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5727,6 +7774,8 @@ class KubeDSL::DSL::Storage::V1::VolumeAttachmentList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5736,7 +7785,13 @@ class KubeDSL::DSL::Storage::V1::VolumeAttachmentList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::VolumeAttachmentSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def inline_volume_spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def inline_volume_spec_present?; end
 
   sig { returns(Symbol) }
@@ -5751,6 +7806,10 @@ class KubeDSL::DSL::Storage::V1::VolumeAttachmentSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::VolumeAttachmentSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def attacher(*args); end
 
   sig { returns(Symbol) }
@@ -5764,18 +7823,29 @@ class KubeDSL::DSL::Storage::V1::VolumeAttachmentSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def source(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def source_present?; end
 end
 
 class KubeDSL::DSL::Storage::V1::VolumeAttachmentStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def attach_error(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def attach_error_present?; end
+
   def attached(*args); end
 
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def attachment_metadata(&block); end
 
   def detach_error(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def detach_error_present?; end
 
   sig { returns(Symbol) }
@@ -5788,6 +7858,10 @@ class KubeDSL::DSL::Storage::V1::VolumeAttachmentStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::VolumeError < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -5802,6 +7876,10 @@ class KubeDSL::DSL::Storage::V1::VolumeError < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1::VolumeNodeResources < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def count(*args); end
 
   sig { returns(Symbol) }
@@ -5816,6 +7894,10 @@ end
 module KubeDSL::DSL::Storage::V1alpha1; end
 
 class KubeDSL::DSL::Storage::V1alpha1::CSIStorageCapacity < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def capacity(*args); end
 
   sig { returns(Symbol) }
@@ -5823,8 +7905,13 @@ class KubeDSL::DSL::Storage::V1alpha1::CSIStorageCapacity < ::KubeDSL::DSLObject
 
   def maximum_volume_size(*args); end
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def node_topology(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def node_topology_present?; end
 
   sig do
@@ -5836,6 +7923,10 @@ class KubeDSL::DSL::Storage::V1alpha1::CSIStorageCapacity < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1alpha1::CSIStorageCapacityList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5843,6 +7934,8 @@ class KubeDSL::DSL::Storage::V1alpha1::CSIStorageCapacityList < ::KubeDSL::DSLOb
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5852,10 +7945,16 @@ class KubeDSL::DSL::Storage::V1alpha1::CSIStorageCapacityList < ::KubeDSL::DSLOb
 end
 
 class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachment < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5864,12 +7963,21 @@ class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachment < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5877,6 +7985,8 @@ class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentList < ::KubeDSL::DSLObje
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5886,7 +7996,13 @@ class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentList < ::KubeDSL::DSLObje
 end
 
 class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def inline_volume_spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def inline_volume_spec_present?; end
 
   sig { returns(Symbol) }
@@ -5901,6 +8017,10 @@ class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentSource < ::KubeDSL::DSLOb
 end
 
 class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def attacher(*args); end
 
   sig { returns(Symbol) }
@@ -5914,18 +8034,29 @@ class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentSpec < ::KubeDSL::DSLObje
   def serialize; end
 
   def source(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def source_present?; end
 end
 
 class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def attach_error(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def attach_error_present?; end
+
   def attached(*args); end
 
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def attachment_metadata(&block); end
 
   def detach_error(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def detach_error_present?; end
 
   sig { returns(Symbol) }
@@ -5938,6 +8069,10 @@ class KubeDSL::DSL::Storage::V1alpha1::VolumeAttachmentStatus < ::KubeDSL::DSLOb
 end
 
 class KubeDSL::DSL::Storage::V1alpha1::VolumeError < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -5954,6 +8089,10 @@ end
 module KubeDSL::DSL::Storage::V1beta1; end
 
 class KubeDSL::DSL::Storage::V1beta1::CSIStorageCapacity < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def capacity(*args); end
 
   sig { returns(Symbol) }
@@ -5961,8 +8100,13 @@ class KubeDSL::DSL::Storage::V1beta1::CSIStorageCapacity < ::KubeDSL::DSLObject
 
   def maximum_volume_size(*args); end
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def node_topology(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def node_topology_present?; end
 
   sig do
@@ -5974,6 +8118,10 @@ class KubeDSL::DSL::Storage::V1beta1::CSIStorageCapacity < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::Storage::V1beta1::CSIStorageCapacityList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -5981,6 +8129,8 @@ class KubeDSL::DSL::Storage::V1beta1::CSIStorageCapacityList < ::KubeDSL::DSLObj
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -5992,6 +8142,10 @@ end
 module KubeDSL::DSL::V1; end
 
 class KubeDSL::DSL::V1::AWSElasticBlockStoreVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -6009,14 +8163,26 @@ class KubeDSL::DSL::V1::AWSElasticBlockStoreVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Affinity < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def node_affinity(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def node_affinity_present?; end
+
   def pod_affinity(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pod_affinity_present?; end
+
   def pod_anti_affinity(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pod_anti_affinity_present?; end
 
   sig do
@@ -6026,6 +8192,10 @@ class KubeDSL::DSL::V1::Affinity < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::AttachedVolume < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def device_path(*args); end
 
   sig { returns(Symbol) }
@@ -6040,6 +8210,10 @@ class KubeDSL::DSL::V1::AttachedVolume < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::AzureDiskVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def caching_mode(*args); end
   def disk_name(*args); end
   def disk_uri(*args); end
@@ -6058,6 +8232,10 @@ class KubeDSL::DSL::V1::AzureDiskVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::AzureFilePersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6074,6 +8252,10 @@ class KubeDSL::DSL::V1::AzureFilePersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::AzureFileVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6089,10 +8271,16 @@ class KubeDSL::DSL::V1::AzureFileVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Binding < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -6101,14 +8289,26 @@ class KubeDSL::DSL::V1::Binding < ::KubeDSL::DSLObject
   def serialize; end
 
   def target(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_present?; end
 end
 
 class KubeDSL::DSL::V1::CSIPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def controller_expand_secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def controller_expand_secret_ref_present?; end
+
   def controller_publish_secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def controller_publish_secret_ref_present?; end
+
   def driver(*args); end
   def fs_type(*args); end
 
@@ -6116,9 +8316,15 @@ class KubeDSL::DSL::V1::CSIPersistentVolumeSource < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def node_publish_secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def node_publish_secret_ref_present?; end
+
   def node_stage_secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def node_stage_secret_ref_present?; end
+
   def read_only(*args); end
 
   sig do
@@ -6133,6 +8339,10 @@ class KubeDSL::DSL::V1::CSIPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::CSIVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def driver(*args); end
   def fs_type(*args); end
 
@@ -6140,7 +8350,10 @@ class KubeDSL::DSL::V1::CSIVolumeSource < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def node_publish_secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def node_publish_secret_ref_present?; end
+
   def read_only(*args); end
 
   sig do
@@ -6153,6 +8366,10 @@ class KubeDSL::DSL::V1::CSIVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Capabilities < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def add(*args); end
   def drop(*args); end
 
@@ -6166,6 +8383,10 @@ class KubeDSL::DSL::V1::Capabilities < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::CephFSPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6174,6 +8395,8 @@ class KubeDSL::DSL::V1::CephFSPersistentVolumeSource < ::KubeDSL::DSLObject
   def read_only(*args); end
   def secret_file(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -6185,6 +8408,10 @@ class KubeDSL::DSL::V1::CephFSPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::CephFSVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6193,6 +8420,8 @@ class KubeDSL::DSL::V1::CephFSVolumeSource < ::KubeDSL::DSLObject
   def read_only(*args); end
   def secret_file(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -6204,6 +8433,10 @@ class KubeDSL::DSL::V1::CephFSVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::CinderPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -6211,6 +8444,8 @@ class KubeDSL::DSL::V1::CinderPersistentVolumeSource < ::KubeDSL::DSLObject
 
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -6222,6 +8457,10 @@ class KubeDSL::DSL::V1::CinderPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::CinderVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -6229,6 +8468,8 @@ class KubeDSL::DSL::V1::CinderVolumeSource < ::KubeDSL::DSLObject
 
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -6240,6 +8481,10 @@ class KubeDSL::DSL::V1::CinderVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ClientIPConfig < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6252,6 +8497,10 @@ class KubeDSL::DSL::V1::ClientIPConfig < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ComponentCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def error(*args); end
 
   sig { returns(Symbol) }
@@ -6269,6 +8518,10 @@ class KubeDSL::DSL::V1::ComponentCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ComponentStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
 
@@ -6276,6 +8529,8 @@ class KubeDSL::DSL::V1::ComponentStatus < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -6285,6 +8540,10 @@ class KubeDSL::DSL::V1::ComponentStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ComponentStatusList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -6292,6 +8551,8 @@ class KubeDSL::DSL::V1::ComponentStatusList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -6301,6 +8562,10 @@ class KubeDSL::DSL::V1::ComponentStatusList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ConfigMap < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def binary_data(&block); end
 
@@ -6313,6 +8578,8 @@ class KubeDSL::DSL::V1::ConfigMap < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -6322,6 +8589,10 @@ class KubeDSL::DSL::V1::ConfigMap < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ConfigMapEnvSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6335,6 +8606,10 @@ class KubeDSL::DSL::V1::ConfigMapEnvSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ConfigMapKeySelector < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def key(*args); end
 
   sig { returns(Symbol) }
@@ -6350,6 +8625,10 @@ class KubeDSL::DSL::V1::ConfigMapKeySelector < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ConfigMapList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -6357,6 +8636,8 @@ class KubeDSL::DSL::V1::ConfigMapList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -6366,6 +8647,10 @@ class KubeDSL::DSL::V1::ConfigMapList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ConfigMapNodeConfigSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6383,6 +8668,10 @@ class KubeDSL::DSL::V1::ConfigMapNodeConfigSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ConfigMapProjection < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -6399,6 +8688,10 @@ class KubeDSL::DSL::V1::ConfigMapProjection < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ConfigMapVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def default_mode(*args); end
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
@@ -6416,6 +8709,10 @@ class KubeDSL::DSL::V1::ConfigMapVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Container < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def args(*args); end
   def command(*args); end
   def env(elem_name = T.unsafe(nil), &block); end
@@ -6429,17 +8726,31 @@ class KubeDSL::DSL::V1::Container < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def lifecycle(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def lifecycle_present?; end
+
   def liveness_probe(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def liveness_probe_present?; end
+
   def name(*args); end
   def port(elem_name = T.unsafe(nil), &block); end
   def ports; end
   def readiness_probe(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def readiness_probe_present?; end
+
   def resources(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resources_present?; end
+
   def security_context(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def security_context_present?; end
 
   sig do
@@ -6448,7 +8759,10 @@ class KubeDSL::DSL::V1::Container < ::KubeDSL::DSLObject
   def serialize; end
 
   def startup_probe(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def startup_probe_present?; end
+
   def stdin(*args); end
   def stdin_once(*args); end
   def termination_message_path(*args); end
@@ -6462,6 +8776,10 @@ class KubeDSL::DSL::V1::Container < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ContainerImage < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6476,6 +8794,10 @@ class KubeDSL::DSL::V1::ContainerImage < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ContainerPort < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container_port(*args); end
   def host_ip(*args); end
   def host_port(*args); end
@@ -6493,10 +8815,16 @@ class KubeDSL::DSL::V1::ContainerPort < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ContainerState < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def running(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def running_present?; end
 
   sig do
@@ -6505,12 +8833,21 @@ class KubeDSL::DSL::V1::ContainerState < ::KubeDSL::DSLObject
   def serialize; end
 
   def terminated(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def terminated_present?; end
+
   def waiting(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def waiting_present?; end
 end
 
 class KubeDSL::DSL::V1::ContainerStateRunning < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6523,6 +8860,10 @@ class KubeDSL::DSL::V1::ContainerStateRunning < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ContainerStateTerminated < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container_id(*args); end
   def exit_code(*args); end
   def finished_at(*args); end
@@ -6543,6 +8884,10 @@ class KubeDSL::DSL::V1::ContainerStateTerminated < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ContainerStateWaiting < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6556,6 +8901,10 @@ class KubeDSL::DSL::V1::ContainerStateWaiting < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ContainerStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container_id(*args); end
   def image(*args); end
   def image_id(*args); end
@@ -6564,7 +8913,10 @@ class KubeDSL::DSL::V1::ContainerStatus < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def last_state(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def last_state_present?; end
+
   def name(*args); end
   def ready(*args); end
   def restart_count(*args); end
@@ -6576,10 +8928,16 @@ class KubeDSL::DSL::V1::ContainerStatus < ::KubeDSL::DSLObject
 
   def started(*args); end
   def state(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def state_present?; end
 end
 
 class KubeDSL::DSL::V1::DaemonEndpoint < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6592,6 +8950,10 @@ class KubeDSL::DSL::V1::DaemonEndpoint < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::DownwardAPIProjection < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -6605,7 +8967,13 @@ class KubeDSL::DSL::V1::DownwardAPIProjection < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::DownwardAPIVolumeFile < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def field_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def field_ref_present?; end
 
   sig { returns(Symbol) }
@@ -6614,6 +8982,8 @@ class KubeDSL::DSL::V1::DownwardAPIVolumeFile < ::KubeDSL::DSLObject
   def mode(*args); end
   def path(*args); end
   def resource_field_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_field_ref_present?; end
 
   sig do
@@ -6623,6 +8993,10 @@ class KubeDSL::DSL::V1::DownwardAPIVolumeFile < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::DownwardAPIVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def default_mode(*args); end
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
@@ -6637,6 +9011,10 @@ class KubeDSL::DSL::V1::DownwardAPIVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EmptyDirVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6651,6 +9029,10 @@ class KubeDSL::DSL::V1::EmptyDirVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EndpointAddress < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def hostname(*args); end
   def ip(*args); end
 
@@ -6665,10 +9047,16 @@ class KubeDSL::DSL::V1::EndpointAddress < ::KubeDSL::DSLObject
   def serialize; end
 
   def target_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def target_ref_present?; end
 end
 
 class KubeDSL::DSL::V1::EndpointPort < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def app_protocol(*args); end
 
   sig { returns(Symbol) }
@@ -6685,6 +9073,10 @@ class KubeDSL::DSL::V1::EndpointPort < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EndpointSubset < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def address(elem_name = T.unsafe(nil), &block); end
   def addresses; end
 
@@ -6703,10 +9095,16 @@ class KubeDSL::DSL::V1::EndpointSubset < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Endpoints < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -6719,6 +9117,10 @@ class KubeDSL::DSL::V1::Endpoints < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EndpointsList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -6726,6 +9128,8 @@ class KubeDSL::DSL::V1::EndpointsList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -6735,7 +9139,13 @@ class KubeDSL::DSL::V1::EndpointsList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EnvFromSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def config_map_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def config_map_ref_present?; end
 
   sig { returns(Symbol) }
@@ -6743,6 +9153,8 @@ class KubeDSL::DSL::V1::EnvFromSource < ::KubeDSL::DSLObject
 
   def prefix(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -6752,6 +9164,10 @@ class KubeDSL::DSL::V1::EnvFromSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EnvVar < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6764,21 +9180,37 @@ class KubeDSL::DSL::V1::EnvVar < ::KubeDSL::DSLObject
 
   def value(*args); end
   def value_from(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def value_from_present?; end
 end
 
 class KubeDSL::DSL::V1::EnvVarSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def config_map_key_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def config_map_key_ref_present?; end
+
   def field_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def field_ref_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def resource_field_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resource_field_ref_present?; end
+
   def secret_key_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_key_ref_present?; end
 
   sig do
@@ -6788,6 +9220,10 @@ class KubeDSL::DSL::V1::EnvVarSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EphemeralContainer < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def args(*args); end
   def command(*args); end
   def env(elem_name = T.unsafe(nil), &block); end
@@ -6801,17 +9237,31 @@ class KubeDSL::DSL::V1::EphemeralContainer < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def lifecycle(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def lifecycle_present?; end
+
   def liveness_probe(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def liveness_probe_present?; end
+
   def name(*args); end
   def port(elem_name = T.unsafe(nil), &block); end
   def ports; end
   def readiness_probe(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def readiness_probe_present?; end
+
   def resources(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resources_present?; end
+
   def security_context(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def security_context_present?; end
 
   sig do
@@ -6820,7 +9270,10 @@ class KubeDSL::DSL::V1::EphemeralContainer < ::KubeDSL::DSLObject
   def serialize; end
 
   def startup_probe(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def startup_probe_present?; end
+
   def stdin(*args); end
   def stdin_once(*args); end
   def target_container_name(*args); end
@@ -6835,6 +9288,10 @@ class KubeDSL::DSL::V1::EphemeralContainer < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EphemeralVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -6844,15 +9301,23 @@ class KubeDSL::DSL::V1::EphemeralVolumeSource < ::KubeDSL::DSLObject
   def serialize; end
 
   def volume_claim_template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def volume_claim_template_present?; end
 end
 
 class KubeDSL::DSL::V1::Event < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def action(*args); end
   def count(*args); end
   def event_time(*args); end
   def first_timestamp(*args); end
   def involved_object(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def involved_object_present?; end
 
   sig { returns(Symbol) }
@@ -6861,10 +9326,16 @@ class KubeDSL::DSL::V1::Event < ::KubeDSL::DSLObject
   def last_timestamp(*args); end
   def message(*args); end
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def reason(*args); end
   def related(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def related_present?; end
+
   def reporting_component(*args); end
   def reporting_instance(*args); end
 
@@ -6874,13 +9345,23 @@ class KubeDSL::DSL::V1::Event < ::KubeDSL::DSLObject
   def serialize; end
 
   def series(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def series_present?; end
+
   def source(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def source_present?; end
+
   def type(*args); end
 end
 
 class KubeDSL::DSL::V1::EventList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -6888,6 +9369,8 @@ class KubeDSL::DSL::V1::EventList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -6897,6 +9380,10 @@ class KubeDSL::DSL::V1::EventList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EventSeries < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def count(*args); end
 
   sig { returns(Symbol) }
@@ -6911,6 +9398,10 @@ class KubeDSL::DSL::V1::EventSeries < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::EventSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def component(*args); end
   def host(*args); end
 
@@ -6924,6 +9415,10 @@ class KubeDSL::DSL::V1::EventSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ExecAction < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def command(*args); end
 
   sig { returns(Symbol) }
@@ -6936,6 +9431,10 @@ class KubeDSL::DSL::V1::ExecAction < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::FCVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -6954,6 +9453,10 @@ class KubeDSL::DSL::V1::FCVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::FlexPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def driver(*args); end
   def fs_type(*args); end
 
@@ -6965,6 +9468,8 @@ class KubeDSL::DSL::V1::FlexPersistentVolumeSource < ::KubeDSL::DSLObject
 
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -6974,6 +9479,10 @@ class KubeDSL::DSL::V1::FlexPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::FlexVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def driver(*args); end
   def fs_type(*args); end
 
@@ -6985,6 +9494,8 @@ class KubeDSL::DSL::V1::FlexVolumeSource < ::KubeDSL::DSLObject
 
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -6994,6 +9505,10 @@ class KubeDSL::DSL::V1::FlexVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::FlockerVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def dataset_name(*args); end
   def dataset_uuid(*args); end
 
@@ -7007,6 +9522,10 @@ class KubeDSL::DSL::V1::FlockerVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::GCEPersistentDiskVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -7023,6 +9542,10 @@ class KubeDSL::DSL::V1::GCEPersistentDiskVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::GitRepoVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def directory(*args); end
 
   sig { returns(Symbol) }
@@ -7038,6 +9561,10 @@ class KubeDSL::DSL::V1::GitRepoVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::GlusterfsPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def endpoints(*args); end
   def endpoints_namespace(*args); end
 
@@ -7054,6 +9581,10 @@ class KubeDSL::DSL::V1::GlusterfsPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::GlusterfsVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def endpoints(*args); end
 
   sig { returns(Symbol) }
@@ -7069,6 +9600,10 @@ class KubeDSL::DSL::V1::GlusterfsVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::HTTPGetAction < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def host(*args); end
   def http_header(elem_name = T.unsafe(nil), &block); end
   def http_headers; end
@@ -7087,6 +9622,10 @@ class KubeDSL::DSL::V1::HTTPGetAction < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::HTTPHeader < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7101,9 +9640,18 @@ class KubeDSL::DSL::V1::HTTPHeader < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Handler < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def exec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def exec_present?; end
+
   def http_get(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def http_get_present?; end
 
   sig { returns(Symbol) }
@@ -7115,10 +9663,16 @@ class KubeDSL::DSL::V1::Handler < ::KubeDSL::DSLObject
   def serialize; end
 
   def tcp_socket(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def tcp_socket_present?; end
 end
 
 class KubeDSL::DSL::V1::HostAlias < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def hostnames(*args); end
   def ip(*args); end
 
@@ -7132,6 +9686,10 @@ class KubeDSL::DSL::V1::HostAlias < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::HostPathVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7146,6 +9704,10 @@ class KubeDSL::DSL::V1::HostPathVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ISCSIPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def chap_auth_discovery(*args); end
   def chap_auth_session(*args); end
   def fs_type(*args); end
@@ -7160,6 +9722,8 @@ class KubeDSL::DSL::V1::ISCSIPersistentVolumeSource < ::KubeDSL::DSLObject
   def portals(*args); end
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -7171,6 +9735,10 @@ class KubeDSL::DSL::V1::ISCSIPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ISCSIVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def chap_auth_discovery(*args); end
   def chap_auth_session(*args); end
   def fs_type(*args); end
@@ -7185,6 +9753,8 @@ class KubeDSL::DSL::V1::ISCSIVolumeSource < ::KubeDSL::DSLObject
   def portals(*args); end
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -7196,6 +9766,10 @@ class KubeDSL::DSL::V1::ISCSIVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::KeyToPath < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def key(*args); end
 
   sig { returns(Symbol) }
@@ -7211,12 +9785,21 @@ class KubeDSL::DSL::V1::KeyToPath < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Lifecycle < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def post_start(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def post_start_present?; end
+
   def pre_stop(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pre_stop_present?; end
 
   sig do
@@ -7226,10 +9809,16 @@ class KubeDSL::DSL::V1::Lifecycle < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::LimitRange < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7238,10 +9827,16 @@ class KubeDSL::DSL::V1::LimitRange < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::V1::LimitRangeItem < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def default(&block); end
 
@@ -7269,6 +9864,10 @@ class KubeDSL::DSL::V1::LimitRangeItem < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::LimitRangeList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -7276,6 +9875,8 @@ class KubeDSL::DSL::V1::LimitRangeList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7285,6 +9886,10 @@ class KubeDSL::DSL::V1::LimitRangeList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::LimitRangeSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7298,6 +9903,10 @@ class KubeDSL::DSL::V1::LimitRangeSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::LoadBalancerIngress < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def hostname(*args); end
   def ip(*args); end
 
@@ -7314,6 +9923,10 @@ class KubeDSL::DSL::V1::LoadBalancerIngress < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::LoadBalancerStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def ingress(elem_name = T.unsafe(nil), &block); end
   def ingresses; end
 
@@ -7327,6 +9940,10 @@ class KubeDSL::DSL::V1::LoadBalancerStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::LocalObjectReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7339,6 +9956,10 @@ class KubeDSL::DSL::V1::LocalObjectReference < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::LocalVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -7353,6 +9974,10 @@ class KubeDSL::DSL::V1::LocalVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NFSVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7368,10 +9993,16 @@ class KubeDSL::DSL::V1::NFSVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Namespace < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7380,12 +10011,21 @@ class KubeDSL::DSL::V1::Namespace < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::V1::NamespaceCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7403,6 +10043,10 @@ class KubeDSL::DSL::V1::NamespaceCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NamespaceList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -7410,6 +10054,8 @@ class KubeDSL::DSL::V1::NamespaceList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7419,6 +10065,10 @@ class KubeDSL::DSL::V1::NamespaceList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NamespaceSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def finalizers(*args); end
 
   sig { returns(Symbol) }
@@ -7431,6 +10081,10 @@ class KubeDSL::DSL::V1::NamespaceSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NamespaceStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
 
@@ -7446,10 +10100,16 @@ class KubeDSL::DSL::V1::NamespaceStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Node < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7458,12 +10118,21 @@ class KubeDSL::DSL::V1::Node < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::V1::NodeAddress < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def address(*args); end
 
   sig { returns(Symbol) }
@@ -7478,12 +10147,18 @@ class KubeDSL::DSL::V1::NodeAddress < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeAffinity < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def preferred_during_scheduling_ignored_during_execution(elem_name = T.unsafe(nil), &block); end
   def preferred_during_scheduling_ignored_during_executions; end
   def required_during_scheduling_ignored_during_execution(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def required_during_scheduling_ignored_during_execution_present?; end
 
   sig do
@@ -7493,6 +10168,10 @@ class KubeDSL::DSL::V1::NodeAffinity < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7511,7 +10190,13 @@ class KubeDSL::DSL::V1::NodeCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeConfigSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def config_map(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def config_map_present?; end
 
   sig { returns(Symbol) }
@@ -7524,16 +10209,28 @@ class KubeDSL::DSL::V1::NodeConfigSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeConfigStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def active(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def active_present?; end
+
   def assigned(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def assigned_present?; end
+
   def error(*args); end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def last_known_good(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def last_known_good_present?; end
 
   sig do
@@ -7543,10 +10240,16 @@ class KubeDSL::DSL::V1::NodeConfigStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeDaemonEndpoints < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def kubelet_endpoint(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def kubelet_endpoint_present?; end
 
   sig do
@@ -7556,6 +10259,10 @@ class KubeDSL::DSL::V1::NodeDaemonEndpoints < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -7563,6 +10270,8 @@ class KubeDSL::DSL::V1::NodeList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7572,6 +10281,10 @@ class KubeDSL::DSL::V1::NodeList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeSelector < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7585,6 +10298,10 @@ class KubeDSL::DSL::V1::NodeSelector < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeSelectorRequirement < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def key(*args); end
 
   sig { returns(Symbol) }
@@ -7601,6 +10318,10 @@ class KubeDSL::DSL::V1::NodeSelectorRequirement < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeSelectorTerm < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7616,8 +10337,15 @@ class KubeDSL::DSL::V1::NodeSelectorTerm < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def config_source(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def config_source_present?; end
+
   def external_id(*args); end
 
   sig { returns(Symbol) }
@@ -7638,6 +10366,10 @@ class KubeDSL::DSL::V1::NodeSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def address(elem_name = T.unsafe(nil), &block); end
   def addresses; end
 
@@ -7650,9 +10382,15 @@ class KubeDSL::DSL::V1::NodeStatus < ::KubeDSL::DSLObject
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
   def config(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def config_present?; end
+
   def daemon_endpoints(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def daemon_endpoints_present?; end
+
   def image(elem_name = T.unsafe(nil), &block); end
   def images; end
 
@@ -7660,7 +10398,10 @@ class KubeDSL::DSL::V1::NodeStatus < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def node_info(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def node_info_present?; end
+
   def phase(*args); end
 
   sig do
@@ -7674,6 +10415,10 @@ class KubeDSL::DSL::V1::NodeStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::NodeSystemInfo < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def architecture(*args); end
   def boot_id(*args); end
   def container_runtime_version(*args); end
@@ -7697,6 +10442,10 @@ class KubeDSL::DSL::V1::NodeSystemInfo < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ObjectFieldSelector < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def field_path(*args); end
 
@@ -7710,6 +10459,10 @@ class KubeDSL::DSL::V1::ObjectFieldSelector < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ObjectReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_version(*args); end
   def field_path(*args); end
   def kind(*args); end
@@ -7730,10 +10483,16 @@ class KubeDSL::DSL::V1::ObjectReference < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PersistentVolume < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7742,16 +10501,27 @@ class KubeDSL::DSL::V1::PersistentVolume < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeClaim < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7760,12 +10530,21 @@ class KubeDSL::DSL::V1::PersistentVolumeClaim < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeClaimCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7784,6 +10563,10 @@ class KubeDSL::DSL::V1::PersistentVolumeClaimCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeClaimList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -7791,6 +10574,8 @@ class KubeDSL::DSL::V1::PersistentVolumeClaimList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7800,18 +10585,32 @@ class KubeDSL::DSL::V1::PersistentVolumeClaimList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeClaimSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def access_modes(*args); end
   def data_source(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def data_source_present?; end
+
   def data_source_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def data_source_ref_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def resources(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def resources_present?; end
+
   def selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def selector_present?; end
 
   sig do
@@ -7825,6 +10624,10 @@ class KubeDSL::DSL::V1::PersistentVolumeClaimSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeClaimStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def access_modes(*args); end
 
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
@@ -7845,10 +10648,16 @@ class KubeDSL::DSL::V1::PersistentVolumeClaimStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeClaimTemplate < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7857,10 +10666,16 @@ class KubeDSL::DSL::V1::PersistentVolumeClaimTemplate < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeClaimVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def claim_name(*args); end
 
   sig { returns(Symbol) }
@@ -7875,6 +10690,10 @@ class KubeDSL::DSL::V1::PersistentVolumeClaimVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -7882,6 +10701,8 @@ class KubeDSL::DSL::V1::PersistentVolumeList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -7891,60 +10712,127 @@ class KubeDSL::DSL::V1::PersistentVolumeList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def access_modes(*args); end
   def aws_elastic_block_store(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def aws_elastic_block_store_present?; end
+
   def azure_disk(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def azure_disk_present?; end
+
   def azure_file(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def azure_file_present?; end
 
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def capacity(&block); end
 
   def cephfs(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def cephfs_present?; end
+
   def cinder(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def cinder_present?; end
+
   def claim_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def claim_ref_present?; end
+
   def csi(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def csi_present?; end
+
   def fc(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def fc_present?; end
+
   def flex_volume(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def flex_volume_present?; end
+
   def flocker(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def flocker_present?; end
+
   def gce_persistent_disk(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def gce_persistent_disk_present?; end
+
   def glusterfs(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def glusterfs_present?; end
+
   def host_path(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def host_path_present?; end
+
   def iscsi(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def iscsi_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def local(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def local_present?; end
+
   def mount_options(*args); end
   def nfs(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def nfs_present?; end
+
   def node_affinity(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def node_affinity_present?; end
+
   def persistent_volume_reclaim_policy(*args); end
   def photon_persistent_disk(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def photon_persistent_disk_present?; end
+
   def portworx_volume(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def portworx_volume_present?; end
+
   def quobyte(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def quobyte_present?; end
+
   def rbd(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def rbd_present?; end
+
   def scale_io(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scale_io_present?; end
 
   sig do
@@ -7954,13 +10842,22 @@ class KubeDSL::DSL::V1::PersistentVolumeSpec < ::KubeDSL::DSLObject
 
   def storage_class_name(*args); end
   def storageos(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def storageos_present?; end
+
   def volume_mode(*args); end
   def vsphere_volume(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def vsphere_volume_present?; end
 end
 
 class KubeDSL::DSL::V1::PersistentVolumeStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -7975,6 +10872,10 @@ class KubeDSL::DSL::V1::PersistentVolumeStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PhotonPersistentDiskVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -7989,10 +10890,16 @@ class KubeDSL::DSL::V1::PhotonPersistentDiskVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Pod < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8001,12 +10908,21 @@ class KubeDSL::DSL::V1::Pod < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::V1::PodAffinity < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8022,13 +10938,23 @@ class KubeDSL::DSL::V1::PodAffinity < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodAffinityTerm < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def label_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def label_selector_present?; end
+
   def namespace_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def namespace_selector_present?; end
+
   def namespaces(*args); end
 
   sig do
@@ -8040,6 +10966,10 @@ class KubeDSL::DSL::V1::PodAffinityTerm < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodAntiAffinity < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8055,6 +10985,10 @@ class KubeDSL::DSL::V1::PodAntiAffinity < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8073,6 +11007,10 @@ class KubeDSL::DSL::V1::PodCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodDNSConfig < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8088,6 +11026,10 @@ class KubeDSL::DSL::V1::PodDNSConfig < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodDNSConfigOption < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8102,6 +11044,10 @@ class KubeDSL::DSL::V1::PodDNSConfigOption < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodIP < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def ip(*args); end
 
   sig { returns(Symbol) }
@@ -8114,6 +11060,10 @@ class KubeDSL::DSL::V1::PodIP < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -8121,6 +11071,8 @@ class KubeDSL::DSL::V1::PodList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8130,6 +11082,10 @@ class KubeDSL::DSL::V1::PodList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodReadinessGate < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition_type(*args); end
 
   sig { returns(Symbol) }
@@ -8142,6 +11098,10 @@ class KubeDSL::DSL::V1::PodReadinessGate < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodSecurityContext < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_group(*args); end
   def fs_group_change_policy(*args); end
 
@@ -8152,8 +11112,13 @@ class KubeDSL::DSL::V1::PodSecurityContext < ::KubeDSL::DSLObject
   def run_as_non_root(*args); end
   def run_as_user(*args); end
   def se_linux_options(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def se_linux_options_present?; end
+
   def seccomp_profile(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def seccomp_profile_present?; end
 
   sig do
@@ -8165,18 +11130,30 @@ class KubeDSL::DSL::V1::PodSecurityContext < ::KubeDSL::DSLObject
   def sysctls(elem_name = T.unsafe(nil), &block); end
   def sysctlses; end
   def windows_options(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def windows_options_present?; end
 end
 
 class KubeDSL::DSL::V1::PodSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def active_deadline_seconds(*args); end
   def affinity(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def affinity_present?; end
+
   def automount_service_account_token(*args); end
   def container(elem_name = T.unsafe(nil), &block); end
   def containers; end
   def dns_config(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def dns_config_present?; end
+
   def dns_policy(*args); end
   def enable_service_links(*args); end
   def ephemeral_container(elem_name = T.unsafe(nil), &block); end
@@ -8212,6 +11189,8 @@ class KubeDSL::DSL::V1::PodSpec < ::KubeDSL::DSLObject
   def runtime_class_name(*args); end
   def scheduler_name(*args); end
   def security_context(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def security_context_present?; end
 
   sig do
@@ -8234,6 +11213,10 @@ class KubeDSL::DSL::V1::PodSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
   def container_status(elem_name = T.unsafe(nil), &block); end
@@ -8264,10 +11247,16 @@ class KubeDSL::DSL::V1::PodStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodTemplate < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8276,10 +11265,16 @@ class KubeDSL::DSL::V1::PodTemplate < ::KubeDSL::DSLObject
   def serialize; end
 
   def template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def template_present?; end
 end
 
 class KubeDSL::DSL::V1::PodTemplateList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -8287,6 +11282,8 @@ class KubeDSL::DSL::V1::PodTemplateList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8296,10 +11293,16 @@ class KubeDSL::DSL::V1::PodTemplateList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PodTemplateSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8308,10 +11311,16 @@ class KubeDSL::DSL::V1::PodTemplateSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
 end
 
 class KubeDSL::DSL::V1::PortStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def error(*args); end
 
   sig { returns(Symbol) }
@@ -8327,6 +11336,10 @@ class KubeDSL::DSL::V1::PortStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PortworxVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -8343,10 +11356,16 @@ class KubeDSL::DSL::V1::PortworxVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::PreferredSchedulingTerm < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def preference(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def preference_present?; end
 
   sig do
@@ -8358,11 +11377,21 @@ class KubeDSL::DSL::V1::PreferredSchedulingTerm < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Probe < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def exec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def exec_present?; end
+
   def failure_threshold(*args); end
   def http_get(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def http_get_present?; end
+
   def initial_delay_seconds(*args); end
 
   sig { returns(Symbol) }
@@ -8377,12 +11406,19 @@ class KubeDSL::DSL::V1::Probe < ::KubeDSL::DSLObject
 
   def success_threshold(*args); end
   def tcp_socket(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def tcp_socket_present?; end
+
   def termination_grace_period_seconds(*args); end
   def timeout_seconds(*args); end
 end
 
 class KubeDSL::DSL::V1::ProjectedVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def default_mode(*args); end
 
   sig { returns(Symbol) }
@@ -8398,6 +11434,10 @@ class KubeDSL::DSL::V1::ProjectedVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::QuobyteVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def group(*args); end
 
   sig { returns(Symbol) }
@@ -8417,6 +11457,10 @@ class KubeDSL::DSL::V1::QuobyteVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::RBDPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
   def image(*args); end
   def keyring(*args); end
@@ -8428,6 +11472,8 @@ class KubeDSL::DSL::V1::RBDPersistentVolumeSource < ::KubeDSL::DSLObject
   def pool(*args); end
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -8439,6 +11485,10 @@ class KubeDSL::DSL::V1::RBDPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::RBDVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
   def image(*args); end
   def keyring(*args); end
@@ -8450,6 +11500,8 @@ class KubeDSL::DSL::V1::RBDVolumeSource < ::KubeDSL::DSLObject
   def pool(*args); end
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -8461,10 +11513,16 @@ class KubeDSL::DSL::V1::RBDVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ReplicationController < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8473,12 +11531,21 @@ class KubeDSL::DSL::V1::ReplicationController < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::V1::ReplicationControllerCondition < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8496,6 +11563,10 @@ class KubeDSL::DSL::V1::ReplicationControllerCondition < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ReplicationControllerList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -8503,6 +11574,8 @@ class KubeDSL::DSL::V1::ReplicationControllerList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8512,6 +11585,10 @@ class KubeDSL::DSL::V1::ReplicationControllerList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ReplicationControllerSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8527,10 +11604,16 @@ class KubeDSL::DSL::V1::ReplicationControllerSpec < ::KubeDSL::DSLObject
   def serialize; end
 
   def template(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def template_present?; end
 end
 
 class KubeDSL::DSL::V1::ReplicationControllerStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def available_replicas(*args); end
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
@@ -8550,6 +11633,10 @@ class KubeDSL::DSL::V1::ReplicationControllerStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ResourceFieldSelector < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def container_name(*args); end
   def divisor(*args); end
 
@@ -8565,10 +11652,16 @@ class KubeDSL::DSL::V1::ResourceFieldSelector < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ResourceQuota < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8577,12 +11670,21 @@ class KubeDSL::DSL::V1::ResourceQuota < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::V1::ResourceQuotaList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -8590,6 +11692,8 @@ class KubeDSL::DSL::V1::ResourceQuotaList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8599,6 +11703,10 @@ class KubeDSL::DSL::V1::ResourceQuotaList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ResourceQuotaSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def hard(&block); end
 
@@ -8606,7 +11714,10 @@ class KubeDSL::DSL::V1::ResourceQuotaSpec < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def scope_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scope_selector_present?; end
+
   def scopes(*args); end
 
   sig do
@@ -8616,6 +11727,10 @@ class KubeDSL::DSL::V1::ResourceQuotaSpec < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ResourceQuotaStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def hard(&block); end
 
@@ -8632,6 +11747,10 @@ class KubeDSL::DSL::V1::ResourceQuotaStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ResourceRequirements < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8648,6 +11767,10 @@ class KubeDSL::DSL::V1::ResourceRequirements < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SELinuxOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8664,6 +11787,10 @@ class KubeDSL::DSL::V1::SELinuxOptions < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ScaleIOPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
   def gateway(*args); end
 
@@ -8673,6 +11800,8 @@ class KubeDSL::DSL::V1::ScaleIOPersistentVolumeSource < ::KubeDSL::DSLObject
   def protection_domain(*args); end
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -8688,6 +11817,10 @@ class KubeDSL::DSL::V1::ScaleIOPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ScaleIOVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
   def gateway(*args); end
 
@@ -8697,6 +11830,8 @@ class KubeDSL::DSL::V1::ScaleIOVolumeSource < ::KubeDSL::DSLObject
   def protection_domain(*args); end
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -8712,6 +11847,10 @@ class KubeDSL::DSL::V1::ScaleIOVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ScopeSelector < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8725,6 +11864,10 @@ class KubeDSL::DSL::V1::ScopeSelector < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ScopedResourceSelectorRequirement < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8740,6 +11883,10 @@ class KubeDSL::DSL::V1::ScopedResourceSelectorRequirement < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SeccompProfile < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8754,6 +11901,10 @@ class KubeDSL::DSL::V1::SeccompProfile < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Secret < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { params(block: T.nilable(T.proc.void)).returns(::KubeDSL::KeyValueFields) }
   def data(&block); end
 
@@ -8763,6 +11914,8 @@ class KubeDSL::DSL::V1::Secret < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8777,6 +11930,10 @@ class KubeDSL::DSL::V1::Secret < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SecretEnvSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8790,6 +11947,10 @@ class KubeDSL::DSL::V1::SecretEnvSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SecretKeySelector < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def key(*args); end
 
   sig { returns(Symbol) }
@@ -8805,6 +11966,10 @@ class KubeDSL::DSL::V1::SecretKeySelector < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SecretList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -8812,6 +11977,8 @@ class KubeDSL::DSL::V1::SecretList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8821,6 +11988,10 @@ class KubeDSL::DSL::V1::SecretList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SecretProjection < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -8837,6 +12008,10 @@ class KubeDSL::DSL::V1::SecretProjection < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SecretReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -8850,6 +12025,10 @@ class KubeDSL::DSL::V1::SecretReference < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SecretVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def default_mode(*args); end
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
@@ -8867,8 +12046,14 @@ class KubeDSL::DSL::V1::SecretVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SecurityContext < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def allow_privilege_escalation(*args); end
   def capabilities(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def capabilities_present?; end
 
   sig { returns(Symbol) }
@@ -8881,8 +12066,13 @@ class KubeDSL::DSL::V1::SecurityContext < ::KubeDSL::DSLObject
   def run_as_non_root(*args); end
   def run_as_user(*args); end
   def se_linux_options(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def se_linux_options_present?; end
+
   def seccomp_profile(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def seccomp_profile_present?; end
 
   sig do
@@ -8891,14 +12081,22 @@ class KubeDSL::DSL::V1::SecurityContext < ::KubeDSL::DSLObject
   def serialize; end
 
   def windows_options(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def windows_options_present?; end
 end
 
 class KubeDSL::DSL::V1::Service < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8907,12 +12105,21 @@ class KubeDSL::DSL::V1::Service < ::KubeDSL::DSLObject
   def serialize; end
 
   def spec(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def spec_present?; end
+
   def status(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def status_present?; end
 end
 
 class KubeDSL::DSL::V1::ServiceAccount < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def automount_service_account_token(*args); end
   def image_pull_secret(elem_name = T.unsafe(nil), &block); end
   def image_pull_secrets; end
@@ -8921,7 +12128,10 @@ class KubeDSL::DSL::V1::ServiceAccount < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
+
   def secret(elem_name = T.unsafe(nil), &block); end
   def secrets; end
 
@@ -8932,6 +12142,10 @@ class KubeDSL::DSL::V1::ServiceAccount < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ServiceAccountList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -8939,6 +12153,8 @@ class KubeDSL::DSL::V1::ServiceAccountList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8948,6 +12164,10 @@ class KubeDSL::DSL::V1::ServiceAccountList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ServiceAccountTokenProjection < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def audience(*args); end
   def expiration_seconds(*args); end
 
@@ -8963,6 +12183,10 @@ class KubeDSL::DSL::V1::ServiceAccountTokenProjection < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ServiceList < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def item(elem_name = T.unsafe(nil), &block); end
   def items; end
 
@@ -8970,6 +12194,8 @@ class KubeDSL::DSL::V1::ServiceList < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def metadata(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def metadata_present?; end
 
   sig do
@@ -8979,6 +12205,10 @@ class KubeDSL::DSL::V1::ServiceList < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ServicePort < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def app_protocol(*args); end
 
   sig { returns(Symbol) }
@@ -8998,6 +12228,10 @@ class KubeDSL::DSL::V1::ServicePort < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::ServiceSpec < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def allocate_load_balancer_node_ports(*args); end
   def cluster_i_ps(*args); end
   def cluster_ip(*args); end
@@ -9029,11 +12263,18 @@ class KubeDSL::DSL::V1::ServiceSpec < ::KubeDSL::DSLObject
 
   def session_affinity(*args); end
   def session_affinity_config(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def session_affinity_config_present?; end
+
   def type(*args); end
 end
 
 class KubeDSL::DSL::V1::ServiceStatus < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def condition(elem_name = T.unsafe(nil), &block); end
   def conditions; end
 
@@ -9041,6 +12282,8 @@ class KubeDSL::DSL::V1::ServiceStatus < ::KubeDSL::DSLObject
   def kind_sym; end
 
   def load_balancer(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def load_balancer_present?; end
 
   sig do
@@ -9050,7 +12293,13 @@ class KubeDSL::DSL::V1::ServiceStatus < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::SessionAffinityConfig < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def client_ip(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def client_ip_present?; end
 
   sig { returns(Symbol) }
@@ -9063,6 +12312,10 @@ class KubeDSL::DSL::V1::SessionAffinityConfig < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::StorageOSPersistentVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -9070,6 +12323,8 @@ class KubeDSL::DSL::V1::StorageOSPersistentVolumeSource < ::KubeDSL::DSLObject
 
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -9082,6 +12337,10 @@ class KubeDSL::DSL::V1::StorageOSPersistentVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::StorageOSVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -9089,6 +12348,8 @@ class KubeDSL::DSL::V1::StorageOSVolumeSource < ::KubeDSL::DSLObject
 
   def read_only(*args); end
   def secret_ref(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_ref_present?; end
 
   sig do
@@ -9101,6 +12362,10 @@ class KubeDSL::DSL::V1::StorageOSVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Sysctl < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -9115,6 +12380,10 @@ class KubeDSL::DSL::V1::Sysctl < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::TCPSocketAction < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def host(*args); end
 
   sig { returns(Symbol) }
@@ -9129,6 +12398,10 @@ class KubeDSL::DSL::V1::TCPSocketAction < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Taint < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def effect(*args); end
   def key(*args); end
 
@@ -9145,6 +12418,10 @@ class KubeDSL::DSL::V1::Taint < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Toleration < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def effect(*args); end
   def key(*args); end
 
@@ -9163,6 +12440,10 @@ class KubeDSL::DSL::V1::Toleration < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::TopologySelectorLabelRequirement < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def key(*args); end
 
   sig { returns(Symbol) }
@@ -9177,6 +12458,10 @@ class KubeDSL::DSL::V1::TopologySelectorLabelRequirement < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::TopologySelectorTerm < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -9190,11 +12475,18 @@ class KubeDSL::DSL::V1::TopologySelectorTerm < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::TopologySpreadConstraint < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def label_selector(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def label_selector_present?; end
+
   def max_skew(*args); end
 
   sig do
@@ -9207,6 +12499,10 @@ class KubeDSL::DSL::V1::TopologySpreadConstraint < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::TypedLocalObjectReference < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def api_group(*args); end
   def kind(*args); end
 
@@ -9222,41 +12518,98 @@ class KubeDSL::DSL::V1::TypedLocalObjectReference < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::Volume < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def aws_elastic_block_store(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def aws_elastic_block_store_present?; end
+
   def azure_disk(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def azure_disk_present?; end
+
   def azure_file(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def azure_file_present?; end
+
   def cephfs(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def cephfs_present?; end
+
   def cinder(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def cinder_present?; end
+
   def config_map(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def config_map_present?; end
+
   def csi(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def csi_present?; end
+
   def downward_api(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def downward_api_present?; end
+
   def empty_dir(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def empty_dir_present?; end
+
   def ephemeral(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def ephemeral_present?; end
+
   def fc(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def fc_present?; end
+
   def flex_volume(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def flex_volume_present?; end
+
   def flocker(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def flocker_present?; end
+
   def gce_persistent_disk(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def gce_persistent_disk_present?; end
+
   def git_repo(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def git_repo_present?; end
+
   def glusterfs(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def glusterfs_present?; end
+
   def host_path(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def host_path_present?; end
+
   def iscsi(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def iscsi_present?; end
 
   sig { returns(Symbol) }
@@ -9264,22 +12617,48 @@ class KubeDSL::DSL::V1::Volume < ::KubeDSL::DSLObject
 
   def name(*args); end
   def nfs(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def nfs_present?; end
+
   def persistent_volume_claim(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def persistent_volume_claim_present?; end
+
   def photon_persistent_disk(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def photon_persistent_disk_present?; end
+
   def portworx_volume(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def portworx_volume_present?; end
+
   def projected(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def projected_present?; end
+
   def quobyte(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def quobyte_present?; end
+
   def rbd(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def rbd_present?; end
+
   def scale_io(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def scale_io_present?; end
+
   def secret(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_present?; end
 
   sig do
@@ -9288,12 +12667,21 @@ class KubeDSL::DSL::V1::Volume < ::KubeDSL::DSLObject
   def serialize; end
 
   def storageos(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def storageos_present?; end
+
   def vsphere_volume(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def vsphere_volume_present?; end
 end
 
 class KubeDSL::DSL::V1::VolumeDevice < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def device_path(*args); end
 
   sig { returns(Symbol) }
@@ -9308,6 +12696,10 @@ class KubeDSL::DSL::V1::VolumeDevice < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::VolumeMount < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
@@ -9326,10 +12718,16 @@ class KubeDSL::DSL::V1::VolumeMount < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::VolumeNodeAffinity < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def required(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def required_present?; end
 
   sig do
@@ -9339,15 +12737,26 @@ class KubeDSL::DSL::V1::VolumeNodeAffinity < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::VolumeProjection < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def config_map(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def config_map_present?; end
+
   def downward_api(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def downward_api_present?; end
 
   sig { returns(Symbol) }
   def kind_sym; end
 
   def secret(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def secret_present?; end
 
   sig do
@@ -9356,10 +12765,16 @@ class KubeDSL::DSL::V1::VolumeProjection < ::KubeDSL::DSLObject
   def serialize; end
 
   def service_account_token(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def service_account_token_present?; end
 end
 
 class KubeDSL::DSL::V1::VsphereVirtualDiskVolumeSource < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def fs_type(*args); end
 
   sig { returns(Symbol) }
@@ -9376,10 +12791,16 @@ class KubeDSL::DSL::V1::VsphereVirtualDiskVolumeSource < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::WeightedPodAffinityTerm < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   sig { returns(Symbol) }
   def kind_sym; end
 
   def pod_affinity_term(*args, &block); end
+
+  sig { returns(T::Boolean) }
   def pod_affinity_term_present?; end
 
   sig do
@@ -9391,6 +12812,10 @@ class KubeDSL::DSL::V1::WeightedPodAffinityTerm < ::KubeDSL::DSLObject
 end
 
 class KubeDSL::DSL::V1::WindowsSecurityContextOptions < ::KubeDSL::DSLObject
+  include KubeDSL::ValueFields::InstanceMethods
+  extend KubeDSL::ValueFields::ClassMethods
+  extend KubeDSL::Validations::ClassMethods
+
   def gmsa_credential_spec(*args); end
   def gmsa_credential_spec_name(*args); end
   def host_process(*args); end
@@ -9418,7 +12843,7 @@ class KubeDSL::DSLObject
   sig { params(block: T.nilable(T.proc.void)).void }
   def initialize(&block); end
 
-  sig { returns(T.any(::String, T::Array[T.untyped], T::Hash[T.untyped, T.untyped])) }
+  sig { returns(T.any(String, T::Array[T.untyped], T::Hash[T.untyped, T.untyped])) }
   def serialize; end
 
   sig { returns(::KubeDSL::Resource) }
@@ -10708,6 +14133,7 @@ class KubeDSL::InlineRef
   def parent_ref; end
   def ruby_autoload_path; end
   def serialize_handlers; end
+  def shorten(filename); end
   def str; end
 
   private
@@ -10736,36 +14162,22 @@ end
 class KubeDSL::KeyValueFields
   extend T::Sig
 
-  sig { params(format: ::Symbol).void }
   def initialize(format: T.unsafe(nil)); end
 
-  sig { params(key: ::Symbol, value: ::String).void }
   def add(key, value); end
-
-  sig { returns(::Symbol) }
   def format; end
-
-  sig { params(key: ::Symbol).returns(T.nilable(::String)) }
   def get(key); end
-
-  sig { returns(T::Hash[::Symbol, ::String]) }
   def kv_pairs; end
-
-  sig { params(other: ::KubeDSL::KeyValueFields).void }
   def merge!(other); end
-
-  sig { params(key: ::Symbol).void }
   def remove(key); end
 
-  sig { returns(T::Hash[::Symbol, ::String]) }
+  sig { returns(T::Hash[Symbol, String]) }
   def serialize; end
 
-  sig { params(key: ::Symbol, value: ::String).void }
   def set(key, value); end
 
   private
 
-  sig { params(data: ::String).returns(::String) }
   def serialize_value(data); end
 end
 
@@ -10824,28 +14236,21 @@ end
 class KubeDSL::Resource
   extend T::Sig
 
-  sig { params(contents: T.any(::String, T::Array[T.untyped], T::Hash[T.untyped, T.untyped])).void }
   def initialize(contents); end
 
-  sig { returns(T.any(::String, T::Array[T.untyped], T::Hash[T.untyped, T.untyped])) }
   def contents; end
 
-  sig { returns(T.nilable(T.any(::String, T::Array[T.untyped], T::Hash[T.untyped, T.untyped]))) }
+  sig { returns(T.nilable(T.any(String, T::Array[T.untyped], T::Hash[T.untyped, T.untyped]))) }
   def serialize; end
 
-  sig { returns(::KubeDSL::Resource) }
+  sig { returns(KubeDSL::Resource) }
   def to_resource; end
 
-  sig { returns(::String) }
+  sig { returns(String) }
   def to_yaml; end
 
   private
 
-  sig do
-    params(
-      obj: T.any(::String, T::Array[T.untyped], T::Hash[T.untyped, T.untyped])
-    ).returns(T.nilable(T.any(::String, T::Array[T.untyped], T::Hash[T.untyped, T.untyped])))
-  end
   def cleanup(obj); end
 end
 

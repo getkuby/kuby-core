@@ -8,7 +8,7 @@ module Kuby
       DEFAULT_DISTRO = T.let(:debian, Symbol)
       DEFAULT_APP_ROOT_PATH = T.let('.'.freeze, String)
 
-      T::Sig::WithoutRuntime.sig { returns(Environment) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Environment) }
       attr_reader :environment
 
       T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
@@ -20,10 +20,10 @@ module Kuby
       T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       attr_reader :app_root_path
 
-      T::Sig::WithoutRuntime.sig { returns T.nilable(Docker::AppImage) }
+      T::Sig::WithoutRuntime.sig { returns T.nilable(Kuby::Docker::AppImage) }
       attr_reader :image
 
-      T::Sig::WithoutRuntime.sig { params(environment: Environment).void }
+      T::Sig::WithoutRuntime.sig { params(environment: Kuby::Environment).void }
       def initialize(environment)
         @environment = environment
 
@@ -124,7 +124,7 @@ module Kuby
         params(
           name: Symbol,
           layer: T.nilable(Layer),
-          block: T.nilable(T.proc.params(df: Dockerfile).void)
+          block: T.nilable(T.proc.params(df: Kuby::Docker::Dockerfile).void)
         )
         .void
       }
@@ -156,7 +156,7 @@ module Kuby
       end
 
       T::Sig::WithoutRuntime.sig {
-        params(block: T.nilable(T.proc.void)).returns(Credentials)
+        params(block: T.nilable(T.proc.void)).returns(Kuby::Docker::Credentials)
       }
       def credentials(&block)
         @credentials ||= Credentials.new
@@ -177,47 +177,47 @@ module Kuby
         end
       end
 
-      T::Sig::WithoutRuntime.sig { returns(SetupPhase) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::SetupPhase) }
       def setup_phase
         @setup_phase ||= SetupPhase.new(environment, self)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(PackagePhase) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::PackagePhase) }
       def package_phase
         @package_phase ||= PackagePhase.new(environment)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(BundlerPhase) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::BundlerPhase) }
       def bundler_phase
         @bundler_phase ||= BundlerPhase.new(environment)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(YarnPhase) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::YarnPhase) }
       def yarn_phase
         @yarn_phase ||= YarnPhase.new(environment)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(CopyPhase) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::CopyPhase) }
       def copy_phase
         @copy_phase ||= CopyPhase.new(environment)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(AppPhase) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::AppPhase) }
       def app_phase
         @app_phase ||= AppPhase.new(environment)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(AssetsPhase) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::AssetsPhase) }
       def assets_phase
         @assets_phase ||= AssetsPhase.new(environment)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(WebserverPhase) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::WebserverPhase) }
       def webserver_phase
         @webserver_phase ||= WebserverPhase.new(environment)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Distro) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::Distro) }
       def distro_spec
         @distro_spec ||= if distro_klass = Kuby.distros[distro_name]
           distro_klass.new(self)

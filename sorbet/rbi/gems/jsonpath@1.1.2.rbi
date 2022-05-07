@@ -21,9 +21,12 @@ class JsonPath
   def deep_clone; end
 
   class << self
+    def construct_path(table_row); end
+    def fetch_all_path(obj); end
+    def find_path(obj, root_key, all_paths, is_array = T.unsafe(nil)); end
     def for(obj_or_str); end
     def on(obj_or_str, path, opts = T.unsafe(nil)); end
-    def process_object(obj_or_str); end
+    def process_object(obj_or_str, opts = T.unsafe(nil)); end
   end
 end
 

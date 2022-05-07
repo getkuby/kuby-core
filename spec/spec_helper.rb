@@ -2,6 +2,7 @@
 
 $:.push(File.expand_path('.', __dir__))
 
+require 'sorbet-runtime'
 require 'kuby'
 require 'pry-byebug'
 

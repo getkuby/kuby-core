@@ -73,8 +73,17 @@ class RBI::Tree < ::RBI::NodeWithComments
   sig { params(constant: ::Module, block: T.nilable(T.proc.params(scope: ::RBI::Scope).void)).void }
   def create_path(constant, &block); end
 
-  sig { params(name: ::String, value: ::String).void }
-  def create_type_member(name, value: T.unsafe(nil)); end
+  sig do
+    params(
+      name: ::String,
+      type: ::String,
+      variance: ::Symbol,
+      fixed: T.nilable(::String),
+      upper: T.nilable(::String),
+      lower: T.nilable(::String)
+    ).void
+  end
+  def create_type_variable(name, type:, variance: T.unsafe(nil), fixed: T.unsafe(nil), upper: T.unsafe(nil), lower: T.unsafe(nil)); end
 
   sig { params(annotation: ::String).void }
   def deannotate!(annotation); end
@@ -140,8 +149,8 @@ RBI::VERSION = T.let(T.unsafe(nil), String)
 
 module T::Generic::TypeStoragePatch
   def [](*types); end
-  def type_member(variance = T.unsafe(nil), fixed: T.unsafe(nil), lower: T.unsafe(nil), upper: T.unsafe(nil)); end
-  def type_template(variance = T.unsafe(nil), fixed: T.unsafe(nil), lower: T.unsafe(nil), upper: T.unsafe(nil)); end
+  def type_member(variance = T.unsafe(nil), fixed: T.unsafe(nil), lower: T.unsafe(nil), upper: T.unsafe(nil), &blk); end
+  def type_template(variance = T.unsafe(nil), fixed: T.unsafe(nil), lower: T.unsafe(nil), upper: T.unsafe(nil), &blk); end
 end
 
 module T::Types::Simple::GenericPatch
@@ -1373,7 +1382,12 @@ module Tapioca::Runtime::Reflection
   sig { params(constant: ::Module).returns(T::Array[::Symbol]) }
   def constants_of(constant); end
 
-  sig { type_parameters(:U).params(klass: T.type_parameter(:U)).returns(T::Array[T.type_parameter(:U)]) }
+  sig do
+    type_parameters(:U)
+      .params(
+        klass: T.all(::Class, T.type_parameter(:U))
+      ).returns(T::Array[T.type_parameter(:U)])
+  end
   def descendants_of(klass); end
 
   sig { params(constant: ::Module).returns(T::Array[::Module]) }
@@ -1637,6 +1651,23 @@ class Tapioca::TypeVariable < ::T::Types::TypeVariable
   def name; end
 end
 
+module Tapioca::TypeVariableHelper
+  extend ::Tapioca::SorbetHelper
+
+  class << self
+    sig do
+      params(
+        type: ::String,
+        variance: ::Symbol,
+        fixed: T.nilable(::String),
+        upper: T.nilable(::String),
+        lower: T.nilable(::String)
+      ).returns(::String)
+    end
+    def serialize_type_variable(type, variance, fixed, upper, lower); end
+  end
+end
+
 class Tapioca::TypeVariableModule < ::Module
   sig do
     params(
@@ -1648,7 +1679,7 @@ class Tapioca::TypeVariableModule < ::Module
       upper: T.untyped
     ).void
   end
-  def initialize(context, type, variance, fixed, lower, upper); end
+  def initialize(context, type, variance, fixed: T.unsafe(nil), lower: T.unsafe(nil), upper: T.unsafe(nil)); end
 
   sig { returns(::Tapioca::TypeVariable) }
   def coerce_to_type_variable; end

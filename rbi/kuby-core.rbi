@@ -138,10 +138,10 @@ module Kuby
     sig { params(app_name: String, block: T.nilable(T.proc.void)).void }
     def initialize(app_name, &block); end
 
-    sig { params(name: Symbol, block: T.nilable(T.proc.void)).returns(Environment) }
+    sig { params(name: Symbol, block: T.nilable(T.proc.void)).returns(Kuby::Environment) }
     def environment(name = Kuby.env, &block); end
 
-    sig { returns(T::Hash[Symbol, Environment]) }
+    sig { returns(T::Hash[Symbol, Kuby::Environment]) }
     def environments; end
   end
 
@@ -152,7 +152,7 @@ module Kuby
     sig { returns(T.untyped) }
     attr_reader :version_or_callable
 
-    sig { params(name: T.untyped, version_or_callable: T.untyped).returns(T.untyped) }
+    sig { params(name: T.untyped, version_or_callable: T.untyped).void }
     def initialize(name, version_or_callable); end
 
     sig { returns(T.untyped) }
@@ -166,7 +166,7 @@ module Kuby
     sig { returns(T.untyped) }
     attr_reader :constraints
 
-    sig { params(name: T.untyped, constraints: T.untyped).returns(T.untyped) }
+    sig { params(name: T.untyped, constraints: T.untyped).void }
     def initialize(name, *constraints); end
 
     sig { params(dependable: T.untyped).returns(T.untyped) }
@@ -183,7 +183,7 @@ module Kuby
     sig { returns(T.untyped) }
     attr_accessor :configured
 
-    sig { params(name: T.untyped, definition: T.untyped, block: T.untyped).returns(T.untyped) }
+    sig { params(name: T.untyped, definition: T.untyped, block: T.untyped).void }
     def initialize(name, definition, &block); end
 
     sig { params(block: T.untyped).returns(T.untyped) }
@@ -200,7 +200,7 @@ module Kuby
     sig { returns(T.untyped) }
     attr_reader :environment
 
-    sig { params(environment: T.untyped).returns(T.untyped) }
+    sig { params(environment: T.untyped).void }
     def initialize(environment); end
 
     sig { returns(T.untyped) }
@@ -267,7 +267,7 @@ module Kuby
     sig { returns(T.untyped) }
     attr_reader :environment
 
-    sig { params(environment: T.untyped).returns(T.untyped) }
+    sig { params(environment: T.untyped).void }
     def initialize(environment); end
 
     sig { params(only: T.untyped).returns(T.untyped) }
@@ -294,10 +294,11 @@ module Kuby
         docker_args: T.untyped,
         only: T.untyped,
         ignore_missing_args: T.untyped,
-        context: T.untyped
+        context: T.untyped,
+        cache_from_latest: T.untyped
       ).returns(T.untyped)
     end
-    def build(build_args = {}, docker_args = [], only: [], ignore_missing_args: false, context: nil); end
+    def build(build_args = {}, docker_args = [], only: [], ignore_missing_args: false, context: nil, cache_from_latest: true); end
 
     sig { params(only: T.untyped).returns(T.untyped) }
     def push(only: []); end
@@ -528,10 +529,11 @@ module Kuby
           image: Image,
           build_args: T::Hash[T.any(Symbol, String), String],
           docker_args: T::Array[String],
-          context: T.nilable(String)
+          context: T.nilable(String),
+          cache_from: T.nilable(String)
         ).void
       end
-      def build(image, build_args: {}, docker_args: [], context: nil); end
+      def build(image, build_args: {}, docker_args: [], context: nil, cache_from: nil); end
 
       sig do
         params(
@@ -833,7 +835,7 @@ module Kuby
       sig { returns(T.nilable(String)) }
       attr_reader :registry_index_url
 
-      sig { returns(Credentials) }
+      sig { returns(Kuby::Docker::Credentials) }
       attr_reader :credentials
 
       sig { returns(T.nilable(String)) }
@@ -844,9 +846,9 @@ module Kuby
 
       sig do
         params(
-          dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
+          dockerfile: T.any(Dockerfile, T.proc.returns(Kuby::Docker::Dockerfile)),
           image_url: String,
-          credentials: Credentials,
+          credentials: Kuby::Docker::Credentials,
           registry_index_url: T.nilable(String),
           main_tag: T.nilable(String),
           alias_tags: T::Array[String]
@@ -854,16 +856,16 @@ module Kuby
       end
       def initialize(dockerfile, image_url, credentials, registry_index_url = nil, main_tag = nil, alias_tags = []); end
 
-      sig { returns(Image) }
+      sig { returns(Kuby::Docker::Image) }
       def new_version; end
 
-      sig { returns(Image) }
+      sig { returns(Kuby::Docker::Image) }
       def current_version; end
 
       sig { params(current_tag: T.nilable(String)).returns(Image) }
       def previous_version(current_tag = nil); end
 
-      sig { returns(Dockerfile) }
+      sig { returns(Kuby::Docker::Dockerfile) }
       def dockerfile; end
 
       sig { returns(String) }
@@ -881,22 +883,32 @@ module Kuby
       sig { returns(String) }
       def image_repo; end
 
-      sig { returns(DockerURI) }
+      sig { returns(Kuby::Docker::DockerURI) }
       def image_uri; end
 
-      sig { returns(DockerURI) }
+      sig { returns(Kuby::Docker::DockerURI) }
       def registry_index_uri; end
 
       sig { returns(T::Array[String]) }
       def tags; end
 
-      sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String], context: T.nilable(String)).void }
-      def build(build_args = {}, docker_args = [], context: nil); end
+      sig do
+        params(
+          build_args: T::Hash[String, String],
+          docker_args: T::Array[String],
+          context: T.nilable(String),
+          cache_from: T.nilable(String)
+        ).void
+      end
+      def build(build_args = {}, docker_args = [], context: nil, cache_from: nil); end
 
       sig { params(tag: String).void }
       def push(tag); end
 
-      sig { returns(Docker::CLI) }
+      sig { params(tag: String).void }
+      def pull(tag); end
+
+      sig { returns(Kuby::Docker::CLI) }
       def docker_cli; end
 
       sig { params(main_tag: String, alias_tags: T::Array[String]).returns(Image) }
@@ -936,21 +948,21 @@ module Kuby
       include Enumerable
       extend T::Sig
       extend T::Generic
-      Elem = type_member { { fixed: Layer } }
+      Elem = type_member { { fixed: Kuby::Docker::Layer } }
 
       sig { returns(T::Array[Symbol]) }
       attr_reader :stack
 
-      sig { returns(T::Hash[Symbol, Layer]) }
+      sig { returns(T::Hash[Symbol, Kuby::Docker::Layer]) }
       attr_reader :layers
 
       sig { void }
       def initialize; end
 
-      sig { override.params(block: T.nilable(T.proc.params(layer: Layer).void)).void }
+      sig { override.params(block: T.nilable(T.proc.params(layer: Kuby::Docker::Layer).void)).void }
       def each(&block); end
 
-      sig { params(name: Symbol, layer: T.nilable(Layer), block: T.nilable(T.proc.params(df: Dockerfile).void)).void }
+      sig { params(name: Symbol, layer: T.nilable(Layer), block: T.nilable(T.proc.params(df: Kuby::Docker::Dockerfile).void)).void }
       def use(name, layer = nil, &block); end
 
       sig do
@@ -958,7 +970,7 @@ module Kuby
           name: Symbol,
           layer: T.nilable(T.any(Layer, T::Hash[Symbol, T.untyped])),
           options: T::Hash[Symbol, T.untyped],
-          block: T.nilable(T.proc.params(df: Dockerfile).void)
+          block: T.nilable(T.proc.params(df: Kuby::Docker::Dockerfile).void)
         ).void
       end
       def insert(name, layer = nil, options = {}, &block); end
@@ -973,13 +985,13 @@ module Kuby
     class LocalTags
       extend T::Sig
 
-      sig { returns(CLI) }
+      sig { returns(Kuby::Docker::CLI) }
       attr_reader :cli
 
       sig { returns(String) }
       attr_reader :image_url
 
-      sig { params(cli: CLI, image_url: String).void }
+      sig { params(cli: Kuby::Docker::CLI, image_url: String).void }
       def initialize(cli, image_url); end
 
       sig { returns(T::Array[String]) }
@@ -988,10 +1000,10 @@ module Kuby
       sig { returns(T::Array[String]) }
       def latest_tags; end
 
-      sig { returns(T::Array[TimestampTag]) }
+      sig { returns(T::Array[Kuby::Docker::TimestampTag]) }
       def timestamp_tags; end
 
-      sig { returns(T.nilable(TimestampTag)) }
+      sig { returns(T.nilable(Kuby::Docker::TimestampTag)) }
       def latest_timestamp_tag; end
     end
 
@@ -999,7 +1011,7 @@ module Kuby
       include Enumerable
       extend T::Sig
       extend T::Generic
-      Elem = wtype_member { { fixed: Distro::PackageImpl } }
+      Elem = type_member { { fixed: Distro::PackageImpl } }
 
       sig { returns(T::Array[Distro::PackageImpl]) }
       attr_reader :packages
@@ -1030,7 +1042,7 @@ module Kuby
       sig { returns(T::Array[Operation]) }
       attr_reader :operations
 
-      sig { params(environment: Environment).void }
+      sig { params(environment: Kuby::Environment).void }
       def initialize(environment); end
 
       sig { params(package_name: Symbol, version: T.nilable(String)).void }
@@ -1039,13 +1051,13 @@ module Kuby
       sig { params(package_name: Symbol).void }
       def remove(package_name); end
 
-      sig { override.params(dockerfile: Dockerfile).void }
+      sig { override.params(dockerfile: Kuby::Docker::Dockerfile).void }
       def apply_to(dockerfile); end
 
-      sig { returns(Distro) }
+      sig { returns(Kuby::Docker::Distro) }
       def distro_spec; end
 
-      sig { params(package_name: Symbol, version: T.nilable(String)).returns(Distro::PackageImpl) }
+      sig { params(package_name: Symbol, version: T.nilable(String)).returns(Kuby::Docker::Distro::PackageImpl) }
       def get_package(package_name, version); end
     end
 
@@ -1067,7 +1079,7 @@ module Kuby
       sig { returns(T::Array[String]) }
       def latest_tags; end
 
-      sig { returns(T::Array[TimestampTag]) }
+      sig { returns(T::Array[Kuby::Docker::TimestampTag]) }
       def timestamp_tags; end
     end
 
@@ -1111,7 +1123,7 @@ module Kuby
       DEFAULT_DISTRO = T.let(:debian, Symbol)
       DEFAULT_APP_ROOT_PATH = T.let('.'.freeze, String)
 
-      sig { returns(Environment) }
+      sig { returns(Kuby::Environment) }
       attr_reader :environment
 
       sig { returns(T.nilable(String)) }
@@ -1123,7 +1135,10 @@ module Kuby
       sig { returns(T.nilable(String)) }
       attr_reader :app_root_path
 
-      sig { params(environment: Environment).void }
+      sig { returns(T.nilable(Kuby::Docker::AppImage)) }
+      attr_reader :image
+
+      sig { params(environment: Kuby::Environment).void }
       def initialize(environment); end
 
       sig { returns(Symbol) }
@@ -1165,7 +1180,7 @@ module Kuby
       sig { params(url: String).void }
       def registry_index_url(url); end
 
-      sig { params(name: Symbol, layer: T.nilable(Layer), block: T.nilable(T.proc.params(df: Dockerfile).void)).void }
+      sig { params(name: Symbol, layer: T.nilable(Layer), block: T.nilable(T.proc.params(df: Kuby::Docker::Dockerfile).void)).void }
       def use(name, layer = nil, &block); end
 
       sig do
@@ -1184,37 +1199,37 @@ module Kuby
       sig { params(name: Symbol).returns(T::Boolean) }
       def exists?(name); end
 
-      sig { params(block: T.nilable(T.proc.void)).returns(Credentials) }
+      sig { params(block: T.nilable(T.proc.void)).returns(Kuby::Docker::Credentials) }
       def credentials(&block); end
 
-      sig { returns(Docker::AppImage) }
-      def image; end
+      sig { void }
+      def after_configuration; end
 
-      sig { returns(SetupPhase) }
+      sig { returns(Kuby::Docker::SetupPhase) }
       def setup_phase; end
 
-      sig { returns(PackagePhase) }
+      sig { returns(Kuby::Docker::PackagePhase) }
       def package_phase; end
 
-      sig { returns(BundlerPhase) }
+      sig { returns(Kuby::Docker::BundlerPhase) }
       def bundler_phase; end
 
-      sig { returns(YarnPhase) }
+      sig { returns(Kuby::Docker::YarnPhase) }
       def yarn_phase; end
 
-      sig { returns(CopyPhase) }
+      sig { returns(Kuby::Docker::CopyPhase) }
       def copy_phase; end
 
-      sig { returns(AppPhase) }
+      sig { returns(Kuby::Docker::AppPhase) }
       def app_phase; end
 
-      sig { returns(AssetsPhase) }
+      sig { returns(Kuby::Docker::AssetsPhase) }
       def assets_phase; end
 
-      sig { returns(WebserverPhase) }
+      sig { returns(Kuby::Docker::WebserverPhase) }
       def webserver_phase; end
 
-      sig { returns(Distro) }
+      sig { returns(Kuby::Docker::Distro) }
       def distro_spec; end
 
       sig { returns(Kuby::Docker::LayerStack) }
@@ -1225,10 +1240,10 @@ module Kuby
       extend T::Sig
       FORMAT = T.let('%Y%m%d%H%M%S'.freeze, String)
 
-      sig { params(str: T.nilable(String)).returns(T.nilable(TimestampTag)) }
+      sig { params(str: T.nilable(String)).returns(T.nilable(Kuby::Docker::TimestampTag)) }
       def self.try_parse(str); end
 
-      sig { returns(TimestampTag) }
+      sig { returns(Kuby::Docker::TimestampTag) }
       def self.now; end
 
       sig { returns(Time) }
@@ -1240,16 +1255,16 @@ module Kuby
       sig { returns(String) }
       def to_s; end
 
-      sig { params(other: TimestampTag).returns(T.nilable(Integer)) }
+      sig { params(other: Kuby::Docker::TimestampTag).returns(T.nilable(Integer)) }
       def <=>(other); end
 
-      sig { params(other: TimestampTag).returns(T::Boolean) }
+      sig { params(other: Kuby::Docker::TimestampTag).returns(T::Boolean) }
       def ==(other); end
 
       sig { returns(Integer) }
       def hash; end
 
-      sig { params(other: TimestampTag).returns(T::Boolean) }
+      sig { params(other: Kuby::Docker::TimestampTag).returns(T::Boolean) }
       def eql?(other); end
     end
 
@@ -1258,9 +1273,9 @@ module Kuby
 
       sig do
         params(
-          dockerfile: T.any(Dockerfile, T.proc.returns(Dockerfile)),
+          dockerfile: T.any(Dockerfile, T.proc.returns(Kuby::Docker::Dockerfile)),
           image_url: String,
-          credentials: Credentials,
+          credentials: Kuby::Docker::Credentials,
           registry_index_url_str: T.nilable(String),
           main_tag: T.nilable(String),
           alias_tags: T::Array[String]
@@ -1268,26 +1283,36 @@ module Kuby
       end
       def initialize(dockerfile, image_url, credentials, registry_index_url_str = nil, main_tag = nil, alias_tags = []); end
 
-      sig { returns(Image) }
+      sig { returns(Kuby::Docker::Image) }
       def new_version; end
 
-      sig { returns(Image) }
+      sig { returns(Kuby::Docker::Image) }
       def current_version; end
 
-      sig { params(current_tag: T.nilable(String)).returns(Image) }
+      sig { params(current_tag: T.nilable(String)).returns(Kuby::Docker::Image) }
       def previous_version(current_tag = nil); end
 
-      sig { params(current_tag: T.nilable(String)).returns(TimestampTag) }
+      sig { params(current_tag: T.nilable(String)).returns(Kuby::Docker::TimestampTag) }
       def previous_timestamp_tag(current_tag = nil); end
 
-      sig { returns(TimestampTag) }
+      sig { returns(Kuby::Docker::TimestampTag) }
       def latest_timestamp_tag; end
 
-      sig { params(build_args: T::Hash[String, String], docker_args: T::Array[String], context: T.nilable(String)).void }
-      def build(build_args = {}, docker_args = [], context: nil); end
+      sig do
+        params(
+          build_args: T::Hash[String, String],
+          docker_args: T::Array[String],
+          context: T.nilable(String),
+          cache_from: T.nilable(String)
+        ).void
+      end
+      def build(build_args = {}, docker_args = [], context: nil, cache_from: nil); end
 
       sig { params(tag: String).void }
       def push(tag); end
+
+      sig { params(tag: String).void }
+      def pull(tag); end
 
       sig { returns(T::Boolean) }
       def exists?; end
@@ -1295,13 +1320,13 @@ module Kuby
       sig { returns(::Docker::Remote::Client) }
       def remote_client; end
 
-      sig { returns(T::Array[TimestampTag]) }
+      sig { returns(T::Array[Kuby::Docker::TimestampTag]) }
       def timestamp_tags; end
 
-      sig { returns(LocalTags) }
+      sig { returns(Kuby::Docker::LocalTags) }
       def local; end
 
-      sig { returns(RemoteTags) }
+      sig { returns(Kuby::Docker::RemoteTags) }
       def remote; end
     end
 
@@ -1493,7 +1518,7 @@ module Kuby
       sig { returns(T.untyped) }
       attr_reader :deploy_task
 
-      sig { params(kwargs: T.untyped).returns(T.untyped) }
+      sig { params(kwargs: T.untyped).void }
       def initialize(**kwargs); end
 
       sig { params(kwargs: T.untyped).returns(T.untyped) }
@@ -1513,7 +1538,7 @@ module Kuby
       sig { params(logdev: T.untyped).returns(T.untyped) }
       attr_writer :logdev
 
-      sig { params(environment: T.untyped).returns(T.untyped) }
+      sig { params(environment: T.untyped).void }
       def initialize(environment); end
 
       sig { returns(T.untyped) }
@@ -1559,7 +1584,7 @@ module Kuby
     class DockerConfig
       extend ::KubeDSL::ValueFields
 
-      sig { params(block: T.untyped).returns(T.untyped) }
+      sig { params(block: T.untyped).void }
       def initialize(&block); end
 
       sig { returns(T.untyped) }
@@ -1607,7 +1632,7 @@ module Kuby
     class Manifest
       include Enumerable
 
-      sig { params(resources: T.untyped).returns(T.untyped) }
+      sig { params(resources: T.untyped).void }
       def initialize(resources); end
 
       sig { params(block: T.untyped).returns(T.untyped) }
@@ -1633,7 +1658,7 @@ module Kuby
       sig { returns(T.untyped) }
       attr_reader :environment
 
-      sig { params(environment: T.untyped).returns(T.untyped) }
+      sig { params(environment: T.untyped).void }
       def initialize(environment); end
 
       sig { params(block: T.untyped).returns(T.untyped) }
@@ -1683,7 +1708,7 @@ module Kuby
     end
 
     class RegistrySecret < ::KubeDSL::DSL::V1::Secret
-      sig { params(block: T.untyped).returns(T.untyped) }
+      sig { params(block: T.untyped).void }
       def initialize(&block); end
 
       sig { returns(T.untyped) }
@@ -1702,7 +1727,7 @@ module Kuby
       sig { returns(T.untyped) }
       attr_reader :tag
 
-      sig { params(environment: T.untyped).returns(T.untyped) }
+      sig { params(environment: T.untyped).void }
       def initialize(environment); end
 
       sig { params(provider_name: T.untyped, block: T.untyped).returns(T.untyped) }
@@ -1760,7 +1785,7 @@ module Kuby
       sig { returns(T.untyped) }
       attr_reader :app
 
-      sig { params(app: T.untyped).returns(T.untyped) }
+      sig { params(app: T.untyped).void }
       def initialize(app); end
 
       sig { params(env: T.untyped).returns(T.untyped) }
@@ -1818,7 +1843,7 @@ module Kuby
         sig { returns(T.untyped) }
         attr_reader :source_path
 
-        sig { params(to: T.untyped, from: T.untyped).returns(T.untyped) }
+        sig { params(to: T.untyped, from: T.untyped).void }
         def initialize(to:, from:); end
 
         sig { returns(T.untyped) }
@@ -1911,7 +1936,7 @@ module Kuby
             registry_index_url: T.untyped,
             main_tag: T.untyped,
             alias_tags: T.untyped
-          ).returns(T.untyped)
+          ).void
         end
         def initialize(base_image, dockerfile, registry_index_url = nil, main_tag = nil, alias_tags = []); end
 
@@ -1924,11 +1949,21 @@ module Kuby
         sig { returns(T.untyped) }
         def previous_version; end
 
-        sig { params(build_args: T.untyped, docker_args: T.untyped, context: T.untyped).returns(T.untyped) }
-        def build(build_args = {}, docker_args = [], context: nil); end
+        sig do
+          params(
+            build_args: T.untyped,
+            docker_args: T.untyped,
+            context: T.untyped,
+            cache_from: T.untyped
+          ).returns(T.untyped)
+        end
+        def build(build_args = {}, docker_args = [], context: nil, cache_from: nil); end
 
         sig { params(tag: T.untyped).returns(T.untyped) }
         def push(tag); end
+
+        sig { params(tag: T.untyped).returns(T.untyped) }
+        def pull(tag); end
 
         sig { params(image: T.untyped).returns(T.untyped) }
         def duplicate_with_annotated_tags(image); end
@@ -1949,11 +1984,14 @@ module Kuby
         sig { returns(T.untyped) }
         attr_reader :environment
 
-        sig { params(environment: T.untyped, _: T.untyped).returns(T.untyped) }
+        sig { params(environment: T.untyped, _: T.untyped).void }
         def initialize(environment, *_); end
 
         sig { returns(T.untyped) }
         def after_configuration; end
+
+        sig { params(_pod_spec: T.untyped).returns(T.untyped) }
+        def configure_pod_spec(_pod_spec); end
 
         sig { returns(T.untyped) }
         def bootstrap; end
@@ -1971,6 +2009,9 @@ module Kuby
   end
 
   module Utils
+    sig { params(args: T.untyped).returns(T.untyped) }
+    def self.which(*args); end
+
     class Table
       sig { returns(T.untyped) }
       attr_reader :headers
@@ -1978,7 +2019,7 @@ module Kuby
       sig { returns(T.untyped) }
       attr_reader :rows
 
-      sig { params(headers: T.untyped, rows: T.untyped).returns(T.untyped) }
+      sig { params(headers: T.untyped, rows: T.untyped).void }
       def initialize(headers, rows); end
 
       sig { returns(T.untyped) }
@@ -1992,6 +2033,13 @@ module Kuby
 
       sig { returns(T.untyped) }
       def col_widths; end
+    end
+
+    module Which
+      extend self
+
+      sig { params(program: T.untyped, path: T.untyped).returns(T.untyped) }
+      def which(program, path = ENV['PATH']); end
     end
 
     module SemVer
@@ -2021,7 +2069,7 @@ module Kuby
         sig { params(str: T.untyped).returns(T.untyped) }
         def self.parse(str); end
 
-        sig { params(operator: T.untyped, version: T.untyped).returns(T.untyped) }
+        sig { params(operator: T.untyped, version: T.untyped).void }
         def initialize(operator, version); end
 
         sig { returns(T.untyped) }
@@ -2038,7 +2086,7 @@ module Kuby
         sig { params(arr: T.untyped).returns(T.untyped) }
         def self.parse(*arr); end
 
-        sig { params(constraints: T.untyped).returns(T.untyped) }
+        sig { params(constraints: T.untyped).void }
         def initialize(constraints); end
 
         sig { params(version: T.untyped).returns(T.untyped) }
@@ -2063,7 +2111,7 @@ module Kuby
         sig { params(str: T.untyped, default: T.untyped).returns(T.untyped) }
         def self.parse(str, default: 0); end
 
-        sig { params(major: T.untyped, minor: T.untyped, patch: T.untyped).returns(T.untyped) }
+        sig { params(major: T.untyped, minor: T.untyped, patch: T.untyped).void }
         def initialize(major, minor, patch); end
 
         sig { returns(T.untyped) }

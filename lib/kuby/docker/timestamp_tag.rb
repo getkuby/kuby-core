@@ -9,7 +9,7 @@ module Kuby
 
       FORMAT = T.let('%Y%m%d%H%M%S'.freeze, String)
 
-      T::Sig::WithoutRuntime.sig { params(str: T.nilable(String)).returns(T.nilable(TimestampTag)) }
+      T::Sig::WithoutRuntime.sig { params(str: T.nilable(String)).returns(T.nilable(Kuby::Docker::TimestampTag)) }
       def self.try_parse(str)
         return nil unless str
 
@@ -27,7 +27,7 @@ module Kuby
         new(time)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(TimestampTag) }
+      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::TimestampTag) }
       def self.now
         new(Time.now.utc)
       end
@@ -45,12 +45,12 @@ module Kuby
         time.strftime(FORMAT)
       end
 
-      T::Sig::WithoutRuntime.sig { params(other: TimestampTag).returns(T.nilable(Integer)) }
+      T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T.nilable(Integer)) }
       def <=>(other)
         time <=> other.time
       end
 
-      T::Sig::WithoutRuntime.sig { params(other: TimestampTag).returns(T::Boolean) }
+      T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T::Boolean) }
       def ==(other)
         time == other.time
       end
@@ -60,7 +60,7 @@ module Kuby
         time.hash
       end
 
-      T::Sig::WithoutRuntime.sig { params(other: TimestampTag).returns(T::Boolean) }
+      T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T::Boolean) }
       def eql?(other)
         time == other.time
       end
