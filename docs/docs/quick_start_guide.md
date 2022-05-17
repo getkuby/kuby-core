@@ -14,7 +14,7 @@ Getting your Rails app set up to work with Kuby is pretty straightforward. Here'
 1. Configure Kuby
 1. Deploy!
 
-**NOTE**: Kuby is designed to work with Rails 5.1 and up.
+**NOTE**: Kuby is designed to work with Rails 5.2 and up.
 
 ## Installing Docker
 
@@ -61,6 +61,12 @@ Add the kuby-core gem and the corresponding gem for your chosen provider to your
 ```ruby
 gem 'kuby-core', '< 1.0'
 gem 'kuby-digitalocean', '< 1.0'
+```
+
+Kuby only supports the [CockroachDB](https://www.cockroachlabs.com/product/) database. If you choose to let Kuby manage your database, you'll need to add the adapter gem to your Gemfile as well:
+
+```ruby
+gem 'activerecord-cockroachdb-adapter'
 ```
 
 Run `bundle install` to install the gems.
@@ -129,6 +135,15 @@ Create a Rails initializer at config/initializers/kuby.rb that loads your Kuby c
 ```ruby
 require 'kuby'
 Kuby.load!
+```
+
+Finally, modify your database.yml to use the CockroachDB adapter in the production environment:
+
+```yaml
+production:
+  <<: *default
+  adapter: cockroachdb
+  database: my_app_production
 ```
 
 Let's go over this config in detail.
