@@ -7,7 +7,7 @@ group :development, :test do
   gem 'rake'
 
   gem 'curdle', '~> 1.2'
-  gem 'parlour', github: 'camertron/parlour', branch: 'initialize_void' # '~> 7.0'
+  gem 'parlour', '~> 8.0'
   gem 'tapioca', '~> 0.7'
   gem 'sorbet-runtime', '= 0.5.9897'
   gem 'sorbet-static', '= 0.5.9897'
