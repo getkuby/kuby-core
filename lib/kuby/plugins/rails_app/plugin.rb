@@ -21,7 +21,7 @@ module Kuby
         DEFAULT_ASSET_PATH = './public'.freeze
 
         value_field :root, default: '.'
-        value_fields :hostname, :tls_enabled, :manage_database, :replicas
+        value_fields :hostname, :hostnames, :tls_enabled, :manage_database, :replicas
         value_fields :asset_url, :packs_url, :asset_path
 
         alias_method :manage_database?, :manage_database
@@ -32,6 +32,7 @@ module Kuby
           @replicas = 1
           @manage_database = true
           @hostname = DEFAULT_HOSTNAME
+          @hostnames = [@hostname]
           @asset_url = DEFAULT_ASSET_URL
           @packs_url = DEFAULT_PACKS_URL
           @asset_path = DEFAULT_ASSET_PATH
@@ -84,7 +85,9 @@ module Kuby
           image_with_tag = "#{docker.image.image_url}:#{kubernetes.tag || Kuby::Docker::LATEST_TAG}"
 
           if assets = environment.kubernetes.plugin(:rails_assets)
-            assets.configure_ingress(ingress, hostname)
+            hostnames.each do |hostname|
+              assets.configure_ingress(ingress, hostname)
+            end
           end
 
           spec = self
