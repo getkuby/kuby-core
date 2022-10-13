@@ -20,12 +20,12 @@ Let's install imagemagick as an example. First, we'll need to register the image
 Next, we tell Kuby to install imagemagick in the `docker` section of our Kuby config:
 
 ```ruby
-Kuby.register_package('imagemagick')
+Kuby.register_package(:imagemagick)
 
 Kuby.define('my-app') do
   environment(:production) do
     docker do
-      package_phase.add('imagemagick')
+      package_phase.add(:imagemagick)
     end
   end
 end
@@ -34,12 +34,12 @@ end
 If the package we want to install has a different name under each of the Linux distros, register it using a hash instead. Let's say we want to install the `dig` command-line utility. In Debian, we'd need to install the `dnsutils` package, but in Alpine we'd need `bind-tools`.
 
 ```ruby
-Kuby.register_package('dig', debian: 'dnsutils', alpine: 'bind-tools')
+Kuby.register_package(:dig, debian: 'dnsutils', alpine: 'bind-tools')
 
 Kuby.define('my-app') do
   environment(:production) do
     docker do
-      package_phase.add('dig')
+      package_phase.add(:dig)
     end
   end
 end
@@ -65,12 +65,27 @@ class WatchmanPackage < Kuby::Docker::Packages::Package
   end
 end
 
-Kuby.register_package('watchman', WatchmanPackage)
+Kuby.register_package(:watchman, WatchmanPackage)
 
 Kuby.define('my-app') do
   environment(:production) do
     docker do
-      package_phase.add('watchman')
+      package_phase.add(:watchman)
+    end
+  end
+end
+```
+
+## Selecting a Different Package Version
+
+Some Kuby packages like Yarn and NodeJS support installing specific versions. For example, to install a specific version of NodeJS for your app, first remove the `:nodejs` package and then add it back again using the version you want:
+
+```ruby
+Kuby.define('my-app') do
+  environment(:production) do
+    docker do
+      package_phase.remove(:nodejs)
+      package_phase.add(:nodejs, '18.10.0')
     end
   end
 end
