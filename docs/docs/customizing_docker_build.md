@@ -134,11 +134,11 @@ The copy phase copies your app's source code into the Docker image.
 
 The app phase allows setting environment variables. These variables will be available to any commands run afterwards in the `docker build` process, but will also be accessible to your application via Ruby's `ENV` hash.
 
+* `app_phase.env(key: String, value: String)`: Adds an environment variable.
+
 ### Assets Phase
 
 The assets phase compiles static assets managed by both the asset pipeline and Webpacker.
-
-* `app_phase.env(key: String, value: String)`: Adds an environment variable.
 
 ### Webserver Phase
 
