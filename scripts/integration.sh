@@ -41,8 +41,8 @@ end
 EOF
 prebundle install --jobs 2 --retry 3 --no-binstubs
 
-# javascript deps
-yarn install
+# javascript deps, cxx flags because node-sass is a special snowflake
+CXXFLAGS="--std=c++17" yarn install
 
 # bootstrap app for use with kuby
 bundle exec bin/rails g kuby

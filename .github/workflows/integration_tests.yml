@@ -8,7 +8,7 @@ on:
       - '*'
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         # NOTE: these need to be valid kindest/node image versions
@@ -27,7 +27,10 @@ jobs:
           ruby-version: '3.0'
       - uses: actions/setup-node@v2
         with:
-          node-version: '15'
+          node-version: '16'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.7.x'
       - name: Install Bundler
         run: gem install bundler
       - name: Install Kind
