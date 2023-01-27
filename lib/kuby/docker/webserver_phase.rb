@@ -46,7 +46,7 @@ module Kuby
       T::Sig::WithoutRuntime.sig { params(port: Integer).returns(Integer) }
       attr_writer :port
 
-      T::Sig::WithoutRuntime.sig { params(port: Integer).returns(Integer) }
+      T::Sig::WithoutRuntime.sig { params(workers: Integer).returns(Integer) }
       attr_writer :workers
 
       T::Sig::WithoutRuntime.sig { returns(T.nilable(Symbol)) }
@@ -78,6 +78,7 @@ module Kuby
         @port || DEFAULT_PORT
       end
 
+      T::Sig::WithoutRuntime.sig { returns(Integer) }
       def workers
         @workers || DEFAULT_WORKERS
       end
