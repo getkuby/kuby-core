@@ -145,6 +145,7 @@ The assets phase compiles static assets managed by both the asset pipeline and W
 The webserver phase instructs the Docker image to use a webserver to run your app. Currently only the Rails default, [Puma](https://github.com/puma/puma), is supported (including puma in your Gemfile is all you need to do - no other configuration is necessary).
 
 * `webserver_phase.port = Integer`: Sets the port the webserver should listen on.
+* `webserver_phase.workers = Integer`: Sets the number of webserver workers to spawn. Defaults to 4.
 * `webserver_phase.webserver = Symbol`: Sets the webserver to use. Must be `:puma`. Additional webservers may be supported in the future if there is demand. The only reason to set this field manually is if Kuby can't detect Puma in your Gemfile for some reason.
 
 ## Creating A Custom Build Phase
