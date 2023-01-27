@@ -1,6 +1,9 @@
 ## Unreleased
 * Modify the Rails generator to add the `activerecord-cockroachdb-adapter` to your bundle.
 
+## 0.19.0
+* Add support to configure the number of web workers for puma (#124, @zhalltyemill)
+
 ## 0.18.0
 * Add the ability to specify your app's root directory.
   - Call `app_root <path>` inside the `docker` section of your Kuby config file.
