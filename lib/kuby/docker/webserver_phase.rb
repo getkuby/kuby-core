@@ -28,7 +28,7 @@ module Kuby
         def apply_to(dockerfile)
           dockerfile.cmd(
             'puma',
-            '--workers', '4',
+            '--workers', phase.workers.to_s,
             '--bind', 'tcp://0.0.0.0',
             '--port', phase.port.to_s,
             '--pidfile', './server.pid',
@@ -40,10 +40,14 @@ module Kuby
       end
 
       DEFAULT_PORT = T.let(8080, Integer)
+      DEFAULT_WORKERS = T.let(4, Integer)
       WEBSERVER_MAP = T.let({ puma: Puma }.freeze, T::Hash[Symbol, T.class_of(Webserver)])
 
       T::Sig::WithoutRuntime.sig { params(port: Integer).returns(Integer) }
       attr_writer :port
+
+      T::Sig::WithoutRuntime.sig { params(port: Integer).returns(Integer) }
+      attr_writer :workers
 
       T::Sig::WithoutRuntime.sig { returns(T.nilable(Symbol)) }
       attr_reader :webserver
@@ -56,6 +60,7 @@ module Kuby
         super
 
         @port = T.let(@port, T.nilable(Integer))
+        @workers = T.let(@workers, T.nilable(Integer))
         @webserver = T.let(@webserver, T.nilable(Symbol))
       end
 
@@ -71,6 +76,10 @@ module Kuby
       T::Sig::WithoutRuntime.sig { returns(Integer) }
       def port
         @port || DEFAULT_PORT
+      end
+
+      def workers
+        @workers || DEFAULT_WORKERS
       end
 
       private
