@@ -94,6 +94,15 @@ module Kuby
         end
       end
 
+      T::Sig::WithoutRuntime.sig { params(name: Symbol, layer: Layer).void }
+      def replace(name, layer)
+        unless layers.include?(name)
+          raise ArgumentError, "Could not find existing layer '#{name}'"
+        end
+
+        layers[name] = layer
+      end
+
       T::Sig::WithoutRuntime.sig { params(name: Symbol).void }
       def delete(name)
         stack.delete(name)

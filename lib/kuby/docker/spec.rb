@@ -145,6 +145,11 @@ module Kuby
         layer_stack.insert(name, layer, options, &block)
       end
 
+      T::Sig::WithoutRuntime.sig { params(name: Symbol, layer: Layer).void }
+      def replace(name, layer)
+        layer_stack.replace(name, layer)
+      end
+
       T::Sig::WithoutRuntime.sig { params(name: Symbol).void }
       def delete(name)
         layer_stack.delete(name)
