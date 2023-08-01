@@ -106,12 +106,14 @@ module Kuby
                     image image_with_tag
                   end
 
-                  init_container(:create_db) do
-                    image image_with_tag
-                  end
+                  if spec.manage_database?
+                    init_container(:create_db) do
+                      image image_with_tag
+                    end
 
-                  init_container(:migrate_db) do
-                    image image_with_tag
+                    init_container(:migrate_db) do
+                      image image_with_tag
+                    end
                   end
                 end
               end
@@ -308,36 +310,38 @@ module Kuby
                     end
                   end
 
-                  init_container(:create_db) do
-                    name "#{kube_spec.selector_app}-create-db"
-                    command %w(bundle exec rake kuby:rails_app:db:bootstrap)
+                  if kube_spec.manage_database?
+                    init_container(:create_db) do
+                      name "#{kube_spec.selector_app}-create-db"
+                      command %w(bundle exec rake kuby:rails_app:db:bootstrap)
 
-                    env_from do
-                      config_map_ref do
-                        name kube_spec.config_map.metadata.name
+                      env_from do
+                        config_map_ref do
+                          name kube_spec.config_map.metadata.name
+                        end
+                      end
+
+                      env_from do
+                        secret_ref do
+                          name kube_spec.app_secrets.metadata.name
+                        end
                       end
                     end
 
-                    env_from do
-                      secret_ref do
-                        name kube_spec.app_secrets.metadata.name
+                    init_container(:migrate_db) do
+                      name "#{kube_spec.selector_app}-migrate-db"
+                      command %w(bundle exec rake kuby:rails_app:db:migrate)
+
+                      env_from do
+                        config_map_ref do
+                          name kube_spec.config_map.metadata.name
+                        end
                       end
-                    end
-                  end
 
-                  init_container(:migrate_db) do
-                    name "#{kube_spec.selector_app}-migrate-db"
-                    command %w(bundle exec rake kuby:rails_app:db:migrate)
-
-                    env_from do
-                      config_map_ref do
-                        name kube_spec.config_map.metadata.name
-                      end
-                    end
-
-                    env_from do
-                      secret_ref do
-                        name kube_spec.app_secrets.metadata.name
+                      env_from do
+                        secret_ref do
+                          name kube_spec.app_secrets.metadata.name
+                        end
                       end
                     end
                   end
