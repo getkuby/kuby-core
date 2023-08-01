@@ -1,8 +1,12 @@
 ## Unreleased
+
+## 0.20.0
 * Modify the Rails generator to add the `activerecord-cockroachdb-adapter` to your bundle.
+* Add the `LayerStack#replace` and corresponding `Docker::Spec#replace` methods for replacing phases. This can be a lot easier than using `#insert` and `#delete`, which can mess with the relative order of the phases and cause surprising results.
+* Don't run init containers for creating and migrating the database if database management is turned off.
 
 ## 0.19.0
-* Add support to configure the number of web workers for puma (#124, @zhalltyemill)
+* Add support for configuring the number of web workers for puma (#124, @zhalltyemill)
 
 ## 0.18.0
 * Add the ability to specify your app's root directory.
