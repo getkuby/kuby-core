@@ -2,7 +2,5 @@
 
 $stdout.sync = true
 
-require 'sorbet-runtime'
-
 require 'kuby'
 exit Kuby::Commands.run(ARGV)

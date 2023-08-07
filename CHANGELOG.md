@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 0.20.1
+* Remove accidentally-released `require 'sorbet-runtime'` in bin/kuby.
+
 ## 0.20.0
 * Modify the Rails generator to add the `activerecord-cockroachdb-adapter` to your bundle.
 * Add the `LayerStack#replace` and corresponding `Docker::Spec#replace` methods for replacing phases. This can be a lot easier than using `#insert` and `#delete`, which can mess with the relative order of the phases and cause surprising results.
