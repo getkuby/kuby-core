@@ -3,39 +3,39 @@
 module Kuby
   module Docker
     class Debian < Distro
-      SHELL_EXE = '/bin/bash'.freeze
+      SHELL_EXE = T.let('/bin/bash'.freeze, String)
 
-      DEFAULT_PACKAGES = [
+      DEFAULT_PACKAGES = T.let([
         [:ca_certificates, nil],
         [:nodejs, '12.14.1'],
         [:yarn, '1.21.1']
-      ].freeze
+      ].freeze, T::Array[[Symbol, T.nilable(String)]])
 
-      # T::Sig::WithoutRuntime.sig { returns(Layer) }
+      T::Sig::WithoutRuntime.sig { returns(Layer) }
       attr_reader :phase
 
-      # T::Sig::WithoutRuntime.sig { override.params(packages: T::Array[Distro::PackageImpl], into: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { override.params(packages: T::Array[Distro::PackageImpl], into: Dockerfile).void }
       def install(packages, into:)
         dockerfile = into
         install_managed(packages, dockerfile)
         install_unmanaged(packages, dockerfile)
       end
 
-      # T::Sig::WithoutRuntime.sig { override.returns(T::Array[[Symbol, T.nilable(String)]]) }
+      T::Sig::WithoutRuntime.sig { override.returns(T::Array[[Symbol, T.nilable(String)]]) }
       def default_packages
         DEFAULT_PACKAGES
       end
 
-      # T::Sig::WithoutRuntime.sig { override.returns(String) }
+      T::Sig::WithoutRuntime.sig { override.returns(String) }
       def shell_exe
         SHELL_EXE
       end
 
       private
 
-      # T::Sig::WithoutRuntime.sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
       def install_managed(packages, dockerfile)
-        pkgs = packages.select(&:managed?)
+        pkgs = T.cast(packages.select(&:managed?), T::Array[Distro::ManagedPackageImpl])
 
         pkg_cmd = <<~CMD.strip
           apt-get update -qq && \\
@@ -52,7 +52,7 @@ module Kuby
         dockerfile.run(pkg_cmd)
       end
 
-      # T::Sig::WithoutRuntime.sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
+      T::Sig::WithoutRuntime.sig { params(packages: T::Array[Distro::PackageImpl], dockerfile: Dockerfile).void }
       def install_unmanaged(packages, dockerfile)
         packages
           .reject(&:managed?)

@@ -4,27 +4,27 @@ module Kuby
   module Docker
     module Packages
       class SimpleManagedPackage
-        # extend T::Sig
+        extend T::Sig
 
-        # T::Sig::WithoutRuntime.sig { returns(String) }
+        T::Sig::WithoutRuntime.sig { returns(String) }
         attr_reader :name
 
-        # T::Sig::WithoutRuntime.sig { params(name: T.any(String, Symbol)).void }
+        T::Sig::WithoutRuntime.sig { params(name: T.any(String, Symbol)).void }
         def initialize(name)
-          @name = name.to_s
+          @name = T.let(name.to_s, String)
         end
 
-        # T::Sig::WithoutRuntime.sig { params(distro: Symbol).returns(String) }
+        T::Sig::WithoutRuntime.sig { params(distro: Symbol).returns(String) }
         def package_name_for(distro)
           name
         end
 
-        # T::Sig::WithoutRuntime.sig { params(ver: String).returns(T.self_type) }
+        T::Sig::WithoutRuntime.sig { params(ver: String).returns(T.self_type) }
         def with_version(ver)
           self
         end
 
-        # T::Sig::WithoutRuntime.sig { returns(T::Boolean) }
+        T::Sig::WithoutRuntime.sig { returns(T::Boolean) }
         def managed?
           true
         end

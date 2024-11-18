@@ -7,29 +7,29 @@ require 'shellwords'
 module Kuby
   module Docker
     class CLI < CLIBase
-      # extend T::Sig
+      extend T::Sig
 
-      # T::Sig::WithoutRuntime.sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       attr_reader :executable
 
-      # T::Sig::WithoutRuntime.sig { params(executable: T.nilable(String)).void }
+      T::Sig::WithoutRuntime.sig { params(executable: T.nilable(String)).void }
       def initialize(executable = nil)
-        @executable = executable || Kuby::Utils.which('docker')
+        @executable = T.let(executable || Kuby::Utils.which('docker'), String)
       end
 
-      # T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
+      T::Sig::WithoutRuntime.sig { returns(T.nilable(String)) }
       def config_file
         if File.exist?(default_config_file)
           default_config_file
         end
       end
 
-      # T::Sig::WithoutRuntime.sig { returns(String) }
+      T::Sig::WithoutRuntime.sig { returns(String) }
       def default_config_file
         File.join(Dir.home, '.docker', 'config.json')
       end
 
-      # T::Sig::WithoutRuntime.sig { params(url: String, username: String, password: String).void }
+      T::Sig::WithoutRuntime.sig { params(url: String, username: String, password: String).void }
       def login(url:, username:, password:)
         cmd = [
           executable, 'login', url, '--username', username, '--password-stdin'
@@ -39,29 +39,29 @@ module Kuby
           stdin.puts(password)
         end
 
-        unless last_status.success?
+        unless T.must(last_status).success?
           raise LoginError, 'build failed: docker command exited with '\
-            "status code #{last_status.exitstatus}"
+            "status code #{T.must(last_status).exitstatus}"
         end
       end
 
-      # T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
+      T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
       def auths
         return [] unless config_file
 
-        config = JSON.parse(File.read(config_file))
+        config = JSON.parse(File.read(T.must(config_file)))
         config.fetch('auths', {}).keys
       end
 
-      # T::Sig::WithoutRuntime.sig {
-      #   params(
-      #     image: Image,
-      #     build_args: T::Hash[T.any(Symbol, String), String],
-      #     docker_args: T::Array[String],
-      #     context: T.nilable(String),
-      #     cache_from: T.nilable(String)
-      #   ).void
-      # }
+      T::Sig::WithoutRuntime.sig {
+        params(
+          image: Image,
+          build_args: T::Hash[T.any(Symbol, String), String],
+          docker_args: T::Array[String],
+          context: T.nilable(String),
+          cache_from: T.nilable(String)
+        ).void
+      }
       def build(image, build_args: {}, docker_args: [], context: nil, cache_from: nil)
         cmd = [
           executable, 'build',
@@ -85,21 +85,21 @@ module Kuby
           stdin.puts(image.dockerfile.to_s)
         end
 
-        unless last_status.success?
+        unless T.must(last_status).success?
           raise BuildError, 'build failed: docker command exited with '\
-            "status code #{last_status.exitstatus}"
+            "status code #{T.must(last_status).exitstatus}"
         end
       end
 
-      # T::Sig::WithoutRuntime.sig {
-      #   params(
-      #     image_url: String,
-      #     tag: String,
-      #     env: T::Hash[T.any(Symbol, String), String],
-      #     ports: T::Array[T.any(String, Integer)]
-      #   )
-      #   .void
-      # }
+      T::Sig::WithoutRuntime.sig {
+        params(
+          image_url: String,
+          tag: String,
+          env: T::Hash[T.any(Symbol, String), String],
+          ports: T::Array[T.any(String, Integer)]
+        )
+        .void
+      }
       def run(image_url:, tag: 'latest', env: {}, ports: [])
         cmd = [
           executable, 'run',
@@ -113,7 +113,7 @@ module Kuby
         execc(cmd)
       end
 
-      # T::Sig::WithoutRuntime.sig { params(container: String, command: String, tty: T::Boolean).returns(String) }
+      T::Sig::WithoutRuntime.sig { params(container: String, command: String, tty: T::Boolean).returns(String) }
       def exec_capture(container:, command:, tty: true)
         cmd = [executable, 'exec']
         cmd << '-it' if tty
@@ -122,7 +122,7 @@ module Kuby
         backticks(cmd)
       end
 
-      # T::Sig::WithoutRuntime.sig { params(image_url: String, tag: String, format: T.nilable(String)).returns(String) }
+      T::Sig::WithoutRuntime.sig { params(image_url: String, tag: String, format: T.nilable(String)).returns(String) }
       def inspect(image_url:, tag: 'latest', format: nil)
         cmd = [executable, 'inspect']
         cmd += ['--format', "'#{format}'"]
@@ -131,7 +131,7 @@ module Kuby
         backticks(cmd)
       end
 
-      # T::Sig::WithoutRuntime.sig { params(image_url: String, digests: T::Boolean).returns(T::Array[T::Hash[Symbol, String]]) }
+      T::Sig::WithoutRuntime.sig { params(image_url: String, digests: T::Boolean).returns(T::Array[T::Hash[Symbol, String]]) }
       def images(image_url, digests: true)
         cmd = [
           executable, 'images', image_url,
@@ -147,41 +147,41 @@ module Kuby
         end
       end
 
-      # T::Sig::WithoutRuntime.sig { params(image_url: String, tag: String).void }
+      T::Sig::WithoutRuntime.sig { params(image_url: String, tag: String).void }
       def push(image_url, tag)
         systemm([
           executable, 'push', "#{image_url}:#{tag}"
         ])
 
-        unless last_status.success?
+        unless T.must(last_status).success?
           raise PushError, 'push failed: docker command exited with '\
-            "status code #{last_status.exitstatus}"
+            "status code #{T.must(last_status).exitstatus}"
         end
       end
 
-      # T::Sig::WithoutRuntime.sig { params(image_url: String, tag: String).void }
+      T::Sig::WithoutRuntime.sig { params(image_url: String, tag: String).void }
       def pull(image_url, tag)
         systemm([
           executable, 'pull', "#{image_url}:#{tag}"
         ])
 
-        unless last_status.success?
+        unless T.must(last_status).success?
           raise PullError, 'pull failed: docker command exited with '\
-            "status code #{last_status.exitstatus}"
+            "status code #{T.must(last_status).exitstatus}"
         end
       end
 
-      # T::Sig::WithoutRuntime.sig { returns(Symbol) }
+      T::Sig::WithoutRuntime.sig { returns(Symbol) }
       def status_key
         :kuby_docker_cli_last_status
       end
 
-      # T::Sig::WithoutRuntime.sig { returns(Symbol) }
+      T::Sig::WithoutRuntime.sig { returns(Symbol) }
       def stdout_key
         :kuby_docker_stdout
       end
 
-      # T::Sig::WithoutRuntime.sig { returns(Symbol) }
+      T::Sig::WithoutRuntime.sig { returns(Symbol) }
       def stderr_key
         :kuby_docker_stderr
       end
