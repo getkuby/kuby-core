@@ -9,8 +9,8 @@ group :development, :test do
   gem 'curdle', '~> 1.2'
   gem 'parlour', '~> 8.0'
   gem 'tapioca', '~> 0.7'
-  gem 'sorbet-runtime', '= 0.5.9897'
-  gem 'sorbet-static', '= 0.5.9897'
+  gem 'sorbet-runtime', '= 0.5.11647'
+  gem 'sorbet-static', '= 0.5.11647'
 end
 
 group :test do
