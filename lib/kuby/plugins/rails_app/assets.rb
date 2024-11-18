@@ -8,7 +8,7 @@ module Kuby
         extend ::KubeDSL::ValueFields
 
         ROLE = 'assets'.freeze
-        NGINX_IMAGE = 'nginx:1.9-alpine'.freeze
+        NGINX_IMAGE = 'nginx:1-alpine'.freeze
         NGINX_PORT = 8082
         NGINX_MOUNT_PATH = '/usr/share/nginx/assets'.freeze
         RAILS_MOUNT_PATH = '/usr/share/assets'.freeze
