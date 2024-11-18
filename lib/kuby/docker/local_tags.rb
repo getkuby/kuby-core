@@ -3,34 +3,34 @@
 module Kuby
   module Docker
     class LocalTags
-      extend T::Sig
+      # extend T::Sig
 
-      T::Sig::WithoutRuntime.sig { returns Kuby::Docker::CLI }
+      # T::Sig::WithoutRuntime.sig { returns Kuby::Docker::CLI }
       attr_reader :cli
 
-      T::Sig::WithoutRuntime.sig { returns(String) }
+      # T::Sig::WithoutRuntime.sig { returns(String) }
       attr_reader :image_url
 
-      T::Sig::WithoutRuntime.sig {
-        params(
-          cli: Kuby::Docker::CLI,
-          image_url: String
-        )
-        .void
-      }
+      # T::Sig::WithoutRuntime.sig {
+      #   params(
+      #     cli: Kuby::Docker::CLI,
+      #     image_url: String
+      #   )
+      #   .void
+      # }
       def initialize(cli, image_url)
         @cli = cli
         @image_url = image_url
-        @latest_timestamp_tag = T.let(@latest_timestamp_tag, T.nilable(TimestampTag))
+        # @latest_timestamp_tag = T.let(@latest_timestamp_tag, T.nilable(TimestampTag))
       end
 
-      T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
+      # T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
       def tags
         images = cli.images(image_url)
-        images.map { |image| T.must(image[:tag]) }
+        images.map { |image| image[:tag] }
       end
 
-      T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
+      # T::Sig::WithoutRuntime.sig { returns(T::Array[String]) }
       def latest_tags
         # find "latest" tag
         images = cli.images(image_url)
@@ -48,12 +48,12 @@ module Kuby
         end
       end
 
-      T::Sig::WithoutRuntime.sig { returns(T::Array[Kuby::Docker::TimestampTag]) }
+      # T::Sig::WithoutRuntime.sig { returns(T::Array[Kuby::Docker::TimestampTag]) }
       def timestamp_tags
         tags.map { |t| TimestampTag.try_parse(t) }.compact
       end
 
-      T::Sig::WithoutRuntime.sig { returns(T.nilable(Kuby::Docker::TimestampTag)) }
+      # T::Sig::WithoutRuntime.sig { returns(T.nilable(Kuby::Docker::TimestampTag)) }
       def latest_timestamp_tag
         @latest_timestamp_tag ||= timestamp_tags.sort.last
       end

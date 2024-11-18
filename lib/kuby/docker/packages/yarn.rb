@@ -4,16 +4,16 @@ module Kuby
   module Docker
     module Packages
       class Yarn < Package
-        extend T::Sig
+        # extend T::Sig
 
-        T::Sig::WithoutRuntime.sig { params(name: Symbol, version: T.nilable(String)).void }
+        # T::Sig::WithoutRuntime.sig { params(name: Symbol, version: T.nilable(String)).void }
         def initialize(name, version = nil)
           super
 
-          @url = T.let(@url, T.nilable(String))
+          # @url = T.let(@url, T.nilable(String))
         end
 
-        T::Sig::WithoutRuntime.sig { params(dockerfile: Dockerfile).void }
+        # T::Sig::WithoutRuntime.sig { params(dockerfile: Dockerfile).void }
         def install_on_debian(dockerfile)
           dockerfile.run(<<~CMD.strip)
             wget #{url} && \\
@@ -29,7 +29,7 @@ module Kuby
           dockerfile.env("PATH=$PATH:/opt/yarn/bin")
         end
 
-        T::Sig::WithoutRuntime.sig { params(dockerfile: Dockerfile).void }
+        # T::Sig::WithoutRuntime.sig { params(dockerfile: Dockerfile).void }
         def install_on_alpine(dockerfile)
           dockerfile.run(<<~CMD.strip)
             wget #{url} && \\
@@ -47,7 +47,7 @@ module Kuby
 
         private
 
-        T::Sig::WithoutRuntime.sig { returns(String) }
+        # T::Sig::WithoutRuntime.sig { returns(String) }
         def url
           @url ||= if version
             "https://github.com/yarnpkg/yarn/releases/download/v#{version}/yarn-v#{version}.tar.gz"

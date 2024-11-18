@@ -4,7 +4,7 @@ require 'kuby/docker/errors'
 
 module Kuby
   module Docker
-    LATEST_TAG = T.let('latest'.freeze, String)
+    LATEST_TAG = 'latest'.freeze
 
     autoload :Alpine,           'kuby/docker/alpine'
     autoload :AppImage,         'kuby/docker/app_image'

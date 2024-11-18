@@ -3,13 +3,13 @@
 module Kuby
   module Docker
     class DockerURI
-      extend T::Sig
+      # extend T::Sig
 
-      DEFAULT_REGISTRY_HOST = T.let('docker.io'.freeze, String)
-      DEFAULT_REGISTRY_INDEX_HOST = T.let('index.docker.io'.freeze, String)
-      DEFAULT_PORT = T.let(443, Integer)
+      DEFAULT_REGISTRY_HOST = 'docker.io'.freeze
+      DEFAULT_REGISTRY_INDEX_HOST = 'index.docker.io'.freeze
+      DEFAULT_PORT = 443
 
-      T::Sig::WithoutRuntime.sig { params(url: String).returns(DockerURI) }
+      # T::Sig::WithoutRuntime.sig { params(url: String).returns(DockerURI) }
       def self.parse_uri(url)
         parse(
           url,
@@ -18,7 +18,7 @@ module Kuby
         )
       end
 
-      T::Sig::WithoutRuntime.sig { params(url: String).returns(DockerURI) }
+      # T::Sig::WithoutRuntime.sig { params(url: String).returns(DockerURI) }
       def self.parse_index_uri(url)
         parse(
           url,
@@ -27,13 +27,13 @@ module Kuby
         )
       end
 
-      T::Sig::WithoutRuntime.sig {
-        params(
-          url: String,
-          default_host: T.nilable(String),
-          default_port: T.nilable(Integer)
-        ).returns(DockerURI)
-      }
+      # T::Sig::WithoutRuntime.sig {
+      #   params(
+      #     url: String,
+      #     default_host: T.nilable(String),
+      #     default_port: T.nilable(Integer)
+      #   ).returns(DockerURI)
+      # }
       def self.parse(url, default_host:, default_port:)
         if idx = url.index('://')
           url = url[(idx + 3)..-1] || ''
@@ -41,8 +41,8 @@ module Kuby
 
         host_port, *path = url.split('/')
         host, port, *path = if host_port =~ /[.:]/
-          hst, prt = T.must(host_port).split(':')
-          [T.must(hst), prt || default_port, *path]
+          hst, prt = host_port.split(':')
+          [hst, prt || default_port, *path]
         else
           [default_host, default_port, host_port, *path]
         end
@@ -50,23 +50,23 @@ module Kuby
         new(host.to_s, port.to_i, (path || []).join('/'))
       end
 
-      T::Sig::WithoutRuntime.sig { returns(String) }
+      # T::Sig::WithoutRuntime.sig { returns(String) }
       attr_reader :host
 
-      T::Sig::WithoutRuntime.sig { returns(Integer) }
+      # T::Sig::WithoutRuntime.sig { returns(Integer) }
       attr_reader :port
 
-      T::Sig::WithoutRuntime.sig { returns(String) }
+      # T::Sig::WithoutRuntime.sig { returns(String) }
       attr_reader :path
 
-      T::Sig::WithoutRuntime.sig { params(host: String, port: Integer, path: String).void }
+      # T::Sig::WithoutRuntime.sig { params(host: String, port: Integer, path: String).void }
       def initialize(host, port, path)
         @host = host
         @port = port
         @path = path
       end
 
-      T::Sig::WithoutRuntime.sig { returns(T::Boolean) }
+      # T::Sig::WithoutRuntime.sig { returns(T::Boolean) }
       def has_default_port?
         port == DEFAULT_PORT
       end

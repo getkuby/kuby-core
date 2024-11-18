@@ -3,31 +3,31 @@
 module Kuby
   module Docker
     class PackagePhase < Layer
-      extend T::Sig
+      # extend T::Sig
 
-      Operation = T.type_alias { [Symbol, Symbol, T.nilable(String)] }
+      # Operation = T.type_alias { [Symbol, Symbol, T.nilable(String)] }
 
-      T::Sig::WithoutRuntime.sig { returns(T::Array[Operation]) }
+      # T::Sig::WithoutRuntime.sig { returns(T::Array[Operation]) }
       attr_reader :operations
 
-      T::Sig::WithoutRuntime.sig { params(environment: Kuby::Environment).void }
+      # T::Sig::WithoutRuntime.sig { params(environment: Kuby::Environment).void }
       def initialize(environment)
         super
 
-        @operations = T.let([], T::Array[Operation])
+        @operations = []
       end
 
-      T::Sig::WithoutRuntime.sig { params(package_name: Symbol, version: T.nilable(String)).void }
+      # T::Sig::WithoutRuntime.sig { params(package_name: Symbol, version: T.nilable(String)).void }
       def add(package_name, version = nil)
         operations << [:add, package_name, version]
       end
 
-      T::Sig::WithoutRuntime.sig { params(package_name: Symbol).void }
+      # T::Sig::WithoutRuntime.sig { params(package_name: Symbol).void }
       def remove(package_name)
         operations << [:remove, package_name, nil]
       end
 
-      T::Sig::WithoutRuntime.sig { override.params(dockerfile: Kuby::Docker::Dockerfile).void }
+      # T::Sig::WithoutRuntime.sig { override.params(dockerfile: Kuby::Docker::Dockerfile).void }
       def apply_to(dockerfile)
         packages = distro_spec.default_packages.dup
 
@@ -50,18 +50,18 @@ module Kuby
 
       private
 
-      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::Distro) }
+      # T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::Distro) }
       def distro_spec
         environment.docker.distro_spec
       end
 
-      T::Sig::WithoutRuntime.sig {
-        params(
-          package_name: Symbol,
-          version: T.nilable(String)
-        )
-        .returns(Kuby::Docker::Distro::PackageImpl)
-      }
+      # T::Sig::WithoutRuntime.sig {
+      #   params(
+      #     package_name: Symbol,
+      #     version: T.nilable(String)
+      #   )
+      #   .returns(Kuby::Docker::Distro::PackageImpl)
+      # }
       def get_package(package_name, version)
         if package = Kuby.packages[package_name]
           package.with_version(version)

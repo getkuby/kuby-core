@@ -109,7 +109,7 @@ module Kuby
         task.run!(verify_result: true, prune: false)
       ensure
         ENV['KUBECONFIG'] = old_kubeconfig
-        FileUtils.rm_rf(T.must(tmpdir))
+        FileUtils.rm_rf(tmpdir)
       end
 
       def restart_rails_deployment_if_necessary

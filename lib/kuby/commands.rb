@@ -8,7 +8,7 @@ GLI::Commands::Help.skips_pre = false
 
 module Kuby
   class Commands
-    extend T::Sig
+    # extend T::Sig
     extend GLI::App
 
     # GLI doesn't have a wildcard option, so it's impossible to tell it to
@@ -22,12 +22,12 @@ module Kuby
     # avoid the usual series of cryptic alias_method calls (note that there
     # is no singleton class version of #prepend in the Ruby language).
     singleton_class.send(:prepend, Module.new do
-      extend T::Sig
+      # extend T::Sig
 
-      T::Sig::WithoutRuntime.sig { params(args: T::Array[String]).void }
+      # T::Sig::WithoutRuntime.sig { params(args: T::Array[String]).void }
       def run(args)
         if idx = args.index('rails') || idx = args.index('rake')
-          @rails_options = T.let(@rails_options, T.nilable(T::Array[String]))
+          # @rails_options = T.let(@rails_options, T.nilable(T::Array[String]))
           @rails_options = args[(idx + 1)..-1]
           super(args[0..idx])
         else
@@ -37,16 +37,16 @@ module Kuby
       end
     end)
 
-    T::Sig::WithoutRuntime.sig { returns(Kuby::Tasks) }
+    # T::Sig::WithoutRuntime.sig { returns(Kuby::Tasks) }
     def self.tasks
       Kuby::Tasks.new(Kuby.environment)
     end
 
-    T::Sig::WithoutRuntime.sig {
-      params(
-        global_options: T::Hash[T.any(String, Symbol), T.any(String, Integer)]
-      ).void
-    }
+    # T::Sig::WithoutRuntime.sig {
+    #   params(
+    #     global_options: T::Hash[T.any(String, Symbol), T.any(String, Integer)]
+    #   ).void
+    # }
     def self.load_kuby_config!(global_options)
       return if @kuby_config_loaded
 
@@ -289,7 +289,7 @@ module Kuby
       rc.desc 'Runs an arbitrary command inside a running Rails pod.'
       rc.command :exec do |c|
         c.action do |global_options, options, args|
-          tasks.remote_exec([*args, *T.unsafe(@rails_options)])
+          tasks.remote_exec([*args, *@rails_options])
         end
       end
 

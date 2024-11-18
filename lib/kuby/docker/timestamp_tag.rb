@@ -5,11 +5,11 @@ require 'time'
 module Kuby
   module Docker
     class TimestampTag
-      extend T::Sig
+      # extend T::Sig
 
-      FORMAT = T.let('%Y%m%d%H%M%S'.freeze, String)
+      FORMAT = '%Y%m%d%H%M%S'.freeze
 
-      T::Sig::WithoutRuntime.sig { params(str: T.nilable(String)).returns(T.nilable(Kuby::Docker::TimestampTag)) }
+      # T::Sig::WithoutRuntime.sig { params(str: T.nilable(String)).returns(T.nilable(Kuby::Docker::TimestampTag)) }
       def self.try_parse(str)
         return nil unless str
 
@@ -27,40 +27,40 @@ module Kuby
         new(time)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::TimestampTag) }
+      # T::Sig::WithoutRuntime.sig { returns(Kuby::Docker::TimestampTag) }
       def self.now
         new(Time.now.utc)
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Time) }
+      # T::Sig::WithoutRuntime.sig { returns(Time) }
       attr_reader :time
 
-      T::Sig::WithoutRuntime.sig { params(time: Time).void }
+      # T::Sig::WithoutRuntime.sig { params(time: Time).void }
       def initialize(time)
-        @time = T.let(time, Time)
+        @time = time
       end
 
-      T::Sig::WithoutRuntime.sig { returns(String) }
+      # T::Sig::WithoutRuntime.sig { returns(String) }
       def to_s
         time.strftime(FORMAT)
       end
 
-      T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T.nilable(Integer)) }
+      # T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T.nilable(Integer)) }
       def <=>(other)
         time <=> other.time
       end
 
-      T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T::Boolean) }
+      # T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T::Boolean) }
       def ==(other)
         time == other.time
       end
 
-      T::Sig::WithoutRuntime.sig { returns(Integer) }
+      # T::Sig::WithoutRuntime.sig { returns(Integer) }
       def hash
         time.hash
       end
 
-      T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T::Boolean) }
+      # T::Sig::WithoutRuntime.sig { params(other: Kuby::Docker::TimestampTag).returns(T::Boolean) }
       def eql?(other)
         time == other.time
       end
