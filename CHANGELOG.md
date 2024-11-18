@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 0.20.2
+* Use a more permissive version for the nginx Docker image the rails_app plugin uses for serving static assets.
+
 ## 0.20.1
 * Remove accidentally-released `require 'sorbet-runtime'` in bin/kuby.
 
