@@ -55,13 +55,8 @@ module Kuby
       @definition = Definition.new(name.to_s)
       @definition.instance_eval(&block)
 
-      @definition.environments.each do |_, env|
-        env.kubernetes.after_configuration
-      end
-
-      @definition.environments.each do |_, env|
-        env.configured = true
-      end
+      @definition.environment.kubernetes.after_configuration
+      @definition.environment.configured = true
 
       @definition
     end
