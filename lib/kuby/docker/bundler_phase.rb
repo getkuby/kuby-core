@@ -55,18 +55,18 @@ module Kuby
         wo = without || DEFAULT_WITHOUT
 
         host_path = Pathname(environment.docker.app_root_path)
-        container_path = Pathname(dockerfile.current_workdir).join(environment.docker.app_root_path)
+        container_path = Pathname(T.must(dockerfile.current_workdir)).join(environment.docker.app_root_path)
 
         dockerfile.run('gem', 'install', 'bundler', '-v', v)
 
-        dockerfile.copy(host_path.join(gf), container_path.join(gf))
-        dockerfile.copy(host_path.join(lf), container_path.join(lf))
+        dockerfile.copy(host_path.join(gf).to_s, container_path.join(gf).to_s)
+        dockerfile.copy(host_path.join(lf).to_s, container_path.join(lf).to_s)
         @gemfiles.each do |file|
-          dockerfile.copy(host_path.join(file), container_path.join(file))
+          dockerfile.copy(host_path.join(file).to_s, container_path.join(file).to_s)
           extra_lf = host_path.join("#{file}.lock")
 
           if extra_lf.exist?
-            dockerfile.copy(extra_lf, container_path.join("#{file}.lock"))
+            dockerfile.copy(extra_lf.to_s, container_path.join("#{file}.lock").to_s)
           end
         end
 
@@ -77,7 +77,7 @@ module Kuby
         end
 
         dockerfile.run(
-          executable || 'bundle', 'lock', '--lockfile', container_path.join(lf)
+          executable || 'bundle', 'lock', '--lockfile', container_path.join(lf).to_s
         )
 
         dockerfile.run(

@@ -1,3 +1,4 @@
+--suppress-payload-superclass-redefinition-for=Reline::ANSI
 --dir
 ./lib
 ./sorbet

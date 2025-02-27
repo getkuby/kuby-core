@@ -26,7 +26,7 @@ module Kuby
 
       T::Sig::WithoutRuntime.sig { params(name: Symbol, version: T.nilable(String)).void }
       def add(name, version = nil)
-        packages << Packages::Package.new(name, version)
+        packages << T.unsafe(Packages::Package).new(name, version)
       end
 
       T::Sig::WithoutRuntime.sig { params(name: String).void }

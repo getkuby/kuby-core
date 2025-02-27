@@ -35,7 +35,7 @@ module Kuby
           if operator == :add
             packages << [package_name, version]
           else
-            packages.reject! do |pkg_name_to_del, *|
+            packages.reject! do |pkg_name_to_del, *rest|
               pkg_name_to_del == package_name
             end
           end

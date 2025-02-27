@@ -6,4 +6,3 @@
 
 module ::Spring; end
 module ActiveSupport::EventedFileUpdateChecker; end
-module RDoc::Task; end

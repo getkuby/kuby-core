@@ -18,7 +18,7 @@ module Kuby
           dockerfile.env("#{key}='#{value}'")
         end
 
-        absolute_app_root = Pathname(dockerfile.current_workdir)
+        absolute_app_root = Pathname(T.must(dockerfile.current_workdir))
           .join(environment.docker.app_root_path)
           .to_s
 

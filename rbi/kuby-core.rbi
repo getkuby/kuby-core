@@ -1,20 +1,6 @@
 # typed: strong
-class KubyGenerator < Rails::Generators::Base
-  sig { returns(T.untyped) }
-  def create_initializer_file; end
-
-  sig { returns(T.untyped) }
-  def create_config_file; end
-
-  sig { returns(T.untyped) }
-  def create_dockerignore; end
-
-  sig { returns(T.untyped) }
-  def app_name; end
-end
-
 module Kuby
-  VERSION = '0.17.0'.freeze
+  VERSION = '0.20.2'.freeze
 
   class BasicLogger < Logger
     extend T::Sig
@@ -975,6 +961,9 @@ module Kuby
       end
       def insert(name, layer = nil, options = {}, &block); end
 
+      sig { params(name: Symbol, layer: Layer).void }
+      def replace(name, layer); end
+
       sig { params(name: Symbol).void }
       def delete(name); end
 
@@ -1193,6 +1182,9 @@ module Kuby
       end
       def insert(name, layer = nil, options = {}, &block); end
 
+      sig { params(name: Symbol, layer: Layer).void }
+      def replace(name, layer); end
+
       sig { params(name: Symbol).void }
       def delete(name); end
 
@@ -1333,6 +1325,7 @@ module Kuby
     class WebserverPhase < Layer
       extend T::Sig
       DEFAULT_PORT = T.let(8080, Integer)
+      DEFAULT_WORKERS = T.let(4, Integer)
       WEBSERVER_MAP = T.let({ puma: Puma }.freeze, T::Hash[Symbol, T.class_of(Webserver)])
 
       class Webserver
@@ -1359,6 +1352,9 @@ module Kuby
       sig { params(port: Integer).returns(Integer) }
       attr_writer :port
 
+      sig { params(workers: Integer).returns(Integer) }
+      attr_writer :workers
+
       sig { returns(T.nilable(Symbol)) }
       attr_reader :webserver
 
@@ -1373,6 +1369,9 @@ module Kuby
 
       sig { returns(Integer) }
       def port; end
+
+      sig { returns(Integer) }
+      def workers; end
 
       sig { returns(T.nilable(Symbol)) }
       def default_webserver; end
@@ -1871,7 +1870,7 @@ module Kuby
       class Assets < ::Kuby::Plugin
         extend ::KubeDSL::ValueFields
         ROLE = 'assets'.freeze
-        NGINX_IMAGE = 'nginx:1.9-alpine'.freeze
+        NGINX_IMAGE = 'nginx:1-alpine'.freeze
         NGINX_PORT = 8082
         NGINX_MOUNT_PATH = '/usr/share/nginx/assets'.freeze
         RAILS_MOUNT_PATH = '/usr/share/assets'.freeze

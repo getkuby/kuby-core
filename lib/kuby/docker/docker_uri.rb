@@ -47,7 +47,7 @@ module Kuby
           [default_host, default_port, host_port, *path]
         end
 
-        new(host.to_s, port.to_i, (path || []).join('/'))
+        new(host.to_s, port.to_i, path.join('/'))
       end
 
       T::Sig::WithoutRuntime.sig { returns(String) }

@@ -7,6 +7,15 @@ module Kuby
   class BasicLogger < Logger
     extend T::Sig
 
+    FormatterProcType = T.type_alias {
+      T.proc.params(
+        severity: Integer,
+        datetime: DateTime,
+        progname: String,
+        msg: String
+      ).returns(String)
+    }
+
     T::Sig::WithoutRuntime.sig {
       override.params(
         logdev: T.any(String, IO, StringIO, NilClass),
