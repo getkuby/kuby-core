@@ -38,7 +38,7 @@ Prebundler.configure do |config|
   )
 end
 EOF
-prebundle install --jobs 2 --retry 3 --no-binstubs
+# prebundle install --jobs 2 --retry 3 --no-binstubs
 
 # # javascript deps, cxx flags because node-sass is a special snowflake
 # CXXFLAGS="--std=c++17" yarn install
