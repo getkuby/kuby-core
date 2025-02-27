@@ -42,3 +42,12 @@ jobs:
           PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
           PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"
           RAILS_MASTER_KEY: "${{ secrets.RAILS_MASTER_KEY }}"
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+        env:
+          K8S_VERSION: ${{ matrix.k8s_version }}
+          PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
+          PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"
+          RAILS_MASTER_KEY: "${{ secrets.RAILS_MASTER_KEY }}"
