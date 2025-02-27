@@ -49,11 +49,11 @@ CXXFLAGS="--std=c++17" yarn install
 bundle exec bin/rails g kuby
 bundle install --jobs 2 --retry 3
 cat <<EOF > kuby.rb
-# class VendorPhase < Kuby::Docker::Layer
-#   def apply_to(dockerfile)
-#     dockerfile.copy('vendor/kuby-core', 'vendor/kuby-core')
-#   end
-# end
+class VendorPhase < Kuby::Docker::Layer
+  def apply_to(dockerfile)
+    dockerfile.copy('vendor/kuby-core', 'vendor/kuby-core')
+  end
+end
 
 require 'kuby/kind'
 require 'kuby/sidekiq'
