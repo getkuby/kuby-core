@@ -110,11 +110,8 @@ class KubyGenerator < Rails::Generators::Base
   end
 
   def add_cockroach_adapter
-    if Rails::VERSION::STRING > '5.2'
-      gem 'activerecord-cockroachdb-adapter', version: '~> 6.0'
-    else
-      gem 'activerecord-cockroachdb-adapter', version: '~> 5.2'
-    end
+    # the adapter gem tracks rails versions
+    gem 'activerecord-cockroachdb-adapter', version: "#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}"
   end
 
   private
