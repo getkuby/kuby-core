@@ -15,7 +15,7 @@ curdle $(find vendor/kuby-core/lib -name '*.rb') > /dev/null
 # gems
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
 # printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
-printf "gem 'kuby-kind', github: 'getkuby/kuby-kind', ref: 'fa40e0ae6986372b3363768a69d4f2c9f5ef0ad0'\n" >> Gemfile
+printf "gem 'kuby-kind', github: 'getkuby/kuby-kind', ref: '3269f5958a1d698c038640f826f8330018692f90'\n" >> Gemfile
 printf "gem 'kuby-sidekiq', '~> 0.3'\n" >> Gemfile
 printf "gem 'sidekiq', '~> 6.5'\n" >> Gemfile
 
