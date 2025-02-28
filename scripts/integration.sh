@@ -249,7 +249,7 @@ curl -vvv https://kubytest.io \
   --fail \
   --connect-timeout 5 \
   --max-time 10 \
-  --retry 5 \
+  --retry 10 \
   --retry-max-time 40
 
 # insert job
