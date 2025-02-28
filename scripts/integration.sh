@@ -250,7 +250,7 @@ curl -vvv https://kubytest.io \
   --connect-timeout 5 \
   --max-time 10 \
   --retry 10 \
-  --retry-max-time 40
+  --retry-delay 10
 
 # insert job
 GLI_DEBUG=true bundle exec kuby -e production remote exec \
