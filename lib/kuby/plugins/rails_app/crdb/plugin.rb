@@ -10,7 +10,7 @@ module Kuby
       module CRDB
         class Plugin < ::Kuby::Plugin
           ROLE = 'web'.freeze
-          VERSION = '21.1.11'.freeze
+          VERSION = '24.3.6'.freeze
           BOOTSTRAP_TIMEOUT_INTERVAL = 2
           BOOTSTRAP_TIMEOUT_TOTAL = 60
           CLIENT_PERMISSIONS = %w(create drop select insert delete update).freeze
