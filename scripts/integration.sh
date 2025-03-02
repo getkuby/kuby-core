@@ -242,20 +242,20 @@ $kubectl -n kubytest-production get secret kubytest-tls -o json \
   | base64 -d - \
   | openssl verify -CAfile pebble.root.crt -untrusted pebble.intermediate.crt
 
-# attempt to hit the app
-curl -vvv https://kubytest.io \
-  --resolve kubytest.io:443:127.0.0.1 \
-  --cacert pebble.root.crt \
-  --fail \
-  --connect-timeout 5 \
-  --max-time 10 \
-  --retry 10 \
-  --retry-delay 10
+# # attempt to hit the app
+# curl -vvv https://kubytest.io \
+#   --resolve kubytest.io:443:127.0.0.1 \
+#   --cacert pebble.root.crt \
+#   --fail \
+#   --connect-timeout 5 \
+#   --max-time 10 \
+#   --retry 10 \
+#   --retry-delay 10
 
-# insert job
-GLI_DEBUG=true bundle exec kuby -e production remote exec \
-  "bundle exec rails runner 'w = Widget.create(status: \"pending\"); WidgetsJob.perform_async(w.id)'"
+# # insert job
+# GLI_DEBUG=true bundle exec kuby -e production remote exec \
+#   "bundle exec rails runner 'w = Widget.create(status: \"pending\"); WidgetsJob.perform_async(w.id)'"
 
-GLI_DEBUG=true bundle exec kuby -e production remote exec \
-  "bundle exec rails runner 'w = Widget.first; puts w.status'" \
-  | grep 'processed'
+# GLI_DEBUG=true bundle exec kuby -e production remote exec \
+#   "bundle exec rails runner 'w = Widget.first; puts w.status'" \
+#   | grep 'processed'
