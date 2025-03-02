@@ -19,7 +19,7 @@ printf "gem 'kuby-kind', github: 'getkuby/kuby-kind', ref: '3269f5958a1d698c0386
 printf "gem 'kuby-sidekiq', '~> 0.3'\n" >> Gemfile
 printf "gem 'sidekiq', '~> 6.5'\n" >> Gemfile
 
-printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb', ref: '73dbe54b5ba237007bfabb41608124142bddda0a'\n" >> Gemfile
+printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb', ref: 'd7cdf6fa7beebb002ed66ec84f130a10c8072290'\n" >> Gemfile
 
 # install ruby deps
 bundle install --jobs 2 --retry 3
