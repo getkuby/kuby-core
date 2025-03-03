@@ -13,7 +13,8 @@ module Kuby
           VERSION = '24.3.6'.freeze
           BOOTSTRAP_TIMEOUT_INTERVAL = 2
           BOOTSTRAP_TIMEOUT_TOTAL = 60
-          CLIENT_PERMISSIONS = %w(create drop select insert delete update).freeze
+          DATABASE_PERMISSIONS = %w(create drop).freeze
+          SCHEMA_PERMISSIONS = %w(select insert update delete).freeze
 
           attr_reader :environment, :configs
 
@@ -140,8 +141,18 @@ module Kuby
               end
 
               conn.exec(
-                "grant #{CLIENT_PERMISSIONS.join(',')} "\
+                "grant connect on database #{database_name} to #{username}"
+              )
+
+              conn.exec(
+                "grant #{DATABASE_PERMISSIONS.join(',')} "\
                   "on database #{database_name} "\
+                  "to #{username}"
+              )
+
+              conn.exec(
+                "grant #{SCHEMA_PERMISSIONS.join(',')} "\
+                  "on all tables in schema public "\
                   "to #{username}"
               )
             end
