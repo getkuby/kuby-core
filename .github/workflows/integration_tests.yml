@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         # NOTE: these need to be valid kindest/node image versions
-        k8s_version: ['1.21.2'] # ['1.21.2', '1.22.7', '1.23.5']
+        k8s_version: ['1.21.2', '1.22.7', '1.23.5']
     steps:
       - name: Disable Swap
         run: |
