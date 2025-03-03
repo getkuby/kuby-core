@@ -10,6 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     strategy:
+      # don't cancel other matrix jobs if one fails
+      fail-fast: false
       matrix:
         # NOTE: these need to be valid kindest/node image versions
         k8s_version: ['1.21.2', '1.22.7', '1.23.5']
