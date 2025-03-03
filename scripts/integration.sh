@@ -14,42 +14,40 @@ curdle $(find vendor/kuby-core/lib -name '*.rb') > /dev/null
 
 # gems
 printf "\ngem 'kuby-core', path: 'vendor/kuby-core'\n" >> Gemfile
-# printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
-printf "gem 'kuby-kind', github: 'getkuby/kuby-kind', ref: '3269f5958a1d698c038640f826f8330018692f90'\n" >> Gemfile
+printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
+printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
 printf "gem 'kuby-sidekiq', '~> 0.3'\n" >> Gemfile
 printf "gem 'sidekiq', '~> 6.5'\n" >> Gemfile
 
-printf "gem 'kuby-crdb', github: 'getkuby/kuby-crdb', ref: 'd7cdf6fa7beebb002ed66ec84f130a10c8072290'\n" >> Gemfile
-
 # install ruby deps
-bundle install --jobs 2 --retry 3
+bundle lock
 
-# bundle lock
-# cat <<'EOF' > .prebundle_config
-# Prebundler.configure do |config|
-#   config.storage_backend = Prebundler::S3Backend.new(
-#     client: Aws::S3::Client.new(
-#       region: 'default',
-#       credentials: Aws::Credentials.new(
-#         ENV['PREBUNDLER_ACCESS_KEY_ID'],
-#         ENV['PREBUNDLER_SECRET_ACCESS_KEY']
-#       ),
-#       endpoint: 'https://us-east-1.linodeobjects.com',
-#       http_continue_timeout: 0
-#     ),
-#     bucket: 'prebundler2',
-#     region: 'us-east-1'
-#   )
-# end
-# EOF
-# prebundle install --jobs 2 --retry 3 --no-binstubs
+cat <<'EOF' > .prebundle_config
+Prebundler.configure do |config|
+  config.storage_backend = Prebundler::S3Backend.new(
+    client: Aws::S3::Client.new(
+      region: 'default',
+      credentials: Aws::Credentials.new(
+        ENV['PREBUNDLER_ACCESS_KEY_ID'],
+        ENV['PREBUNDLER_SECRET_ACCESS_KEY']
+      ),
+      endpoint: 'https://us-east-1.linodeobjects.com',
+      http_continue_timeout: 0
+    ),
+    bucket: 'prebundler2',
+    region: 'us-east-1'
+  )
+end
+EOF
+
+prebundle install --jobs 2 --retry 3 --no-binstubs
 
 # javascript deps, cxx flags because node-sass is a special snowflake
 CXXFLAGS="--std=c++17" yarn install
 
 # bootstrap app for use with kuby
 bundle exec bin/rails g kuby
-bundle install --jobs 2 --retry 3
+
 cat <<EOF > kuby.rb
 class VendorPhase < Kuby::Docker::Layer
   def apply_to(dockerfile)
@@ -59,7 +57,7 @@ end
 
 require 'kuby/kind'
 require 'kuby/sidekiq'
-# require 'kuby/prebundler'
+require 'kuby/prebundler'
 require 'active_support/core_ext'
 require 'active_support/encrypted_configuration'
 
@@ -87,7 +85,7 @@ Kuby.define('Kubytest') do
     end
 
     kubernetes do
-      # add_plugin :prebundler
+      add_plugin :prebundler
 
       add_plugin :rails_app do
         tls_enabled true
@@ -119,6 +117,15 @@ development:
   <<: *default
   database: kubytest_development
 production:
+  <<: *default
+  database: kubytest_production
+cable:
+  <<: *default
+  database: kubytest_production
+queue:
+  <<: *default
+  database: kubytest_production
+cache:
   <<: *default
   database: kubytest_production
 EOF
