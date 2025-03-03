@@ -47,6 +47,7 @@ CXXFLAGS="--std=c++17" yarn install
 
 # bootstrap app for use with kuby
 bundle exec bin/rails g kuby
+prebundle install --jobs 2 --retry 3 --no-binstubs
 
 cat <<EOF > kuby.rb
 class VendorPhase < Kuby::Docker::Layer
