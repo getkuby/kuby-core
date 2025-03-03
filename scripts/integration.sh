@@ -3,7 +3,7 @@
 set -e
 
 # install ruby deps
-source scripts/prebundle.sh
+source kuby-core/scripts/prebundle.sh
 
 # javascript deps, cxx flags because node-sass is a special snowflake
 CXXFLAGS="--std=c++17" yarn install
