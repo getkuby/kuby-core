@@ -20,34 +20,34 @@ printf "gem 'kuby-sidekiq', '~> 0.3'\n" >> Gemfile
 printf "gem 'sidekiq', '~> 6.5'\n" >> Gemfile
 
 # install ruby deps
-bundle install --jobs 2 --retry 3
+bundle lock
 
-# bundle lock
-# cat <<'EOF' > .prebundle_config
-# Prebundler.configure do |config|
-#   config.storage_backend = Prebundler::S3Backend.new(
-#     client: Aws::S3::Client.new(
-#       region: 'default',
-#       credentials: Aws::Credentials.new(
-#         ENV['PREBUNDLER_ACCESS_KEY_ID'],
-#         ENV['PREBUNDLER_SECRET_ACCESS_KEY']
-#       ),
-#       endpoint: 'https://us-east-1.linodeobjects.com',
-#       http_continue_timeout: 0
-#     ),
-#     bucket: 'prebundler2',
-#     region: 'us-east-1'
-#   )
-# end
-# EOF
-# prebundle install --jobs 2 --retry 3 --no-binstubs
+cat <<'EOF' > .prebundle_config
+Prebundler.configure do |config|
+  config.storage_backend = Prebundler::S3Backend.new(
+    client: Aws::S3::Client.new(
+      region: 'default',
+      credentials: Aws::Credentials.new(
+        ENV['PREBUNDLER_ACCESS_KEY_ID'],
+        ENV['PREBUNDLER_SECRET_ACCESS_KEY']
+      ),
+      endpoint: 'https://us-east-1.linodeobjects.com',
+      http_continue_timeout: 0
+    ),
+    bucket: 'prebundler2',
+    region: 'us-east-1'
+  )
+end
+EOF
+
+prebundle install --jobs 2 --retry 3 --no-binstubs
 
 # javascript deps, cxx flags because node-sass is a special snowflake
 CXXFLAGS="--std=c++17" yarn install
 
 # bootstrap app for use with kuby
 bundle exec bin/rails g kuby
-bundle install --jobs 2 --retry 3
+
 cat <<EOF > kuby.rb
 class VendorPhase < Kuby::Docker::Layer
   def apply_to(dockerfile)
@@ -57,7 +57,7 @@ end
 
 require 'kuby/kind'
 require 'kuby/sidekiq'
-# require 'kuby/prebundler'
+require 'kuby/prebundler'
 require 'active_support/core_ext'
 require 'active_support/encrypted_configuration'
 
@@ -85,7 +85,7 @@ Kuby.define('Kubytest') do
     end
 
     kubernetes do
-      # add_plugin :prebundler
+      add_plugin :prebundler
 
       add_plugin :rails_app do
         tls_enabled true
@@ -249,20 +249,20 @@ $kubectl -n kubytest-production get secret kubytest-tls -o json \
   | base64 -d - \
   | openssl verify -CAfile pebble.root.crt -untrusted pebble.intermediate.crt
 
-# # attempt to hit the app
-# curl -vvv https://kubytest.io \
-#   --resolve kubytest.io:443:127.0.0.1 \
-#   --cacert pebble.root.crt \
-#   --fail \
-#   --connect-timeout 5 \
-#   --max-time 10 \
-#   --retry 10 \
-#   --retry-delay 10
+# attempt to hit the app
+curl -vvv https://kubytest.io \
+  --resolve kubytest.io:443:127.0.0.1 \
+  --cacert pebble.root.crt \
+  --fail \
+  --connect-timeout 5 \
+  --max-time 10 \
+  --retry 10 \
+  --retry-delay 10
 
-# # insert job
-# GLI_DEBUG=true bundle exec kuby -e production remote exec \
-#   "bundle exec rails runner 'w = Widget.create(status: \"pending\"); WidgetsJob.perform_async(w.id)'"
+# insert job
+GLI_DEBUG=true bundle exec kuby -e production remote exec \
+  "bundle exec rails runner 'w = Widget.create(status: \"pending\"); WidgetsJob.perform_async(w.id)'"
 
-# GLI_DEBUG=true bundle exec kuby -e production remote exec \
-#   "bundle exec rails runner 'w = Widget.first; puts w.status'" \
-#   | grep 'processed'
+GLI_DEBUG=true bundle exec kuby -e production remote exec \
+  "bundle exec rails runner 'w = Widget.first; puts w.status'" \
+  | grep 'processed'
