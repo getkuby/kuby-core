@@ -8,7 +8,7 @@ on:
       - '*'
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       # don't cancel other matrix jobs if one fails
       fail-fast: false
