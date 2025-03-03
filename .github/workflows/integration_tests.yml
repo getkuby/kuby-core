@@ -7,7 +7,25 @@ on:
     branches:
       - '*'
 jobs:
+  prebundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: kuby-core/
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+      - name: Prebundle
+        run: kuby-core/scripts/prebundle.sh
+        env:
+          PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
+          PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"
+          RAILS_MASTER_KEY: "${{ secrets.RAILS_MASTER_KEY }}"
+
   build:
+    needs: prebundle
     runs-on: ubuntu-latest
     strategy:
       # don't cancel other matrix jobs if one fails
